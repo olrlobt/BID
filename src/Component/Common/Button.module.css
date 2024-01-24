@@ -1,0 +1,22 @@
+
+.logoContainer {
+    position: relative;
+    text-align: center;
+    border-radius: 12px;
+    
+  }
+  
+.logoContainer p {
+    position: relative;
+    font-weight: bold;
+    text-align: center;
+
+}
+  
+.border {
+    position: absolute;
+    pointer-events: none; 
+    box-sizing: border-box; 
+    text-align: center;
+
+}
