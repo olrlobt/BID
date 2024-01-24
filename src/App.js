@@ -18,7 +18,7 @@ function App() {
     <Routes>
       <Route path="/" element={<MainPage />}>
         <Route path="/" element={<Home />} />
-        <Route path="/class/:id/" element={<ClassPage />} />
+        <Route path="/class" element={<ClassPage />} />
         <Route path="/bid" element={<BidPage />} />
         <Route path="/reward" element={<RewardPage />} />
         <Route path="/bank" element={<BankPage />} />

@@ -59,14 +59,14 @@ export default function NavBar() {
         </li>
         <li
           className={`${styled.navLi} ${
-            location.pathname === "/student" ? styled.active : ""
+            location.pathname === "/class" ? styled.active : ""
           }`}
         >
-          <Link to="/student">
+          <Link to="/class">
             <FontAwesomeIcon
               icon={faPerson}
               className={`${styled.navImage} ${
-                location.pathname === "/student" ? styled.clicked : ""
+                location.pathname === "/class" ? styled.clicked : ""
               }`}
             />
             <span>학생</span>
