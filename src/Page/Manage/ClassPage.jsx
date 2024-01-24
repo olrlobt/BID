@@ -1,15 +1,17 @@
+// ClassPage.jsx
 import React, { useEffect, useState, useRef } from "react";
 import styled from "./ClassPage.module.css";
 import StudentList from '../../Component/Manage/StudentList'
-import axios from "axios";
 import StudentAdd from "../../Component/Manage/StudentAdd";
 import Modal from "../../Component/Manage/Modal";
+import Button from "../../Component/Common/Button";
 
 function ClassPage() {
   const [info, setInfo] = useState([])
   const [selected, setSelected] = useState('')
   const [modalOn, setModalOn] = useState(false)
-  const [sortType, setSortType] = useState('id'); // 기본 정렬 기준은 번호(id)로 설정
+  const [activeButton, setActiveButton] = useState('id'); // 기본 정렬 기준은 번호(id)로 설정
+  const [sortType, setSortType] = useState('id'); // 정렬 기준 추가
 
   const nextId = useRef(6)
 
@@ -24,6 +26,11 @@ function ClassPage() {
 
   useEffect(() => {
     setInfo(dummyData);
+  }, []);
+
+  useEffect(() => {
+    // Set "번호" as the default active button when the component mounts
+    setActiveButton('id');
   }, []);
 
   const handleSave = (data) => {
@@ -69,6 +76,7 @@ function ClassPage() {
   }
 
   const handleSort = (type) => {
+    setActiveButton(type);
     setSortType(type);
   };
 
@@ -84,8 +92,16 @@ function ClassPage() {
   return (
     <div className={styled.section}>
       <div className={styled.orderlist}>
-        <h2 onClick={() => handleSort('id')}>번호</h2>
-        <h2 onClick={() => handleSort('bid')}>총 비드</h2>
+        <Button
+          text="번호"
+          onClick={() => handleSort('id')}
+          active={activeButton === 'id'}
+        />
+        <Button
+          text="총 비드"
+          onClick={() => handleSort('bid')}
+          active={activeButton === 'bid'}
+        />
       </div>
       <div>
         <table className={styled.orderTable}>
