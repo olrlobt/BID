@@ -1,8 +1,9 @@
+// Button3.jsx
 import React, { useState, useEffect } from "react";
-import styled from './Button.module.css';
+import styled from './Button3.module.css';
 import PropTypes from "prop-types";
 
-function Button({ text, onClick, active }) {
+function Button3({ text, onClick, active }) {
   const [isClicked, setIsClicked] = useState(active);
 
   useEffect(() => {
@@ -11,35 +12,37 @@ function Button({ text, onClick, active }) {
 
   const handleClick = () => {
     setIsClicked(!isClicked);
-    onClick();
+    onClick(); // 이 부분에서 onClick을 호출합니다.
   };
 
   return (
     <button
       className={styled.logoContainer}
       style={{
-        backgroundColor: isClicked ? "#FFD43A" : "#FFFFFF",
-        border: isClicked ? "none" : "3px solid #FFD43A",
-        height: '4vh',
-        width: '5vw',
-        boxSizing: 'border-box'
+        backgroundColor: "#BBBD32",
+        border: "none", 
+        boxSizing: 'border-box',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer'
       }}
       onClick={handleClick}
     >
       <p style={{
-        color: isClicked ? "#FFFFFF" : "#FFD43A",
+        color: "#FFFFFF",
         fontWeight: 'bold',
         margin: 0,
-
-      }}>{text}</p>
+      }}>
+        {text}
+      </p>
     </button>
   );
 }
 
-Button.propTypes = {
+Button3.propTypes = {
   text: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired, // onClick props 추가
   active: PropTypes.bool,
 };
 
-export default Button;
+export default Button3;

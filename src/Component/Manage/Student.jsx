@@ -1,6 +1,6 @@
 import React from "react";
 
-const Student = ({item, handleRemove, handleEdit}) => {
+const Student = ({item,onClick, handleRemove, handleEdit, showRemove }) => {
     const onRemove = () => {
         handleRemove(item.id)
     }
@@ -8,18 +8,24 @@ const Student = ({item, handleRemove, handleEdit}) => {
         handleEdit(item)
     }
 
+
+    
     return (
         <>
-        <tr className="">
+        <tr onClick={onClick}>
             <td>{item.id}</td>
             <td>{item.name}</td>
             <td>{item.bid}</td>
+            {showRemove && (
             <td onClick={onEdit}>
-                <i>편집</i>
+                <i>비밀번호 초기화</i>
             </td>
-            <td onClick={onRemove}>
+            )}
+            {showRemove && (
+                <td onClick={onRemove}>
                 <i>제거</i>
-            </td>
+                </td>
+            )}
             </tr>
             </>
     )
