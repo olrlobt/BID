@@ -14,6 +14,7 @@ buildscript {
 // 하위 모든 프로젝트 공통 세팅
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'checkstyle'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
@@ -23,6 +24,19 @@ subprojects {
     sourceCompatibility = '17'
     targetCompatibility = '17'
     compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+
+    checkstyle {
+        maxWarnings = 0 // 규칙이 어긋나는 코드가 하나라도 있을 경우 빌드 fail
+        configFile = file("${rootDir}/naver-checkstyle-rules.xml")
+        configProperties = ["suppressionFile" : "${rootDir}/naver-checkstyle-suppressions.xml"]
+        toolVersion ="8.24"
+    }
+
+    tasks.register('addGitPrecommitHook', Copy) {
+        from 'script/pre-commit'
+        into '.git/hooks'
+    }
 
     repositories {
         mavenCentral()
@@ -69,7 +83,6 @@ project(':bid-admin') {
 
     dependencies {
         implementation project(':bid-core') // 컴파일 시 bid-core project 로딩
-//        implementation 'org.springframework.boot:spring-boot-starter-web'
     }
 }
 
