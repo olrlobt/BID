@@ -19,10 +19,10 @@ function Button({ text, onClick, active }) {
       className={styled.logoContainer}
       style={{
         backgroundColor: isClicked ? "#FFD43A" : "#FFFFFF",
-        border: isClicked ? "none" : "3px solid #FFD43A",
-        height: '4vh',
-        width: '5vw',
-        boxSizing: 'border-box'
+        border: isClicked ? "none" : "0.1vw solid #FFD43A",
+        boxSizing: 'border-box',
+        padding: '8px', // Optional: Add padding for better appearance
+        minWidth: '3vw', // Optional: Set a minimum width to prevent being too small
       }}
       onClick={handleClick}
     >
@@ -30,7 +30,10 @@ function Button({ text, onClick, active }) {
         color: isClicked ? "#FFFFFF" : "#FFD43A",
         fontWeight: 'bold',
         margin: 0,
-
+        fontSize: 16,
+        boxSizing: 'border-box',
+        overflow: 'hidden', // Optional: Hide overflow if text is too long
+        textOverflow: 'ellipsis', // Optional: Add ellipsis (...) for long text
       }}>{text}</p>
     </button>
   );

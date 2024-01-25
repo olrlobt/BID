@@ -57,16 +57,30 @@
 }
 .orderTable {
   width: 20vw;
-    background-color: #FFFEF4;
-    line-height: 1.5;
-    font-size: 14px;
-    border-collapse: collapse;
-    table-layout: fixed;
+  background-color: #FFFEF4;
+  line-height: 1.5;
+  font-size: 14px;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
   
+
+.orderTable th {
+  width: 4vw;
+  
+}
+
+.orderTable th:nth-child(2), .orderTable td:nth-child(2) {
+  width: 8vw;
+}
+
+.orderTable th:nth-child(3), .orderTable td:nth-child(3) {
+  width: 8vw;
+}
 .orderTable thead {
   background-color: #E6E5DB;
 }
+
 
 .orderTable th{
     height: 8vh;

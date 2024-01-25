@@ -31,6 +31,9 @@ function Button3({ text, onClick, active }) {
       <p style={{
         color: "#FFFFFF",
         fontWeight: 'bold',
+        cursor: 'pointer',
+        display: 'flex', // Center the icon and text horizontally
+        alignItems: 'center', // Center the icon and text vertically
         margin: 0,
       }}>
         {text}
@@ -46,3 +49,4 @@ Button3.propTypes = {
 };
 
 export default Button3;
+
