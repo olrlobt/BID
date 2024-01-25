@@ -25,18 +25,21 @@ function Button2({ text, onClick, active }) {
         boxSizing: 'border-box',
         alignItems: 'center',
         justifyContent: 'center',
-        cursor: 'pointer' 
+        cursor: 'pointer',
       }}
       onClick={handleClick}
     >
       <p style={{
         color: "#FFFFFF",
         fontWeight: 'bold',
-        cursor: 'pointer' 
-
+        cursor: 'pointer',
+        display: 'flex', // Center the icon and text horizontally
+        alignItems: 'center', // Center the icon and text vertically
+        margin: '0', // Remove default margin
       }}>
-        <FontAwesomeIcon icon={faGear} />
-        {text}</p>
+        <FontAwesomeIcon icon={faGear} style={{ color: "#FFFFFF", marginRight: '8px' }} />
+        {isClicked ? "편집 완료" : text}
+      </p>
     </button>
   );
 }

@@ -60,6 +60,7 @@ function ClassPage() {
     }
   };
 
+
   const handleButton3Click = () => {
     console.log("Button3 클릭됨");
     handleAddClick();
@@ -101,8 +102,6 @@ function ClassPage() {
       return updatedInfo;
     });
   };
-
-
 
   const handleSort = (type) => {
     if (type !== activeButton) {

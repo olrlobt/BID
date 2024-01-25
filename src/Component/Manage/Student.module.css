@@ -1,3 +1,19 @@
 .customColumn {
     width: 150px; /* Adjust the width as needed */
   }
+
+.orderTable th {
+  width: 80px; /* 예시로 80px로 설정. 필요에 따라 조절 가능 */
+}
+
+.orderTable td {
+  width: 80px; /* 예시로 80px로 설정. 필요에 따라 조절 가능 */
+}
+
+.orderTable th:nth-child(2), .orderTable td:nth-child(2) {
+  width: 150px; /* 두 번째 열(이름)에 대한 너비 설정 */
+}
+
+.orderTable th:nth-child(3), .orderTable td:nth-child(3) {
+  width: 120px; /* 세 번째 열(총 비드)에 대한 너비 설정 */
+}

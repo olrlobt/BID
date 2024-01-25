@@ -1,18 +1,12 @@
 
 .logoContainer {
-    position: relative;
     text-align: center;
-    border-radius: 12px;
-}
-
-
-.logoContainer2 {
-    position: relative;
-    text-align: center;
-    border-radius: 4px; 
+    border-radius: 15px;
     cursor: pointer;
-    
+
 }
+
+
 .logoContainer p {
     position: relative;
     font-weight: bold;
