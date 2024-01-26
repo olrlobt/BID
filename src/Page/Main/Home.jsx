@@ -8,6 +8,7 @@ import Locker from "../../Asset/Image/HOME_icons/locker-dynamic-color.png";
 import Clock from "../../Asset/Image/HOME_icons/clock-front-color.png";
 import Calendar from "../../Asset/Image/HOME_icons/calender-dynamic-color.png";
 import useModal from "../../hooks/useModal";
+import TimeTable from "../../Component/Common/TimeTable";
 
 export default function Home() {
   const { openModal } = useModal();
@@ -53,7 +54,10 @@ export default function Home() {
               icons={[{ src: Coin, alt: "주급", css: "coin" }]}
               text={"200비드"}
               modalClick={() =>
-                openModal({ type: "changeBid", props: "쿠폰 신청 목록" })
+                openModal({
+                  type: "changeBid",
+                  props: ["주급 변경", "200비드"],
+                })
               }
             />
             <InfoBox
@@ -92,9 +96,17 @@ export default function Home() {
               ]}
               icons={[{ src: Clock, alt: "시계", css: "clock" }]}
               text={"8:00"}
+              modalClick={() =>
+                openModal({
+                  type: "intoMoney",
+                  props: ["적금 시간 변경", dumpData],
+                })
+              }
             />
           </section>
-          <section className={styled.schedule}></section>
+          <section className={styled.schedule}>
+            <TimeTable />
+          </section>
         </section>
       </main>
     </>
