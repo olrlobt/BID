@@ -1,5 +1,7 @@
 import React from 'react';
 import { ResponsivePie } from '@nivo/pie';
+import styled from './PieChart.module.css';
+
 
 const Piechart = () => {
     const handle = {
@@ -12,35 +14,33 @@ const Piechart = () => {
         },
     };
 
+
     return (
-        <div style={{ width: '30vw', height: '50vh', margin: '0 auto' }}>
+        <div className={styled.PieContainer}>
+        <div style={{ width: '20vw', height: '20vh' }}>
             <ResponsivePie
                 data={[
                     { id: 'cola', value: 324 },
                     { id: 'cidar', value: 88 },
                     { id: 'fanta', value: 221 },
                 ]}
-                margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-                innerRadius={0.5}
-                padAngle={1.8}
-                cornerRadius={8}
+                margin={{ top: 30, right: 100, bottom: 30, left: 30 }}
+                innerRadius={0.04}
                 colors={['olive', 'brown', 'orange']}
                 borderWidth={2}
                 arcLinkLabelsSkipAngle={0}
-                arcLinkLabelsTextColor="#000000"
-                arcLinkLabelsThickness={2}
                 arcLinkLabelsColor={{ from: 'color' }}
                 arcLabelsSkipAngle={10}
                 theme={{
                     labels: {
                         text: {
-                            fontSize: 14,
+                            fontSize: 10,
                             fill: '#000000',
                         },
                     },
                     legends: {
                         text: {
-                            fontSize: 12,
+                            fontSize: 10,
                             fill: '#000000',
                         },
                     },
@@ -52,10 +52,10 @@ const Piechart = () => {
                         direction: 'row',
                         justify: false,
                         translateX: 0,
-                        translateY: 56,
+                        translateY: 26,
                         itemsSpacing: 0,
-                        itemWidth: 100,
-                        itemHeight: 18,
+                        itemWidth: 50,
+                        itemHeight: 20,
                         itemDirection: 'left-to-right',
                         itemOpacity: 1,
                         symbolSize: 18,
@@ -72,6 +72,8 @@ const Piechart = () => {
                     },
                 ]}
             />
+            <div>소비 카테고리 통계</div>
+        </div>
         </div>
     );
 };

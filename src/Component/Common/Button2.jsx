@@ -33,11 +33,10 @@ function Button2({ text, onClick, active }) {
         color: "#FFFFFF",
         fontWeight: 'bold',
         cursor: 'pointer',
-        display: 'flex', // Center the icon and text horizontally
-        alignItems: 'center', // Center the icon and text vertically
-        margin: '0', // Remove default margin
+        alignItems: 'center', 
+        margin: '0',
       }}>
-        <FontAwesomeIcon icon={faGear} style={{ color: "#FFFFFF", marginRight: '8px' }} />
+        <FontAwesomeIcon icon={faGear} style={{ color: "#FFFFFF", marginRight: '8px', }} />
         {isClicked ? "편집 완료" : text}
       </p>
     </button>

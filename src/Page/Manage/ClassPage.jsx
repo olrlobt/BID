@@ -32,7 +32,7 @@ function ClassPage() {
     { id: 1, name: '백지윤', bid: '5,678' },
     { id: 2, name: '유현지', bid: '4,321' },
     { id: 3, name: '배민지', bid: '9,321' },
-    { id: 4, name: '이현진', bid: '2,394' },
+    { id: 4, name: '이현진', bid: '92,394' },
     { id: 5, name: '이승헌', bid: '321' },
     { id: 6, name: '김예림', bid: '54,321' },
   ];
