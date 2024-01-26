@@ -9,5 +9,4 @@ public class BidApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BidApplication.class, args);
 	}
-
 }
