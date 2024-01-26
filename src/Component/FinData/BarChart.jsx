@@ -1,12 +1,12 @@
 import React from "react";
 import styled from './BarChart.module.css';
+import { ResponsiveBarCanvas } from '@nivo/bar'
 
 function BarChart() {
   const savingsData = {
     total: 800,
     saved: 450
   };
-
   const currentDate = 9;
 
   return (
@@ -18,6 +18,7 @@ function BarChart() {
       <p className={styled.interestRate}>{`${savingsData.total} 비드로 돌려받을 수 있어요`}</p>
     </div>
   );
+  
 }
 
 export default BarChart;
