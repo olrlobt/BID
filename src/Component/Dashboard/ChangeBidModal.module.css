@@ -5,7 +5,41 @@
 }
 
 .bidInput {
-  width: 100%;
+  width: 35vw;
+  height: 15vh;
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
+  label {
+    line-height: 5vh;
+  }
+  Input,
+  Select {
+    width: 60%;
+    height: 5vh;
+    border: 1px solid #ececec;
+  }
+  .time {
+    width: 4vw;
+  }
+  .changeTime {
+    width: 20vw;
+    align-self: center;
+  }
+}
+
+.bidInput > section {
+  display: flex;
+  justify-content: space-around;
+}
+
+.changeBid {
+  width: 31vw;
+  height: 6vh;
+  margin-top: 3vh;
+  border: none;
+  color: #ececec;
+  font-weight: 700;
+  border-radius: 5px;
+  background-color: var(--color-point-yellow);
 }
