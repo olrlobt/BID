@@ -7,16 +7,15 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./Store";
-import Modal from 'react-modal';
-
-const appRoot = document.getElementById('root');
-Modal.setAppElement(appRoot);
+import Modal from "react-modal";
+import ModalContainer from "./Component/Common/ModalContainer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <BrowserRouter>
       <App />
+      <ModalContainer />
     </BrowserRouter>
   </Provider>
 );
