@@ -2,6 +2,7 @@ package com.ssafy.bid.domain.board.api;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,5 +23,15 @@ public class BoardApi {
 	@GetMapping("/{gradeNo}/boards")
 	public List<BoardResponse> findAllStudentBoards(@PathVariable int gradeNo){
 		return boardService.findAllStudentBoards(gradeNo);
+	}
+
+	@GetMapping("/{gradeNo}/boards/{boardNo}")
+	public ResponseEntity<BoardResponse> getStudentBoard(@PathVariable int gradeNo, @PathVariable long boardNo) {
+		BoardResponse boardResponse = boardService.getStudentBoard(gradeNo, boardNo);
+		if (boardResponse != null) {
+			return ResponseEntity.ok(boardResponse);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

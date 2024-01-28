@@ -33,4 +33,19 @@ public class BoardResponse {
 		this.goodsImgUrl = goodsImgUrl;
 		this.userName = userName;
 	}
+
+	public BoardResponse(long no, String title, String description, int startPrice, BoardStatus boardStatus,
+		int averagePrice, int resultPrice, Category category, String goodsImgUrl, String userName, int gradePeriodNo) {
+		this.no = no;
+		this.title = title;
+		this.description = description;
+		this.startPrice = startPrice;
+		this.boardStatus = boardStatus;
+		this.averagePrice = averagePrice;
+		this.resultPrice = resultPrice;
+		this.category = category;
+		this.goodsImgUrl = goodsImgUrl;
+		this.userName = userName;
+		this.gradePeriodNo = gradePeriodNo;
+	}
 }
