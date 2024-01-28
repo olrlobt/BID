@@ -27,27 +27,27 @@ export default function NavBar() {
         </div>
       </section>
       <ul>
-        <li
-          className={`${styled.navLi} ${
-            location.pathname === "/" ? styled.active : ""
-          }`}
-        >
-          <Link to="/">
-            <FontAwesomeIcon
-              icon={faHouse}
-              className={`${styled.navImage} ${
-                location.pathname === "/" ? styled.clicked : ""
-              }`}
-            />
-            <span>HOME</span>
-          </Link>
-        </li>
-        <li
-          className={`${styled.navLi} ${
-            location.pathname === "/bid" ? styled.active : ""
-          }`}
-        >
-          <Link to="/bid">
+        <Link to="/">
+          <li
+            className={`${styled.navLi} ${
+              location.pathname === "/" ? styled.active : ""
+            }`}
+          >
+              <FontAwesomeIcon
+                icon={faHouse}
+                className={`${styled.navImage} ${
+                  location.pathname === "/" ? styled.clicked : ""
+                }`}
+              />
+              <span>HOME</span>
+          </li>
+        </Link>
+        <Link to="/bid">
+          <li
+            className={`${styled.navLi} ${
+              location.pathname === "/bid" ? styled.active : ""
+            }`}
+          >
             <FontAwesomeIcon
               icon={faPeopleArrows}
               className={`${styled.navImage} ${
@@ -55,14 +55,14 @@ export default function NavBar() {
               }`}
             />
             <span>경매</span>
-          </Link>
-        </li>
-        <li
-          className={`${styled.navLi} ${
-            location.pathname === "/class" ? styled.active : ""
-          }`}
-        >
-          <Link to="/class">
+          </li>
+        </Link>
+        <Link to="/class">
+          <li
+            className={`${styled.navLi} ${
+              location.pathname === "/class" ? styled.active : ""
+            }`}
+          >
             <FontAwesomeIcon
               icon={faPerson}
               className={`${styled.navImage} ${
@@ -70,14 +70,14 @@ export default function NavBar() {
               }`}
             />
             <span>학생</span>
-          </Link>
-        </li>
-        <li
-          className={`${styled.navLi} ${
-            location.pathname === "/reward" ? styled.active : ""
-          }`}
-        >
-          <Link to="/reward">
+          </li>
+        </Link>
+        <Link to="/reward">
+          <li
+            className={`${styled.navLi} ${
+              location.pathname === "/reward" ? styled.active : ""
+            }`}
+          >
             <FontAwesomeIcon
               icon={faCoins}
               className={`${styled.navImage} ${
@@ -85,14 +85,14 @@ export default function NavBar() {
               }`}
             />
             <span>리워드</span>
-          </Link>
-        </li>
-        <li
-          className={`${styled.navLi} ${
-            location.pathname === "/bank" ? styled.active : ""
-          }`}
-        >
-          <Link to="/bank">
+          </li>
+        </Link>
+        <Link to="/bank">
+          <li
+            className={`${styled.navLi} ${
+              location.pathname === "/bank" ? styled.active : ""
+            }`}
+          >
             <FontAwesomeIcon
               icon={faPiggyBank}
               className={`${styled.navImage} ${
@@ -100,14 +100,14 @@ export default function NavBar() {
               }`}
             />
             <span>은행</span>
-          </Link>
-        </li>
-        <li
-          className={`${styled.navLi} ${
-            location.pathname === "/game" ? styled.active : ""
-          }`}
-        >
-          <Link to="/game">
+          </li>
+        </Link>
+        <Link to="/game">
+          <li
+            className={`${styled.navLi} ${
+              location.pathname === "/game" ? styled.active : ""
+            }`}
+          >
             <FontAwesomeIcon
               icon={faDice}
               className={`${styled.navImage} ${
@@ -115,14 +115,14 @@ export default function NavBar() {
               }`}
             />
             <span>자리 뽑기</span>
-          </Link>
-        </li>
-        <li
-          className={`${styled.navLi} ${
-            location.pathname === "/student-version" ? styled.active : ""
-          }`}
-        >
-          <Link to="for-student">
+          </li>
+        </Link>
+        <Link to="for-student">
+          <li
+            className={`${styled.navLi} ${
+              location.pathname === "/student-version" ? styled.active : ""
+            }`}
+          >
             <FontAwesomeIcon
               icon={faSchool}
               className={`${styled.navImage} ${
@@ -130,8 +130,8 @@ export default function NavBar() {
               }`}
             />
             <span>학생 버전</span>
-          </Link>
-        </li>
+          </li>
+        </Link>
       </ul>
 
       <Link to="/all-class" className={styled.view}>
