@@ -21,7 +21,7 @@ public class CouponApi {
 	private final CouponService couponService;
 
 	@GetMapping("/{gradeNo}/coupons")
-	public ResponseEntity<CouponListResponse> findCoupons(@PathVariable int gradeNo){
+	public ResponseEntity<CouponListResponse> findCoupons(@PathVariable int gradeNo) {
 
 		CouponListResponse coupons = couponService.findCoupons(gradeNo);
 
@@ -33,7 +33,12 @@ public class CouponApi {
 	}
 
 	@PatchMapping("/{gradeNo}/coupons/{couponNo}")
-	public void acceptCoupon(@PathVariable int gradeNo, @PathVariable int couponNo){
+	public void acceptCoupon(@PathVariable int gradeNo, @PathVariable int couponNo) {
 		couponService.acceptCoupon(couponNo);
+	}
+
+	@DeleteMapping("/{gradeNo}/coupons/{couponNo}")
+	public void deleteCoupon(@PathVariable int gradeNo, @PathVariable int couponNo) {
+		couponService.deleteCoupon(couponNo);
 	}
 }

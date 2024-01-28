@@ -12,14 +12,17 @@ import com.ssafy.bid.domain.coupon.CouponStatus;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
 import com.ssafy.bid.domain.coupon.repository.CouponRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CouponService {
 
 	private final CouponRepository couponRepository;
 
+	@Transactional(readOnly = true)
 	public CouponListResponse findCoupons(int gradeNo) {
 
 		List<Coupon> registeredCoupons = couponRepository
@@ -33,12 +36,19 @@ public class CouponService {
 		return new CouponListResponse(registeredCoupons, unregisteredCoupons);
 	}
 
-	@Transactional
+
 	public void acceptCoupon(int couponNo) {
 		Coupon coupon = couponRepository.findById(couponNo)
 			.orElseThrow(() -> new NoSuchElementException("쿠폰이 없습니다."));
 
 		coupon.accept();
+	}
+
+	public void deleteCoupon(int couponNo) {
+		if (!couponRepository.existsById(couponNo)) {
+			throw new EntityNotFoundException("쿠폰이 없습니다.");
+		}
+		couponRepository.deleteById(couponNo);
 	}
 
 }
