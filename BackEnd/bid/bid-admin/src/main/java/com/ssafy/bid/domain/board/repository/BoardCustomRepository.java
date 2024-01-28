@@ -8,4 +8,5 @@ public interface BoardCustomRepository {
 
 	List<BoardResponse> findAllStudentBoards(int gradeNo);
 
+	BoardResponse getStudentBoard(int gradeNo, long boardNo);
 }

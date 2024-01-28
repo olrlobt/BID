@@ -20,4 +20,8 @@ public class BoardService {
 	public List<BoardResponse> findAllStudentBoards(int gradeNo){
 		return boardRepository.findAllStudentBoards(gradeNo);
 	}
+
+	public BoardResponse getStudentBoard(int gradeNo, long boardNo){
+		return boardRepository.getStudentBoard(gradeNo,boardNo);
+	}
 }
