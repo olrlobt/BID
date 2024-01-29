@@ -1,0 +1,35 @@
+.bidSection {
+	display: flex;
+	flex-direction: column;
+	width: calc(100% - 20vw);
+  height: 100vh;
+	padding: 5vh;
+	box-sizing: border-box;
+}
+
+.bidHeader {
+	display: flex;
+	justify-content: space-between;
+	margin: 5vh 0;
+}
+
+.bidBody {
+}
+
+.couponListWrapper{
+	display: flex;
+	justify-content: space-around;
+}
+
+.couponListTitle {
+	text-align: center;
+	font-size: 3vh;
+	font-weight: bold;
+	margin-bottom: 1vh;
+}
+
+.productsWrapper {
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+}
