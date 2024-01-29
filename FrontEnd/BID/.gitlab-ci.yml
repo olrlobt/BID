@@ -17,7 +17,7 @@ build:
     - FEDev
   script:
     - yarn install
-    - yarn --cwd /FrontEnd/BID build
+    - yarn --cwd /home/gitlab-runner/builds/JKy7rwcft/0/s10-webmobile2-sub2/S10P12A306/FrontEnd/BID build
   artifacts:
     expire_in: 1 hour
     paths:
