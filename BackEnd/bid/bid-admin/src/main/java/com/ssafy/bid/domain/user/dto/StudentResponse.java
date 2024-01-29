@@ -45,7 +45,15 @@ public class StudentResponse {
 		boolean attendanceWednesday,
 		boolean attendanceThursday,
 		boolean attendanceFriday,
-		int ballCount
+		int ballCount,
+		int totalCategorySum,
+		int snackSum,
+		int learningSum,
+		int couponSum,
+		int gameSum,
+		int etcSum,
+		int totalIncome,
+		int totalExpense
 	) {
 		this.savingNo = savingNo;
 		this.savingDepositPeriod = savingDepositPeriod;
@@ -59,38 +67,13 @@ public class StudentResponse {
 		this.attendanceThursday = attendanceThursday;
 		this.attendanceFriday = attendanceFriday;
 		this.ballCount = ballCount;
-	}
-
-	public void addSnackSum(int snackSum) {
-		this.totalCategorySum += snackSum;
-		this.snackSum += snackSum;
-	}
-
-	public void addLearningSum(int learningSum) {
-		this.totalCategorySum += learningSum;
-		this.learningSum += learningSum;
-	}
-
-	public void addCouponSum(int couponSum) {
-		this.totalCategorySum += couponSum;
-		this.couponSum += couponSum;
-	}
-
-	public void addGameSum(int gameSum) {
-		this.totalCategorySum += gameSum;
-		this.gameSum += gameSum;
-	}
-
-	public void addEtcSum(int etcSum) {
-		this.totalCategorySum += etcSum;
-		this.etcSum += etcSum;
-	}
-
-	public void addTotalIncome(int totalIncome) {
-		this.totalIncome += totalIncome;
-	}
-
-	public void addTotalExpense(int totalExpense) {
-		this.totalExpense += totalExpense;
+		this.totalCategorySum = totalCategorySum;
+		this.snackSum = snackSum;
+		this.learningSum = learningSum;
+		this.couponSum = couponSum;
+		this.gameSum = gameSum;
+		this.etcSum = etcSum;
+		this.totalIncome = totalIncome;
+		this.totalExpense = totalExpense;
 	}
 }
