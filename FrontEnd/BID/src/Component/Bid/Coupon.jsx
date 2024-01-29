@@ -3,12 +3,16 @@ import styled from "./Coupon.module.css"
 import Price from "./Price";
 import { SvgIcon } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
+import useCoupons from "../../hooks/useCoupons";
 
 export default function Coupon(props){
-	const {no, name, description, startPrice, coupons, removeCoupon} = props;
 
-	const removeThatCoupon = () => {
-		removeCoupon(coupons, no);
+	const {no, name, description, startPrice, coupons} = props;
+	const { removeCoupon } = useCoupons();
+
+	const removeACoupon = (e) => {
+		e.preventDefault();
+		removeCoupon({couponNo: no});
 	}
 
 	return(
@@ -16,7 +20,7 @@ export default function Coupon(props){
 				<div className = {styled.left}>
 					<button
 						className = {styled.removeButton}
-						onClick = {removeThatCoupon}
+						onClick = {removeACoupon}
 					>
 						<SvgIcon
 							component = {Close}

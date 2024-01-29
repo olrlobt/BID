@@ -1,8 +1,9 @@
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "./CouponList.module.css"
 import Coupon from "./Coupon";
 
 export default function CouponList(props){
-	const {coupons, removeCoupon} = props;
+	const { coupons } = props;
 	
 	return(
 		<div className = {styled.couponListWrapper}>
@@ -15,7 +16,6 @@ export default function CouponList(props){
 						description = {coupon.description}
 						startPrice = {coupon.startPrice}
 						coupons = {coupons}
-						removeCoupon = {removeCoupon}
 					/>)
 			}
 		</div>
