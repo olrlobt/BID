@@ -9,26 +9,28 @@ stages:
 
 cache:
   paths:
-    - node_modules/
+    - FrontEnd/BID/node_modules/
 
 build:
   stage: build
   only:
     - FEDev
   script:
+    - cd FrontEnd/BID
     - yarn install
     - yarn add react-scripts
-    - yarn --cwd /home/gitlab-runner/builds/JKy7rwcft/0/s10-webmobile2-sub2/S10P12A306/FrontEnd/BID build
+    - yarn builds
   artifacts:
     expire_in: 1 hour
     paths:
-      - build/
+      - FrontEnd/BID/sbuild/
 
 deploy-to-s3:
   # aws cli를 설치하기 위해서 python image를 사용합니다.
   image: python:latest
   stage: deploy
   script:
+    - cd FrontEnd/BID
     - pip install awscli
     # aws s3 sync 명령어를 활용하여 빌드된 파일을 나의 버킷에 올려주고 public-read가 가능하도록 설정해 줍니다.
     - aws s3 sync build s3://bid-project.s3.ap-northeast-2.amazonaws.com --acl public-read
