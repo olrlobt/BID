@@ -10,10 +10,11 @@ cache:
     - node_modules/
 
 build:
+  image: node:20.10.0-alpine
   stage: build
   script:
-    - npm install
-    - npm run build
+    - yarn install
+    - yarn build
   artifacts:
     expire_in: 1 hour
     paths:
