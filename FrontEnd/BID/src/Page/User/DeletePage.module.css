@@ -1,0 +1,121 @@
+.back {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  justify-content: center;
+  align-items: center;
+}
+
+.contentInput {
+  margin-top: 5vh;
+  height: 40vh;
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.contentInput input:focus {
+  outline: none; /* 클릭할 때 검정색 테두리 제거 */
+  border: 1px solid #a6a6a6; /* 클릭 시 보여질 테두리 스타일 */
+}
+
+.contentInput input {
+  width: 25vw;
+  height: 6vh;
+  padding: 0 1rem;
+  border-radius: 0.3rem;
+  border: 1px solid #a6a6a6;
+  box-sizing: border-box;
+}
+
+.contentInput button {
+  width: 25vw;
+  height: 7vh;
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  background-color: #ffd43a;
+  color: white;
+  border-radius: 0.3rem;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.ContentOption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.ContentOptions input {
+  width: 20px;
+  height: 20px;
+  margin-right: 1rem;
+}
+
+.ContentOptions {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #888;
+}
+
+.findIdLink {
+  text-decoration: none;
+  color: #a6a6a6;
+  cursor: pointer;
+  margin-right: 1.2rem;
+}
+
+.registerLink {
+  text-decoration: none;
+  color: #a6a6a6;
+  cursor: pointer;
+  margin-left: 1.2rem;
+}
+
+.changePwdLink {
+  text-decoration: none;
+  color: #a6a6a6;
+  cursor: pointer;
+}
+
+.IdLink {
+  width: 25vw;
+  height: 7vh;
+  font-size: 1.2rem;
+  background-color: #ffd43a;
+  color: #ffffff;
+  border-radius: 0.3rem;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  line-height: 7vh;
+}
+
+.IdLink > p {
+  color: #ffffff;
+}
+
+.joinLink {
+  width: 250px;
+  height: 45px;
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  background-color: #ffd43a;
+  color: white;
+  border-radius: 0.3rem;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}

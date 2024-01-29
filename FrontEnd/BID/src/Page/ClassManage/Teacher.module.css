@@ -1,0 +1,66 @@
+.teacherArea {
+  display: flex;
+  height: 12vh;
+  align-self: flex-start;
+  margin-left: 3vw;
+  margin-top: 5vh;
+}
+
+.teacherArea > img {
+  margin-right: 1vw;
+}
+
+.eleInfo {
+  margin-top: 0.5vh;
+}
+
+.teacherInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.teacherBtn {
+  display: flex;
+}
+.nameInfo {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.nameInfo > span {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.icon > path {
+  color: #ffffff;
+}
+
+.classBtn,
+.logoutBtn {
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.classBtn {
+  background-color: #5fa1c4;
+  width: 8vw;
+  height: 2.5vh;
+  line-height: 2.5vh;
+}
+
+.logoutBtn {
+  background-color: #a6a6a6;
+  width: 6vw;
+  height: 2.5vh;
+  line-height: 2.5vh;
+  margin-left: 0.5vw;
+}
+
+.disabled {
+  background-color: #a6a6a6;
+}
