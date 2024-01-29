@@ -19,7 +19,7 @@ build:
     - cd FrontEnd/BID
     - yarn install
     - yarn add react-scripts
-    - yarn builds
+    - yarn build
   artifacts:
     expire_in: 1 hour
     paths:
