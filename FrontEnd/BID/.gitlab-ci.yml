@@ -12,13 +12,12 @@ cache:
 build:
   stage: build
   script:
-    - cd FrontEnd/Bid/
-    - yarn install
-    - yarn build
+    - npm install
+    - npm run build
   artifacts:
     expire_in: 1 hour
     paths:
-      - FrontEnd/Bid/build/
+      - build/
 deploy-to-s3:
   # aws cli를 설치하기 위해서 python image를 사용합니다.
   image: python:latest
