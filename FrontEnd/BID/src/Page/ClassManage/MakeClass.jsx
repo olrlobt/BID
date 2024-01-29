@@ -1,11 +1,11 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import styled from './MakeClass.module.css';
-import { useCallback, useState } from 'react';
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import styled from "./MakeClass.module.css";
+import { useCallback, useState } from "react";
 
 export default function MakeClass() {
-  const XLSX = require('xlsx');
+  const XLSX = require("xlsx");
   const [uploadedFile, setUploadedFile] = useState(null);
 
   const handleDrop = useCallback(async (acceptedFiles) => {
@@ -15,7 +15,7 @@ export default function MakeClass() {
       const reader = new FileReader();
       reader.onload = async (e) => {
         const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array', bookVBA: true });
+        const workbook = XLSX.read(data, { type: "array", bookVBA: true });
 
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
@@ -26,6 +26,7 @@ export default function MakeClass() {
 
       reader.readAsArrayBuffer(file);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <section className={styled.makeClass}>
