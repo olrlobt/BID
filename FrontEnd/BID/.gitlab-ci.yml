@@ -6,12 +6,8 @@ stages:
   - deploy
 # 이 전 작업과 동일한 내용인지를 확인해서 재사용 해주는 캐싱 메커니즘의 옵션입니다.
 before_script:
-  - sudo apt-get update -qy
-  - sudo apt-get install -y curl
-  - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-  - sudo apt-get install -y nodejs
-  - npm install -g yarn
-
+  - apt-get update -qq
+  - apt-get install -y sudo
 cache:
   paths:
     - node_modules/
@@ -19,6 +15,11 @@ cache:
 build:
   stage: build
   script:
+    - sudo apt-get update -qq
+    - sudo apt-get install -y curl
+    - curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+    - sudo apt-get install -y nodejs
+    - npm install -g yarn
     - yarn install
     - yarn build
   artifacts:
