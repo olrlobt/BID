@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
+import com.ssafy.bid.domain.user.dto.StudentsResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 
@@ -17,6 +18,11 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
+
+	@Override
+	public List<StudentsResponse> findStudents(int gradeNo) {
+		return userRepository.findStudents(gradeNo);
+	}
 
 	@Override
 	public StudentResponse findStudent(int userNo, StudentRequest studentRequest) {
