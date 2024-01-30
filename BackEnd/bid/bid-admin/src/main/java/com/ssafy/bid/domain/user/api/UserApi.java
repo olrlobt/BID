@@ -18,7 +18,7 @@ public class UserApi {
 	private final UserService userService;
 
 	@GetMapping("/{gradeNo}/users")
-	public List<StudentsResponse> searchStudents(@PathVariable int gradeNo) {
-		return userService.searchStudents(gradeNo);
+	public List<StudentsResponse> findStudents(@PathVariable int gradeNo) {
+		return userService.findStudents(gradeNo);
 	}
 }
