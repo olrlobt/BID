@@ -9,5 +9,5 @@
 	justify-content: flex-start;
 	border-radius: 2vh;
 	box-shadow: 2px 4px 12px rgba(0,0,0,.08);
-	overflow: scroll;
+	overflow-x: scroll;
 }
