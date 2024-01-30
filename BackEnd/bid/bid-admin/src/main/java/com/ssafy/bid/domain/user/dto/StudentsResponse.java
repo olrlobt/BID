@@ -6,19 +6,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class StudentsResponse {
-	private Integer no;
-	private String number;
+	private int no;
+	private int number;
 	private String name;
-	private Integer asset;
+	private int asset;
 
 	public StudentsResponse(
-		Integer no,
+		int no,
 		String id,
 		String name,
-		Integer asset
+		int asset
 	) {
 		this.no = no;
-		this.number = id.split("-")[2].strip(); // TODO: 학년-반-번호 형식으로 id 지정할 것인지 여부 정하기
+		this.number = Integer.parseInt(id.substring(6).strip());
 		this.name = name;
 		this.asset = asset;
 	}
