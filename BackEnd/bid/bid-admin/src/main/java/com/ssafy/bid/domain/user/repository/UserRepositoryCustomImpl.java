@@ -16,7 +16,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<StudentsResponse> searchStudents(int gradeNo) {
+	public List<StudentsResponse> findStudents(int gradeNo) {
 		return queryFactory.select(Projections.constructor(StudentsResponse.class,
 					student.no,
 					student.id,

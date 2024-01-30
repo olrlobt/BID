@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	@Override
-	public List<StudentsResponse> searchStudents(int gradeNo) {
-		return userRepository.searchStudents(gradeNo);
+	public List<StudentsResponse> findStudents(int gradeNo) {
+		return userRepository.findStudents(gradeNo);
 	}
 }

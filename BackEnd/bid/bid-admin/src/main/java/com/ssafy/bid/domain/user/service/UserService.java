@@ -5,5 +5,5 @@ import java.util.List;
 import com.ssafy.bid.domain.user.dto.StudentsResponse;
 
 public interface UserService {
-	List<StudentsResponse> searchStudents(int gradeNo);
+	List<StudentsResponse> findStudents(int gradeNo);
 }

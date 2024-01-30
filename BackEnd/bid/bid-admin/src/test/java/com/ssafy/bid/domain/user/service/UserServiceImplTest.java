@@ -37,7 +37,7 @@ class UserServiceImplTest {
 		List<Student> savedStudents = List.of(savedStudentA, savedStudentB);
 
 		// when
-		List<StudentsResponse> responses = userService.searchStudents(savedStudentA.getGradeNo());
+		List<StudentsResponse> responses = userService.findStudents(savedStudentA.getGradeNo());
 
 		// then
 		// TODO
