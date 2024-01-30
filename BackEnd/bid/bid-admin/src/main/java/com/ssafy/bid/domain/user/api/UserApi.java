@@ -1,6 +1,7 @@
 package com.ssafy.bid.domain.user.api;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,8 @@ public class UserApi {
 	private final UserService userService;
 
 	@GetMapping("/{gradeNo}/users")
-	public List<StudentsResponse> findStudents(@PathVariable int gradeNo) {
-		return userService.findStudents(gradeNo);
+	public Map<String, List<StudentsResponse>> findStudents(@PathVariable int gradeNo) {
+		List<StudentsResponse> responses = userService.findStudents(gradeNo);
+		return Map.of("body", responses);
 	}
 }
