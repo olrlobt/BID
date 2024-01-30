@@ -3,21 +3,16 @@ import styled from "./Product.module.css";
 
 export default function Product(props) {
   const {
-    // no,
+    onClick,
     title,
-    // contents,
     imgUrl,
-    // goodsType,
-    // goodsName,
     userName,
-    // startPrice,
     avgPrice,
     // endTime,
-    // createdAt,
   } = props;
 
   return (
-    <div className={styled.productWrapper}>
+    <div className={styled.productWrapper} onClick={onClick}>
       <div className={styled.imgWrapper}>
         <img src={imgUrl} alt="이미지" />
       </div>
