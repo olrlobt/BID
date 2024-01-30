@@ -21,6 +21,7 @@ import com.ssafy.bid.domain.user.DealType;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
+import com.ssafy.bid.domain.user.dto.StudentsResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,23 @@ import lombok.RequiredArgsConstructor;
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
+
+	@Override
+	public List<StudentsResponse> findStudents(int gradeNo) {
+		return queryFactory.select(Projections.constructor(StudentsResponse.class,
+					student.no,
+					student.id,
+					student.name,
+					student.asset
+				)
+			)
+			.from(student)
+			.where(
+				student.gradeNo.eq(gradeNo),
+				student.deletedAt.isNull()
+			)
+			.fetch();
+	}
 
 	@Override
 	public List<UserCouponsResponse> findUserCoupons(int userNo) {
