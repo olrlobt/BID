@@ -10,9 +10,9 @@ import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
 
 public interface UserRepositoryCustom {
 
-	List<UserCouponsResponse> searchUserCoupons(int userNo);
+	List<UserCouponsResponse> findUserCoupons(int userNo);
 
-	List<AccountsResponse> searchAccounts(int userNo, StudentRequest studentRequest);
+	List<AccountsResponse> findAccounts(int userNo, StudentRequest studentRequest);
 
-	Optional<StudentResponse> searchStudent(int userNo);
+	Optional<StudentResponse> findStudent(int userNo);
 }
