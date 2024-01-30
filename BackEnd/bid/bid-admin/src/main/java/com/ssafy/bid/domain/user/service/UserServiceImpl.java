@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.bid.domain.user.dto.AccountRequest;
+import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
@@ -35,5 +37,10 @@ public class UserServiceImpl implements UserService {
 		studentResponse.setAccountsResponses(accountsResponses);
 
 		return studentResponse;
+	}
+
+	@Override
+	public List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest) {
+		return userRepository.findAccount(userNo, accountRequest);
 	}
 }

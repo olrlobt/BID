@@ -18,6 +18,8 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.DealType;
+import com.ssafy.bid.domain.user.dto.AccountRequest;
+import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
@@ -238,5 +240,28 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 				.where(student.no.eq(userNo))
 				.fetchOne()
 		);
+	}
+
+	@Override
+	public List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest) {
+		return queryFactory
+			.select(Projections.constructor(AccountResponse.class,
+					account.accountType,
+					account.price,
+					account.content,
+					account.dealType,
+					account.createdAt
+				)
+			)
+			.from(account)
+			.where(
+				account.userNo.eq(userNo),
+				account.createdAt.between(
+					accountRequest.getDate().atStartOfDay(),
+					accountRequest.getDate().plusDays(1).atStartOfDay()
+				)
+			)
+			.orderBy(account.createdAt.desc())
+			.fetch();
 	}
 }
