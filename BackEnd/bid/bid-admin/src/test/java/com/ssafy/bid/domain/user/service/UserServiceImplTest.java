@@ -1,10 +1,7 @@
 package com.ssafy.bid.domain.user.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +18,9 @@ import com.ssafy.bid.model.UserFixture;
 class UserServiceImplTest {
 
 	@Autowired
-	private UserServiceImpl userService;
-
-	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	private UserServiceImpl userService;
 
 	@Test
 	@DisplayName("관리자 학생 목록 조회 서비스 테스트")
