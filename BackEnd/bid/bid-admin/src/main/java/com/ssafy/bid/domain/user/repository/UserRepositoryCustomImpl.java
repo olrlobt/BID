@@ -31,7 +31,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<UserCouponsResponse> searchUserCoupons(int userNo) {
+	public List<UserCouponsResponse> findUserCoupons(int userNo) {
 		return queryFactory
 			.select(Projections.constructor(UserCouponsResponse.class,
 					coupon.name,
@@ -46,7 +46,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
-	public List<AccountsResponse> searchAccounts(int userNo, StudentRequest studentRequest) {
+	public List<AccountsResponse> findAccounts(int userNo, StudentRequest studentRequest) {
 		return queryFactory
 			.select(Projections.constructor(AccountsResponse.class,
 					account.createdAt.dayOfMonth(),
@@ -71,7 +71,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
-	public Optional<StudentResponse> searchStudent(int userNo) {
+	public Optional<StudentResponse> findStudent(int userNo) {
 		return Optional.ofNullable(
 			queryFactory
 				.select(Projections.constructor(StudentResponse.class,

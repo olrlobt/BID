@@ -18,7 +18,7 @@ public class UserApi {
 	private final UserService userService;
 
 	@GetMapping("/users/{userNo}")
-	public StudentResponse searchUser(@PathVariable int userNo, @ModelAttribute StudentRequest studentRequest) {
-		return userService.studentSearch(userNo, studentRequest);
+	public StudentResponse findStudent(@PathVariable int userNo, @ModelAttribute StudentRequest studentRequest) {
+		return userService.findStudent(userNo, studentRequest);
 	}
 }
