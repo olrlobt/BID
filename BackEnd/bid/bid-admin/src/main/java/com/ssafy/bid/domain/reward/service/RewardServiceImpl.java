@@ -30,4 +30,9 @@ public class RewardServiceImpl implements RewardService {
 	public List<RewardsFindResponse> findRewards(int gradeNo) {
 		return rewardRepository.findRewards(gradeNo);
 	}
+
+	@Override
+	public void deleteReward(int rewardNo) {
+		rewardRepository.deleteById(rewardNo);
+	}
 }

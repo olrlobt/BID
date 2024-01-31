@@ -9,4 +9,6 @@ public interface RewardService {
 	void saveReward(int gradeNo, RewardSaveRequest rewardSaveRequest);
 
 	List<RewardsFindResponse> findRewards(int gradeNo);
+
+	void deleteReward(int rewardNo);
 }
