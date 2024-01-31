@@ -2,7 +2,6 @@ import React from "react";
 import styled from "./ViewProductModal.module.css";
 import Modal from '../Common/Modal';
 import { useState } from 'react';
-import useProducts from "../../hooks/useProducts";
 import ProductInfoButton from "./ProductInfoButton";
 import { SvgIcon } from "@material-ui/core";
 import { ArrowForward } from "@material-ui/icons";
@@ -22,10 +21,6 @@ export default function ViewProductModal({ onClose, ...props }) {
   // 9  endTime,
   // 10 createdAt,
 
-  const { removeProduct } = useProducts();
-
-  // console.log(props[11]);
-
   const [form, setForm] = useState({
     price: 0,
   });
@@ -38,16 +33,13 @@ export default function ViewProductModal({ onClose, ...props }) {
     });
   };
 
-  const addNewProduct = (e) => {
+  const bidSubmit = (e) => {
     e.preventDefault();
     if (form.price === 0) {
       console.log('금액을 입력해주세요');
     } else{
-      // 데이터 저장
-      // addProduct({
-      //   newProduct: form
-      // });s
-      onClose();
+      // 입찰
+      console.log(form.price+'비드 입찰되었습니다');
     }
   }
 
@@ -109,7 +101,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             <img src={props[3]} alt="제품 이미지" />
           </div>
           <div className={styled.biddingArea}>
-            <form id='newProductForm' onSubmit={addNewProduct}>
+            <form id='newProductForm' onSubmit={bidSubmit}>
               <input
                 type="number"
                 name="price"
@@ -119,6 +111,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                 text = '입찰'
                 width = '7vw'
                 height = '5vw'
+                fontSize = '2vw'
               />
             </form>
           </div>
@@ -127,6 +120,8 @@ export default function ViewProductModal({ onClose, ...props }) {
           <div className={styled.content}>{ props[2]}</div>
           <div className={styled.commentArea}>
             {
+              props[11]===undefined?
+              <></>:
               props[11].map((c) =>
                 <Comment
                   key = {c.createdAt}
