@@ -1,0 +1,16 @@
+
+.bead {
+    width: 5vw;
+    height: 10vh;
+    background-color: #5FA1C4;
+    border-radius: 50%;
+    display: flex;
+    font-size: 1rem;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 3px 3px #4D4D4D;
+    margin-top: 1vh;
+    color: white; /* Set text color to white or adjust as needed */
+    font-weight: bold;
+  }
+  
