@@ -1,0 +1,19 @@
+.priceWrapper{
+	background-color: white;
+	border: 0.3vh solid #F23F3F;
+	display: inline-flex;
+	width: auto;
+	border-radius: 2vh;
+	height: 3vh;
+	box-sizing: border-box;
+	line-height: 3vh;
+	padding: 0 1vh;
+
+}
+
+.priceWrapper > span{
+	color: #F23F3F;
+	font-weight: 600;
+	font-size: 1.8vh;
+	line-height: 2.5vh;
+}

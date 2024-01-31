@@ -1,0 +1,21 @@
+.writerButton {
+	background-color: white;
+	color: #FFD43A;
+	border: 0.2vw solid #FFD43A;
+	box-sizing: border-box;
+	border-radius: 2vw;
+	line-height: 2vw;
+	padding: 0 0.7vw;
+	margin-right: 0.5vw;
+}
+
+.writerButton:last-child {
+	margin-right: 0;
+}
+
+.active {
+	background-color: #FFD43A;
+	color: white;
+
+}
+

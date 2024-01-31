@@ -1,0 +1,57 @@
+.makeClass {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.xlsxDownload {
+  align-self: flex-start;
+  width: 12vw;
+  height: 4vh;
+  line-height: 4vh;
+  border-radius: 5px;
+  font-weight: 0.9rem;
+  color: #ffffff;
+  font-weight: 600;
+  background-color: var(--color-text-important);
+}
+
+.xlsxDownload path {
+  color: #ffffff;
+}
+
+.makeInfo {
+  display: flex;
+  flex-direction: column;
+  width: 47vw;
+  font-weight: 0.9rem;
+  height: 13vh;
+  text-align: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.makeInfo span {
+  color: #ffffff;
+}
+
+.info2 {
+  margin-top: 1vh;
+}
+
+.viewStu {
+  height: 30vh;
+  width: 47vw;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.makeBtn {
+  width: 47vw;
+  height: 7vh;
+  background-color: var(--color-point-yellow);
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
