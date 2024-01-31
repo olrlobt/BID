@@ -9,4 +9,6 @@ public interface SavingService {
 	List<SavingsResponse> findSavings(int gradeNo);
 
 	void saveSaving(int userNo, SavingRequest savingRequest);
+
+	void deleteSaving(int userNo, int savingNo);
 }
