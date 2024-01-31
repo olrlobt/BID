@@ -1,0 +1,11 @@
+.detailsContainer{
+
+    background-color: #FFFFFF;
+
+    box-shadow: 0px 3px 3px #4D4D4D;
+    font-size: 14px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-right: 1vw;
+  }
+  
