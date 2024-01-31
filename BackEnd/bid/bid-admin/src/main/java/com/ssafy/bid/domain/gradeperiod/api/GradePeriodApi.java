@@ -15,7 +15,7 @@ public class GradePeriodApi {
 
 	private final GradePeriodService gradePeriodService;
 
-	@PatchMapping("{gradeNo}/periods")
+	@PatchMapping("{gradeNo}/grade-periods")
 	public void modifyGradePeriods(@PathVariable int gradeNo, GradePeriodModifyRequest gradePeriodModifyRequest) {
 		gradePeriodService.modifyGradePeriod(gradeNo, gradePeriodModifyRequest);
 	}
