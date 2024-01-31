@@ -1,0 +1,24 @@
+.savingsContainer {
+  background-color: #F7F7F7;
+    padding: 20px; /* 내부 여백 조정 */
+    box-shadow: 0px 3px 3px #4D4D4D; /* 그림자 효과 */
+    margin-bottom: 20px; /* 하단 마진 */
+    max-height: 500px; /* 최대 높이 설정 */
+    width: 16vw;
+    border-radius: 12px;
+}
+
+.header {
+  font-size: 1.2rem;
+  color: #4D4D4D;
+}
+
+.subText {
+  font-size: 1rem;
+  color: #4D4D4D;
+}
+
+.interestRate {
+  font-size: 0.8rem;
+  color: #4D4D4D;
+}
