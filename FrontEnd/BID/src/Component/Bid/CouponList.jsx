@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import styled from "./CouponList.module.css"
 import Coupon from "./Coupon";
 
