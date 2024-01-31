@@ -52,4 +52,8 @@ public class Grade extends BaseEntity {
 	 */
 	@NotNull
 	private Integer userNo;
+
+	public void modifySalary(int salary) {
+		this.salary = salary;
+	}
 }
