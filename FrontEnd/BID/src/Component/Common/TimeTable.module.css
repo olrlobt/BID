@@ -4,7 +4,7 @@
 .timeImage {
   width: 20vw;
   height: 34vh;
-  background-image: url('../../Asset/Image/HOME_icons/calender-dynamic-color.png');
+  background-image: url("../../Asset/Image/HOME_icons/class-time.png");
   background-size: cover;
   background-position: -5vw;
   background-repeat: no-repeat;
