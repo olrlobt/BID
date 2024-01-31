@@ -7,12 +7,18 @@ import ChangeBidModal from "../Dashboard/ChangeBidModal";
 import useModal from "../../hooks/useModal";
 import IntoMoneyModal from "../Dashboard/IntoMoneyModal";
 import NewCouponModal from "../Bid/NewCouponModal";
+import StudentAdd from "../Manage/StudentAdd";
+import PwdRemoveModal from '../Manage/PwdRemoveModal'
+import StudentEditModal from '../Manage/StudentEditModal'
 
 const MODAL_COMPONENTS = {
   coupon: CouponModal,
   changeBid: ChangeBidModal,
   intoMoney: IntoMoneyModal,
   newCoupon: NewCouponModal,
+  addStudent: StudentAdd,
+  pwdRemove: PwdRemoveModal,
+  editStudent: StudentEditModal,
 };
 
 function ModalContainer() {
