@@ -1,10 +1,10 @@
 import styled from "./Home.module.css";
 import InfoBox from "../../Component/Common/InfoBox";
-import Card from "../../Asset/Image/HOME_icons/card-dynamic-color.png";
-import Coin from "../../Asset/Image/HOME_icons/Coins.png";
-import LinkFront from "../../Asset/Image/HOME_icons/link-front-color.png";
-import Locker from "../../Asset/Image/HOME_icons/locker-dynamic-color.png";
-import Clock from "../../Asset/Image/HOME_icons/clock-front-color.png";
+import Card from "../../Asset/Image/HOME_icons/coupon.png";
+import Coin from "../../Asset/Image/HOME_icons/money.png";
+import LinkFront from "../../Asset/Image/HOME_icons/transaction.png";
+import Locker from "../../Asset/Image/HOME_icons/bank.png";
+import Clock from "../../Asset/Image/HOME_icons/class-time.png";
 import useModal from "../../hooks/useModal";
 import TimeTable from "../../Component/Common/TimeTable";
 
