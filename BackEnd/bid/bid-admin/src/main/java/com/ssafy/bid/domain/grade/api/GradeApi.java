@@ -22,7 +22,7 @@ public class GradeApi {
 		return gradeService.findGrade(gradeNo);
 	}
 
-	@PatchMapping("/{gradeNo}/grades/salary")
+	@PatchMapping("/{gradeNo}/salary")
 	public void modifySalary(@PathVariable int gradeNo, SalaryModifyRequest salaryModifyRequest) {
 		gradeService.modifySalary(gradeNo, salaryModifyRequest);
 	}
