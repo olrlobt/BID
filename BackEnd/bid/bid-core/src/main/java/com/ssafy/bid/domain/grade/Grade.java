@@ -56,4 +56,9 @@ public class Grade extends BaseEntity {
 	public void modifySalary(int salary) {
 		this.salary = salary;
 	}
+
+	public void modifySavingTime(LocalTime transferAlertPeriod, LocalTime transferPeriod) {
+		this.transferAlertPeriod = transferAlertPeriod;
+		this.transferPeriod = transferPeriod;
+	}
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.grade.dto.GradeFindResponse;
 import com.ssafy.bid.domain.grade.dto.SalaryModifyRequest;
+import com.ssafy.bid.domain.grade.dto.SavingPeriodModifyRequest;
 import com.ssafy.bid.domain.grade.service.GradeService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,10 @@ public class GradeApi {
 	@PatchMapping("/{gradeNo}/salary")
 	public void modifySalary(@PathVariable int gradeNo, SalaryModifyRequest salaryModifyRequest) {
 		gradeService.modifySalary(gradeNo, salaryModifyRequest);
+	}
+
+	@PatchMapping("/{gradeNo}/saving-periods")
+	public void modifySavingPeriod(@PathVariable int gradeNo, SavingPeriodModifyRequest savingPeriodModifyRequest) {
+		gradeService.modifySavingTime(gradeNo, savingPeriodModifyRequest);
 	}
 }
