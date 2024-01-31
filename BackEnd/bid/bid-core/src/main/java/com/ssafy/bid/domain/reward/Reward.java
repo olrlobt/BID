@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,9 +27,6 @@ public class Reward {
 	private String name;
 
 	@NotNull
-	private String description;
-
-	@NotNull
 	private Integer price;
 
 	/**
@@ -36,4 +34,15 @@ public class Reward {
 	 */
 	@NotNull
 	private  Integer gradeNo;
+
+	@Builder
+	public Reward(
+		String name,
+		Integer price,
+		Integer gradeNo
+	) {
+		this.name = name;
+		this.price = price;
+		this.gradeNo = gradeNo;
+	}
 }
