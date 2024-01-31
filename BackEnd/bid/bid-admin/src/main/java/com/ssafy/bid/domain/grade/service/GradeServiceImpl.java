@@ -10,6 +10,7 @@ import com.ssafy.bid.domain.grade.dto.BiddingsFindResponse;
 import com.ssafy.bid.domain.grade.dto.GradeFindResponse;
 import com.ssafy.bid.domain.grade.dto.GradePeriodsFindResponse;
 import com.ssafy.bid.domain.grade.dto.SalaryModifyRequest;
+import com.ssafy.bid.domain.grade.dto.SavingPeriodModifyRequest;
 import com.ssafy.bid.domain.grade.repository.GradeRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -41,5 +42,16 @@ public class GradeServiceImpl implements GradeService {
 			.orElseThrow(() -> new IllegalArgumentException(""));//TODO: 커스텀 예외처리
 
 		grade.modifySalary(salaryModifyRequest.getSalary());
+	}
+
+	@Override
+	public void modifySavingTime(int gradeNo, SavingPeriodModifyRequest savingPeriodModifyRequest) {
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new IllegalArgumentException(""));//TODO: 커스텀 예외처리
+
+		grade.modifySavingTime(
+			savingPeriodModifyRequest.getTransferAlertPeriod(),
+			savingPeriodModifyRequest.getTransferPeriod()
+		);
 	}
 }
