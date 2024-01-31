@@ -1,4 +1,3 @@
-// import Calender from '../../Asset/Image/HOME_icons/calender-dynamic-color.png';
 import styled from "./TimeTable.module.css";
 import React from "react";
 
