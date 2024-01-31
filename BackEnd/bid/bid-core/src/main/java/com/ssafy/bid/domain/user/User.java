@@ -43,4 +43,16 @@ public class User extends BaseEntity {
 	 */
 	@NotNull
 	private Integer schoolNo;
+
+	public User(
+		String id,
+		String password,
+		String name,
+		Integer schoolNo
+	) {
+		this.id = id;
+		this.password = password;
+		this.name = name;
+		this.schoolNo = schoolNo;
+	}
 }
