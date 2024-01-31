@@ -32,4 +32,9 @@ public class SavingServiceImpl implements SavingService {
 		UserSaving userSaving = savingRequest.toEntity(userNo);
 		userSavingRepository.save(userSaving);
 	}
+
+	@Override
+	public void deleteSaving(int userNo, int savingNo) {
+		userSavingRepository.deleteByUserNoAndSavingNo(userNo, savingNo);
+	}
 }

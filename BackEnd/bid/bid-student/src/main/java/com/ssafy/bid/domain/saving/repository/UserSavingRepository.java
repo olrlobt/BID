@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ssafy.bid.domain.saving.UserSaving;
 
 public interface UserSavingRepository extends JpaRepository<UserSaving, Integer> {
+	void deleteByUserNoAndSavingNo(int userNo, int savingNo);
 }
