@@ -1,24 +1,36 @@
 .couponContainer {
-    background-color: #F7F7F7;
-      padding: 20px; /* 내부 여백 조정 */
-      box-shadow: 0px 3px 3px #4D4D4D; /* 그림자 효과 */
-      margin-bottom: 20px; /* 하단 마진 */
-      max-height: 500px; /* 최대 높이 설정 */
-      width: 16vw;
-      border-radius: 12px;
-  }
-  
-.coupon {
-    font-size: 0.8rem;
-    color: #4D4D4D;
-  }
-  
-.couponIcon {
-    font-size: 0.8rem;
-    color: #4D4D4D;
+  background-color: #F7F7F7;
+  padding: 20px;
+  box-shadow: 0px 3px 3px #4D4D4D;
+  width: 15vw;
+  border-radius: 1vw;
+  display: flex;
+  flex-direction: column;
 }
-  
-.interestRate {
-    font-size: 0.8rem;
-    color: #4D4D4D;
+
+.couponName {
+  font-size: 0.95rem;
+  color: #FFFFFF;
+  background-color: #FFD43A;
+  border-radius: 0.3vw;
+  padding: 0.5vh;
+  width: 100%; /* 변경된 부분 */
+  text-align: center;
+  margin-bottom: 1vh;
+}
+
+.couponCount {
+  flex: 1;
+  margin-left: 1vw;
+  margin-top: 0.5vh;
+}
+
+.coupon {
+  display: flex;
+}
+
+.couponIcon {
+  font-size: 0.8rem;
+  color: #FFFFFF;
+  margin-right: 0.5vw; /* 변경된 부분 */
 }
