@@ -282,4 +282,16 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 			.orderBy(student.no.asc())
 			.fetch();
 	}
+
+	@Override
+	public void resetBallCounts(int gradeNo) {
+		queryFactory
+			.update(student)
+			.set(student.ballCount, 0)
+			.where(
+				student.gradeNo.eq(gradeNo),
+				student.deletedAt.isNull()
+			)
+			.execute();
+	}
 }
