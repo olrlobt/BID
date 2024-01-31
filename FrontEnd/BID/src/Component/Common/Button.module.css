@@ -1,26 +1,21 @@
+.writerButton {
+	background-color: white;
+	color: #FFD43A;
+	border: 0.3vh solid #FFD43A;
+	box-sizing: border-box;
+	border-radius: 2vh;
+	line-height: 3vh;
+	padding: 0 1vh;
+	margin-right: 0.5vw;
+}
 
-.logoContainer {
-    text-align: center;
-    border-radius: 15px;
-    cursor: pointer;
+.writerButton:last-child {
+	margin-right: 0;
+}
+
+.active {
+	background-color: #FFD43A;
+	color: white;
 
 }
 
-
-.logoContainer p {
-    position: relative;
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-
-}
-  
-
-.border {
-    position: absolute;
-    pointer-events: none; 
-    box-sizing: border-box; 
-    text-align: center;
-    cursor: pointer;
-
-}
