@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,5 +42,10 @@ public class UserApi {
 	@GetMapping("/{gradeNo}/balls")
 	public List<BallsResponse> findBalls(@PathVariable int gradeNo) {
 		return userService.findBalls(gradeNo);
+	}
+
+	@PatchMapping("/{gradeNo}/balls")
+	public void modifyBalls(@PathVariable int gradeNo) {
+		userService.modifyBalls(gradeNo);
 	}
 }

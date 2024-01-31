@@ -17,4 +17,6 @@ public interface UserService {
 	List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest);
 
 	List<BallsResponse> findBalls(int gradeNo);
+
+	void modifyBalls(int gradeNo);
 }
