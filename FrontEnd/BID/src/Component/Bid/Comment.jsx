@@ -2,7 +2,7 @@ import React from "react";
 import styled from "./Comment.module.css";
 
 export default function Comment(props){
-  const { userNo, name, content, createdAt, deleteAt } = props;
+  const { name, content, createdAt } = props;
 
   return(
     <div className={styled.commentWrapper}>
