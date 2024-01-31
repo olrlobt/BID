@@ -180,7 +180,9 @@ export default function BidPage(){
 
   useEffect(() => {
     initCoupons({ couponList: dummyCoupons });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     initProducts({ productList: dummyProducts });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   
   /** 게시자 종류를 toggle하는 함수 */
