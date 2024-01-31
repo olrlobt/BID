@@ -79,6 +79,7 @@ export default function NewCouponModal({ onClose, ...props }){
           text = '등록'
           width = '100%'
           height = '7vh'
+          fontSize = '2vw'
         />
       </form>
     </Modal>

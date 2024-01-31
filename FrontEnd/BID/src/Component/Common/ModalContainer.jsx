@@ -7,12 +7,14 @@ import ChangeBidModal from "../Dashboard/ChangeBidModal";
 import useModal from "../../hooks/useModal";
 import IntoMoneyModal from "../Dashboard/IntoMoneyModal";
 import NewCouponModal from "../Bid/NewCouponModal";
+import ViewProductModal from "../Bid/ViewProductModal";
 
 const MODAL_COMPONENTS = {
   coupon: CouponModal,
   changeBid: ChangeBidModal,
   intoMoney: IntoMoneyModal,
   newCoupon: NewCouponModal,
+  viewProduct: ViewProductModal,
 };
 
 function ModalContainer() {

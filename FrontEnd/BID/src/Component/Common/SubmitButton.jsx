@@ -2,11 +2,12 @@ import React from "react";
 import styled from "./SubmitButton.module.css";
 
 export default function SubmitButton(props){
-  const {text, width, height} = props;
+  const {text, width, height, fontSize} = props;
 
   const buttonSize = {
     width: width,
-    height: height
+    height: height,
+    fontSize: fontSize
   }
 
   return(
