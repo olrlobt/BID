@@ -1,20 +1,17 @@
 import React from "react";
-import styled from './Button3.module.css';
+import styled from './PwdRemoveBtn.module.css';
 import PropTypes from "prop-types";
 
-function Button3(props) {
+function PwdRemoveBtn(props) {
 
-  const {onClick, text} = props;
+  const {onClick} = props;
 
 
   return (
     <button
       className={styled.logoContainer}
       style={{
-        backgroundColor: "#BBBD32",
-        border: "none", 
-        boxSizing: 'border-box',
-        alignItems: 'center',
+        backgroundColor: "#A6A6A6",
         justifyContent: 'center',
         cursor: 'pointer'
       }}
@@ -28,15 +25,15 @@ function Button3(props) {
         alignItems: 'center', // Center the icon and text vertically
         margin: 0,
       }}>
-        {text}
+        비밀번호 초기화
       </p>
     </button>
   );
 }
 
-Button3.propTypes = {
+PwdRemoveBtn.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
-export default Button3;
+export default PwdRemoveBtn;
 
