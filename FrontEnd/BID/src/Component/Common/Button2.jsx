@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "./Button2.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SvgIcon } from "@material-ui/core";
 import SettingsIcon from '@mui/icons-material/Settings';
 
