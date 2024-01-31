@@ -1,11 +1,11 @@
 .writerButton {
 	background-color: white;
 	color: #FFD43A;
-	border: 0.3vh solid #FFD43A;
+	border: 0.2vw solid #FFD43A;
 	box-sizing: border-box;
-	border-radius: 2vh;
-	line-height: 3vh;
-	padding: 0 1vh;
+	border-radius: 2vw;
+	line-height: 2vw;
+	padding: 0 0.7vw;
 	margin-right: 0.5vw;
 }
 
