@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "./BidPage.module.css";
 import WriterButton from "../../Component/Bid/WriterButton";
 import NewCouponButton from "../../Component/Bid/NewCouponButton";
 import CouponList from "../../Component/Bid/CouponList";
 import AddIcon from "@material-ui/icons/Add";
 import Product from "../../Component/Bid/Product";
+import NoContent from "../../Component/Bid/NoContent";
 import useModal from '../../hooks/useModal';
 import useCoupons from "../../hooks/useCoupons";
 import useProducts from "../../hooks/useProducts";
@@ -42,7 +43,7 @@ export default function BidPage(){
         {
           userNo: 17,
           name: '유현지',
-          content: '우효~ 귀여워라',
+          content: '우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 ',
           createdAt: new Date('2022-5-20 10:32:20').toJSON(),
           deleteAt: null,
         },
@@ -97,7 +98,7 @@ export default function BidPage(){
     }, 
     {
       no: 4,
-      title: '미니 퍼즐',
+      title: '초미니 퍼즐',
       contents: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다!',
       imgUrl: 'https://img.freepik.com/premium-psd/jigsaw-puzzle-cube-isolated-gaming-and-streaming-icon-set-cute-minimal-style-3d-render_570783-710.jpg',
       goodsType: '기타',
@@ -138,6 +139,8 @@ export default function BidPage(){
 
   // const [isInitialRender, setIsInitialRender] = useState(true);
   const [isTeacher, setIsTeacher] = useState(true);
+  const [productFilter, setProductFilter] = useState('전체');
+  const [keyword, setKeyword] = useState('');
 
   const dispatch = useDispatch();
   const { openModal } = useModal();
@@ -148,10 +151,31 @@ export default function BidPage(){
   
   let notSelected = [];
   let selected = [];
+  let filteredProducts = [];
 
-  if(coupons!==null) {
+  if(coupons !== null) {
     notSelected = coupons.filter((coupon) => coupon.selected===false);
     selected = coupons.filter((coupon) => coupon.selected===true);
+  }
+
+  if(products !== null) {
+    if(productFilter === '전체'){
+      if(keyword === ''){
+        filteredProducts = [...products];
+      }
+      else{
+        filteredProducts = products.filter((product) => product.title.includes(keyword));
+      }
+    }
+    else{
+      if(keyword === ''){
+        filteredProducts = products.filter((product) => product.goodsType === productFilter);
+      }
+      else{
+        filteredProducts = products.filter((product) => product.goodsType === productFilter && product.title.includes(keyword));
+
+      }
+    }
   }
 
   useEffect(() => {
@@ -159,12 +183,26 @@ export default function BidPage(){
     initProducts({ productList: dummyProducts });
   }, [dispatch]);
   
-  /** 게시자 종류를 toggle해주는 함수 */
+  /** 게시자 종류를 toggle하는 함수 */
   const changeWriter = (writer) => {
     if(isTeacher && writer==='teacher') {}
     else if(!isTeacher && writer==='student') {}
     else {setIsTeacher(!isTeacher);}
   }
+
+  /** 게시글 필터를 toggle하는 함수 */
+  const changeFilter = (filter) => {
+    if(productFilter !== filter){
+      setProductFilter(filter);
+    }
+  }
+
+  /** keyword 기준으로 게시글을 검색하는 함수 */
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setKeyword(value);
+    console.log(keyword);
+  };
 
   return (
     <div className = {styled.bidSection}>
@@ -173,12 +211,12 @@ export default function BidPage(){
           <WriterButton
             onClick = {() => changeWriter('teacher')}
             text = {'선생님'}
-            active = {isTeacher}
+            active = { isTeacher }
           />
           <WriterButton
             onClick = {() => changeWriter('student')}
             text = {'학생'}
-            active = {!isTeacher}
+            active = { !isTeacher }
           />
         </div>
         <div>
@@ -193,12 +231,53 @@ export default function BidPage(){
             svg = {AddIcon}
             text = {'새 쿠폰 등록'}
           /> :
-          null
+          <div className = {styled.filterArea}>
+            <div className = {styled.filterButtons}>
+              <WriterButton
+                onClick = { () => changeFilter('전체') }
+                text = '전체'
+                active = { productFilter==='전체' }
+              />
+              <WriterButton
+                onClick = { () => changeFilter('간식') }
+                text = '간식'
+                active = { productFilter==='간식' }
+              />
+              <WriterButton
+                onClick = { () => changeFilter('학습') }
+                text = '학습'
+                active = { productFilter==='학습' }
+              />
+              <WriterButton
+                onClick = { () => changeFilter('쿠폰') }
+                text = '쿠폰'
+                active = { productFilter==='쿠폰' }
+              />
+              <WriterButton
+                onClick = { () => changeFilter('오락') }
+                text = '오락'
+                active = { productFilter==='오락' }
+              />
+              <WriterButton
+                onClick = { () => changeFilter('기타') }
+                text = '기타'
+                active = { productFilter==='기타' }
+              />
+            </div>
+            <div className = {styled.keywordSearch}>
+              <input
+                placeholder = '찾고 싶은 물건을 검색해보세요!'
+                type = 'text'
+                name = 'keyword'
+                onChange = { handleChange }
+              />
+            </div>
+          </div>
         }
         </div>
       </div>
 
-      <div className = {styled.bidBody}>
+      <div>
         {
           isTeacher?
           (<div className = {styled.couponListWrapper}>
@@ -217,7 +296,11 @@ export default function BidPage(){
           </div>):
           (<div className = {styled.productsWrapper}>
             {
-              products.map((product) => 
+              filteredProducts.length === 0
+              ?
+              <NoContent/>
+              :
+              filteredProducts.map((product) => 
                 <Product
                   onClick = {() =>
                     openModal({
