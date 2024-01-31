@@ -106,7 +106,7 @@
   }
 
   .commentArea{
-    background-color: pink;
+    /* background-color: pink; */
     overflow-x: scroll;
   }
 
