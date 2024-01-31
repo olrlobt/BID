@@ -4,6 +4,7 @@ import { faGear } from "@fortawesome/free-solid-svg-icons";
 import styled from "./BankPage.module.css";
 
 export default function BankPage() {
+  // 이후 백엔드에서 국고 금액 받아오면 바꾸기
   // const [bankMoney, setBankMoney] = useState(0);
   const [savingInfo, setSavingInfo] = useState({
     savingA: 30,
