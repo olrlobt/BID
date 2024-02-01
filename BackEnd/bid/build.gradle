@@ -87,7 +87,7 @@ project(':bid-core') {
     // 공통 코드
     bootJar {
         enabled = false
-        archiveFileName = 'bid-core-0.0.1-SNAPSHOT-plain.jar'
+        archiveFileName = 'bid-core-0.0.1-SNAPSHOT.jar'
     } // core 은 bootJar 로 패키징 할 필요 없음
     jar { enabled = true }
 
@@ -98,7 +98,7 @@ project(':bid-core') {
 project(':bid-admin') {
     bootJar {
         enabled = true
-        archiveFileName = 'bid-admin-0.0.1-SNAPSHOT-plain.jar'
+        archiveFileName = 'bid-admin-0.0.1-SNAPSHOT.jar'
     }
     jar { enabled = false }
 
@@ -110,7 +110,7 @@ project(':bid-admin') {
 project(':bid-student') {
     bootJar {
         enabled = true
-        archiveFileName = 'bid-student-0.0.1-SNAPSHOT-plain.jar'
+        archiveFileName = 'bid-student-0.0.1-SNAPSHOT.jar'
     }
     jar { enabled = false }
 
