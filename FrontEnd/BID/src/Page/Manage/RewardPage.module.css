@@ -1,0 +1,115 @@
+.contentSection {
+	display: flex;
+	flex-direction: column;
+	width: calc(100% - 20vw);
+  height: 100vh;
+	padding: 5vh;
+	box-sizing: border-box;
+
+  .col{
+    padding: 2vw;
+    box-sizing: border-box;
+  }
+}
+
+.rewardArea{
+  background-color: rgb(212, 212, 212);
+  width: 100%;
+  height: 50vw;
+  max-height: 50vw;
+  margin: auto;
+  display: flex;
+}
+
+.studentCol{
+  flex: 2;
+
+  table{
+    width: 100%;
+  }
+}
+
+.rewardCol{
+  flex: 4;
+
+  .header{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .rewardContainer{
+    background-color: beige;
+    border-radius: 1vw;
+    height: 42vw;
+    box-sizing: border-box;
+
+    .body{
+      /* background-color: beige; */
+      border-radius: 1vw;
+      height: 34vw;
+      padding: 1vw;
+
+      .reward{
+        background-color: orange;
+        display: flex;
+        padding: 1.5vw;
+        box-sizing: border-box;
+        border-radius: 1vw;
+
+        span{
+          background-color: pink;
+          margin-right: 0.7vw;
+        }
+      }
+    }
+
+    .footer{
+      background-color: steelblue;
+      height: 6vw;
+      padding: 1vw;
+      box-sizing: border-box;
+      
+      form{
+        height: 4vw;
+        display: flex;
+        justify-content: space-between;
+
+        input{
+          border: none;
+          border-radius: 0.5vw;
+          padding: 1vw;
+          box-sizing: border-box;
+        }
+        input:focus{
+          outline: none;
+        }
+
+        input[type="text"]{
+          width: 50%;
+        }
+
+        input[type="number"]{
+          width: 25%;
+        }
+      }
+    }
+  }
+}
+
+.submitCol{
+  flex: 3;
+
+  .result{
+  }
+}
+
+.title{
+  font-size: 2.5vw;
+  margin-bottom: 1vw;
+  background-color: orange;
+}
+
+.subTitle{
+  font-size: 2vw;
+  margin-bottom: 0.5vw;
+}
