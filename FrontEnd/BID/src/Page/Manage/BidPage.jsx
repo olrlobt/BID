@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import styled from "./BidPage.module.css";
 import WriterButton from "../../Component/Bid/WriterButton";
 import NewCouponButton from "../../Component/Bid/NewCouponButton";
@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { couponSelector } from "../../Store/couponSlice";
 import { productSelector } from "../../Store/productSlice";
 import { useDispatch } from "react-redux";
+import { DragDropContext } from "react-beautiful-dnd";
 
 export default function BidPage(){
 
@@ -137,8 +138,9 @@ export default function BidPage(){
     }
   ]
 
-  // const [isInitialRender, setIsInitialRender] = useState(true);
   const [isTeacher, setIsTeacher] = useState(true);
+  const [selectedCoupons, setSelectedCoupons] = useState([]);
+  const [notSelectedCoupons, setNotSelectedCoupons] = useState([]); 
   const [productFilter, setProductFilter] = useState('전체');
   const [keyword, setKeyword] = useState('');
 
@@ -149,14 +151,9 @@ export default function BidPage(){
   const coupons = useSelector(couponSelector);
   const products = useSelector(productSelector);
   
-  let notSelected = [];
-  let selected = [];
+  // let notSelected = [];
+  // let selected = [];
   let filteredProducts = [];
-
-  if(coupons !== null) {
-    notSelected = coupons.filter((coupon) => coupon.selected===false);
-    selected = coupons.filter((coupon) => coupon.selected===true);
-  }
 
   if(products !== null) {
     if(productFilter === '전체'){
@@ -184,7 +181,19 @@ export default function BidPage(){
     initProducts({ productList: dummyProducts });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  useLayoutEffect(() => {
+    if(coupons!==null){
+    let copyCoupons = [...coupons];
+    let selected = copyCoupons.filter((coupon) => coupon.selected===true);
+    setSelectedCoupons(selected);
+    let notSelected = copyCoupons.filter((coupon) => coupon.selected===false);
+    setNotSelectedCoupons(notSelected);
+    }
+  }, [coupons]);
   
+
+
   /** 게시자 종류를 toggle하는 함수 */
   const changeWriter = (writer) => {
     if(isTeacher && writer==='teacher') {}
@@ -205,6 +214,20 @@ export default function BidPage(){
     setKeyword(value);
     console.log(keyword);
   };
+
+  /** 쿠폰을 드래그 해서 옮길 때 실행되는 함수 */
+  const onDragEnd = ({source, destination}) => {
+    if(destination===null) { return; }
+    let copyCoupons = [...coupons];
+    const destSelected = JSON.parse(destination.droppableId);
+    if(JSON.parse(source.droppableId) === destSelected) { return; }
+    copyCoupons = copyCoupons.map((coupon) =>
+      coupon.no === source.index ?
+      {...coupon, selected: destSelected} :
+      coupon
+      );
+    initCoupons({ couponList: copyCoupons });
+  }
 
   return (
     <div className = {styled.bidSection}>
@@ -283,19 +306,26 @@ export default function BidPage(){
         {
           isTeacher?
           (<div className = {styled.couponListWrapper}>
-            <div>
-              <div className = {styled.couponListTitle}>미등록 쿠폰</div>
-              <CouponList
-                coupons = {notSelected}
-              />
-            </div>
-            <div>
-              <div className = {styled.couponListTitle}>등록된 쿠폰</div>
-              <CouponList
-                coupons = {selected}
-              />
-            </div>
-          </div>):
+              <DragDropContext
+                onDragEnd={onDragEnd}
+              >
+                <div>
+                  <div className = {styled.couponListTitle}>미등록 쿠폰</div>
+                  <CouponList
+                    title = 'false'
+                    coupons = {notSelectedCoupons}
+                  />
+                </div>
+                <div>
+                  <div className = {styled.couponListTitle}>등록된 쿠폰</div>
+                  <CouponList
+                    title= 'true'
+                    coupons = {selectedCoupons}
+                  />
+                </div>
+              </DragDropContext>
+          </div>)
+          :
           (<div className = {styled.productsWrapper}>
             {
               filteredProducts.length === 0
