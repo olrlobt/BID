@@ -82,7 +82,7 @@ export default function GamePage() {
               ))}
           </section>
         </section>
-        <Link to="/game/seat">
+        <Link to="/game/seat" state={ballList}>
           <button className={styled.seatBtn}>자리 뽑기 시작</button>
         </Link>
       </section>

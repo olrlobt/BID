@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { initBalls } from "../Store/ballSlice";
+import { initBalls, removeBalls } from "../Store/ballSlice";
 
 export default function useBalls() {
   const dispatch = useDispatch();
@@ -7,7 +7,12 @@ export default function useBalls() {
   const handleInitBalls = ({ ballList }) => {
     dispatch(initBalls(ballList));
   };
+
+  const handleRemoveBalls = ({ studentNo }) => {
+    dispatch(removeBalls(studentNo));
+  };
   return {
     initBalls: handleInitBalls,
+    removeBalls: handleRemoveBalls,
   };
 }

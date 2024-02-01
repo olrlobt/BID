@@ -50,7 +50,21 @@
   margin-right: 4vw;
 }
 
+.falling {
+  animation: rotateAnimation 1s ease forwards;
+}
+
+@keyframes rotateAnimation {
+  50% {
+    transform: rotate(-70deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
 .basket {
+  position: relative;
   align-self: center;
   width: 45vw;
   height: 40vh;
@@ -58,4 +72,49 @@
   background-repeat: no-repeat;
   background-size: contain;
   margin-bottom: 8vh;
+  z-index: 30;
+}
+
+.ball {
+  z-index: 10;
+  position: absolute;
+  width: 28vw;
+  height: 45vh;
+  margin-left: 22vw;
+  margin-bottom: 10vh;
+  visibility: hidden;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("../../Asset/Image/SeatGame/name_ball.png");
+}
+
+.popBall {
+  animation: popAnimation 3s ease-in-out forwards;
+}
+
+@keyframes popAnimation {
+  0% {
+    visibility: visible;
+  }
+
+  35% {
+    transform: translateY(-40vh);
+  }
+
+  65% {
+    transform: translateY(-40vh);
+  }
+
+  100% {
+    transform: translateY(0);
+    visibility: hidden;
+  }
+}
+
+.ball div {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #ffffff;
+  font-weight: 800;
+  line-height: 45vh;
 }
