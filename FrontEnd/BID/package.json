@@ -25,6 +25,7 @@
     "axios": "^1.6.5",
     "font-awesome": "^4.7.0",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-big-calendar": "^1.8.6",
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
