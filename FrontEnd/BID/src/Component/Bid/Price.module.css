@@ -4,7 +4,7 @@
 	display: inline-flex;
 	width: auto;
 	border-radius: 2vh;
-	height: 3vh;
+	height: fit-content;
 	box-sizing: border-box;
 	line-height: 3vh;
 	padding: 0 1vh;
