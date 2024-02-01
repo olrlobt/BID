@@ -44,4 +44,10 @@ public class Bidding extends BaseEntity {
 	 */
 	@NotNull
 	private Long boardNo;
+
+	/**
+	 * grade : bidding(me) = 1 : N
+	 */
+	@NotNull
+	private Integer gradeNo;
 }
