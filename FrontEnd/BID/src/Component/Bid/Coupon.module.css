@@ -5,13 +5,8 @@
 	border-radius: 1vh;
 	line-height: 3vh;
 	width: 26vw;
-	margin-bottom: 2vh;
 	display: flex;
 	box-shadow: 2px 4px 12px rgba(0,0,0,.08);
-}
-
-.couponWrapper:last-child{
-	margin-bottom: 0vh;
 }
 
 .left{
@@ -39,7 +34,7 @@
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 0.5vh;
-	height: 3vh;
+	min-height: 3vh;
 	line-height: 3vh;
 }
 .couponName{
