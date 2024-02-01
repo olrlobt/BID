@@ -30,8 +30,8 @@ subprojects {
     checkstyle {
         maxWarnings = 0 // 규칙이 어긋나는 코드가 하나라도 있을 경우 빌드 fail
         configFile = file("${rootDir}/naver-checkstyle-rules.xml")
-        configProperties = ["suppressionFile" : "${rootDir}/naver-checkstyle-suppressions.xml"]
-        toolVersion ="8.24"
+        configProperties = ["suppressionFile": "${rootDir}/naver-checkstyle-suppressions.xml"]
+        toolVersion = "8.24"
     }
 
     tasks.register('addGitPrecommitHook', Copy) {
@@ -74,7 +74,7 @@ subprojects {
 
     // java source set 에 querydsl QClass 위치 추가
     sourceSets {
-        main.java.srcDirs += [ generated ]
+        main.java.srcDirs += [generated]
     }
 
     // gradle clean 시에 QClass 디렉토리 삭제
