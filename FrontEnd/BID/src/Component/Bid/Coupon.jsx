@@ -17,24 +17,24 @@ export default function Coupon(props){
 
 	return(
 		<div className = {styled.couponWrapper}>	
-				<div className = {styled.left}>
-					<button
-						className = {styled.removeButton}
-						onClick = {removeACoupon}
-					>
-						<SvgIcon
-							component = {Close}
-							style = {{fill: 'white', height: '3vh',}}
-						/>
-					</button>
+			<div className = {styled.left}>
+				<button
+					className = {styled.removeButton}
+					onClick = {removeACoupon}
+				>
+					<SvgIcon
+						component = {Close}
+						style = {{fill: 'white', height: '3vh',}}
+					/>
+				</button>
+			</div>
+			<div className = {styled.right}>
+				<div className = {styled.couponHeader}>
+					<p className = {styled.couponName}>{name}</p>
+					<Price price = {startPrice}/>
 				</div>
-				<div className = {styled.right}>
-					<div className = {styled.couponHeader}>
-						<div className = {styled.couponName}>{name}</div>
-						<Price price = {startPrice}/>
-					</div>
-					<div className = {styled.couponDesc}>{description}</div>
-				</div>
-		</div>
+				<p className = {styled.couponDesc}>{description}</p>
+			</div>
+	</div>
 	);
 }
