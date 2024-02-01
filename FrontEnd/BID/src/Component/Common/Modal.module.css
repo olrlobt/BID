@@ -11,10 +11,9 @@
 }
 
 .modalWrap {
-  width: 45vw;
   height: fit-content;
   border-radius: 15px;
-  padding: 3vw 2vw;
+  padding: 3vw;
   box-sizing: border-box;
   background-color: #fff;
   position: absolute;

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import styled from './Button2.module.css';
-import PropTypes from "prop-types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons"; // Import the needed icon
+import styled from "./Button2.module.css";
+import { SvgIcon } from "@material-ui/core";
+import SettingsIcon from '@mui/icons-material/Settings';
 
-function Button2({ text, onClick, active }) {
+export default function Button2(props) {
+  const { onClick, active, text } = props;
+
   const [isClicked, setIsClicked] = useState(active);
 
   useEffect(() => {
@@ -13,40 +14,16 @@ function Button2({ text, onClick, active }) {
 
   const handleClick = () => {
     setIsClicked(!isClicked);
-    onClick();
+    onClick(); // Call the onClick prop here
   };
 
   return (
     <button
-      className={styled.logoContainer}
-      style={{
-        backgroundColor: "#5FA1C4",
-        border: "none", 
-        boxSizing: 'border-box',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-      }}
-      onClick={handleClick}
+      className={styled.newCouponButton}
+      onClick={handleClick} // Use handleClick instead of onClick
     >
-      <p style={{
-        color: "#FFFFFF",
-        fontWeight: 'bold',
-        cursor: 'pointer',
-        alignItems: 'center', 
-        margin: '0',
-      }}>
-        <FontAwesomeIcon icon={faGear} style={{ color: "#FFFFFF", marginRight: '8px', }} />
-        {isClicked ? "편집 완료" : text}
-      </p>
+    <SvgIcon component={SettingsIcon} style={{ fill: "white", height: "2.5vh" }}  />
+      {isClicked ? "편집 완료" : text}
     </button>
   );
 }
-
-Button2.propTypes = {
-  text: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-  active: PropTypes.bool,
-};
-
-export default Button2;
