@@ -8,8 +8,8 @@ export default function useBalls() {
     dispatch(initBalls(ballList));
   };
 
-  const handleRemoveBalls = ({ studentNo }) => {
-    dispatch(removeBalls(studentNo));
+  const handleRemoveBalls = () => {
+    dispatch(removeBalls());
   };
   return {
     initBalls: handleInitBalls,

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "./GamePage.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import useBalls from "../../hooks/useBalls";
 import { ballSelector } from "../../Store/ballSlice";
@@ -53,15 +53,30 @@ export default function GamePage() {
       name: "김성민",
       ballCount: 3,
     },
+    {
+      no: 10,
+      name: "김민서",
+      ballCount: 2,
+    },
+    {
+      no: 11,
+      name: "김성민",
+      ballCount: 2,
+    },
+    {
+      no: 12,
+      name: "김지우",
+      ballCount: 1,
+    },
   ];
 
-  const dispatch = useDispatch();
   const { initBalls } = useBalls();
   const ballList = useSelector(ballSelector);
 
   useEffect(() => {
     // dummyBalls 백엔드 api 날려서 넣어줄 것
     initBalls({ ballList: dummyBalls });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -16,10 +16,11 @@ export const ballSlice = createSlice({
     },
 
     removeBalls: (state, action) => {
-      const ballNo = action.payload;
-      const newBallsList = state.ballList.filter(
-        (student) => student.no !== ballNo
-      );
+      console.log(action);
+      const newBallsList = state.ballList.map((student) => ({
+        ...student,
+        ballCount: 1,
+      }));
       state.ballList = [...newBallsList];
     },
   },
