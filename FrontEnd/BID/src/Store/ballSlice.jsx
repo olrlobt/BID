@@ -14,7 +14,15 @@ export const ballSlice = createSlice({
       const ballList = action.payload;
       state.ballList = ballList;
     },
+
+    removeBalls: (state, action) => {
+      const ballNo = action.payload;
+      const newBallsList = state.ballList.filter(
+        (student) => student.no !== ballNo
+      );
+      state.ballList = [...newBallsList];
+    },
   },
 });
 
-export const { initBalls } = ballSlice.actions;
+export const { initBalls, removeBalls } = ballSlice.actions;
