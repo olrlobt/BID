@@ -33,7 +33,7 @@ public class Reward {
 	 * grade : reward(me) = N : 1
 	 */
 	@NotNull
-	private  Integer gradeNo;
+	private Integer gradeNo;
 
 	@Builder
 	public Reward(
