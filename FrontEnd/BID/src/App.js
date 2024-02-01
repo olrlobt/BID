@@ -14,6 +14,7 @@ import ClassPage from "./Page/Manage/ClassPage";
 import ClassList from "./Page/ClassManage/ClassList";
 import MainClass from "./Page/Main/MainClass";
 import AddClass from "./Page/ClassManage/MakeClass";
+import SeatGame from "./Page/Manage/SeatGame";
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
       <Route path="/find_id" element={<FindIdPage />} />
       <Route path="/change_pwd" element={<ChangePwdPage />} />
       <Route path="/delete/:id/" element={<DeletePage />} />
-      <Route />
+      <Route path="/game/seat" element={<SeatGame />} />
     </Routes>
   );
 }

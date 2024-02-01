@@ -1,0 +1,151 @@
+.seatGame {
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff9c1;
+  display: flex;
+}
+
+.seatInfo {
+  width: 24vw;
+  height: 7vh;
+  margin-left: 4vw;
+  background-color: #bbbd32;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 7vh;
+  border-radius: 5px 5px 0 0;
+  margin-top: 6vh;
+}
+
+.seatTable {
+  margin-left: 4vw;
+  width: 24vw;
+  height: 75vh;
+  background-color: #ffffff;
+  border-radius: 0 0 5px 5px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+}
+
+.back {
+  margin-left: 4vw;
+  width: 4vw;
+  margin-top: 1vh;
+}
+
+.gameArea {
+  width: 72vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.cane {
+  background-image: url("../../Asset/Image/SeatGame/cane.png");
+  width: 25vw;
+  height: 42vh;
+  background-repeat: no-repeat;
+  background-size: contain;
+  align-self: flex-end;
+  margin-right: 4vw;
+}
+
+.falling {
+  animation: rotateAnimation 1s ease forwards;
+}
+
+@keyframes rotateAnimation {
+  50% {
+    transform: rotate(-70deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.basket {
+  position: relative;
+  align-self: center;
+  width: 45vw;
+  height: 40vh;
+  background-image: url("../../Asset/Image/SeatGame/basket.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-bottom: 8vh;
+  z-index: 30;
+}
+
+.ball {
+  z-index: 10;
+  position: absolute;
+  width: 28vw;
+  height: 45vh;
+  margin-left: 22vw;
+  margin-bottom: 10vh;
+  visibility: hidden;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("../../Asset/Image/SeatGame/name_ball.png");
+}
+
+.popBall {
+  animation: popAnimation 3s ease-in-out forwards;
+}
+
+@keyframes popAnimation {
+  0% {
+    visibility: visible;
+  }
+
+  35% {
+    transform: translateY(-40vh);
+  }
+
+  65% {
+    transform: translateY(-40vh);
+  }
+
+  100% {
+    transform: translateY(0);
+    visibility: hidden;
+  }
+}
+
+.ball div {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #ffffff;
+  font-weight: 800;
+  line-height: 45vh;
+}
+
+.mySeat {
+  width: 12vw;
+  height: calc(74vh / 10);
+  line-height: calc(74vh / 10);
+}
+
+.order {
+  display: inline-block;
+  width: 5vw;
+  text-align: center;
+  color: #bbbd32;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.downloadBtn {
+  position: absolute;
+  background-color: #bbbd32;
+  width: 10vw;
+  height: 6vh;
+  color: #ffffff;
+  border-radius: 5px;
+  font-weight: 700;
+  top: 90%;
+  left: 85%;
+}
