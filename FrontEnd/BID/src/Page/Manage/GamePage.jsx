@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 import styled from "./GamePage.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import useBalls from "../../hooks/useBalls";
+import { ballSelector } from "../../Store/ballSlice";
 
 export default function GamePage() {
   // 벡엔으로부터 데이터 받아와~
@@ -50,6 +54,16 @@ export default function GamePage() {
       ballCount: 3,
     },
   ];
+
+  const dispatch = useDispatch();
+  const { initBalls } = useBalls();
+  const ballList = useSelector(ballSelector);
+
+  useEffect(() => {
+    // dummyBalls 백엔드 api 날려서 넣어줄 것
+    initBalls({ ballList: dummyBalls });
+  }, []);
+
   return (
     <>
       <section className={styled.gamePage}>
@@ -59,12 +73,13 @@ export default function GamePage() {
             우리 반 친구들의 자리 구슬 개수
           </div>
           <section className={styled.ballStage}>
-            {dummyBalls.map((student) => (
-              <div className={styled.studentList}>
-                <span>{student.name}</span>
-                <span>{student.ballCount}개</span>
-              </div>
-            ))}
+            {ballList &&
+              ballList.map((student) => (
+                <div className={styled.studentList}>
+                  <span>{student.name}</span>
+                  <span>{student.ballCount}개</span>
+                </div>
+              ))}
           </section>
         </section>
         <Link to="/game/seat">
