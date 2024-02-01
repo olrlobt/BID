@@ -11,3 +11,11 @@
 	box-shadow: 2px 4px 12px rgba(0,0,0,.08);
 	overflow-x: scroll;
 }
+
+.draggableWrapper{
+	margin-bottom: 2vh;
+}
+
+.draggableWrapper:last-child{
+	margin-bottom: 0vh;
+}
