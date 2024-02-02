@@ -27,17 +27,17 @@ public class QAdmin extends EntityPathBase<Admin> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 
-    public final StringPath id = createString("id");
+    //inherited
+    public final StringPath id = _super.id;
 
-    public final StringPath name = createString("name");
+    //inherited
+    public final StringPath name = _super.name;
 
     //inherited
     public final NumberPath<Integer> no = _super.no;
 
     //inherited
     public final StringPath password = _super.password;
-
-    public final StringPath schoolCode = createString("schoolCode");
 
     //inherited
     public final NumberPath<Integer> schoolNo = _super.schoolNo;
