@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.reward.dto.RewardSaveRequest;
+import com.ssafy.bid.domain.reward.dto.RewardSendRequest;
 import com.ssafy.bid.domain.reward.dto.RewardsFindResponse;
 import com.ssafy.bid.domain.reward.service.RewardService;
 
@@ -38,5 +39,10 @@ public class RewardApi {
 	public ResponseEntity<Void> deleteReward(@PathVariable int rewardsNo) {
 		rewardService.deleteReward(rewardsNo);
 		return ResponseEntity.status(NO_CONTENT).build();
+	}
+
+	@PostMapping("/rewards/send")
+	public void sendReward(RewardSendRequest rewardSendRequest) {
+		rewardService.sendReward(rewardSendRequest);
 	}
 }

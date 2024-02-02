@@ -3,6 +3,7 @@ package com.ssafy.bid.domain.user.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
