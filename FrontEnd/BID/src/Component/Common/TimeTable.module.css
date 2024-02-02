@@ -2,11 +2,11 @@
   display: flex;
 }
 .timeImage {
-  width: 20vw;
-  height: 34vh;
+  width: 19vw;
+  height: 33vh;
   background-image: url("../../Asset/Image/HOME_icons/class-time.png");
   background-size: cover;
-  background-position: -5vw;
+  background-position: -1vw;
   background-repeat: no-repeat;
 }
 
