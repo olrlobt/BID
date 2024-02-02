@@ -18,6 +18,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.DealType;
+import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
@@ -263,6 +264,14 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 				)
 			)
 			.orderBy(account.createdAt.desc())
+			.fetch();
+	}
+
+	@Override
+	public List<Student> findAllByIds(List<Integer> userNos) {
+		return queryFactory
+			.selectFrom(student)
+			.where(student.no.in(userNos))
 			.fetch();
 	}
 
