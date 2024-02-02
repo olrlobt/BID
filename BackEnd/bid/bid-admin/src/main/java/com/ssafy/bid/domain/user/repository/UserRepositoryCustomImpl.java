@@ -268,6 +268,14 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
+	public List<Student> findAllByIds(List<Integer> userNos) {
+		return queryFactory
+			.selectFrom(student)
+			.where(student.no.in(userNos))
+			.fetch();
+	}
+
+	@Override
 	public List<BallsResponse> findBalls(int gradeNo) {
 		return queryFactory
 			.select(Projections.constructor(BallsResponse.class,
