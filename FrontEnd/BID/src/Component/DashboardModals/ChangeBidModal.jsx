@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Modal from "../Common/Modal";
-import styled from "./ChangeBidModal.module.css";
-import { useSelector } from "react-redux";
-import { bidSelector } from "../../Store/bidSlice";
-import useBid from "../../hooks/useBid";
+import { useState } from 'react';
+import Modal from '../Common/Modal';
+import styled from './ChangeBidModal.module.css';
+import { useSelector } from 'react-redux';
+import { bidSelector } from '../../Store/bidSlice';
+import useBid from '../../hooks/useBid';
 
 export default function ChangeBidModal({ onClose, ...props }) {
   const currentBid = useSelector(bidSelector);
