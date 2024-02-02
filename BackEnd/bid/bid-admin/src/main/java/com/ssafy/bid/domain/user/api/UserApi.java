@@ -1,7 +1,25 @@
 package com.ssafy.bid.domain.user.api;
 
+<<<<<<< BackEnd/bid/bid-admin/src/main/java/com/ssafy/bid/domain/user/api/UserApi.java
 import com.ssafy.bid.domain.user.dto.*;
 import com.ssafy.bid.domain.user.service.AuthService;
+=======
+import java.util.List;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.bid.domain.user.dto.AccountRequest;
+import com.ssafy.bid.domain.user.dto.AccountResponse;
+import com.ssafy.bid.domain.user.dto.BallsResponse;
+import com.ssafy.bid.domain.user.dto.StudentRequest;
+import com.ssafy.bid.domain.user.dto.StudentResponse;
+import com.ssafy.bid.domain.user.dto.StudentsResponse;
+>>>>>>> BackEnd/bid/bid-admin/src/main/java/com/ssafy/bid/domain/user/api/UserApi.java
 import com.ssafy.bid.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +31,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 public class UserApi {
 
     private final UserService userService;
@@ -28,14 +47,25 @@ public class UserApi {
         return userService.findStudent(userNo, studentRequest);
     }
 
-    @GetMapping("/users/{userNo}/accounts")
-    public List<AccountResponse> findAccount(@PathVariable int userNo, @ModelAttribute AccountRequest accountRequest) {
-        return userService.findAccount(userNo, accountRequest);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
         String token = this.authService.login(request);
         return ResponseEntity.status(HttpStatus.OK).body(token);
     }
+
+	@GetMapping("/users/{userNo}/accounts")
+	public List<AccountResponse> findAccount(@PathVariable int userNo, @ModelAttribute AccountRequest accountRequest) {
+		return userService.findAccount(userNo, accountRequest);
+	}
+
+	@GetMapping("/{gradeNo}/balls")
+	public List<BallsResponse> findBalls(@PathVariable int gradeNo) {
+		return userService.findBalls(gradeNo);
+	}
+
+	@PatchMapping("/{gradeNo}/balls")
+	public void modifyBalls(@PathVariable int gradeNo) {
+		userService.modifyBalls(gradeNo);
+	}
+>>>>>>> BackEnd/bid/bid-admin/src/main/java/com/ssafy/bid/domain/user/api/UserApi.java
 }

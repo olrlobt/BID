@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -44,4 +45,19 @@ public class UserSaving {
 	 */
 	@NotNull
 	private Integer savingNo;
+
+	@Builder
+	public UserSaving(
+		LocalDateTime startPeriod,
+		LocalDateTime endPeriod,
+		Integer resultPrice,
+		Integer userNo,
+		Integer savingNo
+	) {
+		this.startPeriod = startPeriod;
+		this.endPeriod = endPeriod;
+		this.resultPrice = resultPrice;
+		this.userNo = userNo;
+		this.savingNo = savingNo;
+	}
 }
