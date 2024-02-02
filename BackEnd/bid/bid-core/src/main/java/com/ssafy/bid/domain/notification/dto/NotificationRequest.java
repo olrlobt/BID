@@ -1,4 +1,4 @@
-package com.ssafy.bid.global.notification.dto;
+package com.ssafy.bid.domain.notification.dto;
 
 import com.ssafy.bid.domain.notification.Notification;
 import com.ssafy.bid.domain.notification.NotificationType;
