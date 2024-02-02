@@ -4,12 +4,16 @@ import Card from "../../Asset/Image/HOME_icons/coupon.png";
 import Coin from "../../Asset/Image/HOME_icons/Coins.png";
 import LinkFront from "../../Asset/Image/HOME_icons/transaction.png";
 import Locker from "../../Asset/Image/HOME_icons/bank.png";
-import Clock from "../../Asset/Image/HOME_icons/class-time.png";
+import Clock from "../../Asset/Image/HOME_icons/clock.png";
 import useModal from "../../hooks/useModal";
 import TimeTable from "../../Component/Common/TimeTable";
+import { useSelector } from "react-redux";
+import { bidSelector } from "../../Store/bidSlice";
+import { useEffect } from "react";
 
 export default function Home() {
   const { openModal } = useModal();
+  const currentBid = useSelector(bidSelector);
   const dumpData = [
     { name: "이승헌", coupon: "청소 역할 선점 쿠폰" },
     { name: "이현진", coupon: "급식 먼저 먹기 쿠폰" },
@@ -17,6 +21,7 @@ export default function Home() {
     { name: "배미남", coupon: "자유 이용 쿠폰" },
   ];
 
+  useEffect(() => {}, [currentBid]);
   return (
     <>
       <main className={styled.home}>
@@ -29,7 +34,7 @@ export default function Home() {
             {
               width: "30vw",
               height: "15vh",
-              text: ["승인할 쿠폰이", "있어요."],
+              text: ["승인할 쿠폰이", "있어요"],
             },
           ]}
           icons={[{ src: Card, alt: "카드", css: "card" }]}
@@ -53,8 +58,9 @@ export default function Home() {
               text={"200비드"}
               modalClick={() =>
                 openModal({
+                  // 여기 text로 비드 붙이기
                   type: "changeBid",
-                  props: ["주급 변경", "200비드"],
+                  props: ["주급 변경", currentBid],
                 })
               }
             />
