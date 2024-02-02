@@ -56,7 +56,7 @@ public class Student extends User {
 		this.gradeNo = gradeNo;
 	}
 
-	public void addRewardPrice(int price) {
-		this.asset += price;
+	public void modifyProfileImgUrl(String url) {
+		this.profileImgUrl = url;
 	}
 }
