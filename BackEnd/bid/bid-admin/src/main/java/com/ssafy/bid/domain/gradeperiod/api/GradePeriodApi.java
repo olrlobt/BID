@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.gradeperiod.api;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 public class GradePeriodApi {
 
 	private final GradePeriodService gradePeriodService;

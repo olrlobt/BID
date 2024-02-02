@@ -1,6 +1,7 @@
 package com.ssafy.bid.domain.notification.api;
 
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 public class NotificationApi {
 
 	private static final String LAST_EVENT_ID_HEADER = "Last-Event-ID";
