@@ -1,4 +1,4 @@
-package com.ssafy.bid.global.notification.repository;
+package com.ssafy.bid.domain.notification.repository;
 
 import java.util.Map;
 

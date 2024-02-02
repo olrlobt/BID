@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.notification.NotificationType;
+import com.ssafy.bid.domain.notification.dto.NotificationRequest;
+import com.ssafy.bid.domain.notification.service.NotificationService;
 import com.ssafy.bid.domain.reward.Reward;
 import com.ssafy.bid.domain.reward.dto.RewardSaveRequest;
 import com.ssafy.bid.domain.reward.dto.RewardSendRequest;
@@ -13,8 +15,6 @@ import com.ssafy.bid.domain.reward.dto.RewardsFindResponse;
 import com.ssafy.bid.domain.reward.repository.RewardRepository;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.repository.UserRepository;
-import com.ssafy.bid.global.notification.dto.NotificationRequest;
-import com.ssafy.bid.global.notification.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 
