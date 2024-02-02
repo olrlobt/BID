@@ -5,6 +5,16 @@ import com.ssafy.bid.domain.user.dto.*;
 import java.util.List;
 import java.util.Optional;
 
+import com.ssafy.bid.domain.user.Student;
+import com.ssafy.bid.domain.user.dto.AccountRequest;
+import com.ssafy.bid.domain.user.dto.AccountResponse;
+import com.ssafy.bid.domain.user.dto.AccountsResponse;
+import com.ssafy.bid.domain.user.dto.BallsResponse;
+import com.ssafy.bid.domain.user.dto.StudentRequest;
+import com.ssafy.bid.domain.user.dto.StudentResponse;
+import com.ssafy.bid.domain.user.dto.StudentsResponse;
+import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
+
 public interface UserRepositoryCustom {
     List<StudentsResponse> findStudents(int gradeNo);
 
@@ -14,5 +24,11 @@ public interface UserRepositoryCustom {
 
     Optional<StudentResponse> findStudent(int userNo);
 
-    List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest);
+	List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest);
+
+	List<Student> findAllByIds(List<Integer> userNos);
+
+	List<BallsResponse> findBalls(int gradeNo);
+
+	void resetBallCounts(int gradeNo);
 }
