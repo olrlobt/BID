@@ -1,18 +1,20 @@
 package com.ssafy.bid.domain.user.service;
 
+import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import com.ssafy.bid.domain.user.security.CustomUserInfo;
 import com.ssafy.bid.domain.user.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,7 +22,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
-    private final ModelMapper modelMapper;
 
     @Override
     @Transactional
@@ -34,9 +35,8 @@ public class AuthServiceImpl implements AuthService {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
-        CustomUserInfo info = modelMapper.map(user, CustomUserInfo.class);
+        CustomUserInfo info = new CustomUserInfo(user);
 
-        String accessToken = jwtUtil.createAccessToken(info);
-        return accessToken;
+        return jwtUtil.createAccessToken(info);
     }
 }

@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -17,13 +16,16 @@ public class JwtUtil {
     private final Key key;
     private final long accessTokenExpTime;
 
-    public JwtUtil(
-            @Value("${jwt.secret}") String secretKey,
-            @Value("${jwt.expiration_time}") long accessTokenExpTime
-    ) {
-        byte[] keyBytes = Decoders.BASE64URL.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.accessTokenExpTime = accessTokenExpTime;
+    public JwtUtil(JwtProperties jwtProperties) {
+        try {
+            log.info("JWT Secret:{}", jwtProperties.getSecret());
+            byte[] keyBytes = Decoders.BASE64URL.decode(jwtProperties.getSecret());
+            this.key = Keys.hmacShaKeyFor(keyBytes);
+            this.accessTokenExpTime = jwtProperties.getExpirationTime();
+        } catch (IllegalArgumentException e) {
+            log.error("JWT Secret loading error: ", e);
+            throw new IllegalStateException("JWT configuration is invalid", e);
+        }
     }
 
     public String createAccessToken(CustomUserInfo user) {
@@ -34,7 +36,6 @@ public class JwtUtil {
         Claims claims = Jwts.claims();
         claims.put("UserId", user.getId());
         claims.put("name", user.getName());
-        claims.put("tel", user.getTel());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValidity = now.plusSeconds(expireTime);
