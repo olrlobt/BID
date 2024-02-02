@@ -1,4 +1,4 @@
-package com.ssafy.bid.domain.notification.repository;
+package com.ssafy.bid.global.notification.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
