@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const studentSelector = (state) => {
-  return state.student.students;
+  return state.student ? state.student.students : null;
 };
 
 export const studentSlice = createSlice({

@@ -7,7 +7,9 @@ import Button2 from "../../Component/Common/Button2";
 import Button3 from "../../Component/Common/Button3";
 import useModal from "../../hooks/useModal";
 import { useSelector, useDispatch } from "react-redux";
-import { initStudents, removeStudent,studentSelector  } from "../../Store/studentSlice";
+import {  removeStudent,studentSelector  } from "../../Store/studentSlice";
+import useStudents from "../../hooks/useStudents";
+
 
 function ClassPage() {
   const [activeButton, setActiveButton] = useState('number'); // 기본 정렬 기준은 번호(id)로 설정
@@ -30,19 +32,22 @@ function ClassPage() {
   const { openModal } = useModal();
   const students = useSelector(studentSelector);
 
+  const { initStudents } = useStudents();
 
-  useEffect(() => {
-    const dummyData = [
-      { no:1, number: 1, name: '백지윤', asset: '5,678' },
-      { no:2, number: 2, name: '유현지', asset: '4,321' },
-      { no:3, number: 3, name: '배민지', asset: '9,321' },
-      { no:4, number: 4, name: '이현진', asset: '92,394' },
-      { no:5, number: 8, name: '이승헌', asset: '321' },
-      { no:6, number: 6, name: '김예림', asset: '54,321' },
-    ];
   
-    dispatch(initStudents(dummyData));
-    setSelectedStudent(dummyData[0]); // 첫 번째 학생을 기본적으로 선택
+  const dummyData = [
+    { no:1, number: 1, name: '백지윤', asset: '5,678' },
+    { no:2, number: 2, name: '유현지', asset: '4,321' },
+    { no:3, number: 3, name: '배민지', asset: '9,321' },
+    { no:4, number: 4, name: '이현진', asset: '92,394' },
+    { no:5, number: 8, name: '이승헌', asset: '321' },
+    { no:6, number: 6, name: '김예림', asset: '54,321' },
+  ];
+  useEffect(() => {
+  
+    initStudents({ students: dummyData });
+    setSelectedStudent(dummyData[0]); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   
 
@@ -145,7 +150,7 @@ function ClassPage() {
           </thead>
           <StudentList
               info={sortedInfo}
-              students={students}
+              students={students} 
               handleStudentClick={handleStudentClick}
               handleRemove={handleRemove}
               showRemove={showRemove}
