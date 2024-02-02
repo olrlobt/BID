@@ -1,4 +1,4 @@
-package com.ssafy.bid.domain.notification.service;
+package com.ssafy.bid.global.notification.service;
 
 import java.io.IOException;
 import java.util.Map;
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.ssafy.bid.domain.notification.Notification;
-import com.ssafy.bid.domain.notification.dto.NotificationRequest;
-import com.ssafy.bid.domain.notification.repository.NotificationRepository;
-import com.ssafy.bid.domain.notification.repository.SseEmitterRepository;
+import com.ssafy.bid.global.notification.dto.NotificationRequest;
+import com.ssafy.bid.global.notification.repository.NotificationRepository;
+import com.ssafy.bid.global.notification.repository.SseEmitterRepository;
 
 import lombok.RequiredArgsConstructor;
 

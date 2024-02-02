@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.ssafy.bid.domain.notification.service.NotificationService;
+import com.ssafy.bid.global.notification.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 
