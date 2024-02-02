@@ -55,4 +55,8 @@ public class Student extends User {
 		this.profileImgUrl = profileImgUrl;
 		this.gradeNo = gradeNo;
 	}
+
+	public void modifyProfileImgUrl(String url) {
+		this.profileImgUrl = url;
+	}
 }
