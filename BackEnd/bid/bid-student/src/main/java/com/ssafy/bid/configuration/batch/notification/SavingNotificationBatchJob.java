@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @EnableBatchProcessing
 @Configuration
-public class SavingNotificationJob {
+public class SavingNotificationBatchJob {
 
 	private final NotificationService notificationService;
 	private final UserSavingRepository userSavingRepository;

@@ -1,4 +1,4 @@
-package com.ssafy.bid.configuration.batch.notification;
+package com.ssafy.bid.configuration.batch.transfer;
 
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -8,8 +8,11 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import com.ssafy.bid.configuration.batch.notification.SavingNotificationBatchJob;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,9 +21,10 @@ import lombok.RequiredArgsConstructor;
 public class SavingNotificationScheduler {
 
 	private final JobLauncher jobLauncher;
-	private final SavingNotificationJob savingNotificationJob;
+	private final SavingNotificationBatchJob savingNotificationBatchJob;
 	private final JobRepository jobRepository;
-	private final Step step;
+	@Qualifier("savingTransferAlertStep")
+	private final Step savingTransferAlertStep;
 
 	@Scheduled(cron = "0 50 8 * * *")
 		// 매일 8시 50분에 실행
@@ -30,7 +34,7 @@ public class SavingNotificationScheduler {
 		JobParametersInvalidException,
 		JobRestartException {
 		jobLauncher.run(
-			savingNotificationJob.savingTransferAlertJob(jobRepository, step),
+			savingNotificationBatchJob.savingTransferAlertJob(jobRepository, savingTransferAlertStep),
 			new JobParameters()
 		);
 	}
