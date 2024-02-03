@@ -11,4 +11,12 @@
     margin-right: 0.7vw;
     max-width: 15vw;
   }
+
+  .rewardRight{
+    display: flex;
+  }
+}
+
+.reward:last-child{
+  margin: 0;;
 }
