@@ -11,4 +11,6 @@ public interface SavingService {
 	void saveSaving(int userNo, SavingRequest savingRequest);
 
 	void deleteSaving(int userNo, int savingNo);
+
+	void transfer();
 }

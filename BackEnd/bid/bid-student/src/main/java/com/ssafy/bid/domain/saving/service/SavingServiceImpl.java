@@ -1,5 +1,7 @@
 package com.ssafy.bid.domain.saving.service;
 
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -7,34 +9,68 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.saving.UserSaving;
 import com.ssafy.bid.domain.saving.dto.SavingRequest;
+import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.saving.dto.SavingsResponse;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
 import com.ssafy.bid.domain.saving.repository.UserSavingRepository;
+import com.ssafy.bid.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class SavingServiceImpl implements SavingService {
 
 	private final SavingRepository savingRepository;
 	private final UserSavingRepository userSavingRepository;
+	private final UserRepository userRepository;
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<SavingsResponse> findSavings(int gradeNo) {
 		return savingRepository.findSavings(gradeNo);
 	}
 
 	@Override
+	@Transactional
 	public void saveSaving(int userNo, SavingRequest savingRequest) {
 		UserSaving userSaving = savingRequest.toEntity(userNo);
 		userSavingRepository.save(userSaving);
 	}
 
 	@Override
+	@Transactional
 	public void deleteSaving(int userNo, int savingNo) {
 		userSavingRepository.deleteByUserNoAndSavingNo(userNo, savingNo);
+	}
+
+	@Override
+	@Transactional
+	public void transfer() {
+		List<Integer> targetUserNos = userSavingRepository.findAll().stream()
+			.filter(this::isTarget)
+			.map(UserSaving::getUserNo)
+			.toList();
+
+		userRepository.findAllByIds(targetUserNos).stream()
+			.filter(this::isLack)
+			.forEach(request -> request.getStudent().minusSavingPrice(request.getPrice()));
+	}
+
+	private boolean isTarget(UserSaving userSaving) {
+		if (userSaving.getSavingNo().equals(1)) {
+			return true;
+		}
+
+		Period period = Period.between(userSaving.getStartPeriod().toLocalDate(), LocalDateTime.now().toLocalDate());
+		return period.getDays() % 7 == 0;
+	}
+
+	private boolean isLack(SavingTransferRequest savingTransferRequest) {
+		if (savingTransferRequest.getStudent().getAsset() - savingTransferRequest.getPrice() < 0) {
+			// TODO: 잔액부족 실시간 알림??
+			return false;
+		}
+		return true;
 	}
 }
