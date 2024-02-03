@@ -2,7 +2,6 @@ package com.ssafy.bid.configuration.batch.expire;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -15,12 +14,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.ssafy.bid.domain.notification.NotificationType;
 import com.ssafy.bid.domain.notification.dto.NotificationRequest;
 import com.ssafy.bid.domain.notification.service.NotificationService;
+import com.ssafy.bid.domain.saving.dto.SavingExpireAlertRequest;
 import com.ssafy.bid.domain.saving.service.SavingService;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@EnableBatchProcessing
 @Configuration
 public class SavingExpireBatchJob {
 
@@ -49,18 +48,22 @@ public class SavingExpireBatchJob {
 	@Bean
 	public Tasklet savingExpireTasklet() {
 		return ((contribution, chunkContext) -> {
-			savingService.expire().forEach(request -> {
-				NotificationRequest notificationRequest = NotificationRequest.builder()
-					.receiverNo(request.getUserNo())
-					.title("적금 만기 알림")
-					.content(String.valueOf(request.getPrice())
-						.concat(" ")
-						.concat(String.valueOf(request.getEndDate())))
-					.notificationType(NotificationType.SAVING_DONE)
-					.build();
+			savingService.expire().forEach(savingExpireAlertRequest -> {
+				NotificationRequest notificationRequest = createNotificationRequest(savingExpireAlertRequest);
 				notificationService.send(notificationRequest);
 			});
 			return RepeatStatus.FINISHED;
 		});
+	}
+
+	private NotificationRequest createNotificationRequest(SavingExpireAlertRequest savingExpireAlertRequest) {
+		return NotificationRequest.builder()
+			.receiverNo(savingExpireAlertRequest.getUserNo())
+			.title("적금 만기 알림")
+			.content(String.valueOf(savingExpireAlertRequest.getPrice())
+				.concat(" ")
+				.concat(String.valueOf(savingExpireAlertRequest.getEndDate())))
+			.notificationType(NotificationType.SAVING_EXPIRE)
+			.build();
 	}
 }

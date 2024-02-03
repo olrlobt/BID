@@ -8,5 +8,5 @@ import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 public interface UserSavingRepositoryCustom {
 	List<SavingTransferAlertRequest> findAllSavingTransferInfos();
 
-	List<SavingExpireRequest> findSavingExpireInfos();
+	List<SavingExpireRequest> findAllSavingExpireInfos();
 }

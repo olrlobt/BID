@@ -36,10 +36,12 @@ public class UserSavingRepositoryCustomImpl implements UserSavingRepositoryCusto
 	}
 
 	@Override
-	public List<SavingExpireRequest> findSavingExpireInfos() {
+	public List<SavingExpireRequest> findAllSavingExpireInfos() {
 		return queryFactory
 			.select(Projections.constructor(SavingExpireRequest.class,
-					userSaving,
+					userSaving.no,
+					userSaving.endPeriod,
+					userSaving.resultPrice,
 					student
 				)
 			)
