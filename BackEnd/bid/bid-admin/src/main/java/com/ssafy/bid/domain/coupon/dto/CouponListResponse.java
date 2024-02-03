@@ -2,7 +2,6 @@ package com.ssafy.bid.domain.coupon.dto;
 
 import java.util.List;
 
-import com.ssafy.bid.domain.coupon.Coupon;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +10,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class CouponListResponse {
 
-	private List<Coupon> registeredCoupons;
-	private List<Coupon> unregisteredCoupons;
-
+	private List<CouponResponse> registeredCoupons;
+	private List<CouponResponse> unregisteredCoupons;
 }
