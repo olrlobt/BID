@@ -1,4 +1,4 @@
-package com.ssafy.bid.configuration.batch.transfer;
+package com.ssafy.bid.configuration.batch.expire;
 
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -16,22 +16,23 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class SavingTransferScheduler {
+public class SavingExpireScheduler {
 
 	private final JobLauncher jobLauncher;
-	private final SavingTransferBatchJob savingTransferBatchJob;
+	private final SavingExpireBatchJob savingExpireBatchJob;
 	private final JobRepository jobRepository;
-	@Qualifier("savingTransferStep")
-	private final Step savingTransferStep;
+	@Qualifier("savingExpireStep")
+	private final Step savingExpireStep;
 
-	@Scheduled(cron = "0 0 15 * * *")
-	void transfer() throws
+	@Scheduled(cron = "0 40 8 * * *")
+		// 적금 이체 알림보다 이전시간에 작동해야 함
+	void expire() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
 		JobParametersInvalidException,
 		JobRestartException {
 		jobLauncher.run(
-			savingTransferBatchJob.savingTransferJob(jobRepository, savingTransferStep),
+			savingExpireBatchJob.savingExpireJob(jobRepository, savingExpireStep),
 			new JobParameters()
 		);
 	}
