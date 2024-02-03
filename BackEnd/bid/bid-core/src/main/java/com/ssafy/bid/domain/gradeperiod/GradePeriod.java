@@ -38,4 +38,12 @@ public class GradePeriod {
 	 */
 	@NotNull
 	private Integer gradeNo;
+
+	public void modify(
+		LocalTime startPeriod,
+		LocalTime endPeriod
+	) {
+		this.startPeriod = startPeriod;
+		this.endPeriod = endPeriod;
+	}
 }

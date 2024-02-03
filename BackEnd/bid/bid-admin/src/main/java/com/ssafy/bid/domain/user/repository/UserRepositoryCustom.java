@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ssafy.bid.domain.user.School;
+import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
+import com.ssafy.bid.domain.user.dto.BallsResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.dto.StudentsResponse;
@@ -28,4 +30,10 @@ public interface UserRepositoryCustom {
 	boolean existsById(String id);
 
 	Optional<School> findByCode(String code);
+
+	List<Student> findAllByIds(List<Integer> userNos);
+
+	List<BallsResponse> findBalls(int gradeNo);
+
+	void resetBallCounts(int gradeNo);
 }
