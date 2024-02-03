@@ -1,4 +1,4 @@
-package com.ssafy.bid.configuration.batch.notification;
+package com.ssafy.bid.configuration.batch.transfer;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

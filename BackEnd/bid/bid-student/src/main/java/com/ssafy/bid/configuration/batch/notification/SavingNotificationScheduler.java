@@ -1,4 +1,4 @@
-package com.ssafy.bid.configuration.batch.transfer;
+package com.ssafy.bid.configuration.batch.notification;
 
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -11,8 +11,6 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import com.ssafy.bid.configuration.batch.notification.SavingNotificationBatchJob;
 
 import lombok.RequiredArgsConstructor;
 
