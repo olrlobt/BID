@@ -43,7 +43,4 @@ public class Coupon extends BaseEntity {
 	private Integer gradeNo;
 
 
-	public void accept(){
-		this.couponStatus = CouponStatus.REGISTERED;
-	}
 }
