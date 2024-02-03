@@ -37,3 +37,6 @@ out/
 .vscode/
 
 application.yml
+/bid-core/src/main/generated/
+/bid-admin/src/main/generated/
+/bid-student/src/main/generated/
