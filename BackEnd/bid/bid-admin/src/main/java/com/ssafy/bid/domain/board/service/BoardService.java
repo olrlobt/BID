@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
+import com.ssafy.bid.domain.board.repository.ReplyRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardService {
 
 	private final BoardRepository boardRepository;
+	private final ReplyRepository replyRepository;
 
 	public List<BoardResponse> findAllStudentBoards(int gradeNo){
 		return boardRepository.findAllStudentBoards(gradeNo);
@@ -43,4 +45,11 @@ public class BoardService {
 	}
 
 
+	@Transactional
+	public void deleteReply(long replyNo){
+		if (!replyRepository.existsById(replyNo)) {
+			throw new NoSuchElementException("해당 댓글이 없습니다.");
+		}
+		replyRepository.deleteById(replyNo);
+	}
 }
