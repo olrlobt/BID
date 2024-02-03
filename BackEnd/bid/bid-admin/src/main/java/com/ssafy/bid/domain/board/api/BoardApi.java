@@ -22,7 +22,7 @@ public class BoardApi {
 	private final BoardService boardService;
 
 	@GetMapping("/{gradeNo}/boards")
-	public List<BoardResponse> findAllStudentBoards(@PathVariable int gradeNo){
+	public List<BoardResponse> findAllStudentBoards(@PathVariable int gradeNo) {
 		return boardService.findAllStudentBoards(gradeNo);
 	}
 
@@ -37,8 +37,16 @@ public class BoardApi {
 	}
 
 	@DeleteMapping("/{gradeNo}/boards/{boardNo}")
-	public ResponseEntity<?> deleteBoard(@PathVariable int gradeNo, @PathVariable long boardNo){
+	public ResponseEntity<?> deleteBoard(@PathVariable int gradeNo, @PathVariable long boardNo) {
 		boardService.deleteBoard(boardNo);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/{gradeNo}/boards/{boardNo}/{replyNo}")
+	public ResponseEntity<?> deleteReply(@PathVariable int gradeNo,
+										@PathVariable long boardNo,
+										@PathVariable long replyNo) {
+		boardService.deleteReply(replyNo);
 		return ResponseEntity.noContent().build();
 	}
 }
