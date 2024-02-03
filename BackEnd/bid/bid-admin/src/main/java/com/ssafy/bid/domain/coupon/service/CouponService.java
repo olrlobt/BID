@@ -1,6 +1,5 @@
 package com.ssafy.bid.domain.coupon.service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -10,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.coupon.Coupon;
 import com.ssafy.bid.domain.coupon.CouponStatus;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
+import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 import com.ssafy.bid.domain.coupon.repository.CouponRepository;
+import com.ssafy.bid.domain.coupon.repository.UserCouponRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,10 @@ import lombok.RequiredArgsConstructor;
 public class CouponService {
 
 	private final CouponRepository couponRepository;
+	private final UserCouponRepository userCouponRepository;
 
 	@Transactional(readOnly = true)
 	public CouponListResponse findCoupons(int gradeNo) {
-
 		List<Coupon> registeredCoupons = couponRepository
 			.findByGradeNoAndCouponStatus(gradeNo, CouponStatus.REGISTERED);
 
@@ -32,6 +33,11 @@ public class CouponService {
 			.findByGradeNoAndCouponStatus(gradeNo, CouponStatus.UNREGISTERED);
 
 		return new CouponListResponse(registeredCoupons, unregisteredCoupons);
+	}
+
+	@Transactional(readOnly = true)
+	public List<UserCouponResponse> findCouponRequests(int gradeNo) {
+		return userCouponRepository.findUserCouponList(gradeNo);
 	}
 
 	public void acceptCoupon(int couponNo) {
@@ -47,5 +53,6 @@ public class CouponService {
 		}
 		couponRepository.deleteById(couponNo);
 	}
+
 
 }
