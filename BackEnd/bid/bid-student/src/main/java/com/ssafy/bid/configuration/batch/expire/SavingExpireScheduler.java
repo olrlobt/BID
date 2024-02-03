@@ -24,8 +24,10 @@ public class SavingExpireScheduler {
 	@Qualifier("savingExpireStep")
 	private final Step savingExpireStep;
 
+	/**
+	 * 적금 이체 알림보다 이전시간에 작동해야 함
+	 */
 	@Scheduled(cron = "0 40 8 * * *")
-		// 적금 이체 알림보다 이전시간에 작동해야 함
 	void expire() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,

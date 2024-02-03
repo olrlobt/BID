@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.saving.UserSaving;
-import com.ssafy.bid.domain.saving.dto.SavingExpireResponse;
+import com.ssafy.bid.domain.saving.dto.SavingExpireAlertRequest;
+import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
 import com.ssafy.bid.domain.saving.dto.SavingRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
@@ -57,40 +58,34 @@ public class SavingServiceImpl implements SavingService {
 	@Transactional
 	public void transfer() {
 		List<Integer> targetUserNos = userSavingRepository.findAll().stream()
-			.filter(this::isTarget)
+			.filter(this::isTransferTarget)
 			.map(UserSaving::getUserNo)
 			.toList();
 
 		userRepository.findAllByIds(targetUserNos).stream()
-			.filter(this::isLack)
+			.filter(this::isStudentAssetLack)
 			.forEach(request -> request.getStudent().subtractSavingPrice(request.getPrice()));
 	}
 
 	@Override
 	@Transactional
-	public List<SavingExpireResponse> expire() {
+	public List<SavingExpireAlertRequest> expire() {
 		List<Integer> userSavings = new ArrayList<>();
-		List<SavingExpireResponse> savingExpireResponses = new ArrayList<>();
+		List<SavingExpireAlertRequest> savingExpireAlertRequests = new ArrayList<>();
 
-		userSavingRepository.findSavingExpireInfos().stream()
-			.filter(info -> info.getUserSaving().getEndPeriod().toLocalDate().equals(LocalDate.now()))
-			.forEach(info -> {
-				userSavings.add(info.getUserSaving().getNo());
-				savingExpireResponses.add(
-					SavingExpireResponse.builder()
-						.price(info.getUserSaving().getResultPrice())
-						.endDate(info.getUserSaving().getEndPeriod().toLocalDate())
-						.userNo(info.getStudent().getNo())
-						.build()
-				);
-				info.getStudent().addSavingPrice(info.getUserSaving().getResultPrice());
+		userSavingRepository.findAllSavingExpireInfos().stream()
+			.filter(savingExpireRequest -> isExpireTarget(savingExpireRequest.getUserSavingEndPeriod()))
+			.forEach(savingExpireRequest -> {
+				userSavings.add(savingExpireRequest.getUserSavingNo());
+				savingExpireAlertRequests.add(createSavingTransferAlertRequest(savingExpireRequest));
+				savingExpireRequest.getStudent().addSavingPrice(savingExpireRequest.getResultPrice());
 			});
 
 		userSavingRepository.deleteAllById(userSavings);
-		return savingExpireResponses;
+		return savingExpireAlertRequests;
 	}
 
-	private boolean isTarget(UserSaving userSaving) {
+	private boolean isTransferTarget(UserSaving userSaving) {
 		if (userSaving.getSavingNo().equals(1)) {
 			return true;
 		}
@@ -99,8 +94,20 @@ public class SavingServiceImpl implements SavingService {
 		return period.getDays() % 7 == 0;
 	}
 
-	private boolean isLack(SavingTransferRequest savingTransferRequest) {
+	private boolean isStudentAssetLack(SavingTransferRequest savingTransferRequest) {
 		// TODO: 잔액부족 실시간 알림??
 		return savingTransferRequest.getStudent().getAsset() - savingTransferRequest.getPrice() >= 0;
+	}
+
+	private boolean isExpireTarget(LocalDate userSavingEndPeriod) {
+		return userSavingEndPeriod.equals(LocalDate.now());
+	}
+
+	private SavingExpireAlertRequest createSavingTransferAlertRequest(SavingExpireRequest savingExpireRequest) {
+		return SavingExpireAlertRequest.builder()
+			.price(savingExpireRequest.getResultPrice())
+			.endDate(savingExpireRequest.getUserSavingEndPeriod())
+			.userNo(savingExpireRequest.getStudent().getNo())
+			.build();
 	}
 }

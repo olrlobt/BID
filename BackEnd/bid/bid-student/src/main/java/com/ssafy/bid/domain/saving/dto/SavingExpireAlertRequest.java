@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SavingExpireResponse {
+public class SavingExpireAlertRequest {
 	private int price;
 	private LocalDate endDate;
 	private int userNo;
 
 	@Builder
-	public SavingExpireResponse(
+	public SavingExpireAlertRequest(
 		int price,
 		LocalDate endDate,
 		int userNo
