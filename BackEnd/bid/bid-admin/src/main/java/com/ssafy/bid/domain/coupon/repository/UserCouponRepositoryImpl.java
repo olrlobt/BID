@@ -19,7 +19,7 @@ public class UserCouponRepositoryImpl implements UserCouponCustomRepository {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<UserCouponResponse> findUserCouponList(int gradeNo) {
+	public List<UserCouponResponse> findUserCoupons(int gradeNo) {
 
 		return queryFactory.select(Projections.constructor(UserCouponResponse.class,
 				userCoupon.no,

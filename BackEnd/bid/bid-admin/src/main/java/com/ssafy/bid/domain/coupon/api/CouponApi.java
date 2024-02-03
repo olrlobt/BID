@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
@@ -29,20 +28,23 @@ public class CouponApi {
 		return ResponseEntity.ok(couponService.findCoupons(gradeNo));
 	}
 
-	@GetMapping("/{gradeNo}/coupons/requests")
-	public ResponseEntity<List<UserCouponResponse>> findCouponRequests(@PathVariable int gradeNo) {
-		return ResponseEntity.ok(couponService.findCouponRequests(gradeNo));
+	@GetMapping("/{gradeNo}/user-coupons")
+	public ResponseEntity<List<UserCouponResponse>> findUserCoupons(@PathVariable int gradeNo) {
+		return ResponseEntity.ok(couponService.findUserCoupons(gradeNo));
 	}
 
-	@DeleteMapping("/{gradeNo}/coupons/requests/{userCouponNo}")
-	public ResponseEntity<?> acceptCouponRequest(@PathVariable int gradeNo, @PathVariable int userCouponNo) {
-		couponService.acceptCouponRequest(userCouponNo);
+	@DeleteMapping("/{gradeNo}/user-coupons/{userCouponNo}")
+	public ResponseEntity<?> acceptUserCoupon(@PathVariable int gradeNo, @PathVariable int userCouponNo) {
+		couponService.acceptUserCoupon(userCouponNo);
 		return ResponseEntity.noContent().build();
 	}
 
-	@PatchMapping("/{gradeNo}/coupons/requests/{userCouponNo}")
-	public ResponseEntity<?> rejectCouponRequest(@PathVariable int gradeNo, @PathVariable int userCouponNo) {
-		couponService.rejectCouponRequest(userCouponNo);
+	@PatchMapping("/{gradeNo}/user-coupons/{userCouponNo}")
+	public ResponseEntity<?> rejectUserCoupon(@PathVariable int gradeNo, @PathVariable int userCouponNo) {
+		couponService.rejectUserCoupon(userCouponNo);
 		return ResponseEntity.noContent().build();
 	}
+
+
+
 }

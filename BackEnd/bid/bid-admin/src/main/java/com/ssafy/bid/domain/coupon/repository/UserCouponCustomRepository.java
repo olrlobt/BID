@@ -6,6 +6,6 @@ import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 
 public interface UserCouponCustomRepository {
 
-	List<UserCouponResponse> findUserCouponList(int gradeNo);
+	List<UserCouponResponse> findUserCoupons(int gradeNo);
 
 }

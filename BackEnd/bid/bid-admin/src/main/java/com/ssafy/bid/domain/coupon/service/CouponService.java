@@ -53,11 +53,11 @@ public class CouponService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<UserCouponResponse> findCouponRequests(int gradeNo) {
-		return userCouponRepository.findUserCouponList(gradeNo);
+	public List<UserCouponResponse> findUserCoupons(int gradeNo) {
+		return userCouponRepository.findUserCoupons(gradeNo);
 	}
 
-	public void acceptCouponRequest(long userCouponNo) {
+	public void acceptUserCoupon(long userCouponNo) {
 		if (!userCouponRepository.existsById(userCouponNo)) {
 			throw new EntityNotFoundException("쿠폰이 없습니다.");
 		}
@@ -65,7 +65,7 @@ public class CouponService {
 		userCouponRepository.deleteById(userCouponNo);
 	}
 
-	public void rejectCouponRequest(long userCouponNo) {
+	public void rejectUserCoupon(long userCouponNo) {
 		if (!userCouponRepository.existsById(userCouponNo)) {
 			throw new EntityNotFoundException("쿠폰이 없습니다.");
 		}
