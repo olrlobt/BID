@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BoardService {
 
 	private final BoardRepository boardRepository;
@@ -29,7 +31,16 @@ public class BoardService {
 		if (studentBoard.isEmpty()) {
 			throw new NoSuchElementException("해당 게시글이 없습니다.");
 		}
-
 		return studentBoard.get();
 	}
+
+	@Transactional
+	public void deleteBoard(long boardNo){
+		if (!boardRepository.existsById(boardNo)) {
+			throw new NoSuchElementException("해당 게시글이 없습니다.");
+		}
+		boardRepository.deleteById(boardNo);
+	}
+
+
 }

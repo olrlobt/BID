@@ -3,6 +3,7 @@ package com.ssafy.bid.domain.board.api;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +34,11 @@ public class BoardApi {
 		} else {
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@DeleteMapping("/{gradeNo}/boards/{boardNo}")
+	public ResponseEntity<?> deleteBoard(@PathVariable int gradeNo, @PathVariable long boardNo){
+		boardService.deleteBoard(boardNo);
+		return ResponseEntity.noContent().build();
 	}
 }
