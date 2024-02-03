@@ -14,9 +14,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.ssafy.bid.domain.saving.service.SavingService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequiredArgsConstructor
 @Configuration
 public class SavingTransferBatchJob {
@@ -30,7 +28,7 @@ public class SavingTransferBatchJob {
 			.build();
 	}
 
-	@Bean("savingTransferStep")
+	@Bean
 	public Step savingTransferStep(
 		JobRepository jobRepository,
 		Tasklet savingTransferTasklet,

@@ -64,7 +64,7 @@ public class Student extends User {
 		this.profileImgUrl = url;
 	}
 
-	public void minusSavingPrice(int price) {
+	public void subtractSavingPrice(int price) {
 		this.asset -= price;
 	}
 

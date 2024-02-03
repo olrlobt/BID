@@ -63,7 +63,7 @@ public class SavingServiceImpl implements SavingService {
 
 		userRepository.findAllByIds(targetUserNos).stream()
 			.filter(this::isLack)
-			.forEach(request -> request.getStudent().minusSavingPrice(request.getPrice()));
+			.forEach(request -> request.getStudent().subtractSavingPrice(request.getPrice()));
 	}
 
 	@Override
