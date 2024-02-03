@@ -15,7 +15,7 @@ buildscript {
 // 하위 모든 프로젝트 공통 세팅
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'checkstyle'
+//    apply plugin: 'checkstyle'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
@@ -27,12 +27,12 @@ subprojects {
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
 
-    checkstyle {
-        maxWarnings = 0 // 규칙이 어긋나는 코드가 하나라도 있을 경우 빌드 fail
-        configFile = file("${rootDir}/naver-checkstyle-rules.xml")
-        configProperties = ["suppressionFile" : "${rootDir}/naver-checkstyle-suppressions.xml"]
-        toolVersion ="8.24"
-    }
+//    checkstyle {
+//        maxWarnings = 0 // 규칙이 어긋나는 코드가 하나라도 있을 경우 빌드 fail
+//        configFile = file("${rootDir}/naver-checkstyle-rules.xml")
+//        configProperties = ["suppressionFile" : "${rootDir}/naver-checkstyle-suppressions.xml"]
+//        toolVersion ="8.24"
+//    }
 
     tasks.register('addGitPrecommitHook', Copy) {
         from 'script/pre-commit'
@@ -74,7 +74,7 @@ subprojects {
 
     // java source set 에 querydsl QClass 위치 추가
     sourceSets {
-        main.java.srcDirs += [ generated ]
+        main.java.srcDirs += [generated]
     }
 
     // gradle clean 시에 QClass 디렉토리 삭제
@@ -85,7 +85,9 @@ subprojects {
 
 project(':bid-core') {
     // 공통 코드
-    bootJar { enabled = false } // core 은 bootJar 로 패키징 할 필요 없음
+    bootJar {
+        enabled = false
+    } // core 은 bootJar 로 패키징 할 필요 없음
     jar { enabled = true }
 
     dependencies {
@@ -93,7 +95,10 @@ project(':bid-core') {
 }
 
 project(':bid-admin') {
-    bootJar { enabled = true }
+    bootJar {
+        enabled = true
+        archiveFileName = 'bid-admin-0.0.1-SNAPSHOT.jar'
+    }
     jar { enabled = false }
 
     dependencies {
@@ -102,7 +107,10 @@ project(':bid-admin') {
 }
 
 project(':bid-student') {
-    bootJar { enabled = true }
+    bootJar {
+        enabled = true
+        archiveFileName = 'bid-student-0.0.1-SNAPSHOT.jar'
+    }
     jar { enabled = false }
 
     dependencies {

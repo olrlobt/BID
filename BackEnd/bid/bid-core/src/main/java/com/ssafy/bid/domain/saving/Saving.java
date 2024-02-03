@@ -45,4 +45,9 @@ public class Saving {
 	 */
 	@NotNull
 	private Integer gradeNo;
+
+	public void modify(int depositPrice, int interestRate) {
+		this.depositPrice = depositPrice;
+		this.interestRate = interestRate;
+	}
 }
