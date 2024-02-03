@@ -34,4 +34,10 @@ public class CouponApi {
 	public void deleteCoupon(@PathVariable int gradeNo, @PathVariable int couponNo) {
 		couponService.deleteCoupon(couponNo);
 	}
+
+	@PatchMapping("/{gradeNo}/coupons/{couponNo}/register")
+	public ResponseEntity<?> registerCoupon(@PathVariable int gradeNo, @PathVariable int couponNo){
+		couponService.registerCoupon(couponNo);
+		return ResponseEntity.ok().build();
+	}
 }
