@@ -6,7 +6,7 @@ import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 
 public interface UserSavingRepositoryCustom {
-	List<SavingTransferAlertRequest> findSavingTransferInfos();
+	List<SavingTransferAlertRequest> findAllSavingTransferInfos();
 
 	List<SavingExpireRequest> findSavingExpireInfos();
 }

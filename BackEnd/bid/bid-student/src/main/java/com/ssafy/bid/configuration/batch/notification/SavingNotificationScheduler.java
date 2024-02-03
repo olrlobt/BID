@@ -25,7 +25,6 @@ public class SavingNotificationScheduler {
 	private final Step savingTransferAlertStep;
 
 	@Scheduled(cron = "0 50 8 * * *")
-		// 매일 8시 50분에 실행
 	void notifySavingTransfer() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,

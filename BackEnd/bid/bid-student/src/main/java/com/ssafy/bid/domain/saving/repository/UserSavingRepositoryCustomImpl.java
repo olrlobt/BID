@@ -20,7 +20,7 @@ public class UserSavingRepositoryCustomImpl implements UserSavingRepositoryCusto
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<SavingTransferAlertRequest> findSavingTransferInfos() {
+	public List<SavingTransferAlertRequest> findAllSavingTransferInfos() {
 		return queryFactory
 			.select(Projections.constructor(SavingTransferAlertRequest.class,
 					userSaving.userNo,
