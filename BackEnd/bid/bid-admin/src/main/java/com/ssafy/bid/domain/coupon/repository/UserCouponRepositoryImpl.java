@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.bid.domain.coupon.UsageStatus;
 import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class UserCouponRepositoryImpl implements UserCouponCustomRepository {
 			.where(student.gradeNo.eq(gradeNo))
 			.innerJoin(coupon)
 			.on(userCoupon.couponNo.eq(coupon.no))
+			.where(userCoupon.useStatus.eq(UsageStatus.REQUEST_PROGRESS))
 			.fetch();
 
 	}
