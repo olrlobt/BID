@@ -1,12 +1,14 @@
 package com.ssafy.bid.domain.coupon.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.coupon.Coupon;
 import com.ssafy.bid.domain.coupon.CouponStatus;
+import com.ssafy.bid.domain.coupon.UserCoupon;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
 import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 import com.ssafy.bid.domain.coupon.repository.CouponRepository;
@@ -47,11 +49,15 @@ public class CouponService {
 		userCouponRepository.deleteById(userCouponNo);
 	}
 
-	public void deleteCoupon(int couponNo) {
-		if (!couponRepository.existsById(couponNo)) {
+	public void rejectCouponRequest(long userCouponNo) {
+		if (!userCouponRepository.existsById(userCouponNo)) {
 			throw new EntityNotFoundException("쿠폰이 없습니다.");
 		}
-		couponRepository.deleteById(couponNo);
+
+		UserCoupon userCoupon = userCouponRepository.findById(userCouponNo)
+			.orElseThrow(() -> new NoSuchElementException("사용할 쿠폰이 없습니다."));
+
+		userCoupon.reject();
 	}
 
 

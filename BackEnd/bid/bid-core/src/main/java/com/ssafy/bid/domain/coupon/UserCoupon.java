@@ -35,4 +35,8 @@ public class UserCoupon {
 	 * users : userCoupon(me) = 1 : N
 	 */
 	private Integer userNo;
+
+	public void reject(){
+		this.useStatus = UsageStatus.BEFORE_USE;
+	}
 }

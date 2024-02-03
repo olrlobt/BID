@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
@@ -33,12 +35,14 @@ public class CouponApi {
 	}
 
 	@DeleteMapping("/{gradeNo}/coupons/requests/{userCouponNo}")
-	public void acceptCouponRequest(@PathVariable int gradeNo, @PathVariable int userCouponNo) {
+	public ResponseEntity<?> acceptCouponRequest(@PathVariable int gradeNo, @PathVariable int userCouponNo) {
 		couponService.acceptCouponRequest(userCouponNo);
+		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("/{gradeNo}/coupons/{couponNo}")
-	public void deleteCoupon(@PathVariable int gradeNo, @PathVariable int couponNo) {
-		couponService.deleteCoupon(couponNo);
+	@PatchMapping("/{gradeNo}/coupons/requests/{userCouponNo}")
+	public ResponseEntity<?> rejectCouponRequest(@PathVariable int gradeNo, @PathVariable int userCouponNo) {
+		couponService.rejectCouponRequest(userCouponNo);
+		return ResponseEntity.noContent().build();
 	}
 }
