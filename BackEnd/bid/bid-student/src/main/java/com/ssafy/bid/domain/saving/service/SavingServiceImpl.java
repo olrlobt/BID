@@ -1,13 +1,16 @@
 package com.ssafy.bid.domain.saving.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.saving.UserSaving;
+import com.ssafy.bid.domain.saving.dto.SavingExpireResponse;
 import com.ssafy.bid.domain.saving.dto.SavingRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.saving.dto.SavingsResponse;
@@ -55,6 +58,30 @@ public class SavingServiceImpl implements SavingService {
 		userRepository.findAllByIds(targetUserNos).stream()
 			.filter(this::isLack)
 			.forEach(request -> request.getStudent().minusSavingPrice(request.getPrice()));
+	}
+
+	@Override
+	@Transactional
+	public List<SavingExpireResponse> expire() {
+		List<Integer> userSavings = new ArrayList<>();
+		List<SavingExpireResponse> savingExpireResponses = new ArrayList<>();
+
+		userSavingRepository.findSavingExpireInfos().stream()
+			.filter(info -> info.getUserSaving().getEndPeriod().toLocalDate().equals(LocalDate.now()))
+			.forEach(info -> {
+				userSavings.add(info.getUserSaving().getNo());
+				savingExpireResponses.add(
+					SavingExpireResponse.builder()
+						.price(info.getUserSaving().getResultPrice())
+						.endDate(info.getUserSaving().getEndPeriod().toLocalDate())
+						.userNo(info.getStudent().getNo())
+						.build()
+				);
+				info.getStudent().addSavingPrice(info.getUserSaving().getResultPrice());
+			});
+
+		userSavingRepository.deleteAllById(userSavings);
+		return savingExpireResponses;
 	}
 
 	private boolean isTarget(UserSaving userSaving) {

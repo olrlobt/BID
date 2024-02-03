@@ -67,4 +67,8 @@ public class Student extends User {
 	public void minusSavingPrice(int price) {
 		this.asset -= price;
 	}
+
+	public void addSavingPrice(int price) {
+		this.asset += price;
+	}
 }
