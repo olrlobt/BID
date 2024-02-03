@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.saving.UserSaving;
 import com.ssafy.bid.domain.saving.dto.SavingExpireResponse;
 import com.ssafy.bid.domain.saving.dto.SavingRequest;
+import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.saving.dto.SavingsResponse;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
@@ -45,6 +46,11 @@ public class SavingServiceImpl implements SavingService {
 	@Transactional
 	public void deleteSaving(int userNo, int savingNo) {
 		userSavingRepository.deleteByUserNoAndSavingNo(userNo, savingNo);
+	}
+
+	@Override
+	public List<SavingTransferAlertRequest> findAllSavingTransferInfos() {
+		return userSavingRepository.findAllSavingTransferInfos();
 	}
 
 	@Override
@@ -94,10 +100,7 @@ public class SavingServiceImpl implements SavingService {
 	}
 
 	private boolean isLack(SavingTransferRequest savingTransferRequest) {
-		if (savingTransferRequest.getStudent().getAsset() - savingTransferRequest.getPrice() < 0) {
-			// TODO: 잔액부족 실시간 알림??
-			return false;
-		}
-		return true;
+		// TODO: 잔액부족 실시간 알림??
+		return savingTransferRequest.getStudent().getAsset() - savingTransferRequest.getPrice() >= 0;
 	}
 }
