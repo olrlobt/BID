@@ -9,5 +9,5 @@ import com.ssafy.bid.domain.coupon.Coupon;
 import com.ssafy.bid.domain.coupon.CouponStatus;
 
 public interface CouponRepository extends JpaRepository<Coupon, Integer> {
-	Optional<List<Coupon>> findByGradeNoAndCouponStatus(int gradeNo, CouponStatus couponStatus);
+	List<Coupon> findByGradeNoAndCouponStatus(int gradeNo, CouponStatus couponStatus);
 }
