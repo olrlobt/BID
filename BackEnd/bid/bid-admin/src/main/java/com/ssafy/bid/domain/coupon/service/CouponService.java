@@ -70,4 +70,11 @@ public class CouponService {
 
 		coupon.register();
 	}
+
+	public void unRegisterCoupon(int couponNo) {
+		Coupon coupon = couponRepository.findById(couponNo)
+			.orElseThrow(() -> new NoSuchElementException("쿠폰이 없습니다."));
+
+		coupon.unRegister();
+	}
 }
