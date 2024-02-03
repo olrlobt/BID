@@ -26,16 +26,13 @@ public class CouponService {
 	public CouponListResponse findCoupons(int gradeNo) {
 
 		List<Coupon> registeredCoupons = couponRepository
-			.findByGradeNoAndCouponStatus(gradeNo, CouponStatus.REGISTERED)
-			.orElse(Collections.emptyList());
+			.findByGradeNoAndCouponStatus(gradeNo, CouponStatus.REGISTERED);
 
 		List<Coupon> unregisteredCoupons = couponRepository
-			.findByGradeNoAndCouponStatus(gradeNo, CouponStatus.UNREGISTERED)
-			.orElse(Collections.emptyList());
+			.findByGradeNoAndCouponStatus(gradeNo, CouponStatus.UNREGISTERED);
 
 		return new CouponListResponse(registeredCoupons, unregisteredCoupons);
 	}
-
 
 	public void acceptCoupon(int couponNo) {
 		Coupon coupon = couponRepository.findById(couponNo)

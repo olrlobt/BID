@@ -22,14 +22,7 @@ public class CouponApi {
 
 	@GetMapping("/{gradeNo}/coupons")
 	public ResponseEntity<CouponListResponse> findCoupons(@PathVariable int gradeNo) {
-
-		CouponListResponse coupons = couponService.findCoupons(gradeNo);
-
-		if (coupons != null) {
-			return ResponseEntity.ok(coupons);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		return ResponseEntity.ok(couponService.findCoupons(gradeNo));
 	}
 
 	@PatchMapping("/{gradeNo}/coupons/{couponNo}")
