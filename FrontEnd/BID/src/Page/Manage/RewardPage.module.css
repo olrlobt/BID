@@ -73,13 +73,12 @@ body{
 
     .body{
       border-radius: 1vw;
-      height: 34vw;
       padding: 1vw;
       overflow: scroll;
     }
 
     .footer{
-      background-color: steelblue;
+      /* background-color: steelblue; */
       height: 6vw;
       padding: 1vw;
       box-sizing: border-box;
@@ -125,16 +124,15 @@ body{
       margin-bottom: 2vw;
 
       .body{
-        height: 2vw;
-        max-height: 7.5vw;
+        max-height: 7.1vw;
         overflow-y: scroll;
         display: flex;
         flex-wrap: wrap;
         gap: 1vw 2%;
         
         div{
-          box-sizing: border-box;
           width: 32%;
+          height: fit-content;
         }
       }
     }
