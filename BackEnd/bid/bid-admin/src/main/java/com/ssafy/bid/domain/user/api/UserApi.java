@@ -81,4 +81,40 @@ public class UserApi {
 	public void modifyBalls(@PathVariable int gradeNo) {
 		userService.modifyBalls(gradeNo);
 	}
+
+	@PostMapping("/find-id")
+	public ResponseEntity<String> findUserId(@RequestBody FindUserIDRequest request) {
+		try {
+			String userId = userService.findUserId(request.getName(), request.getTel());
+			return ResponseEntity.ok(userId);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	@DeleteMapping("/users/{userNo}")
+	public ResponseEntity<?> deleteUser(@PathVariable Integer userNo, @RequestBody UserWithdrawalRequest request) {
+		try {
+			userService.deleteUser(userNo, request.getPassword());
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+				return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	@PatchMapping("/users/{userNo}")
+	public ResponseEntity<?> updateUser(@PathVariable Integer userNo, @RequestBody UserUpdateRequest request) {
+		try {
+			userService.updateUser(userNo, request);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	@PostMapping("/students")
+	public ResponseEntity<Void> registerStudent(@RequestBody StudentRegistrationRequest request) {
+			userService.registerStudent(request);
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
 }
