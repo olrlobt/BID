@@ -34,7 +34,7 @@ function App() {
           <Route path="/bank" element={<BankPage />} />
           <Route path="/game" element={<GamePage />} />
         </Route>
-        <Route path="/classlist" element={<MainClass />}>
+        <Route path="/classlist/:teacherId/" element={<MainClass />}>
           <Route path="/classlist/:teacherId/" element={<ClassList />} />
           <Route path="/classlist/:teacherId/modify/" element={<ClassList />} />
           <Route path="/classlist/:teacherId/make/" element={<AddClass />} />
