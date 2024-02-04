@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 import com.ssafy.bid.domain.saving.UserSaving;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class SavingRequest {
 	private int no;
