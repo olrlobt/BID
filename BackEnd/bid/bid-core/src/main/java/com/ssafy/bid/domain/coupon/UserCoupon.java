@@ -36,8 +36,7 @@ public class UserCoupon {
 	 */
 	private Integer userNo;
 
-	/**
-	 * grade : userCoupon(me) = 1 : N
-	 */
-	private Integer gradeNo;
+	public void reject(){
+		this.useStatus = UsageStatus.BEFORE_USE;
+	}
 }
