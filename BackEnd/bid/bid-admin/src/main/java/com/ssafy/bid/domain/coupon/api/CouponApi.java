@@ -39,6 +39,12 @@ public class CouponApi {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PatchMapping("/{gradeNo}/user-coupons/{userCouponNo}")
+	public ResponseEntity<?> rejectUserCoupon(@PathVariable int gradeNo, @PathVariable int userCouponNo) {
+		couponService.rejectUserCoupon(userCouponNo);
+		return ResponseEntity.noContent().build();
+	}
+
 	@PatchMapping("/{gradeNo}/coupons/{couponNo}/register")
 	public ResponseEntity<?> registerCoupon(@PathVariable int gradeNo, @PathVariable int couponNo){
 		couponService.registerCoupon(couponNo);
