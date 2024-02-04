@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.grade.dto.GradeFindResponse;
@@ -26,12 +27,13 @@ public class GradeApi {
 	}
 
 	@PatchMapping("/{gradeNo}/salaries")
-	public void modifySalary(@PathVariable int gradeNo, SalaryModifyRequest salaryModifyRequest) {
+	public void modifySalary(@PathVariable int gradeNo, @RequestBody SalaryModifyRequest salaryModifyRequest) {
 		gradeService.modifySalary(gradeNo, salaryModifyRequest);
 	}
 
 	@PatchMapping("/{gradeNo}/saving-periods")
-	public void modifySavingPeriod(@PathVariable int gradeNo, SavingPeriodModifyRequest savingPeriodModifyRequest) {
+	public void modifySavingPeriod(@PathVariable int gradeNo,
+		@RequestBody SavingPeriodModifyRequest savingPeriodModifyRequest) {
 		gradeService.modifySavingTime(gradeNo, savingPeriodModifyRequest);
 	}
 }
