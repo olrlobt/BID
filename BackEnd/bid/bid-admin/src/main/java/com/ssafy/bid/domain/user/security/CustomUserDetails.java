@@ -19,48 +19,33 @@ public class CustomUserDetails implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority("Authority"));
     }
 
-    ;
-
     @Override
     public String getPassword() {
         return user.getPassword();
     }
-
-    ;
-
 
     @Override
     public String getUsername() {
         return user.getId();
     }
 
-    ;
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
-
-    ;
 
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    ;
-
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    ;
-
     @Override
     public boolean isEnabled() {
         return true;
     }
-
-    ;
 }

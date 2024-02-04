@@ -38,4 +38,10 @@ public class UserApi {
         String token = this.authService.login(request);
         return ResponseEntity.status(HttpStatus.OK).body(token);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authToken) {
+        authService.logout(authToken);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -1,8 +1,10 @@
 package com.ssafy.bid.domain.user.service;
 
-import com.ssafy.bid.domain.user.Admin;
+import com.ssafy.bid.domain.user.TokenBlacklist;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
+import com.ssafy.bid.domain.user.dto.TokenBlacklistDTO;
+import com.ssafy.bid.domain.user.repository.TokenBlacklistRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import com.ssafy.bid.domain.user.security.CustomUserInfo;
 import com.ssafy.bid.domain.user.security.JwtUtil;
@@ -22,6 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final TokenBlacklistRepository tokenBlacklistRepository;
 
     @Override
     @Transactional
@@ -38,5 +41,15 @@ public class AuthServiceImpl implements AuthService {
         CustomUserInfo info = new CustomUserInfo(user);
 
         return jwtUtil.createAccessToken(info);
+    }
+
+    @Override
+    @Transactional
+    public void logout(String token) {
+        String actualToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+
+        TokenBlacklistDTO tokenBlacklistDTO = new TokenBlacklistDTO(actualToken);
+        TokenBlacklist blacklistedToken = tokenBlacklistDTO.toEntity();
+        tokenBlacklistRepository.save(blacklistedToken);
     }
 }
