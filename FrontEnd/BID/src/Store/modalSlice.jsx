@@ -1,3 +1,4 @@
+// 모달 slice
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
