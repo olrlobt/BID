@@ -13,26 +13,7 @@ export default function RewardPage() {
     'name': '',
     'price': 0
   })
-  const [studentList] = useState([
-    { no:1, number: 1, name: '백지윤', asset: '5,678' },
-    { no:2, number: 2, name: '유현지', asset: '4,321' },
-    { no:3, number: 3, name: '배민지', asset: '9,321' },
-    { no:4, number: 4, name: '이현진', asset: '92,394' },
-    { no:5, number: 5, name: '이승헌', asset: '321' },
-    { no:6, number: 6, name: '김예림', asset: '54,321' },
-    { no:7, number: 7, name: '백지윤', asset: '5,678' },
-    { no:8, number: 8, name: '유현지', asset: '4,321' },
-    { no:9, number: 9, name: '배민지', asset: '9,321' },
-    { no:10, number: 10, name: '이현진', asset: '92,394' },
-    { no:11, number: 11, name: '이승헌', asset: '321' },
-    { no:12, number: 12, name: '김예림', asset: '54,321' },
-    { no:13, number: 13, name: '백지윤', asset: '5,678' },
-    { no:14, number: 14, name: '유현지', asset: '4,321' },
-    { no:15, number: 15, name: '배민지', asset: '9,321' },
-    { no:16, number: 16, name: '이현진', asset: '92,394' },
-    { no:17, number: 17, name: '이승헌', asset: '321' },
-    { no:18, number: 18, name: '김예림', asset: '54,321' },
-  ]);
+  const [studentList, setStudentList] = useState([]);
   const [rStudents, setRStudents] = useState([]);
   const [rReward, setRReward] = useState({
     'no': 0,
@@ -49,14 +30,14 @@ export default function RewardPage() {
       .catch(error => {
         console.log(error);
       });
-    // axios.get(('http://i10a306.p.ssafy.io:8081/1/users'))
-    //   .then(response => {
-    //     // setStudentList(response.data);
-    //     console.log(response.data);
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
+    axios.get(('http://i10a306.p.ssafy.io:8081/1/users'))
+      .then(response => {
+        setStudentList(response.data);
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }, []);
 
   const isCheked = (no) => {
@@ -101,7 +82,7 @@ export default function RewardPage() {
       ...newCouponForm,
       'price': parseInt(newCouponForm.price, 10)
     })
-    // console.log(newCouponForm);
+    console.log(newCouponForm);
     axios.post('http://i10a306.p.ssafy.io:8081/1/rewards', newCouponForm)
       .then(response => {
         console.log('ok');
@@ -170,7 +151,7 @@ export default function RewardPage() {
                       <td>
                         <input
                           type='checkbox'
-                          checked={ isCheked(student.number) }
+                          checked={ isCheked(student.no) }
                           onChange={ (e) => { selectStudent(student.no, e.target.checked) }}
                         />
                       </td>
