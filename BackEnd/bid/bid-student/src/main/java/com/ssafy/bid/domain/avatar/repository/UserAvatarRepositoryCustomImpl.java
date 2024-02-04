@@ -4,6 +4,7 @@ import static com.ssafy.bid.domain.avatar.QAvatar.*;
 import static com.ssafy.bid.domain.avatar.QUserAvatar.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -29,5 +30,17 @@ public class UserAvatarRepositoryCustomImpl implements UserAvatarRepositoryCusto
 			.innerJoin(avatar).on(avatar.no.eq(userAvatar.avatarNo))
 			.where(userAvatar.userNo.eq(userNo))
 			.fetch();
+	}
+
+	@Override
+	public Optional<String> findUrlByUserAvatarNo(int userAvatarNo) {
+		return Optional.ofNullable(
+			queryFactory
+				.select(avatar.url)
+				.from(userAvatar)
+				.innerJoin(avatar).on(avatar.no.eq(userAvatar.avatarNo))
+				.where(userAvatar.no.eq(userAvatarNo))
+				.fetchOne()
+		);
 	}
 }
