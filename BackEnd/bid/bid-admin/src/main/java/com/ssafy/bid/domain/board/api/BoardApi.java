@@ -21,7 +21,7 @@ public class BoardApi {
 	private final BoardService boardService;
 
 	@GetMapping("/{gradeNo}/boards")
-	public List<BoardResponse> findAllStudentBoards(@PathVariable int gradeNo){
+	public List<BoardResponse> findAllStudentBoards(@PathVariable int gradeNo) {
 		return boardService.findAllStudentBoards(gradeNo);
 	}
 
