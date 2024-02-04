@@ -57,7 +57,6 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 				.where(student.gradeNo.eq(gradeNo).and(board.no.eq(boardNo)))
 				.fetchOne());
 
-
 	}
 
 }
