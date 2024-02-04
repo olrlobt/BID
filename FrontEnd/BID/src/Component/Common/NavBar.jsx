@@ -70,7 +70,7 @@ export default function NavBar() {
               }`}
             />
             <span>학생</span>
-         </li>
+          </li>
         </Link>
         <Link to="/reward">
           <li
@@ -133,7 +133,7 @@ export default function NavBar() {
           </li>
         </Link>
       </ul>
-      <Link to="/classlist" className={styled.view}>
+      <Link to="/classlist/:teacherId/" className={styled.view}>
         <FontAwesomeIcon icon={faBars} />
         <span>전체학급목록</span>
       </Link>
