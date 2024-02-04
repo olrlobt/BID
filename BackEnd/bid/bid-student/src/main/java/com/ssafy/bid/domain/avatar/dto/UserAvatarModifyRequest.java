@@ -6,5 +6,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserAvatarModifyRequest {
-	private String url;
+	private int no;
 }
