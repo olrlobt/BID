@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -11,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class GradeFindResponse {
 	private long unapprovedCouponCount;
 	private int salary;
-	private int dealCount;
 	private int totalCategorySum;
 	private int snackSum;
 	private int learningSum;
