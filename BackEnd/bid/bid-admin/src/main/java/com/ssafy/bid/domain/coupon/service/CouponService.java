@@ -52,9 +52,11 @@ public class CouponService {
 		return new CouponListResponse(registeredCoupons, unregisteredCoupons);
 	}
 
-	@Transactional(readOnly = true)
-	public List<UserCouponResponse> findUserCoupons(int gradeNo) {
-		return userCouponRepository.findUserCoupons(gradeNo);
+	public void acceptCoupon(int couponNo) {
+		Coupon coupon = couponRepository.findById(couponNo)
+			.orElseThrow(() -> new NoSuchElementException("쿠폰이 없습니다."));
+
+		coupon.register();
 	}
 
 	public void acceptUserCoupon(long userCouponNo) {
@@ -65,16 +67,17 @@ public class CouponService {
 		userCouponRepository.deleteById(userCouponNo);
 	}
 
-	public void rejectUserCoupon(long userCouponNo) {
-		if (!userCouponRepository.existsById(userCouponNo)) {
-			throw new EntityNotFoundException("쿠폰이 없습니다.");
-		}
+	public void registerCoupon(int couponNo) {
+		Coupon coupon = couponRepository.findById(couponNo)
+			.orElseThrow(() -> new NoSuchElementException("쿠폰이 없습니다."));
 
-		UserCoupon userCoupon = userCouponRepository.findById(userCouponNo)
-			.orElseThrow(() -> new NoSuchElementException("사용할 쿠폰이 없습니다."));
-
-		userCoupon.reject();
+		coupon.register();
 	}
 
+	public void unRegisterCoupon(int couponNo) {
+		Coupon coupon = couponRepository.findById(couponNo)
+			.orElseThrow(() -> new NoSuchElementException("쿠폰이 없습니다."));
 
+		coupon.unRegister();
+	}
 }
