@@ -18,4 +18,8 @@ import java.time.LocalDateTime;
 public class Admin extends User {
 
 	private String tel;
+	public Admin(String id, String password, String name, Integer schoolNo, String tel) {
+		super(id, password, name, schoolNo);
+		this.tel = tel;
+	}
 }

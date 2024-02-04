@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.ssafy.bid.domain.user.School;
 import com.ssafy.bid.domain.user.Student;
+import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
@@ -27,7 +28,7 @@ public interface UserRepositoryCustom {
 
 	List<School> findByNameContaining(String name);
 
-	boolean existsById(String id);
+	boolean checkExistsById(String id);
 
 	Optional<School> findByCode(String code);
 
@@ -36,4 +37,6 @@ public interface UserRepositoryCustom {
 	List<BallsResponse> findBalls(int gradeNo);
 
 	void resetBallCounts(int gradeNo);
+
+	Optional<User> findByNameAndTel(String name, String tel);
 }

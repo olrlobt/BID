@@ -27,4 +27,12 @@ public interface UserService {
 	List<BallsResponse> findBalls(int gradeNo);
 
 	void modifyBalls(int gradeNo);
+
+	String findUserId(String name, String tel) throws Exception;
+
+	void deleteUser(Integer userNo, String password) throws Exception;
+
+	void updateUser(Integer userNo, UserUpdateRequest request) throws Exception;
+
+	void registerStudent(StudentRegistrationRequest request);
 }
