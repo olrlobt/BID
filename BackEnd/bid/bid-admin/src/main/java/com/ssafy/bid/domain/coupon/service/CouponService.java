@@ -6,11 +6,13 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.bid.domain.coupon.Coupon;
 import com.ssafy.bid.domain.coupon.CouponStatus;
+import com.ssafy.bid.domain.coupon.UserCoupon;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
 import com.ssafy.bid.domain.coupon.dto.CouponResponse;
+import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 import com.ssafy.bid.domain.coupon.repository.CouponRepository;
+import com.ssafy.bid.domain.coupon.repository.UserCouponRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +23,10 @@ import lombok.RequiredArgsConstructor;
 public class CouponService {
 
 	private final CouponRepository couponRepository;
+	private final UserCouponRepository userCouponRepository;
 
 	@Transactional(readOnly = true)
 	public CouponListResponse findCoupons(int gradeNo) {
-
 		List<CouponResponse> registeredCoupons = couponRepository
 			.findByGradeNoAndCouponStatus(gradeNo, CouponStatus.REGISTERED)
 			.stream()
@@ -57,11 +59,12 @@ public class CouponService {
 		coupon.register();
 	}
 
-	public void deleteCoupon(int couponNo) {
-		if (!couponRepository.existsById(couponNo)) {
+	public void acceptUserCoupon(long userCouponNo) {
+		if (!userCouponRepository.existsById(userCouponNo)) {
 			throw new EntityNotFoundException("쿠폰이 없습니다.");
 		}
-		couponRepository.deleteById(couponNo);
+		// Todo. 해당 학생 알림 주기
+		userCouponRepository.deleteById(userCouponNo);
 	}
 
 	public void registerCoupon(int couponNo) {
