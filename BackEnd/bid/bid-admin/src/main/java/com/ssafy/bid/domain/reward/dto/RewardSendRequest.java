@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class RewardSendRequest {
-	private String name;
+	private int no;
 	private List<Integer> usersNos;
 	private String comment;
-	private int price;
 }
