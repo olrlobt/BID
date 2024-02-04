@@ -44,8 +44,8 @@ public class BoardApi {
 
 	@DeleteMapping("/{gradeNo}/boards/{boardNo}/{replyNo}")
 	public ResponseEntity<?> deleteReply(@PathVariable int gradeNo,
-										@PathVariable long boardNo,
-										@PathVariable long replyNo) {
+		@PathVariable long boardNo,
+		@PathVariable long replyNo) {
 		boardService.deleteReply(replyNo);
 		return ResponseEntity.noContent().build();
 	}

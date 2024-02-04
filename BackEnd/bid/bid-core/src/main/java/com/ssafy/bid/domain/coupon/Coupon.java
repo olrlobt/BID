@@ -45,12 +45,11 @@ public class Coupon extends BaseEntity {
 	@NotNull
 	private Integer gradeNo;
 
-
-	public void register(){
+	public void register() {
 		this.couponStatus = CouponStatus.REGISTERED;
 	}
 
-	public void unRegister(){
+	public void unRegister() {
 		this.couponStatus = CouponStatus.UNREGISTERED;
 	}
 }

@@ -37,16 +37,15 @@ public class BoardService {
 	}
 
 	@Transactional
-	public void deleteBoard(long boardNo){
+	public void deleteBoard(long boardNo) {
 		if (!boardRepository.existsById(boardNo)) {
 			throw new NoSuchElementException("해당 게시글이 없습니다.");
 		}
 		boardRepository.deleteById(boardNo);
 	}
 
-
 	@Transactional
-	public void deleteReply(long replyNo){
+	public void deleteReply(long replyNo) {
 		if (!replyRepository.existsById(replyNo)) {
 			throw new NoSuchElementException("해당 댓글이 없습니다.");
 		}
