@@ -27,4 +27,10 @@ public class BoardApi {
 		return ResponseEntity.ok(boards);
 	}
 
+
+	@GetMapping("/users/{userNo}/boards")
+	public ResponseEntity<?> findMyBoards(@PathVariable int userNo) {
+		List<BoardResponse> boards = boardService.findMyBoards(userNo);
+		return ResponseEntity.ok(boards);
+	}
 }

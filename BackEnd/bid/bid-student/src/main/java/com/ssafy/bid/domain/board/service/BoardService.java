@@ -22,4 +22,8 @@ public class BoardService {
 		Category from = Category.from(category);
 		return boardRepository.findBoards(gradeNo, from, keyword);
 	}
+
+	public List<BoardResponse> findMyBoards(int userNo) {
+		return boardRepository.findMyBoards(userNo);
+	}
 }
