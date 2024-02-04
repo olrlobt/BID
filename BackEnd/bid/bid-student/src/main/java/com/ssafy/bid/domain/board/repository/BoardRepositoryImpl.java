@@ -36,4 +36,22 @@ public class BoardRepositoryImpl implements BoardCustomRepository{
 			.orderBy(board.createdAt.desc())
 			.fetch();
 	}
+
+	@Override
+	public List<BoardResponse> findMyBoards(int userNo) {
+
+		return queryFactory.select(Projections.constructor(BoardResponse.class,
+				board.no,
+				board.title,
+				board.boardStatus,
+				board.totalPrice.divide(board.attendeeCount),
+				board.resultPrice,
+				board.goodsImgUrl,
+				student.name
+			))
+			.from(board)
+			.innerJoin(student).on(board.userNo.eq(student.no).and(student.no.eq(userNo)))
+			.orderBy(board.createdAt.desc())
+			.fetch();
+	}
 }
