@@ -46,13 +46,13 @@ public class CouponApi {
 	}
 
 	@PatchMapping("/{gradeNo}/coupons/{couponNo}/register")
-	public ResponseEntity<?> registerCoupon(@PathVariable int gradeNo, @PathVariable int couponNo){
+	public ResponseEntity<?> registerCoupon(@PathVariable int gradeNo, @PathVariable int couponNo) {
 		couponService.registerCoupon(couponNo);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PatchMapping("/{gradeNo}/coupons/{couponNo}/unregister")
-	public ResponseEntity<?> unRegisterCoupon(@PathVariable int gradeNo, @PathVariable int couponNo){
+	public ResponseEntity<?> unRegisterCoupon(@PathVariable int gradeNo, @PathVariable int couponNo) {
 		couponService.unRegisterCoupon(couponNo);
 		return ResponseEntity.noContent().build();
 	}

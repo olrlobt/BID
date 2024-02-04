@@ -41,7 +41,7 @@ public class UserCoupon {
 	 */
 	private Integer gradeNo;
 
-	public void reject(){
+	public void reject() {
 		this.useStatus = UsageStatus.BEFORE_USE;
 	}
 }
