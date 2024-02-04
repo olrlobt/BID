@@ -36,6 +36,9 @@ public class UserCoupon {
 	 */
 	private Integer userNo;
 
+	/**
+	 * grade : userCoupon(me) = 1 : N
+	 */
 	private Integer gradeNo;
 
 	public void reject(){
