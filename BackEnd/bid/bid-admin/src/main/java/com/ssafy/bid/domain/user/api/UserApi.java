@@ -1,24 +1,34 @@
 package com.ssafy.bid.domain.user.api;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.School;
-import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.*;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.bid.domain.user.dto.AccountRequest;
+import com.ssafy.bid.domain.user.dto.AccountResponse;
+import com.ssafy.bid.domain.user.dto.BallsResponse;
+import com.ssafy.bid.domain.user.dto.StudentRequest;
+import com.ssafy.bid.domain.user.dto.StudentResponse;
+import com.ssafy.bid.domain.user.dto.StudentsResponse;
 import com.ssafy.bid.domain.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 public class UserApi {
 
 	private final UserService userService;
@@ -51,7 +61,7 @@ public class UserApi {
 	@GetMapping("/check-id")
 	public ResponseEntity<?> checkIdDuplicate(@RequestParam String id) {
 		boolean isDuplicate = userService.isIdDuplicate(id);
-		return ResponseEntity.ok().body(Map.of("dulplicated", isDuplicate));
+		return ResponseEntity.ok().body(isDuplicate);
 	}
 
 	@GetMapping("/schools")
@@ -61,5 +71,14 @@ public class UserApi {
 				.map(school -> new SchoolResponse(school.getNo(), school.getName(), school.getRegion(), school.getCode()))
 				.collect(Collectors.toList());
 		return ResponseEntity.ok(schoolResponses);
+	}
+	@GetMapping("/{gradeNo}/balls")
+	public List<BallsResponse> findBalls(@PathVariable int gradeNo) {
+		return userService.findBalls(gradeNo);
+	}
+
+	@PatchMapping("/{gradeNo}/balls")
+	public void modifyBalls(@PathVariable int gradeNo) {
+		userService.modifyBalls(gradeNo);
 	}
 }

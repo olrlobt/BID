@@ -18,9 +18,11 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.DealType;
+import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
+import com.ssafy.bid.domain.user.dto.BallsResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.dto.StudentsResponse;
@@ -263,5 +265,42 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 			)
 			.orderBy(account.createdAt.desc())
 			.fetch();
+	}
+
+	@Override
+	public List<Student> findAllByIds(List<Integer> userNos) {
+		return queryFactory
+			.selectFrom(student)
+			.where(student.no.in(userNos))
+			.fetch();
+	}
+
+	@Override
+	public List<BallsResponse> findBalls(int gradeNo) {
+		return queryFactory
+			.select(Projections.constructor(BallsResponse.class,
+					student.no,
+					student.name,
+					student.ballCount
+				)
+			)
+			.from(student)
+			.where(
+				student.gradeNo.eq(gradeNo)
+			)
+			.orderBy(student.no.asc())
+			.fetch();
+	}
+
+	@Override
+	public void resetBallCounts(int gradeNo) {
+		queryFactory
+			.update(student)
+			.set(student.ballCount, 0)
+			.where(
+				student.gradeNo.eq(gradeNo),
+				student.deletedAt.isNull()
+			)
+			.execute();
 	}
 }

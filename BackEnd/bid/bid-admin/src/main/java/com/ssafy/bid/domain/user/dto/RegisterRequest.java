@@ -11,4 +11,14 @@ public class RegisterRequest {
     private String name;
     private String tel;
     private String schoolCode;
+
+    public Admin toEntity(Integer schoolNo, String encryptedPassword) {
+        return Admin.builder()
+                .id(this.id)
+                .password(encryptedPassword)
+                .name(this.name)
+                .tel(this.tel)
+                .schoolNo(schoolNo)
+                .build();
+    }
 }

@@ -45,4 +45,10 @@ public class Account extends BaseEntity {
 	 */
 	@NotNull
 	private Integer userNo;
+
+	/**
+	 * grade : account(me) = 1 : N
+	 */
+	@NotNull
+	private Integer gradeNo;
 }
