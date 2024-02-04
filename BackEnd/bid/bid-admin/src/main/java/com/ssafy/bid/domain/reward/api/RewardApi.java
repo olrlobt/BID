@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.reward.dto.RewardSaveRequest;
@@ -27,7 +28,8 @@ public class RewardApi {
 	private final RewardService rewardService;
 
 	@PostMapping("/{gradeNo}/rewards")
-	public ResponseEntity<Void> saveReward(@PathVariable int gradeNo, RewardSaveRequest rewardSaveRequest) {
+	public ResponseEntity<Void> saveReward(@PathVariable int gradeNo,
+		@RequestBody RewardSaveRequest rewardSaveRequest) {
 		rewardService.saveReward(gradeNo, rewardSaveRequest);
 		return ResponseEntity.status(CREATED).build();
 	}
@@ -44,7 +46,7 @@ public class RewardApi {
 	}
 
 	@PostMapping("/rewards/send")
-	public void sendReward(RewardSendRequest rewardSendRequest) {
+	public void sendReward(@RequestBody RewardSendRequest rewardSendRequest) {
 		rewardService.sendReward(rewardSendRequest);
 	}
 }
