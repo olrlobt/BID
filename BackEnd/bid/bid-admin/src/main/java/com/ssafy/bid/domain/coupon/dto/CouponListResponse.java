@@ -2,7 +2,6 @@ package com.ssafy.bid.domain.coupon.dto;
 
 import java.util.List;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
