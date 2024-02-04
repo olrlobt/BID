@@ -30,7 +30,7 @@ public class Reward {
 	private Integer price;
 
 	/**
-	 * grade : reward(me) = N : 1
+	 * grade : reward(me) = 1 : N
 	 */
 	@NotNull
 	private Integer gradeNo;

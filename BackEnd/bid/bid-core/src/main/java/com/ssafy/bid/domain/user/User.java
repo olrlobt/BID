@@ -26,7 +26,7 @@ public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "users_no")
+	@Column(name = "user_no")
 	private Integer no;
 
 	@NotNull
