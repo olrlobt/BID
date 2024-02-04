@@ -48,7 +48,7 @@ public class Grade extends BaseEntity {
 	private LocalTime transferPeriod;
 
 	/**
-	 * users : group(me) = 1 : N
+	 * users : grade(me) = 1 : N
 	 */
 	@NotNull
 	private Integer userNo;
