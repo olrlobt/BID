@@ -23,11 +23,11 @@ public class BoardService {
 	private final BoardRepository boardRepository;
 	private final ReplyRepository replyRepository;
 
-	public List<BoardResponse> findAllStudentBoards(int gradeNo){
+	public List<BoardResponse> findAllStudentBoards(int gradeNo) {
 		return boardRepository.findAllStudentBoards(gradeNo);
 	}
 
-	public BoardResponse getStudentBoard(int gradeNo, long boardNo){
+	public BoardResponse getStudentBoard(int gradeNo, long boardNo) {
 		Optional<BoardResponse> studentBoard = boardRepository.getStudentBoard(gradeNo, boardNo);
 
 		if (studentBoard.isEmpty()) {
