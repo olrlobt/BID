@@ -2,7 +2,7 @@ import React from "react";
 import styled from "./ViewProductModal.module.css";
 import Modal from '../Common/Modal';
 import { useState } from 'react';
-import ProductInfoButton from "./ProductInfoButton";
+import RoundedInfoButton from "../Common/RoundedInfoButton";
 import { SvgIcon } from "@material-ui/core";
 import { ArrowForward } from "@material-ui/icons";
 import SubmitButton from "../Common/SubmitButton";
@@ -52,30 +52,33 @@ export default function ViewProductModal({ onClose, ...props }) {
         </div>
         <div className={styled.info}>
           <div className = {styled.infoButton}>
-            <ProductInfoButton
+            <RoundedInfoButton
               value = { props[4] }
               unit = ''
               textColor = 'white'
               borderColor = '#BBBD32'
               backgroundColor = '#BBBD32'
+              padding = '0.5vw 1vw'
             />
           </div>
           <div className = {styled.infoButton}>
-            <ProductInfoButton
+            <RoundedInfoButton
               value = { props[9] }
               unit = '교시'
               textColor = 'white'
               borderColor = '#BBBD32'
               backgroundColor = '#BBBD32'
+              padding = '0.5vw 1vw'
             />
           </div>
           <div className = {styled.infoButton}>
-            <ProductInfoButton
+            <RoundedInfoButton
               value = { props[7] }
               unit = '비드'
               textColor = '#F23F3F'
               borderColor = '#F23F3F'
               backgroundColor = 'white'
+              padding = '0.5vw 1vw'
             />
           </div>
           <div className = {styled.arrowArea}>
@@ -85,12 +88,13 @@ export default function ViewProductModal({ onClose, ...props }) {
             />
           </div>
           <div className = {styled.infoButton}>
-            <ProductInfoButton
+            <RoundedInfoButton
               value = { props[8] }
               unit = '비드'
               textColor = 'white'
               borderColor = '#F23F3F'
               backgroundColor = '#F23F3F'
+              padding = '0.5vw 1vw'
             />
           </div>
         </div>

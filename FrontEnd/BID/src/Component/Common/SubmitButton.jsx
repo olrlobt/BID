@@ -2,7 +2,7 @@ import React from "react";
 import styled from "./SubmitButton.module.css";
 
 export default function SubmitButton(props){
-  const {text, width, height, fontSize} = props;
+  const { text, width, height, fontSize } = props;
 
   const buttonSize = {
     width: width,
@@ -12,9 +12,9 @@ export default function SubmitButton(props){
 
   return(
     <button
-      className={styled.submitBtn}
+      className={ styled.submitBtn }
       type='submit'
-      style={buttonSize}
+      style={ buttonSize }
     >
       {text}
     </button>
