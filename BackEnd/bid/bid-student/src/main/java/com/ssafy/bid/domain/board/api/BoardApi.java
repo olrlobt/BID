@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.service.BoardService;
+import com.ssafy.bid.domain.board.service.CoreBoardService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +24,12 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardApi {
 
 	private final BoardService boardService;
+	private final CoreBoardService coreBoardService;
 
-	@GetMapping("/boards/{category}")
-	public ResponseEntity<?> findBoards(@PathVariable String category, @RequestParam String keyword) {
-		List<BoardResponse> boards = boardService.findBoards(1, category, keyword);
+
+	@GetMapping("/boards")
+	public ResponseEntity<?> findBoards(@RequestParam String keyword) {
+		List<BoardResponse> boards = boardService.findBoards(1, keyword);
 		return ResponseEntity.ok(boards);
 	}
 
@@ -37,4 +40,14 @@ public class BoardApi {
 
 		return ResponseEntity.ok(myAllBoards);
 	}
+
+	@GetMapping("/boards/{boardNo}")
+	public ResponseEntity<BoardResponse> getBoardDetail(@PathVariable long boardNo) {
+		BoardResponse boardResponse = coreBoardService.getBoardDetail(boardNo);
+		return ResponseEntity.ok(boardResponse);
+	}
+
+
+
+
 }

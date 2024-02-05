@@ -10,7 +10,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.board.BiddingStatus;
 import com.ssafy.bid.domain.board.Category;
-import com.ssafy.bid.domain.board.QBidding;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository{
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<BoardResponse> findBoards(int gradeNo, Category category, String keyword) {
+	public List<BoardResponse> findBoards(int gradeNo, String keyword) {
 
 		return queryFactory.select(Projections.constructor(BoardResponse.class,
 				board.no,
@@ -34,9 +33,8 @@ public class BoardRepositoryImpl implements BoardCustomRepository{
 				student.name))
 			.from(board)
 			.innerJoin(student).on(board.userNo.eq(student.no).and(student.gradeNo.eq(gradeNo)))
-			.where(board.category.eq(category)
-				.and(board.title.contains(keyword)
-					.or(board.description.contains(keyword))))
+			.where(board.title.contains(keyword)
+					.or(board.description.contains(keyword)))
 			.orderBy(board.createdAt.desc())
 			.fetch();
 	}

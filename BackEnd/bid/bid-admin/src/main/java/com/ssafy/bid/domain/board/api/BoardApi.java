@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.service.BoardService;
+import com.ssafy.bid.domain.board.service.CoreBoardService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardApi {
 
 	private final BoardService boardService;
+	private final CoreBoardService coreBoardService;
 
 	@GetMapping("/{gradeNo}/boards")
 	public List<BoardResponse> findAllStudentBoards(@PathVariable int gradeNo) {
@@ -29,13 +31,9 @@ public class BoardApi {
 	}
 
 	@GetMapping("/{gradeNo}/boards/{boardNo}")
-	public ResponseEntity<BoardResponse> getStudentBoard(@PathVariable int gradeNo, @PathVariable long boardNo) {
-		BoardResponse boardResponse = boardService.getStudentBoard(gradeNo, boardNo);
-		if (boardResponse != null) {
-			return ResponseEntity.ok(boardResponse);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<BoardResponse> getBoardDetail(@PathVariable int gradeNo, @PathVariable long boardNo) {
+		BoardResponse boardResponse = coreBoardService.getBoardDetail(boardNo);
+		return ResponseEntity.ok(boardResponse);
 	}
 
 	@DeleteMapping("/{gradeNo}/boards/{boardNo}")

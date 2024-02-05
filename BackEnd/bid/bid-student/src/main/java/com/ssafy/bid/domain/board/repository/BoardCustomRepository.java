@@ -7,7 +7,7 @@ import com.ssafy.bid.domain.board.dto.BoardResponse;
 
 public interface BoardCustomRepository {
 
-	List<BoardResponse> findBoards(int gradeNo, Category category, String keyword);
+	List<BoardResponse> findBoards(int gradeNo, String keyword);
 	List<BoardResponse> findMyBoards(int userNo);
 	List<BoardResponse> findMyBiddingBoards(int userNo);
 
