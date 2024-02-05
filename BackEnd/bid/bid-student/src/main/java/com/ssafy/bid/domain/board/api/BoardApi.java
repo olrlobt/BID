@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.board.dto.BoardResponse;
+import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.service.BoardService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
 
@@ -25,28 +26,28 @@ public class BoardApi {
 	private final BoardService boardService;
 	private final CoreBoardService coreBoardService;
 
-	@GetMapping("/{gradeNo}/boards")
-	public List<BoardResponse> findAllStudentBoards(@PathVariable int gradeNo) {
-		return boardService.findAllStudentBoards(gradeNo);
+
+	@GetMapping("/boards")
+	public ResponseEntity<?> findBoards(@RequestParam String keyword) {
+		List<BoardResponse> boards = boardService.findBoards(1, keyword);
+		return ResponseEntity.ok(boards);
 	}
 
-	@GetMapping("/{gradeNo}/boards/{boardNo}")
-	public ResponseEntity<BoardResponse> getBoardDetail(@PathVariable int gradeNo, @PathVariable long boardNo) {
+
+	@GetMapping("/users/{userNo}/boards")
+	public ResponseEntity<?> findMyAllBoards(@PathVariable int userNo) {
+		MyBoardsResponse myAllBoards = boardService.findMyAllBoards(userNo);
+
+		return ResponseEntity.ok(myAllBoards);
+	}
+
+	@GetMapping("/boards/{boardNo}")
+	public ResponseEntity<BoardResponse> getBoardDetail(@PathVariable long boardNo) {
 		BoardResponse boardResponse = coreBoardService.getBoardDetail(boardNo);
 		return ResponseEntity.ok(boardResponse);
 	}
 
-	@DeleteMapping("/{gradeNo}/boards/{boardNo}")
-	public ResponseEntity<?> deleteBoard(@PathVariable int gradeNo, @PathVariable long boardNo) {
-		boardService.deleteBoard(boardNo);
-		return ResponseEntity.noContent().build();
-	}
 
-	@DeleteMapping("/{gradeNo}/boards/{boardNo}/{replyNo}")
-	public ResponseEntity<?> deleteReply(@PathVariable int gradeNo,
-		@PathVariable long boardNo,
-		@PathVariable long replyNo) {
-		boardService.deleteReply(replyNo);
-		return ResponseEntity.noContent().build();
-	}
+
+
 }
