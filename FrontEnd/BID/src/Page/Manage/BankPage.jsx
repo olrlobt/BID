@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
-import styled from "./BankPage.module.css";
-import { viewSavingList } from "../../Apis/TeacherBankApis";
-import { useQuery } from "@tanstack/react-query";
-import useSaving from "../../hooks/useSaving";
-import { useSelector } from "react-redux";
-import { moneySeletor } from "../../Store/moneySlice";
+import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import styled from './BankPage.module.css';
+import { updateSavingList, viewSavingList } from '../../Apis/TeacherBankApis';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import useSaving from '../../hooks/useSaving';
+import { useSelector } from 'react-redux';
+import { moneySeletor } from '../../Store/moneySlice';
 
 export default function BankPage() {
   // 이후 백엔드에서 국고 금액 받아오면 바꾸기
@@ -33,13 +33,27 @@ export default function BankPage() {
     console.log(savingBasket);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     // 백엔드로 현재 savingInfo 넘기기
+    changeSavings.mutate();
   };
 
+  const changeSavings = useMutation({
+    mutationKey: ['changeSaving'],
+    mutationFn: () =>
+      updateSavingList({ savingBasket })
+        .then((data) => {
+          console.log(data);
+          initSavingList(savingBasket);
+          setIsEdit(!isEdit);
+        })
+        .catch(() => {
+          alert('변경이 되지 않았습니다.');
+        }),
+  });
+
   const { data: savingInfo } = useQuery({
-    queryKey: ["savingInfo"],
+    queryKey: ['savingInfo'],
     queryFn: () =>
       viewSavingList().then((res) => {
         initSavingList(res.data);
@@ -114,7 +128,7 @@ export default function BankPage() {
                     type="number"
                     id="saving"
                     name="savingDepositPrice"
-                    value={savingInfo[0].savingDepositPrice}
+                    value={savingBasket[0].savingDepositPrice}
                     onChange={(e) => handleChange(e, 0)}
                     readOnly={isEdit ? false : true}
                   />
@@ -123,9 +137,9 @@ export default function BankPage() {
                 <div>
                   <label htmlFor="interest">금리</label>
                   <input
-                    className={isEdit ? `${styled.isEdit}` : ""}
+                    className={isEdit ? `${styled.isEdit}` : ''}
                     type="number"
-                    value={savingInfo[0].savingInterestRate}
+                    value={savingBasket[0].savingInterestRate}
                     id="interest"
                     name="savingInterestRate"
                     onChange={(e) => handleChange(e, 0)}
@@ -171,8 +185,8 @@ export default function BankPage() {
                         : `${styled.saving}`
                     }
                     type="number"
-                    value={savingInfo[1].savingDepositPrice}
-                    onChange={handleChange}
+                    value={savingBasket[1].savingDepositPrice}
+                    onChange={(e) => handleChange(e, 1)}
                     id="saving"
                     name="savingDepositPrice"
                     readOnly={isEdit ? false : true}
@@ -182,10 +196,10 @@ export default function BankPage() {
                 <div>
                   <label htmlFor="interest">금리</label>
                   <input
-                    className={isEdit ? `${styled.isEdit}` : ""}
+                    className={isEdit ? `${styled.isEdit}` : ''}
                     type="number"
-                    value={savingInfo[1].savingInterestRate}
-                    onChange={handleChange}
+                    value={savingBasket[1].savingInterestRate}
+                    onChange={(e) => handleChange(e, 1)}
                     id="interest"
                     name="interestB"
                     readOnly={isEdit ? false : true}
