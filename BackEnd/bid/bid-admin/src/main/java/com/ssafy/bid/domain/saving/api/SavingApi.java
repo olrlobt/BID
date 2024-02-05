@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.saving.dto.SavingModifyRequest;
@@ -27,7 +28,7 @@ public class SavingApi {
 	}
 
 	@PatchMapping("/{gradeNo}/savings")
-	public void modifySavings(@PathVariable int gradeNo, SavingModifyRequest savingModifyRequest) {
+	public void modifySavings(@PathVariable int gradeNo, @RequestBody SavingModifyRequest savingModifyRequest) {
 		savingService.modifySavings(gradeNo, savingModifyRequest);
 	}
 }

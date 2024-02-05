@@ -92,157 +92,157 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 .fetch();
     }
 
-    @Override
-    public Optional<StudentResponse> findStudent(int userNo) {
-        return Optional.ofNullable(
-                queryFactory
-                        .select(Projections.constructor(StudentResponse.class,
-                                        saving.no,
-                                        saving.depositPeriod,
-                                        saving.interestRate,
-                                        userSaving.startPeriod,
-                                        saving.depositPrice,
-                                        userSaving.resultPrice,
-                                        student.attendance.monday,
-                                        student.attendance.tuesday,
-                                        student.attendance.wednesday,
-                                        student.attendance.thursday,
-                                        student.attendance.friday,
-                                        student.ballCount,
-                                        ExpressionUtils.as(
-                                                JPAExpressions
-                                                        .select(
-                                                                account.price.sum()
-                                                        )
-                                                        .from(account)
-                                                        .where(
-                                                                account.userNo.eq(student.no),
-                                                                account.accountType.eq(AccountType.EXPENDITURE),
-                                                                account.dealType.notIn(DealType.REWARD, DealType.SALARY, DealType.SAVING),
-                                                                account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-                                                                account.createdAt.loe(LocalDateTime.now())
-                                                        )
-                                                , "totalCategorySum"
-                                        ),
-                                        ExpressionUtils.as(
-                                                JPAExpressions
-                                                        .select(
-                                                                account.price.sum()
-                                                        )
-                                                        .from(account)
-                                                        .where(
-                                                                account.userNo.eq(student.no),
-                                                                account.accountType.eq(AccountType.EXPENDITURE),
-                                                                account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-                                                                account.createdAt.loe(LocalDateTime.now())
-                                                        )
-                                                        .groupBy(account.accountType, account.dealType)
-                                                        .having(account.dealType.eq(DealType.SNACK))
-                                                , "snackSum"
-                                        ),
-                                        ExpressionUtils.as(
-                                                JPAExpressions
-                                                        .select(
-                                                                account.price.sum()
-                                                        )
-                                                        .from(account)
-                                                        .where(
-                                                                account.userNo.eq(student.no),
-                                                                account.accountType.eq(AccountType.EXPENDITURE),
-                                                                account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-                                                                account.createdAt.loe(LocalDateTime.now())
-                                                        )
-                                                        .groupBy(account.accountType, account.dealType)
-                                                        .having(account.dealType.eq(DealType.LEARNING))
-                                                , "learningSum"
-                                        ),
-                                        ExpressionUtils.as(
-                                                JPAExpressions
-                                                        .select(
-                                                                account.price.sum()
-                                                        )
-                                                        .from(account)
-                                                        .where(
-                                                                account.userNo.eq(student.no),
-                                                                account.accountType.eq(AccountType.EXPENDITURE),
-                                                                account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-                                                                account.createdAt.loe(LocalDateTime.now())
-                                                        )
-                                                        .groupBy(account.accountType, account.dealType)
-                                                        .having(account.dealType.eq(DealType.COUPON))
-                                                , "couponSum"
-                                        ),
-                                        ExpressionUtils.as(
-                                                JPAExpressions
-                                                        .select(
-                                                                account.price.sum()
-                                                        )
-                                                        .from(account)
-                                                        .where(
-                                                                account.userNo.eq(student.no),
-                                                                account.accountType.eq(AccountType.EXPENDITURE),
-                                                                account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-                                                                account.createdAt.loe(LocalDateTime.now())
-                                                        )
-                                                        .groupBy(account.accountType, account.dealType)
-                                                        .having(account.dealType.eq(DealType.GAME))
-                                                , "gameSum"
-                                        ),
-                                        ExpressionUtils.as(
-                                                JPAExpressions
-                                                        .select(
-                                                                account.price.sum()
-                                                        )
-                                                        .from(account)
-                                                        .where(
-                                                                account.userNo.eq(student.no),
-                                                                account.accountType.eq(AccountType.EXPENDITURE),
-                                                                account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-                                                                account.createdAt.loe(LocalDateTime.now())
-                                                        )
-                                                        .groupBy(account.accountType, account.dealType)
-                                                        .having(account.dealType.eq(DealType.ETC))
-                                                , "etcSum"
-                                        ),
-                                        ExpressionUtils.as(
-                                                JPAExpressions
-                                                        .select(
-                                                                account.price.sum()
-                                                        )
-                                                        .from(account)
-                                                        .where(
-                                                                account.userNo.eq(student.no),
-                                                                account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-                                                                account.createdAt.loe(LocalDateTime.now())
-                                                        )
-                                                        .groupBy(account.accountType)
-                                                        .having(account.accountType.eq(AccountType.INCOME))
-                                                , "totalIncome"
-                                        ),
-                                        ExpressionUtils.as(
-                                                JPAExpressions
-                                                        .select(
-                                                                account.price.sum()
-                                                        )
-                                                        .from(account)
-                                                        .where(
-                                                                account.userNo.eq(student.no),
-                                                                account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-                                                                account.createdAt.loe(LocalDateTime.now())
-                                                        )
-                                                        .groupBy(account.accountType)
-                                                        .having(account.accountType.eq(AccountType.EXPENDITURE))
-                                                , "totalExpense"
-                                        )
-                                )
-                        )
-                        .from(student)
-                        .innerJoin(userSaving).on(userSaving.userNo.eq(student.no))
-                        .innerJoin(saving).on(saving.no.eq(userSaving.savingNo))
-                        .where(student.no.eq(userNo))
-                        .fetchOne()
-        );
-    }
+	@Override
+	public Optional<StudentResponse> findStudent(int userNo) {
+		return Optional.ofNullable(
+			queryFactory
+				.select(Projections.constructor(StudentResponse.class,
+						saving.no,
+						saving.depositPeriod,
+						saving.interestRate,
+						userSaving.startPeriod,
+						saving.depositPrice,
+						userSaving.currentPrice,
+						student.attendance.monday,
+						student.attendance.tuesday,
+						student.attendance.wednesday,
+						student.attendance.thursday,
+						student.attendance.friday,
+						student.ballCount,
+						ExpressionUtils.as(
+							JPAExpressions
+								.select(
+									account.price.sum()
+								)
+								.from(account)
+								.where(
+									account.userNo.eq(student.no),
+									account.accountType.eq(AccountType.EXPENDITURE),
+									account.dealType.notIn(DealType.REWARD, DealType.SALARY, DealType.SAVING),
+									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
+									account.createdAt.loe(LocalDateTime.now())
+								)
+							, "totalCategorySum"
+						),
+						ExpressionUtils.as(
+							JPAExpressions
+								.select(
+									account.price.sum()
+								)
+								.from(account)
+								.where(
+									account.userNo.eq(student.no),
+									account.accountType.eq(AccountType.EXPENDITURE),
+									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
+									account.createdAt.loe(LocalDateTime.now())
+								)
+								.groupBy(account.accountType, account.dealType)
+								.having(account.dealType.eq(DealType.SNACK))
+							, "snackSum"
+						),
+						ExpressionUtils.as(
+							JPAExpressions
+								.select(
+									account.price.sum()
+								)
+								.from(account)
+								.where(
+									account.userNo.eq(student.no),
+									account.accountType.eq(AccountType.EXPENDITURE),
+									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
+									account.createdAt.loe(LocalDateTime.now())
+								)
+								.groupBy(account.accountType, account.dealType)
+								.having(account.dealType.eq(DealType.LEARNING))
+							, "learningSum"
+						),
+						ExpressionUtils.as(
+							JPAExpressions
+								.select(
+									account.price.sum()
+								)
+								.from(account)
+								.where(
+									account.userNo.eq(student.no),
+									account.accountType.eq(AccountType.EXPENDITURE),
+									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
+									account.createdAt.loe(LocalDateTime.now())
+								)
+								.groupBy(account.accountType, account.dealType)
+								.having(account.dealType.eq(DealType.COUPON))
+							, "couponSum"
+						),
+						ExpressionUtils.as(
+							JPAExpressions
+								.select(
+									account.price.sum()
+								)
+								.from(account)
+								.where(
+									account.userNo.eq(student.no),
+									account.accountType.eq(AccountType.EXPENDITURE),
+									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
+									account.createdAt.loe(LocalDateTime.now())
+								)
+								.groupBy(account.accountType, account.dealType)
+								.having(account.dealType.eq(DealType.GAME))
+							, "gameSum"
+						),
+						ExpressionUtils.as(
+							JPAExpressions
+								.select(
+									account.price.sum()
+								)
+								.from(account)
+								.where(
+									account.userNo.eq(student.no),
+									account.accountType.eq(AccountType.EXPENDITURE),
+									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
+									account.createdAt.loe(LocalDateTime.now())
+								)
+								.groupBy(account.accountType, account.dealType)
+								.having(account.dealType.eq(DealType.ETC))
+							, "etcSum"
+						),
+						ExpressionUtils.as(
+							JPAExpressions
+								.select(
+									account.price.sum()
+								)
+								.from(account)
+								.where(
+									account.userNo.eq(student.no),
+									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
+									account.createdAt.loe(LocalDateTime.now())
+								)
+								.groupBy(account.accountType)
+								.having(account.accountType.eq(AccountType.INCOME))
+							, "totalIncome"
+						),
+						ExpressionUtils.as(
+							JPAExpressions
+								.select(
+									account.price.sum()
+								)
+								.from(account)
+								.where(
+									account.userNo.eq(student.no),
+									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
+									account.createdAt.loe(LocalDateTime.now())
+								)
+								.groupBy(account.accountType)
+								.having(account.accountType.eq(AccountType.EXPENDITURE))
+							, "totalExpense"
+						)
+					)
+				)
+				.from(student)
+				.innerJoin(userSaving).on(userSaving.userNo.eq(student.no))
+				.innerJoin(saving).on(saving.no.eq(userSaving.savingNo))
+				.where(student.no.eq(userNo))
+				.fetchOne()
+		);
+	}
 
 	@Override
 	public List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest) {
