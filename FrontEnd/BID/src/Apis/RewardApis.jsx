@@ -9,14 +9,32 @@ export const RewardApis = axios.create({
  * @param gradeNo 학급 넘버
  * @returns 리워드 목록
  */
-export const getRewardList = async () => {
-  return await RewardApis.get('1/rewards');
+export const getRewardListApi = async (gradeNo) => {
+  return await RewardApis.get(gradeNo+'/rewards');
 }
 
 /**
  * 리워드 추가
  * @param gradeNo 학급 넘버
+ * @param newRewardForm 새 리워드 정보(name, price)
  */
-export const addNewReward = async (newRewardForm) => {
-  return await RewardApis.post('1/rewards', newRewardForm);
+export const addNewRewardApi = async (gradeNo, newRewardForm) => {
+  return await RewardApis.post(gradeNo+'/rewards', newRewardForm);
+}
+
+/**
+ * 리워드 삭제
+ * @param rNo 리워드 번호
+ */
+export const deleteRewardApi = async (rNo) => {
+  return await RewardApis.delete('rewards/'+rNo);
+
+}
+
+/**
+ * 리워드 지급
+ * @param postData 리워드 지급 정보
+ */
+export const sendRewardApi = async (postData) => {
+  return await RewardApis.post('/rewards/send', postData);
 }
