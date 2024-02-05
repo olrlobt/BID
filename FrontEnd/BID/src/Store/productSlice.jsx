@@ -1,16 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+// 경매 물품 slice
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  productList: null
+  productList: null,
 };
 
 export const productSelector = (state) => {
   return state.products.productList;
-}
+};
 
 export const productSlice = createSlice({
   name: 'products',
-  initialState : initialState,
+  initialState: initialState,
   reducers: {
     initProducts: (state, action) => {
       const productList = action.payload;
@@ -24,8 +25,8 @@ export const productSlice = createSlice({
       const productNo = action.payload;
       const newList = state.productList.filter((c) => c.no !== productNo);
       state.productList = [...newList];
-    }
-  }
+    },
+  },
 });
 
 export const { initProducts, addProduct, removeProduct } = productSlice.actions;
