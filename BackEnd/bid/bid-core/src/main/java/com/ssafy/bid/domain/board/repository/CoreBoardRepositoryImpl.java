@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class CoreBoardRepositoryImpl implements CoreBoardCustomRepository {
 
 	private final JPAQueryFactory queryFactory;
+
 	@Override
 	public Optional<BoardResponse> getStudentBoard(long boardNo) {
 
