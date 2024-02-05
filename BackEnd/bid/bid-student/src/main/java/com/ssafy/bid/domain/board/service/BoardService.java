@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.bid.domain.board.Category;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
+import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,11 @@ public class BoardService {
 		return boardRepository.findBoards(gradeNo, from, keyword);
 	}
 
-	public List<BoardResponse> findMyBoards(int userNo) {
-		return boardRepository.findMyBoards(userNo);
+	public MyBoardsResponse findMyAllBoards(int userNo) {
+
+		List<BoardResponse> myBoards = boardRepository.findMyBoards(userNo);
+		List<BoardResponse> myBiddingBoards = boardRepository.findMyBiddingBoards(userNo);
+
+		return new MyBoardsResponse(myBoards, myBiddingBoards);
 	}
 }
