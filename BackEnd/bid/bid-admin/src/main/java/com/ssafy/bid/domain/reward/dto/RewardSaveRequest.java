@@ -2,10 +2,10 @@ package com.ssafy.bid.domain.reward.dto;
 
 import com.ssafy.bid.domain.reward.Reward;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class RewardSaveRequest {
 	private String name;
