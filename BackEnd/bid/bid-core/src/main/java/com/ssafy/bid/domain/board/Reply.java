@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,4 +39,15 @@ public class Reply extends BaseEntity {
 	 */
 	@NotNull
 	private Integer userNo;
+
+	@Builder
+	private Reply(String content, Long boardNo, Integer userNo) {
+		this.content = content;
+		this.boardNo = boardNo;
+		this.userNo = userNo;
+	}
+
+	public void modify(String content){
+		this.content = content;
+	}
 }

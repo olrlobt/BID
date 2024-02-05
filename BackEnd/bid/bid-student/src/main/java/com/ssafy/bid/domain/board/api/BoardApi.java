@@ -2,15 +2,22 @@ package com.ssafy.bid.domain.board.api;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
+import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.service.BoardService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
 
@@ -45,4 +52,37 @@ public class BoardApi {
 		return ResponseEntity.ok(boardResponse);
 	}
 
+	@PostMapping("/boards")
+	public ResponseEntity<?> addBoard(@RequestBody BoardCreateRequest boardCreateRequest) {
+		boardService.addBoard(1, 1, boardCreateRequest);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
+	@DeleteMapping("/boards/{boardNo}")
+	public ResponseEntity<?> deleteBoard(@PathVariable int boardNo) {
+		boardService.deleteBoard(boardNo);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping("/boards/{boardNo}/reply")
+	public ResponseEntity<?> addBoardReply(@PathVariable int boardNo,
+		@RequestBody ReplyCreateRequest replyCreateRequest) {
+		boardService.addBoardReply(1, boardNo, replyCreateRequest);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
+	@PatchMapping("/boards/{boardNo}/reply/{replyNo}")
+	public ResponseEntity<?> modifyBoardReply(@PathVariable int boardNo,
+		@PathVariable int replyNo,
+		@RequestBody ReplyCreateRequest replyCreateRequest) {
+		boardService.modifyBoardReply(1, replyNo, replyCreateRequest);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/boards/{boardNo}/reply/{replyNo}")
+	public ResponseEntity<?> deleteBoardReply(@PathVariable int boardNo,
+		@PathVariable int replyNo) {
+		boardService.deleteBoardReply(1, replyNo);
+		return ResponseEntity.noContent().build();
+	}
 }
