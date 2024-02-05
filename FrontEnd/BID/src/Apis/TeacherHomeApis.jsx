@@ -1,9 +1,7 @@
-import axios from 'axios';
-
-const TEACHER_URL = 'http://i10a306.p.ssafy.io:8081';
+import axios from "axios";
 
 export const TeacherHomeApis = axios.create({
-  baseURL: TEACHER_URL,
+  baseURL: process.env.REACT_APP_TCH_API,
 });
 
 /**
