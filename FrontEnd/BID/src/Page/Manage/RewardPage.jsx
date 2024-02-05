@@ -4,57 +4,75 @@ import SubmitButton from "../../Component/Common/SubmitButton";
 import Reward from "../../Component/Reward/Reward";
 import SettingButton from "../../Component/Common/SettingButton";
 import SettingsIcon from '@mui/icons-material/Settings';
+import { getStudentList } from "../../Apis/StudentApis";
+import { getRewardList, addNewReward } from "../../Apis/RewardApis";
 import axios from 'axios';
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export default function RewardPage() {
   const [isSetting, setIsSetting] = useState(false);
   const [rewardList, setRewardList] = useState([]);
+  const [studentList, setStudentList] = useState([]);
+
+  //code smell
   const [newRewardForm, setNewRewardForm] = useState({
     'name': '',
     'price': 0
   })
-  const [studentList, setStudentList] = useState([]);
+  //
+
   const [rStudents, setRStudents] = useState([]);
   const [rReward, setRReward] = useState({
     'no': 0,
     'name': '',
   });
   const [rComment, setRComment] = useState('');
+  const [clickAdd, setClickAdd] = useState(false);
+  const [clickSend, setClickSend] = useState(false);
 
-  useEffect(() => {
-    axios.get(('http://i10a306.p.ssafy.io:8081/1/users'))
-      .then(response => {
-        setStudentList(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+/** 학생 목록 가져오기 */
+  const{} = useQuery({
+    queryKey: ['studentList'],
+    queryFn: () => {
+      getStudentList().then((res) => {
+        if (res.data !== undefined) {
+          setStudentList(res.data);
+        }
 
-      axios.get(('http://i10a306.p.ssafy.io:8081/1/rewards'))
-      .then(response => {
-        setRewardList(response.data);
+        return res.data;
       })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
+    },
+  });
+
+/** 리워드 목록 가져오기 */
+  const{} = useQuery({
+    queryKey: ['rewardList'],
+    queryFn: () =>
+      getRewardList().then((res) => {
+        if (res.data !== undefined) {
+          setRewardList(res.data);
+        }
+
+        return res.data;
+      }),
+  });
+
+/** 리워드 추가 */
+  const mutation = useMutation(
+    {
+      queryKey: ['rewardList'],
+      queryFn: () => {
+        addNewReward(newRewardForm);
+        return [];
+      },
+      onMutate: 
+    },
+  )
 
   /** 새 리워드를 등록하는 함수 */
   const createNewReward = (e) => {
     e.preventDefault();
-    axios.post('http://i10a306.p.ssafy.io:8081/1/rewards', newRewardForm)
-      .then(() => {
-        axios.get(('http://i10a306.p.ssafy.io:8081/1/rewards'))
-        .then(response => {
-          setRewardList(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    console.log("우웅");
   }
   
   /** 리워드를 지급하는 함수 */
@@ -144,7 +162,7 @@ export default function RewardPage() {
               </thead>
               <tbody>
                 {
-                  studentList.map((student) => (
+                  studentList && studentList.map((student) => (
                     <tr key={ student.no }>
                       <td>
                         <input
@@ -180,7 +198,7 @@ export default function RewardPage() {
               style = {{ height: isSetting? '34vw': '40vw'}}
             >
               {
-                rewardList.map(reward => (
+                rewardList && rewardList.map(reward => (
                   <Reward
                     key={ reward.no }
                     rNo={ reward.no }
