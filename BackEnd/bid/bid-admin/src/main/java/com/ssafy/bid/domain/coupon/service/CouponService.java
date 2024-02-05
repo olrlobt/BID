@@ -36,6 +36,7 @@ public class CouponService {
 				.name(coupon.getName())
 				.description(coupon.getDescription())
 				.gradeNo(coupon.getGradeNo())
+				.startPrice(coupon.getStartPrice())
 				.build()
 			).toList();
 
@@ -47,6 +48,7 @@ public class CouponService {
 				.name(coupon.getName())
 				.description(coupon.getDescription())
 				.gradeNo(coupon.getGradeNo())
+				.startPrice(coupon.getStartPrice())
 				.build()
 			).toList();
 
