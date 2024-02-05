@@ -9,7 +9,7 @@ import useModal from "../../hooks/useModal";
 import TimeTable from "../../Component/Common/TimeTable";
 import { useSelector } from "react-redux";
 import { bidSelector } from "../../Store/bidSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { viewDashboard } from "../../Apis/TeacherHomeApis";
 import useBid from "../../hooks/useBid";
@@ -17,6 +17,8 @@ import useMoney from "../../hooks/useMoney";
 import useBidCount from "../../hooks/useBidCount";
 import { moneySeletor } from "../../Store/moneySlice";
 import { bidCountSelector } from "../../Store/bidCountSlice";
+import PieChart from "../../Component/Common/PieChart";
+import LineChart from "../../Component/Common/LineChart";
 
 export default function Home() {
   const { openModal } = useModal();
@@ -26,6 +28,7 @@ export default function Home() {
   const currentBid = useSelector(bidSelector);
   const classMoney = useSelector(moneySeletor);
   const bidCount = useSelector(bidCountSelector);
+  const [lineData, setLineData] = useState([]);
   const dumpData = [
     { name: "이승헌", coupon: "청소 역할 선점 쿠폰" },
     { name: "이현진", coupon: "급식 먼저 먹기 쿠폰" },
@@ -33,11 +36,7 @@ export default function Home() {
     { name: "배미남", coupon: "자유 이용 쿠폰" },
   ];
 
-  const {
-    // isLoading,
-    // error,
-    data: dashboardInfo,
-  } = useQuery({
+  const { data: dashboardInfo } = useQuery({
     queryKey: ["HomeDashboard"],
     queryFn: () =>
       viewDashboard().then((res) => {
@@ -45,8 +44,19 @@ export default function Home() {
           changeBid(res.data.salary);
           initMoney(res.data.asset);
           initCount(res.data.dealCount);
-        }
 
+          const sortWinningBiddingCounts = res.data.winningBiddingCounts.sort(
+            (a, b) => new Date(a.date) - new Date(b.date)
+          );
+          setLineData(
+            sortWinningBiddingCounts.map((item) => {
+              return {
+                x: `${item.date.split("-")[1]}.${item.date.split("-")[2]}`,
+                y: item.count,
+              };
+            })
+          );
+        }
         return res.data;
       }),
   });
@@ -78,7 +88,27 @@ export default function Home() {
             }
           />
           <section className={styled.secondRow}>
-            <section className={styled.graphSec}></section>
+            <section className={styled.graphSec}>
+              <LineChart
+                data={[
+                  {
+                    id: "line",
+                    color: "hsl(82, 70%, 50%)",
+                    data: lineData,
+                  },
+                ]}
+              />
+              <PieChart
+                data={[
+                  dashboardInfo.totalCategorySum,
+                  dashboardInfo.couponSum,
+                  dashboardInfo.etcSum,
+                  dashboardInfo.gameSum,
+                  dashboardInfo.learningSum,
+                  dashboardInfo.snackSum,
+                ]}
+              />
+            </section>
             <section className={styled.infoSec}>
               <InfoBox
                 info={[
