@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.user.service;
 
+import java.util.List;
 import com.ssafy.bid.domain.user.dto.*;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
