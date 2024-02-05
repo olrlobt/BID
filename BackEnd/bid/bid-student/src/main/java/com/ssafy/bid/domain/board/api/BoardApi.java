@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
+import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.service.BoardService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
 
@@ -51,8 +52,8 @@ public class BoardApi {
 	}
 
 	@PostMapping("/boards")
-	public ResponseEntity<?> addBoard(@RequestBody BoardCreateRequest boardCreateRequest){
-		boardService.addBoard(1,1,boardCreateRequest);
+	public ResponseEntity<?> addBoard(@RequestBody BoardCreateRequest boardCreateRequest) {
+		boardService.addBoard(1, 1, boardCreateRequest);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
@@ -62,5 +63,11 @@ public class BoardApi {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PostMapping("/boards/{boardNo}/reply")
+	public ResponseEntity<?> addBoardReply(@PathVariable int boardNo,
+		@RequestBody ReplyCreateRequest replyCreateRequest) {
+		boardService.addBoardReply(1, boardNo, replyCreateRequest);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
 
 }
