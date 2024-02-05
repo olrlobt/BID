@@ -56,15 +56,21 @@ public class CouponService {
 		return new CouponListResponse(registeredCoupons, unregisteredCoupons);
 	}
 
-	public void addCoupon(int gradeNo, CouponCreateRequest couponCreateRequest){
+	@Transactional(readOnly = true)
+	public List<UserCouponResponse> findUserCoupons(int gradeNo) {
+		return userCouponRepository.findUserCoupons(gradeNo);
+	}
+
+	public void addCoupon(int gradeNo, CouponCreateRequest couponCreateRequest) {
 		couponCreateRequest.setGradeNo(gradeNo);
 		couponRepository.save(couponCreateRequest.toEntity());
 	}
 
-
-	@Transactional(readOnly = true)
-	public List<UserCouponResponse> findUserCoupons(int gradeNo) {
-		return userCouponRepository.findUserCoupons(gradeNo);
+	public void deleteCoupon(int couponNo) {
+		if (!couponRepository.existsById(couponNo)) {
+			throw new EntityNotFoundException("쿠폰이 없습니다.");
+		}
+		couponRepository.deleteById(couponNo);
 	}
 
 	public void acceptUserCoupon(long userCouponNo) {
