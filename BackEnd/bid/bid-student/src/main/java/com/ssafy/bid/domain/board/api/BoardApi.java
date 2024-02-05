@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,4 +71,18 @@ public class BoardApi {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
+	@PatchMapping("/boards/{boardNo}/reply/{replyNo}")
+	public ResponseEntity<?> modifyBoardReply(@PathVariable int boardNo,
+		@PathVariable int replyNo,
+		@RequestBody ReplyCreateRequest replyCreateRequest) {
+		boardService.modifyBoardReply(1, replyNo, replyCreateRequest);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/boards/{boardNo}/reply/{replyNo}")
+	public ResponseEntity<?> deleteBoardReply(@PathVariable int boardNo,
+		@PathVariable int replyNo) {
+		boardService.deleteBoardReply(1, replyNo);
+		return ResponseEntity.noContent().build();
+	}
 }
