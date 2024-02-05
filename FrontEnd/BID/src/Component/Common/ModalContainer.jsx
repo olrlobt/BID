@@ -1,21 +1,21 @@
-import React from "react";
-import { createPortal } from "react-dom";
-import { useSelector } from "react-redux";
-import { modalSelector } from "../../Store/modalSlice";
-import CouponModal from "../Dashboard/CouponModal";
-import ChangeBidModal from "../Dashboard/ChangeBidModal";
-import useModal from "../../hooks/useModal";
-import IntoMoneyModal from "../Dashboard/IntoMoneyModal";
-import NewCouponModal from "../Bid/NewCouponModal";
-import StudentAdd from "../Manage/StudentAdd";
-import PwdRemoveModal from '../Manage/PwdRemoveModal'
-import StudentEditModal from '../Manage/StudentEditModal'
-import ViewProductModal from "../Bid/ViewProductModal";
+import React from 'react';
+import { createPortal } from 'react-dom';
+import { useSelector } from 'react-redux';
+import { modalSelector } from '../../Store/modalSlice';
+import CouponModal from '../DashboardModals/CouponModal';
+import ChangeBidModal from '../DashboardModals/ChangeBidModal';
+import useModal from '../../hooks/useModal';
+import NewCouponModal from '../Bid/NewCouponModal';
+import StudentAdd from '../Manage/StudentAdd';
+import PwdRemoveModal from '../Manage/PwdRemoveModal';
+import StudentEditModal from '../Manage/StudentEditModal';
+import ViewProductModal from '../Bid/ViewProductModal';
+import TimeModal from '../DashboardModals/TimeModal';
 
 const MODAL_COMPONENTS = {
   coupon: CouponModal,
   changeBid: ChangeBidModal,
-  intoMoney: IntoMoneyModal,
+  timeModal: TimeModal,
   newCoupon: NewCouponModal,
   addStudent: StudentAdd,
   pwdRemove: PwdRemoveModal,
@@ -35,7 +35,7 @@ function ModalContainer() {
     <>
       <Modal onClose={closeModal} {...props} />
     </>,
-    document.getElementById("modal")
+    document.getElementById('modal')
   );
 }
 

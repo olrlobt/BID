@@ -1,16 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+// 쿠폰 slice
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  couponList: null
+  couponList: null,
 };
 
 export const couponSelector = (state) => {
   return state.coupons.couponList;
-}
+};
 
 export const couponSlice = createSlice({
   name: 'coupons',
-  initialState : initialState,
+  initialState: initialState,
   reducers: {
     initCoupons: (state, action) => {
       const couponList = action.payload;
@@ -24,8 +25,8 @@ export const couponSlice = createSlice({
       const couponNo = action.payload;
       const newList = state.couponList.filter((c) => c.no !== couponNo);
       state.couponList = [...newList];
-    }
-  }
+    },
+  },
 });
 
 export const { initCoupons, addCoupon, removeCoupon } = couponSlice.actions;

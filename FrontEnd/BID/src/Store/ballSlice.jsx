@@ -16,7 +16,6 @@ export const ballSlice = createSlice({
     },
 
     removeBalls: (state, action) => {
-      console.log(action);
       const newBallsList = state.ballList.map((student) => ({
         ...student,
         ballCount: 1,
