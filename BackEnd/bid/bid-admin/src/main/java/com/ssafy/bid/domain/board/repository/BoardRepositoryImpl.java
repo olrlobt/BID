@@ -23,6 +23,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 				board.no,
 				board.title,
 				board.boardStatus,
+				board.startPrice,
 				board.totalPrice.divide(board.attendeeCount),
 				board.resultPrice,
 				board.goodsImgUrl,
@@ -56,7 +57,5 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 				.innerJoin(student).on(board.userNo.eq(student.no))
 				.where(student.gradeNo.eq(gradeNo).and(board.no.eq(boardNo)))
 				.fetchOne());
-
 	}
-
 }
