@@ -41,6 +41,13 @@ public class CouponApi {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
+	@DeleteMapping("/{gradeNo}/coupons/{couponNo}")
+	public ResponseEntity<?> deleteCoupon(@PathVariable int gradeNo,
+		@PathVariable int couponNo) {
+		couponService.deleteCoupon(couponNo);
+		return ResponseEntity.noContent().build();
+	}
+
 	@GetMapping("/{gradeNo}/user-coupons")
 	public ResponseEntity<List<UserCouponResponse>> findUserCoupons(@PathVariable int gradeNo) {
 		return ResponseEntity.ok(couponService.findUserCoupons(gradeNo));
