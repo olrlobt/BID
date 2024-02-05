@@ -36,9 +36,20 @@ public class Coupon extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private CouponStatus couponStatus;
 
+	@NotNull
+	private Integer startPrice;
+
 	/**
-	 * grade : coupon = 1 : N
+	 * grade : coupon(me) = 1 : N
 	 */
 	@NotNull
 	private Integer gradeNo;
+
+	public void register() {
+		this.couponStatus = CouponStatus.REGISTERED;
+	}
+
+	public void unRegister() {
+		this.couponStatus = CouponStatus.UNREGISTERED;
+	}
 }
