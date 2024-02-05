@@ -1,9 +1,7 @@
 package com.ssafy.bid.domain.user.api;
 
-<<<<<<< BackEnd/bid/bid-admin/src/main/java/com/ssafy/bid/domain/user/api/UserApi.java
 import com.ssafy.bid.domain.user.dto.*;
 import com.ssafy.bid.domain.user.service.AuthService;
-=======
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
