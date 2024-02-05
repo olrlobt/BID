@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 public class SecurityConfig {
     private static final String[] AUTH_WHITELIST = {
-            "/**"
+            "/login", "/join"
     };
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtUtil jwtUtil;
