@@ -102,7 +102,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 						saving.interestRate,
 						userSaving.startPeriod,
 						saving.depositPrice,
-						userSaving.resultPrice,
+						userSaving.currentPrice,
 						student.attendance.monday,
 						student.attendance.tuesday,
 						student.attendance.wednesday,

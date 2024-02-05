@@ -41,7 +41,7 @@ public class UserSavingRepositoryCustomImpl implements UserSavingRepositoryCusto
 			.select(Projections.constructor(SavingExpireRequest.class,
 					userSaving.no,
 					userSaving.endPeriod,
-					userSaving.resultPrice,
+					userSaving.currentPrice,
 					student
 				)
 			)

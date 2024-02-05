@@ -13,18 +13,18 @@ import lombok.NoArgsConstructor;
 public class SavingExpireRequest {
 	private int userSavingNo;
 	private LocalDate userSavingEndPeriod;
-	private int resultPrice;
+	private int currentPrice;
 	private Student student;
 
 	public SavingExpireRequest(
 		int userSavingNo,
 		LocalDateTime userSavingEndPeriod,
-		int resultPrice,
+		int currentPrice,
 		Student student
 	) {
 		this.userSavingNo = userSavingNo;
 		this.userSavingEndPeriod = userSavingEndPeriod.toLocalDate();
-		this.resultPrice = resultPrice;
+		this.currentPrice = currentPrice;
 		this.student = student;
 	}
 }
