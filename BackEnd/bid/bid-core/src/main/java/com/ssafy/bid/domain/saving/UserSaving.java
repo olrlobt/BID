@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,7 +32,7 @@ public class UserSaving {
 	private LocalDateTime endPeriod;
 
 	@NotNull
-	private Integer resultPrice;
+	private Integer currentPrice;
 
 	/**
 	 * users : userSaving(me) = 1 : 1
@@ -44,4 +45,25 @@ public class UserSaving {
 	 */
 	@NotNull
 	private Integer savingNo;
+
+	/**
+	 * grade : userSaving(me) = 1 : N
+	 */
+	@NotNull
+	private Integer gradeNo;
+
+	@Builder
+	public UserSaving(
+		LocalDateTime startPeriod,
+		LocalDateTime endPeriod,
+		Integer currentPrice,
+		Integer userNo,
+		Integer savingNo
+	) {
+		this.startPeriod = startPeriod;
+		this.endPeriod = endPeriod;
+		this.currentPrice = currentPrice;
+		this.userNo = userNo;
+		this.savingNo = savingNo;
+	}
 }
