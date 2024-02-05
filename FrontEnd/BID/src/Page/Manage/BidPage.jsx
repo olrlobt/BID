@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import styled from "./BidPage.module.css";
 import WriterButton from "../../Component/Bid/WriterButton";
-import NewCouponButton from "../../Component/Bid/NewCouponButton";
+import SettingButton from "../../Component/Common/SettingButton";
 import CouponList from "../../Component/Bid/CouponList";
 import AddIcon from "@material-ui/icons/Add";
 import Product from "../../Component/Bid/Product";
@@ -247,14 +247,15 @@ export default function BidPage(){
         <div>
         {
           isTeacher ?
-          <NewCouponButton
+          <SettingButton
             onClick = {() =>
               openModal({
                 type: 'newCoupon',
                 props: ['새 쿠폰 등록',] })
               }
             svg = {AddIcon}
-            text = {'새 쿠폰 등록'}
+            text = '새 쿠폰 등록' 
+            height = '3vw'
           /> :
           <div className = {styled.filterArea}>
             <div className = {styled.filterButtons}>

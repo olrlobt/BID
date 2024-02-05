@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "./Coupon.module.css"
-import Price from "./Price";
+import Price from "../Common/Price";
 import { SvgIcon } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import useCoupons from "../../hooks/useCoupons";
