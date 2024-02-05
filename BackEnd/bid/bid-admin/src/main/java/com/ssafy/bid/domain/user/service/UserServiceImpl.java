@@ -1,7 +1,8 @@
 package com.ssafy.bid.domain.user.service;
 
-import java.util.List;
-
+import com.ssafy.bid.domain.user.dto.*;
+import com.ssafy.bid.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -38,11 +39,11 @@ public class UserServiceImpl implements UserService {
 		StudentResponse studentResponse = userRepository.findStudent(userNo)
 			.orElseThrow(() -> new IllegalArgumentException("일치하는 회원정보가 없습니다."));//TODO: 글로벌 예외처리
 
-		studentResponse.setCouponsResponses(userCouponsResponses);
-		studentResponse.setAccountsResponses(accountsResponses);
+        studentResponse.setCouponsResponses(userCouponsResponses);
+        studentResponse.setAccountsResponses(accountsResponses);
 
-		return studentResponse;
-	}
+        return studentResponse;
+    }
 
 	@Override
 	@Transactional(readOnly = true)
