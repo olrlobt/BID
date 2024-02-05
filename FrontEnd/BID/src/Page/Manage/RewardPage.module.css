@@ -1,0 +1,175 @@
+body{
+  font-size: 1.4vw;
+}
+
+.contentSection {
+	display: flex;
+	flex-direction: column;
+	width: calc(100% - 20vw);
+  height: 100vh;
+	padding: 5vh;
+	box-sizing: border-box;
+
+  .col{
+    padding: 2vw;
+    box-sizing: border-box;
+  }
+}
+
+.rewardArea{
+  width: 100%;
+  height: 50vw;
+  margin: auto;
+  display: flex;
+}
+
+.studentCol{
+  flex: 2;
+
+  .body{
+    max-height: 42vw;
+    overflow: scroll;
+
+    table{
+      width: 100%;
+      border: 0;
+
+      thead {
+        background-color: #E6E5DB;
+      }
+      th{
+        font-size: 1.5vw;
+        vertical-align: middle;
+      }
+      td{
+      height: 6vh;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      vertical-align: middle;
+      }
+    }
+  }
+}
+
+.rewardCol{
+  flex: 4;
+
+  .header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1vw;
+
+    .title{
+      margin: 0;
+    }
+  }
+
+  .rewardContainer{
+    background-color: #F0EFE3;
+    border-radius: 1vw;
+    height: 42vw;
+    box-sizing: border-box;
+
+    .body{
+      border-radius: 1vw;
+      padding: 1vw;
+      overflow: scroll;
+    }
+
+    .footer{
+      /* background-color: steelblue; */
+      height: 6vw;
+      padding: 1vw;
+      box-sizing: border-box;
+      
+      form{
+        height: 4vw;
+        display: flex;
+        justify-content: space-between;
+
+        input{
+          border: none;
+          border-radius: 0.5vw;
+          padding: 1vw;
+          box-sizing: border-box;
+        }
+        input:focus{
+          outline: none;
+        }
+
+        input[type="text"]{
+          width: 50%;
+        }
+
+        input[type="number"]{
+          width: 25%;
+        }
+      }
+    }
+  }
+}
+
+.submitCol{
+  flex: 3;
+
+  .result{
+    background-color: #F0EFE3;
+    margin: 3.9vw 0 2vw 0;
+    padding: 1.5vw 1vw;
+    box-sizing: border-box;
+    border-radius: 1vw;
+
+    .student{
+      margin-bottom: 2vw;
+
+      .body{
+        max-height: 7.1vw;
+        overflow-y: scroll;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1vw 2%;
+        
+        div{
+          width: 32%;
+          height: fit-content;
+        }
+      }
+    }
+
+    .reward{
+      .body{ 
+        height: 2vw;
+        max-height: 2vw;
+      }
+    }
+  }
+
+  .comment{
+    margin-bottom: 1.5vw;
+
+    textarea{
+      width: 100%;
+      height: 10vw;
+      padding: 1vw;
+      box-sizing: border-box;
+      resize: none;
+      font-size: 1.3vw;
+      border: 1px solid #c8c8c8;
+      border-radius: 0.5vw;
+    }
+    textarea:focus{
+      outline: none;
+    }
+  }
+}
+
+.title{
+  font-size: 2.5vw;
+  margin-bottom: 1vw;
+}
+
+.subTitle{
+  font-size: 1.5vw;
+  margin-bottom: 1vw;
+}

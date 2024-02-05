@@ -1,10 +1,15 @@
 .newCouponButton{
 	background-color: #5FA1C4;
-	color: white;
 	box-sizing: border-box;
 	border: none;
 	border-radius: 0.5vh;
-	line-height: 3vh;
-	padding: 0.3vh 1vh;
+	padding: 0.5vh 1vh;
 	display: flex;
+	align-items: center;
+}
+
+.text{
+	font-size: 1.4vw;
+	margin-left: 0.3vw;
+	color: white;
 }
