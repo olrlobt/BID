@@ -17,7 +17,6 @@ import com.ssafy.bid.domain.user.dto.BallsResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.dto.StudentsResponse;
->>>>>>> BackEnd/bid/bid-admin/src/main/java/com/ssafy/bid/domain/user/api/UserApi.java
 import com.ssafy.bid.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
