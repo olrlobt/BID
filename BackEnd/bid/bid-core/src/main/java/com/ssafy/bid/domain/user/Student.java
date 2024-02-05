@@ -63,4 +63,12 @@ public class Student extends User {
 	public void modifyProfileImgUrl(String url) {
 		this.profileImgUrl = url;
 	}
+
+	public void subtractSavingPrice(int price) {
+		this.asset -= price;
+	}
+
+	public void addSavingPrice(int price) {
+		this.asset += price;
+	}
 }

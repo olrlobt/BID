@@ -19,7 +19,8 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.board.BiddingStatus;
 import com.ssafy.bid.domain.coupon.UsageStatus;
-import com.ssafy.bid.domain.grade.dto.BiddingsFindResponse;
+import com.ssafy.bid.domain.grade.dto.AccountsStatisticsResponse;
+import com.ssafy.bid.domain.grade.dto.BiddingsStatisticsResponse;
 import com.ssafy.bid.domain.grade.dto.GradeFindResponse;
 import com.ssafy.bid.domain.grade.dto.GradePeriodsFindResponse;
 import com.ssafy.bid.domain.user.AccountType;
@@ -33,7 +34,7 @@ public class GradeRepositoryCustomImpl implements GradeRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<BiddingsFindResponse> findBiddings(int gradeNo) {
+	public List<BiddingsStatisticsResponse> findBiddings(int gradeNo) {
 		DateTemplate<String> formattedDate = Expressions.dateTemplate(
 			String.class,
 			"DATE_FORMAT({0}, {1})",
@@ -42,7 +43,7 @@ public class GradeRepositoryCustomImpl implements GradeRepositoryCustom {
 		);
 
 		return queryFactory
-			.select(Projections.constructor(BiddingsFindResponse.class,
+			.select(Projections.constructor(BiddingsStatisticsResponse.class,
 					formattedDate,
 					bidding.no.count()
 				)
@@ -90,100 +91,6 @@ public class GradeRepositoryCustomImpl implements GradeRepositoryCustom {
 							, "unapprovedCouponCount"
 						),
 						grade.salary,
-						ExpressionUtils.as(
-							JPAExpressions
-								.select(
-									account.price.sum()
-								)
-								.from(account)
-								.where(
-									account.gradeNo.eq(gradeNo),
-									account.dealType.notIn(DealType.REWARD, DealType.SALARY, DealType.SAVING),
-									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-									account.createdAt.loe(LocalDateTime.now())
-								)
-							, "totalCategorySum"
-						),
-						ExpressionUtils.as(
-							JPAExpressions
-								.select(
-									account.price.sum()
-								)
-								.from(account)
-								.where(
-									account.gradeNo.eq(gradeNo),
-									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-									account.createdAt.loe(LocalDateTime.now()),
-									account.accountType.eq(AccountType.EXPENDITURE)
-								)
-								.groupBy(account.dealType)
-								.having(account.dealType.eq(DealType.SNACK))
-							, "snackSum"
-						),
-						ExpressionUtils.as(
-							JPAExpressions
-								.select(
-									account.price.sum()
-								)
-								.from(account)
-								.where(
-									account.gradeNo.eq(gradeNo),
-									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-									account.createdAt.loe(LocalDateTime.now()),
-									account.accountType.eq(AccountType.EXPENDITURE)
-								)
-								.groupBy(account.dealType)
-								.having(account.dealType.eq(DealType.LEARNING))
-							, "learningSum"
-						),
-						ExpressionUtils.as(
-							JPAExpressions
-								.select(
-									account.price.sum()
-								)
-								.from(account)
-								.where(
-									account.gradeNo.eq(gradeNo),
-									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-									account.createdAt.loe(LocalDateTime.now()),
-									account.accountType.eq(AccountType.EXPENDITURE)
-								)
-								.groupBy(account.dealType)
-								.having(account.dealType.eq(DealType.COUPON))
-							, "couponSum"
-						),
-						ExpressionUtils.as(
-							JPAExpressions
-								.select(
-									account.price.sum()
-								)
-								.from(account)
-								.where(
-									account.gradeNo.eq(gradeNo),
-									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-									account.createdAt.loe(LocalDateTime.now()),
-									account.accountType.eq(AccountType.EXPENDITURE)
-								)
-								.groupBy(account.dealType)
-								.having(account.dealType.eq(DealType.GAME))
-							, "gameSum"
-						),
-						ExpressionUtils.as(
-							JPAExpressions
-								.select(
-									account.price.sum()
-								)
-								.from(account)
-								.where(
-									account.gradeNo.eq(gradeNo),
-									account.createdAt.goe(LocalDateTime.now().minusDays(14)),
-									account.createdAt.loe(LocalDateTime.now()),
-									account.accountType.eq(AccountType.EXPENDITURE)
-								)
-								.groupBy(account.dealType)
-								.having(account.dealType.eq(DealType.ETC))
-							, "etcSum"
-						),
 						grade.asset,
 						grade.transferAlertPeriod,
 						grade.transferPeriod
@@ -196,5 +103,23 @@ public class GradeRepositoryCustomImpl implements GradeRepositoryCustom {
 				)
 				.fetchOne()
 		);
+	}
+
+	@Override
+	public List<AccountsStatisticsResponse> findGradeStatistics(int gradeNo) {
+		return queryFactory
+			.select(Projections.constructor(AccountsStatisticsResponse.class,
+					account.dealType,
+					account.price.sum()
+				)
+			)
+			.from(account)
+			.where(
+				account.gradeNo.eq(gradeNo),
+				account.accountType.eq(AccountType.EXPENDITURE),
+				account.dealType.notIn(DealType.REWARD, DealType.SALARY, DealType.SAVING)
+			)
+			.groupBy(account.dealType)
+			.fetch();
 	}
 }
