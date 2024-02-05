@@ -9,7 +9,7 @@ import axios from 'axios';
 export default function RewardPage() {
   const [isSetting, setIsSetting] = useState(false);
   const [rewardList, setRewardList] = useState([]);
-  const [newCouponForm, setNewCouponForm] = useState({
+  const [newRewardForm, setNewRewardForm] = useState({
     'name': '',
     'price': 0
   })
@@ -18,27 +18,70 @@ export default function RewardPage() {
   const [rReward, setRReward] = useState({
     'no': 0,
     'name': '',
-    'price': 0
   });
   const [rComment, setRComment] = useState('');
 
   useEffect(() => {
-    axios.get(('http://i10a306.p.ssafy.io:8081/1/rewards'))
+    axios.get(('http://i10a306.p.ssafy.io:8081/1/users'))
+      .then(response => {
+        setStudentList(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+      axios.get(('http://i10a306.p.ssafy.io:8081/1/rewards'))
       .then(response => {
         setRewardList(response.data);
       })
       .catch(error => {
         console.log(error);
       });
-    axios.get(('http://i10a306.p.ssafy.io:8081/1/users'))
-      .then(response => {
-        setStudentList(response.data);
-        console.log(response.data);
+  }, []);
+
+  /** 새 리워드를 등록하는 함수 */
+  const createNewReward = (e) => {
+    e.preventDefault();
+    axios.post('http://i10a306.p.ssafy.io:8081/1/rewards', newRewardForm)
+      .then(() => {
+        axios.get(('http://i10a306.p.ssafy.io:8081/1/rewards'))
+        .then(response => {
+          setRewardList(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
+  }
+  
+  /** 리워드를 지급하는 함수 */
+  const sendReward = () => {
+    if(rStudents.length===0){
+      console.log('리워드를 지급할 학생을 선택해주세요');
+    }
+    else if(rReward.no===0){
+      console.log('지급할 리워드를 선택해주세요');
+    }
+    else if(rComment===''){
+      console.log('리워드와 함께 전달할 코멘트를 입력해주세요');
+    }
+    else{
+      const postData = {
+        'no': rReward.no,
+        'usersNos': rStudents,
+        comment: rComment,
+      }
+      axios.post('http://i10a306.p.ssafy.io:8081/rewards/send', postData)
+        .then(() => {
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }
 
   const isCheked = (no) => {
     const findStudent = rStudents.find((stdNo) => stdNo===no);
@@ -60,36 +103,19 @@ export default function RewardPage() {
     setRStudents(rStudents.filter((std) => std !== no))
   }
 
-  const selectReward = (no, name, price) => {
+  const selectReward = (no, name) => {
     setRReward({
       'no': no,
       'name': name,
-      'price': price
     });
   }
 
-  const updateNewCouponForm = (e) => {
+  const updateNewRewardForm = (e) => {
     let { name, value } = e.target;
-    setNewCouponForm({
-      ...newCouponForm,
+    setNewRewardForm({
+      ...newRewardForm,
       [name]: value
     });
-  }
-
-  const createNewCoupon = (e) => {
-    e.preventDefault();
-    setNewCouponForm({
-      ...newCouponForm,
-      'price': parseInt(newCouponForm.price, 10)
-    })
-    console.log(newCouponForm);
-    axios.post('http://i10a306.p.ssafy.io:8081/1/rewards', newCouponForm)
-      .then(response => {
-        console.log('ok');
-      })
-      .catch(error => {
-        console.log(error);
-      });
   }
 
   const getNameByNo = (no) => {
@@ -101,34 +127,6 @@ export default function RewardPage() {
     setRComment(e.target.value);
   }
 
-  const sendReward = () => {
-    if(rStudents.length===0){
-      console.log('리워드를 지급할 학생을 선택해주세요');
-    }
-    else if(rReward.no===0){
-      console.log('지급할 리워드를 선택해주세요');
-    }
-    else if(rComment===''){
-      console.log('리워드와 함께 전달할 코멘트를 입력해주세요');
-    }
-    else{
-      const postData = {
-        'no': rReward.no,
-        'userNos': rStudents,
-        comment: rComment,
-        'price': rReward.price,
-      }
-      console.log(postData);
-  
-      axios.post('http://i10a306.p.ssafy.io:8081/rewards/send', postData)
-        .then(response => {
-          console.log('send');
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-  }
 
   return (
     <div className = {styled.contentSection}>
@@ -191,6 +189,7 @@ export default function RewardPage() {
                     isSetting={ isSetting }
                     onClick={ () => { selectReward(reward.no, reward.name, reward.price);} }
                     isActivated={ rReward.no===reward.no }
+                    setRewardList={ setRewardList }
                   />
                 ))
               }
@@ -198,18 +197,18 @@ export default function RewardPage() {
             {
               isSetting?
               <div className = { styled.footer }>
-                <form onSubmit={ createNewCoupon }>
+                <form onSubmit={ createNewReward }>
                   <input
                     type='text'
                     name='name'
                     placeholder='리워드 이름'
-                    onChange={ updateNewCouponForm }
+                    onChange={ updateNewRewardForm }
                   />
                   <input
                     type='number'
                     name='price'
                     placeholder='금액'
-                    onChange={ updateNewCouponForm }
+                    onChange={ updateNewRewardForm }
                   />
                   <SubmitButton
                     text = '추가'
