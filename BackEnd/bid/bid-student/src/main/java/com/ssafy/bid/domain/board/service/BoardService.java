@@ -12,6 +12,7 @@ import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,5 +40,13 @@ public class BoardService {
 	public void addBoard(int userNo, int gradeNo, BoardCreateRequest boardCreateRequest) {
 		Board board = boardCreateRequest.toEntity(1, 1);
 		boardRepository.save(board);
+	}
+
+	@Transactional
+	public void deleteBoard(long boardNo) {
+		if (!boardRepository.existsById(boardNo)) {
+			throw new EntityNotFoundException("게시물이 없습니다.");
+		}
+		boardRepository.deleteById(boardNo);
 	}
 }
