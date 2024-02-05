@@ -12,18 +12,8 @@ export default function RewardPage() {
   const [isSetting, setIsSetting] = useState(false);
   const [studentList, setStudentList] = useState([]);
   const [rewardList, setRewardList] = useState([]);
-  //code smell
-  const [newRewardForm, setNewRewardForm] = useState({
-    'name': '',
-    'price': 0
-  })
-  //
   const [rStudents, setRStudents] = useState([]);
-  const [rReward, setRReward] = useState({
-    'no': 0,
-    'name': '',
-  });
-  const [rComment, setRComment] = useState('');
+  const [rReward, setRReward] = useState(0);
 
   const queryClient = useQueryClient();
 
@@ -50,7 +40,7 @@ export default function RewardPage() {
 /** 리워드 추가 쿼리 */
   const addRewardQuery = useMutation({
     mutationKey: ['addNewReward'],
-    mutationFn: () => addNewRewardApi(1, newRewardForm),
+    mutationFn: (newRewardForm) => addNewRewardApi(1, newRewardForm),
     onSuccess: () => { queryClient.invalidateQueries('rewardList'); },
     onError: (error) => { console.log(error); },
   })
@@ -66,19 +56,26 @@ export default function RewardPage() {
   /** 새 리워드 등록 함수 */
   const addNewReward = (e) => {
     e.preventDefault();
-    addRewardQuery.mutate();
+    const newRewardForm = {
+      'name': e.target.name.value,
+      'price': e.target.price.value,
+    }
+    addRewardQuery.mutate(newRewardForm);
   }
   
   /** 리워드 지급 함수 */
-  const sendReward = () => {
+  const sendReward = (e) => {
+    e.preventDefault();
     if(rStudents.length===0){ console.log('리워드를 지급할 학생을 선택해주세요'); }
-    else if(rReward.no===0){ console.log('지급할 리워드를 선택해주세요'); }
-    else if(rComment===''){ console.log('리워드와 함께 전달할 코멘트를 입력해주세요'); }
+    else if(rReward===0){ console.log('지급할 리워드를 선택해주세요'); }
+    else if(e.target.comment.value===''){ console.log('리워드와 함께 전달할 코멘트를 입력해주세요'); }
     else{
+      const rComment = e.target.comment.value;
+      console.log(rComment);
       const postData = {
-        'no': rReward.no,
+        'no': rReward,
         'usersNos': rStudents,
-        comment: rComment,
+        'comment': rComment,
       }
       sendRewardQuery.mutate(postData);
     }
@@ -107,28 +104,20 @@ export default function RewardPage() {
     setRStudents(rStudents.filter((std) => std !== no))
   }
 
-  /** 리워드 지급 데이터 업데이트 함수 */
-  const updateNewRewardForm = (e) => {
-    let { name, value } = e.target;
-    setNewRewardForm({
-      ...newRewardForm,
-      [name]: value
-    });
-  }
-
-  /** 번호 -> 이름 반환 함수 */
-  const getNameByNo = (no) => {
+  /** 학생 번호 -> 이름 반환 함수 */
+  const getStudentNameByNo = (no) => {
     const find = studentList.find((std) => std.no===no);
     return find.name;
   }
 
-  /** 코멘트 업데이트 함수 */
-  const updateComment = (e) => {
-    setRComment(e.target.value);
+  /** 리워드 번호 -> 이름 반환 함수 */
+  const getRewardNameByNo = (no) => {
+    const find = rewardList.find((reward) => reward.no===no);
+    return find.name;
   }
 
-
   return (
+    <>
     <div className = {styled.contentSection}>
       <div className = {styled.rewardArea}>
         <div className = {[styled.studentCol, styled.col].join(" ")}>
@@ -137,7 +126,11 @@ export default function RewardPage() {
             <table>
               <thead>
                 <tr>
-                  <th><input type='checkbox' onChange={(e) => {selectAllStudents(e.target.checked)}}/></th>
+                  <th>
+                    <input
+                      type='checkbox'
+                      onChange={(e) => { selectAllStudents(e.target.checked)} }/>
+                  </th>
                   <th>번호</th>
                   <th>이름</th>
                 </tr>
@@ -166,12 +159,10 @@ export default function RewardPage() {
           <div className = {styled.header}>
             <h3 className = {styled.title}> 리워드 목록 </h3>
             <SettingButton
-              onClick = {() =>
-                setIsSetting(!isSetting)
-              }
-              svg = { SettingsIcon }
-              text = '리워드 편집' 
-              height = '2vw'
+              onClick={ () => setIsSetting(!isSetting) }
+              svg={ SettingsIcon }
+              text='리워드 편집' 
+              height='2vw'
             />
           </div>
           <div className = {styled.rewardContainer}>
@@ -187,9 +178,8 @@ export default function RewardPage() {
                     rName={ reward.name }
                     rPrice={ reward.price }
                     isSetting={ isSetting }
-                    onClick={ () => { setRReward({'no': reward.no, 'name':reward.name})} }
-                    isActivated={ rReward.no===reward.no }
-                    setRewardList={ setRewardList }
+                    onClick={ () => { setRReward(reward.no)} }
+                    isActivated={ rReward===reward.no }
                   />
                 ))
               }
@@ -202,13 +192,11 @@ export default function RewardPage() {
                     type='text'
                     name='name'
                     placeholder='리워드 이름'
-                    onChange={ updateNewRewardForm }
                   />
                   <input
                     type='number'
                     name='price'
                     placeholder='금액'
-                    onChange={ updateNewRewardForm }
                   />
                   <SubmitButton
                     text = '추가'
@@ -231,32 +219,34 @@ export default function RewardPage() {
               <div className = {styled.body}>
               {
                 rStudents.map((std) => (
-                  <div key={std}>{getNameByNo(std)}</div>
+                  <div key={std}>{getStudentNameByNo(std)}</div>
                 ))
               }
               </div>
             </div>
             <div className = {styled.reward}>
               <h3 className = {styled.subTitle}> 지급 리워드 </h3>
-              <div className = {styled.body}> { rReward.name } </div>
+              <div className = {styled.body}> { rReward>0 && getRewardNameByNo(rReward) } </div>
             </div>
           </div>
-          <div className = {styled.comment}>
-              <h3 className = {styled.title}> 코멘트 </h3>
-              <textarea 
-                placeholder='리워드와 함께 전달할 코멘트를 입력해주세요!'
-                onChange={ updateComment }
-              />
-          </div>
-          <SubmitButton
-            text = '리워드 지급'
-            width = '100%'
-            height = '4vw'
-            fontSize = '2vw'
-            onClick = { sendReward }
-          />
+          <form onSubmit={ sendReward }>
+            <div className = {styled.comment}>
+                <h3 className = {styled.title}> 코멘트 </h3>
+                <textarea 
+                  name='comment'
+                  placeholder='리워드와 함께 전달할 코멘트를 입력해주세요!'
+                />
+            </div>
+            <SubmitButton
+              text = '리워드 지급'
+              width = '100%'
+              height = '4vw'
+              fontSize = '2vw'
+            />
+          </form>
         </div>
       </div>
     </div>
+    </>
   );
 }
