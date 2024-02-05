@@ -9,13 +9,12 @@ import java.util.List;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.board.BiddingStatus;
-import com.ssafy.bid.domain.board.Category;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class BoardRepositoryImpl implements BoardCustomRepository{
+public class BoardRepositoryImpl implements BoardCustomRepository {
 
 	private final JPAQueryFactory queryFactory;
 
@@ -34,7 +33,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository{
 			.from(board)
 			.innerJoin(student).on(board.userNo.eq(student.no).and(student.gradeNo.eq(gradeNo)))
 			.where(board.title.contains(keyword)
-					.or(board.description.contains(keyword)))
+				.or(board.description.contains(keyword)))
 			.orderBy(board.createdAt.desc())
 			.fetch();
 	}
