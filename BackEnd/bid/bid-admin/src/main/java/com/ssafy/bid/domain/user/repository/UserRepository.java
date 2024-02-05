@@ -1,8 +1,9 @@
 package com.ssafy.bid.domain.user.repository;
 
+import com.ssafy.bid.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ssafy.bid.domain.user.User;
+import java.util.Optional;
 
 import java.util.Optional;
 
