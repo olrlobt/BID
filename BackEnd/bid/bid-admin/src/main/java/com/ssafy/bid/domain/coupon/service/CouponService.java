@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.coupon.Coupon;
 import com.ssafy.bid.domain.coupon.CouponStatus;
 import com.ssafy.bid.domain.coupon.UserCoupon;
+import com.ssafy.bid.domain.coupon.dto.CouponCreateRequest;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
 import com.ssafy.bid.domain.coupon.dto.CouponResponse;
 import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
@@ -36,6 +37,7 @@ public class CouponService {
 				.name(coupon.getName())
 				.description(coupon.getDescription())
 				.gradeNo(coupon.getGradeNo())
+				.startPrice(coupon.getStartPrice())
 				.build()
 			).toList();
 
@@ -47,6 +49,7 @@ public class CouponService {
 				.name(coupon.getName())
 				.description(coupon.getDescription())
 				.gradeNo(coupon.getGradeNo())
+				.startPrice(coupon.getStartPrice())
 				.build()
 			).toList();
 
@@ -56,6 +59,18 @@ public class CouponService {
 	@Transactional(readOnly = true)
 	public List<UserCouponResponse> findUserCoupons(int gradeNo) {
 		return userCouponRepository.findUserCoupons(gradeNo);
+	}
+
+	public void addCoupon(int gradeNo, CouponCreateRequest couponCreateRequest) {
+		couponCreateRequest.setGradeNo(gradeNo);
+		couponRepository.save(couponCreateRequest.toEntity());
+	}
+
+	public void deleteCoupon(int couponNo) {
+		if (!couponRepository.existsById(couponNo)) {
+			throw new EntityNotFoundException("쿠폰이 없습니다.");
+		}
+		couponRepository.deleteById(couponNo);
 	}
 
 	public void acceptUserCoupon(long userCouponNo) {
