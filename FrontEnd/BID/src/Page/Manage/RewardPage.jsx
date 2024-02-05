@@ -1,112 +1,97 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "./RewardPage.module.css";
 import SubmitButton from "../../Component/Common/SubmitButton";
 import Reward from "../../Component/Reward/Reward";
 import SettingButton from "../../Component/Common/SettingButton";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { getStudentList } from "../../Apis/StudentApis";
-import { getRewardList, addNewReward } from "../../Apis/RewardApis";
-import axios from 'axios';
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { getRewardListApi, addNewRewardApi, sendRewardApi } from "../../Apis/RewardApis";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function RewardPage() {
   const [isSetting, setIsSetting] = useState(false);
-  const [rewardList, setRewardList] = useState([]);
   const [studentList, setStudentList] = useState([]);
-
+  const [rewardList, setRewardList] = useState([]);
   //code smell
   const [newRewardForm, setNewRewardForm] = useState({
     'name': '',
     'price': 0
   })
   //
-
   const [rStudents, setRStudents] = useState([]);
   const [rReward, setRReward] = useState({
     'no': 0,
     'name': '',
   });
   const [rComment, setRComment] = useState('');
-  const [clickAdd, setClickAdd] = useState(false);
-  const [clickSend, setClickSend] = useState(false);
 
-/** 학생 목록 가져오기 */
+  const queryClient = useQueryClient();
+
+/** 학생 목록 쿼리 */
   const{} = useQuery({
     queryKey: ['studentList'],
-    queryFn: () => {
+    queryFn: () => 
       getStudentList().then((res) => {
-        if (res.data !== undefined) {
-          setStudentList(res.data);
-        }
-
+        if(res.data !== undefined) { setStudentList(res.data); }
         return res.data;
-      })
-    },
+    }),
   });
 
-/** 리워드 목록 가져오기 */
+/** 리워드 목록 쿼리 */
   const{} = useQuery({
     queryKey: ['rewardList'],
     queryFn: () =>
-      getRewardList().then((res) => {
-        if (res.data !== undefined) {
-          setRewardList(res.data);
-        }
-
+      getRewardListApi(1).then((res) => {
+        if (res.data !== undefined) { setRewardList(res.data); }
         return res.data;
       }),
   });
 
-/** 리워드 추가 */
-  const mutation = useMutation(
-    {
-      queryKey: ['rewardList'],
-      queryFn: () => {
-        addNewReward(newRewardForm);
-        return [];
-      },
-      onMutate: 
-    },
-  )
+/** 리워드 추가 쿼리 */
+  const addRewardQuery = useMutation({
+    mutationKey: ['addNewReward'],
+    mutationFn: () => addNewRewardApi(1, newRewardForm),
+    onSuccess: () => { queryClient.invalidateQueries('rewardList'); },
+    onError: (error) => { console.log(error); },
+  })
 
-  /** 새 리워드를 등록하는 함수 */
-  const createNewReward = (e) => {
+  /** 리워드 지급 쿼리 */
+  const sendRewardQuery = useMutation({
+    mutationKey: ['sendReward'],
+    mutationFn: (postData) => sendRewardApi(postData),
+    onSuccess: (res) => { console.log(res); },
+    onError: (error) => { console.log(error); },
+  })
+
+  /** 새 리워드 등록 함수 */
+  const addNewReward = (e) => {
     e.preventDefault();
-    console.log("우웅");
+    addRewardQuery.mutate();
   }
   
-  /** 리워드를 지급하는 함수 */
+  /** 리워드 지급 함수 */
   const sendReward = () => {
-    if(rStudents.length===0){
-      console.log('리워드를 지급할 학생을 선택해주세요');
-    }
-    else if(rReward.no===0){
-      console.log('지급할 리워드를 선택해주세요');
-    }
-    else if(rComment===''){
-      console.log('리워드와 함께 전달할 코멘트를 입력해주세요');
-    }
+    if(rStudents.length===0){ console.log('리워드를 지급할 학생을 선택해주세요'); }
+    else if(rReward.no===0){ console.log('지급할 리워드를 선택해주세요'); }
+    else if(rComment===''){ console.log('리워드와 함께 전달할 코멘트를 입력해주세요'); }
     else{
       const postData = {
         'no': rReward.no,
         'usersNos': rStudents,
         comment: rComment,
       }
-      axios.post('http://i10a306.p.ssafy.io:8081/rewards/send', postData)
-        .then(() => {
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      sendRewardQuery.mutate(postData);
     }
   }
 
+  /** 해당 학생의 현재 선택 여부 반환 함수 */
   const isCheked = (no) => {
     const findStudent = rStudents.find((stdNo) => stdNo===no);
     if(findStudent) { return true; }
     else { return false; }
   }
 
+  /** 전체 학생 선택 함수 */
   const selectAllStudents = (checked) => {
     checked?
     setRStudents(studentList.map((std) => std.no))
@@ -114,6 +99,7 @@ export default function RewardPage() {
     setRStudents([])
   }
 
+  /** 특정 학생 선택 함수 */
   const selectStudent = (no, checked) => {
     checked?
     setRStudents([...rStudents, no])
@@ -121,13 +107,7 @@ export default function RewardPage() {
     setRStudents(rStudents.filter((std) => std !== no))
   }
 
-  const selectReward = (no, name) => {
-    setRReward({
-      'no': no,
-      'name': name,
-    });
-  }
-
+  /** 리워드 지급 데이터 업데이트 함수 */
   const updateNewRewardForm = (e) => {
     let { name, value } = e.target;
     setNewRewardForm({
@@ -136,11 +116,13 @@ export default function RewardPage() {
     });
   }
 
+  /** 번호 -> 이름 반환 함수 */
   const getNameByNo = (no) => {
     const find = studentList.find((std) => std.no===no);
     return find.name;
   }
 
+  /** 코멘트 업데이트 함수 */
   const updateComment = (e) => {
     setRComment(e.target.value);
   }
@@ -205,7 +187,7 @@ export default function RewardPage() {
                     rName={ reward.name }
                     rPrice={ reward.price }
                     isSetting={ isSetting }
-                    onClick={ () => { selectReward(reward.no, reward.name, reward.price);} }
+                    onClick={ () => { setRReward({'no': reward.no, 'name':reward.name})} }
                     isActivated={ rReward.no===reward.no }
                     setRewardList={ setRewardList }
                   />
@@ -215,7 +197,7 @@ export default function RewardPage() {
             {
               isSetting?
               <div className = { styled.footer }>
-                <form onSubmit={ createNewReward }>
+                <form onSubmit={ addNewReward }>
                   <input
                     type='text'
                     name='name'
