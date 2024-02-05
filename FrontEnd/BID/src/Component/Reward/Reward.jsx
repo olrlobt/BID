@@ -6,12 +6,19 @@ import DoDisturbOnIcon from '@mui/icons-material/DoDisturbOn';
 import axios from "axios";
 
 export default function Reward(props){
-  const { rNo, rName, rPrice, isSetting, onClick, isActivated } = props;
+  const { rNo, rName, rPrice, isSetting, onClick, isActivated, setRewardList } = props;
 
+    /** 리워드를 삭제하는 함수 */
   const deleteCoupon = () => {
     axios.delete('http://i10a306.p.ssafy.io:8081/rewards/' + rNo)
-    .then(response => {
-      console.log('deleted');
+    .then(() => {
+      axios.get(('http://i10a306.p.ssafy.io:8081/1/rewards'))
+        .then(response => {
+          setRewardList(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     })
     .catch(error => {
       console.log(error);
