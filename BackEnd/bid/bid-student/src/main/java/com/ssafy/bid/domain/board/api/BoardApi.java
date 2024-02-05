@@ -26,13 +26,11 @@ public class BoardApi {
 	private final BoardService boardService;
 	private final CoreBoardService coreBoardService;
 
-
 	@GetMapping("/boards")
 	public ResponseEntity<?> findBoards(@RequestParam String keyword) {
 		List<BoardResponse> boards = boardService.findBoards(1, keyword);
 		return ResponseEntity.ok(boards);
 	}
-
 
 	@GetMapping("/users/{userNo}/boards")
 	public ResponseEntity<?> findMyAllBoards(@PathVariable int userNo) {
@@ -46,8 +44,5 @@ public class BoardApi {
 		BoardResponse boardResponse = coreBoardService.getBoardDetail(boardNo);
 		return ResponseEntity.ok(boardResponse);
 	}
-
-
-
 
 }
