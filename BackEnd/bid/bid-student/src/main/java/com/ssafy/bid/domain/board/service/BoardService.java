@@ -7,10 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Category;
+import com.ssafy.bid.domain.board.Reply;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
+import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
+import com.ssafy.bid.domain.board.repository.ReplyRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardService {
 
 	private final BoardRepository boardRepository;
+	private final ReplyRepository replyRepository;
 
 	public List<BoardResponse> findBoards(int gradeNo, String keyword) {
 		return boardRepository.findBoards(gradeNo, keyword);
@@ -48,5 +52,13 @@ public class BoardService {
 			throw new EntityNotFoundException("게시물이 없습니다.");
 		}
 		boardRepository.deleteById(boardNo);
+	}
+
+	@Transactional
+	public void addBoardReply(int userNo, int boardNo, ReplyCreateRequest replyCreateRequest) {
+		replyCreateRequest.setUserNo(userNo);
+		replyCreateRequest.setBoardNo(boardNo);
+		Reply reply = replyCreateRequest.toEntity();
+		replyRepository.save(reply);
 	}
 }
