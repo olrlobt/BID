@@ -5,11 +5,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BiddingsFindResponse {
+public class BiddingsStatisticsResponse {
 	private String date;
 	private long count;
 
-	public BiddingsFindResponse(
+	public BiddingsStatisticsResponse(
 		String date,
 		long count
 	) {

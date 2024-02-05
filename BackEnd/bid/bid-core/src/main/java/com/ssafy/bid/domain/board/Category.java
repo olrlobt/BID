@@ -1,8 +1,6 @@
 package com.ssafy.bid.domain.board;
 
 import java.util.Arrays;
-import java.util.Locale;
-import java.util.NoSuchElementException;
 
 import lombok.Getter;
 
