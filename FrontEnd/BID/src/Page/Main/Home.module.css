@@ -44,6 +44,7 @@
 }
 
 .graphSec {
+  display: flex;
   width: 40vw;
   height: 34vh;
   background-color: #ffffff;
@@ -90,4 +91,17 @@
 
 .infoImportant {
   color: var(--color-text-important);
+}
+
+.line {
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  margin-right: 3vw;
+  align-items: center;
+  height: 85%;
+}
+
+.category {
+  font-weight: 600;
 }
