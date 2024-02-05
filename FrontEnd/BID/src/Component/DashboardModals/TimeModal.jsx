@@ -1,5 +1,5 @@
-import Modal from '../Common/Modal';
-import styled from './TimeModal.module.css';
+import Modal from "../Common/Modal";
+import styled from "./TimeModal.module.css";
 
 export default function TimeModal({ onClose, ...props }) {
   const classTime = [1, 2, 3, 4, 5, 6];
