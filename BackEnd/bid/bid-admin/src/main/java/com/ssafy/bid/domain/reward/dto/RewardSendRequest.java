@@ -2,14 +2,13 @@ package com.ssafy.bid.domain.reward.dto;
 
 import java.util.List;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class RewardSendRequest {
-	private String name;
+	private int no;
 	private List<Integer> usersNos;
 	private String comment;
-	private int price;
 }

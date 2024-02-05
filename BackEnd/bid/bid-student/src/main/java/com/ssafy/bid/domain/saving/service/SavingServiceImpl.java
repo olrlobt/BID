@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.saving.Saving;
 import com.ssafy.bid.domain.saving.UserSaving;
 import com.ssafy.bid.domain.saving.dto.SavingExpireAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
@@ -39,7 +40,9 @@ public class SavingServiceImpl implements SavingService {
 	@Override
 	@Transactional
 	public void saveSaving(int userNo, SavingRequest savingRequest) {
-		UserSaving userSaving = savingRequest.toEntity(userNo);
+		Saving saving = savingRepository.findById(savingRequest.getNo())
+			.orElseThrow(() -> new IllegalArgumentException("적금 없음"));//TODO: 커스텀 예외처리
+		UserSaving userSaving = savingRequest.toEntity(saving, userNo);
 		userSavingRepository.save(userSaving);
 	}
 
@@ -78,7 +81,7 @@ public class SavingServiceImpl implements SavingService {
 			.forEach(savingExpireRequest -> {
 				userSavings.add(savingExpireRequest.getUserSavingNo());
 				savingExpireAlertRequests.add(createSavingTransferAlertRequest(savingExpireRequest));
-				savingExpireRequest.getStudent().addSavingPrice(savingExpireRequest.getResultPrice());
+				savingExpireRequest.getStudent().addSavingPrice(savingExpireRequest.getCurrentPrice());
 			});
 
 		userSavingRepository.deleteAllById(userSavings);
@@ -105,7 +108,7 @@ public class SavingServiceImpl implements SavingService {
 
 	private SavingExpireAlertRequest createSavingTransferAlertRequest(SavingExpireRequest savingExpireRequest) {
 		return SavingExpireAlertRequest.builder()
-			.price(savingExpireRequest.getResultPrice())
+			.price(savingExpireRequest.getCurrentPrice())
 			.endDate(savingExpireRequest.getUserSavingEndPeriod())
 			.userNo(savingExpireRequest.getStudent().getNo())
 			.build();

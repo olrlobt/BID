@@ -2,10 +2,10 @@ package com.ssafy.bid.domain.grade.dto;
 
 import java.time.LocalTime;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class SavingPeriodModifyRequest {
 	private LocalTime transferAlertPeriod;

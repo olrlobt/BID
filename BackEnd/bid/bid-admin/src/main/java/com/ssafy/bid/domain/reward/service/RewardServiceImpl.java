@@ -54,10 +54,12 @@ public class RewardServiceImpl implements RewardService {
 
 		students.forEach(
 			student -> {
-				student.addRewardPrice(rewardSendRequest.getPrice());
+				Reward reward = rewardRepository.findById(rewardSendRequest.getNo())
+					.orElseThrow(() -> new IllegalArgumentException("해당하는 리워드 존재 X"));//TODO: 커스텀 예외처리
+				student.addRewardPrice(reward.getPrice());
 				NotificationRequest notificationRequest = NotificationRequest.builder()
 					.receiverNo(student.getNo())
-					.title(rewardSendRequest.getName())
+					.title(reward.getName())
 					.content(rewardSendRequest.getComment())
 					.notificationType(NotificationType.REWARD)
 					.build();

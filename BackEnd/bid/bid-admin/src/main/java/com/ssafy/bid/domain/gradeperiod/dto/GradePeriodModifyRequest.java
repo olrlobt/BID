@@ -2,10 +2,10 @@ package com.ssafy.bid.domain.gradeperiod.dto;
 
 import java.util.List;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class GradePeriodModifyRequest {
 	List<GradePeriodsRequest> gradePeriodsRequests;
