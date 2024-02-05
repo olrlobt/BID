@@ -18,7 +18,7 @@ export default function RewardPage() {
   const queryClient = useQueryClient();
 
 /** 학생 목록 쿼리 */
-  const{} = useQuery({
+  useQuery({
     queryKey: ['studentList'],
     queryFn: () => 
       getStudentList().then((res) => {
@@ -28,7 +28,7 @@ export default function RewardPage() {
   });
 
 /** 리워드 목록 쿼리 */
-  const{} = useQuery({
+  useQuery({
     queryKey: ['rewardList'],
     queryFn: () =>
       getRewardListApi(1).then((res) => {
