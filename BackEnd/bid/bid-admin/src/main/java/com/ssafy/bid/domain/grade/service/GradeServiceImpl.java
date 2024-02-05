@@ -6,12 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.grade.Grade;
-import com.ssafy.bid.domain.grade.dto.BiddingsFindResponse;
+import com.ssafy.bid.domain.grade.dto.AccountsStatisticsResponse;
+import com.ssafy.bid.domain.grade.dto.BiddingsStatisticsResponse;
 import com.ssafy.bid.domain.grade.dto.GradeFindResponse;
 import com.ssafy.bid.domain.grade.dto.GradePeriodsFindResponse;
 import com.ssafy.bid.domain.grade.dto.SalaryModifyRequest;
 import com.ssafy.bid.domain.grade.dto.SavingPeriodModifyRequest;
 import com.ssafy.bid.domain.grade.repository.GradeRepository;
+import com.ssafy.bid.domain.user.DealType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,13 +27,28 @@ public class GradeServiceImpl implements GradeService {
 	@Override
 	@Transactional(readOnly = true)
 	public GradeFindResponse findGrade(int gradeNo) {
-		List<BiddingsFindResponse> biddings = gradeRepository.findBiddings(gradeNo);
+		List<BiddingsStatisticsResponse> biddings = gradeRepository.findBiddings(gradeNo);
 		List<GradePeriodsFindResponse> gradePeriods = gradeRepository.findGradePeriods(gradeNo);
+		List<AccountsStatisticsResponse> gradeStatistics = gradeRepository.findGradeStatistics(gradeNo);
 		GradeFindResponse gradeFindResponse = gradeRepository.findGrade(gradeNo)
 			.orElseThrow(() -> new IllegalArgumentException(""));//TODO: 커스텀 예외처리
 
 		gradeFindResponse.setWinningBiddingCounts(biddings);
 		gradeFindResponse.setGradePeriods(gradePeriods);
+		gradeStatistics.forEach(statistics -> {
+			gradeFindResponse.addTotal(statistics.getSum());
+			if (statistics.getDealType().equals(DealType.SNACK)) {
+				gradeFindResponse.setSnackSum(statistics.getSum());
+			} else if (statistics.getDealType().equals(DealType.LEARNING)) {
+				gradeFindResponse.setLearningSum(statistics.getSum());
+			} else if (statistics.getDealType().equals(DealType.COUPON)) {
+				gradeFindResponse.setCouponSum(statistics.getSum());
+			} else if (statistics.getDealType().equals(DealType.GAME)) {
+				gradeFindResponse.setGameSum(statistics.getSum());
+			} else {
+				gradeFindResponse.setEtcSum(statistics.getSum());
+			}
+		});
 
 		return gradeFindResponse;
 	}
