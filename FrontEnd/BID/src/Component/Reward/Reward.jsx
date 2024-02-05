@@ -2,27 +2,27 @@ import React from "react";
 import styled from "./Reward.module.css";
 import RoundedInfoButton from "../Common/RoundedInfoButton";
 import { SvgIcon } from "@material-ui/core";
-import DoDisturbOnIcon from '@mui/icons-material/DoDisturbOn';
-import axios from "axios";
+import DoDisturbOnIcon from "@mui/icons-material/DoDisturbOn";
+import { deleteRewardApi } from "../../Apis/RewardApis";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function Reward(props){
-  const { rNo, rName, rPrice, isSetting, onClick, isActivated, setRewardList } = props;
+  const { rNo, rName, rPrice, isSetting, onClick, isActivated } = props;
+  const queryClient = useQueryClient();
+
+  /** 리워드 삭제 쿼리 */
+  const deleteRewardQuery = useMutation({
+    mutationKey: ['deleteReward'],
+    mutationFn: () => deleteRewardApi(rNo),
+    onSuccess: () => {
+      queryClient.invalidateQueries('rewardList');
+    },
+    onError: (error) => { console.log(error); }
+  })
 
     /** 리워드를 삭제하는 함수 */
-  const deleteCoupon = () => {
-    axios.delete('http://i10a306.p.ssafy.io:8081/rewards/' + rNo)
-    .then(() => {
-      axios.get(('http://i10a306.p.ssafy.io:8081/1/rewards'))
-        .then(response => {
-          setRewardList(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  const deleteReward = () => {
+    deleteRewardQuery.mutate();
   }
 
   return(
@@ -55,7 +55,7 @@ export default function Reward(props){
               fontSize: '1.9vw',
               marginLeft: '0.7vw'
             } }
-            onClick={ deleteCoupon }
+            onClick={ deleteReward }
           />
           :
           null
