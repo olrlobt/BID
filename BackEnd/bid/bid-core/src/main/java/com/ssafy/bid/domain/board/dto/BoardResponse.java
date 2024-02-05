@@ -23,7 +23,8 @@ public class BoardResponse {
 	private int gradePeriodNo;
 	private LocalTime createdAt;
 
-	public BoardResponse(long no, String title, BoardStatus boardStatus,int startPrice, int averagePrice, int resultPrice,
+	public BoardResponse(long no, String title, BoardStatus boardStatus, int startPrice, int averagePrice,
+		int resultPrice,
 		String goodsImgUrl, String userName) {
 		this.no = no;
 		this.title = title;
