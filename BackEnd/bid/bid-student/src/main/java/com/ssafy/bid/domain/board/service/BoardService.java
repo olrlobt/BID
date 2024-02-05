@@ -19,9 +19,8 @@ public class BoardService {
 
 	private final BoardRepository boardRepository;
 
-	public List<BoardResponse> findBoards(int gradeNo, String category, String keyword) {
-		Category from = Category.from(category);
-		return boardRepository.findBoards(gradeNo, from, keyword);
+	public List<BoardResponse> findBoards(int gradeNo, String keyword) {
+		return boardRepository.findBoards(gradeNo, keyword);
 	}
 
 	public MyBoardsResponse findMyAllBoards(int userNo) {
