@@ -61,4 +61,20 @@ public class BoardService {
 		Reply reply = replyCreateRequest.toEntity();
 		replyRepository.save(reply);
 	}
+
+	@Transactional
+	public void modifyBoardReply(int userNo, int replyNo, ReplyCreateRequest replyCreateRequest) {
+		Reply reply = replyRepository.findById(replyNo)
+			.orElseThrow();
+
+		reply.modify(replyCreateRequest.getContent());
+	}
+
+	@Transactional
+	public void deleteBoardReply(int userNo, int replyNo) {
+		if (!replyRepository.existsById(replyNo)) {
+			throw new EntityNotFoundException("댓글이 없습니다.");
+		}
+		replyRepository.deleteById(replyNo);
+	}
 }
