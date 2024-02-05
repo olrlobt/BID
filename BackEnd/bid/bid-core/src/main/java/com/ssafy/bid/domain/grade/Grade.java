@@ -48,7 +48,7 @@ public class Grade extends BaseEntity {
 	private LocalTime transferPeriod;
 
 	/**
-	 * users : group(me) = 1 : N
+	 * users : grade(me) = 1 : N
 	 */
 	@NotNull
 	private Integer userNo;
@@ -57,5 +57,13 @@ public class Grade extends BaseEntity {
 		this.schoolCode = schoolCode;
 		this.year = year;
 		this.classRoom = classRoom;
+
+	public void modifySalary(int salary) {
+		this.salary = salary;
+	}
+
+	public void modifySavingTime(LocalTime transferAlertPeriod, LocalTime transferPeriod) {
+		this.transferAlertPeriod = transferAlertPeriod;
+		this.transferPeriod = transferPeriod;
 	}
 }
