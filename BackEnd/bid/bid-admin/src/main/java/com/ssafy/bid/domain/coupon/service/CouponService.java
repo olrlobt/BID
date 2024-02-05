@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.coupon.Coupon;
 import com.ssafy.bid.domain.coupon.CouponStatus;
 import com.ssafy.bid.domain.coupon.UserCoupon;
+import com.ssafy.bid.domain.coupon.dto.CouponCreateRequest;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
 import com.ssafy.bid.domain.coupon.dto.CouponResponse;
 import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
@@ -54,6 +55,12 @@ public class CouponService {
 
 		return new CouponListResponse(registeredCoupons, unregisteredCoupons);
 	}
+
+	public void addCoupon(int gradeNo, CouponCreateRequest couponCreateRequest){
+		couponCreateRequest.setGradeNo(gradeNo);
+		couponRepository.save(couponCreateRequest.toEntity());
+	}
+
 
 	@Transactional(readOnly = true)
 	public List<UserCouponResponse> findUserCoupons(int gradeNo) {
