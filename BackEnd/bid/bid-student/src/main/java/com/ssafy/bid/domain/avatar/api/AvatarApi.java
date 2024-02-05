@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.avatar.dto.UserAvatarModifyRequest;
@@ -27,7 +28,7 @@ public class AvatarApi {
 	}
 
 	@PatchMapping("/avatars")
-	public void modifyUserAvatar(UserAvatarModifyRequest userAvatarModifyRequest) {
+	public void modifyUserAvatar(@RequestBody UserAvatarModifyRequest userAvatarModifyRequest) {
 		// TODO: SecurityUser
 		avatarService.modifyAvatar(2, userAvatarModifyRequest);
 	}

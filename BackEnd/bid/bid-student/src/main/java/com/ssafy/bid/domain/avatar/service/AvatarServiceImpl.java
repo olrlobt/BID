@@ -32,6 +32,9 @@ public class AvatarServiceImpl implements AvatarService {
 		Student student = (Student)userRepository.findById(userNo)
 			.orElseThrow(() -> new IllegalArgumentException(""));//TODO: 커스텀 예외
 
-		student.modifyProfileImgUrl(userAvatarModifyRequest.getUrl());
+		String url = userAvatarRepository.findUrlByUserAvatarNo(userAvatarModifyRequest.getNo())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저아바타"));//TODO: 커스텀 예외처리
+
+		student.modifyProfileImgUrl(url);
 	}
 }

@@ -49,7 +49,6 @@ public class Board extends BaseEntity {
 	@ColumnDefault("0")
 	private Integer attendeeCount;
 
-	@NotNull
 	private Integer resultPrice;
 
 	@NotNull
@@ -66,8 +65,19 @@ public class Board extends BaseEntity {
 	private Integer userNo;
 
 	/**
+	 * grade : board(me) = 1 : N
+	 */
+	@NotNull
+	private Integer gradeNo;
+
+	/**
 	 * gradePeriod : board(me) = 1 : 1
 	 */
 	@NotNull
 	private Integer gradePeriodNo;
+
+	/**
+	 * bidding : board(me) = 1 : N
+	 */
+	private Long biddingNo;
 }
