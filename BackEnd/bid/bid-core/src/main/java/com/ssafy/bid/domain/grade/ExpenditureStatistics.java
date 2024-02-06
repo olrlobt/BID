@@ -19,11 +19,11 @@ public class ExpenditureStatistics {
 
 	public void updateExpenditureStatistics(ExpenditureStatisticsFindResponse response) {
 		switch (response.getDealType()) {
-			case SNACK -> this.sumSnackExpenditure += response.getSumExpenditure();
-			case LEARNING -> this.sumLearningExpenditure += response.getSumExpenditure();
-			case COUPON -> this.sumCouponExpenditure += response.getSumExpenditure();
-			case GAME -> this.sumGameExpenditure += response.getSumExpenditure();
-			default -> this.sumEtcExpenditure += response.getSumExpenditure();
+			case SNACK -> this.sumSnackExpenditure = response.getSumExpenditure();
+			case LEARNING -> this.sumLearningExpenditure = response.getSumExpenditure();
+			case COUPON -> this.sumCouponExpenditure = response.getSumExpenditure();
+			case GAME -> this.sumGameExpenditure = response.getSumExpenditure();
+			default -> this.sumEtcExpenditure = response.getSumExpenditure();
 		}
 	}
 }
