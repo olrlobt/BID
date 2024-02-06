@@ -6,7 +6,10 @@ import static com.ssafy.bid.domain.coupon.QUserCoupon.*;
 import static com.ssafy.bid.domain.saving.QSaving.*;
 import static com.ssafy.bid.domain.saving.QUserSaving.*;
 import static com.ssafy.bid.domain.user.QAccount.*;
+import static com.ssafy.bid.domain.user.QAdmin.*;
+import static com.ssafy.bid.domain.user.QSchool.*;
 import static com.ssafy.bid.domain.user.QStudent.*;
+import static com.ssafy.bid.domain.user.QUser.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,11 +17,17 @@ import java.util.Optional;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.DealType;
+import com.ssafy.bid.domain.user.QAdmin;
+import com.ssafy.bid.domain.user.QSchool;
+import com.ssafy.bid.domain.user.QUser;
+import com.ssafy.bid.domain.user.School;
 import com.ssafy.bid.domain.user.Student;
+import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
@@ -268,6 +277,39 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
+	public List<School> findByNameContaining(String name) {
+		return queryFactory
+			.selectFrom(school)
+			.where(school.name.like("%"+name+"%"))
+			.fetch();
+	}
+
+	@Override
+	public boolean checkExistsById(String id) {
+		return Boolean.TRUE.equals(queryFactory
+			.select(
+				new CaseBuilder()
+					.when(user.no.count().goe(1)).then(true)
+					.otherwise(false)
+			)
+			.from(user)
+			.groupBy(user.id)
+			.having(user.id.eq(id))
+			.fetchOne());
+
+	}
+
+	@Override
+	public Optional<School> findByCode(String code) {
+		return Optional.ofNullable(
+			queryFactory
+				.selectFrom(school)
+				.where(school.code.eq(code))
+				.fetchOne()
+		);
+	}
+
+	@Override
 	public List<Student> findAllByIds(List<Integer> userNos) {
 		return queryFactory
 			.selectFrom(student)
@@ -296,11 +338,21 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	public void resetBallCounts(int gradeNo) {
 		queryFactory
 			.update(student)
-			.set(student.ballCount, 0)
+			.set(student.ballCount, 1)
 			.where(
 				student.gradeNo.eq(gradeNo),
 				student.deletedAt.isNull()
 			)
 			.execute();
+	}
+
+	@Override
+	public Optional<User> findByNameAndTel(String name, String tel) {
+		return Optional.ofNullable(
+			queryFactory
+				.selectFrom(admin)
+				.where(admin.name.eq(name), admin.tel.eq(tel))
+				.fetchOne()
+		);
 	}
 }

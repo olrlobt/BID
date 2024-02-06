@@ -7,8 +7,8 @@ import java.util.List;
 @Getter
 public class GradeCreationRequest {
     private String schoolCode;
-    private Integer year;
-    private Integer classRoom;
+    private int year;
+    private int classRoom;
     private List<StudentsRegistrationDto> students;
     private Integer userNo;
 }
