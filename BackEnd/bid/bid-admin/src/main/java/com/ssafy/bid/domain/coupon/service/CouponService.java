@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.coupon.Coupon;
-import com.ssafy.bid.domain.coupon.CouponStatus;
 import com.ssafy.bid.domain.coupon.UserCoupon;
 import com.ssafy.bid.domain.coupon.dto.CouponCreateRequest;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
