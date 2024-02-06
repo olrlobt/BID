@@ -7,7 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class CouponCreateRequest {
 
 	private String name;
@@ -15,7 +16,14 @@ public class CouponCreateRequest {
 	private int startPrice;
 	private int gradeNo;
 
-	public Coupon toEntity(){
+	@Builder
+	private CouponCreateRequest(String name, String content, int startPrice) {
+		this.name = name;
+		this.description = content;
+		this.startPrice = startPrice;
+	}
+
+	public Coupon toEntity() {
 		return Coupon.builder()
 			.name(this.name)
 			.description(this.description)
@@ -23,12 +31,5 @@ public class CouponCreateRequest {
 			.couponStatus(CouponStatus.UNREGISTERED)
 			.gradeNo(this.gradeNo)
 			.build();
-	}
-
-	@Builder
-	private CouponCreateRequest(String name, String content, int startPrice) {
-		this.name = name;
-		this.description = content;
-		this.startPrice = startPrice;
 	}
 }
