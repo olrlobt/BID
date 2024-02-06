@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.board.Bidding;
 import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Reply;
+import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
+import com.ssafy.bid.domain.board.repository.BiddingRepository;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
 
@@ -26,6 +29,7 @@ public class BoardService {
 
 	private final BoardRepository boardRepository;
 	private final ReplyRepository replyRepository;
+	private final BiddingRepository biddingRepository;
 
 	public List<BoardResponse> findBoards(int gradeNo, String keyword) {
 		return boardRepository.findBoards(gradeNo, keyword);
@@ -75,5 +79,21 @@ public class BoardService {
 			throw new EntityNotFoundException("댓글이 없습니다.");
 		}
 		replyRepository.deleteById(replyNo);
+	}
+
+	@Transactional
+	public void bidBoard(BiddingCreateRequest biddingCreateRequest, long boardNo, int gradeNo, int userNo) {
+
+		biddingCreateRequest.setBoardNo(boardNo);
+		biddingCreateRequest.setGradeNo(gradeNo);
+		biddingCreateRequest.setUserNo(userNo);
+		biddingRepository.save(biddingCreateRequest.toEntity());
+	}
+
+	@Transactional
+	public void rebidBoard(BiddingCreateRequest biddingCreateRequest, long boardNo, int gradeNo, int userNo) {
+
+		Bidding userBidding = biddingRepository.findByUserNoAndBoardNo(userNo, boardNo);
+		userBidding.rebidding(biddingCreateRequest.getPrice());
 	}
 }
