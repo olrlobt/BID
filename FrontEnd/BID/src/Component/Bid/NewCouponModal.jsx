@@ -6,7 +6,6 @@ import { addNewCouponApi } from '../../Apis/CouponApis';
 import { useMutation } from '@tanstack/react-query';
 
 export default function NewCouponModal({ onClose, ...props }){
-  // const { addCoupon } = useCoupons();
 
   /** 쿠폰 추가 쿼리 */
   const addNewCouponQuery  = useMutation({
