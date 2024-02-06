@@ -9,6 +9,8 @@ public interface GradeService {
     List<GradeDTO> listGrades();
     void deleteGrade(Integer gradeNo);
 
+	GradeStatisticsFindResponse findGrade(int gradeNo);
+
 	void modifySalary(int gradeNo, SalaryModifyRequest salaryModifyRequest);
 
 	void modifySavingTime(int gradeNo, SavingPeriodModifyRequest savingPeriodModifyRequest);

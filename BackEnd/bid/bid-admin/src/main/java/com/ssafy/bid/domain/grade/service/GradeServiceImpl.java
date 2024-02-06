@@ -2,6 +2,7 @@ package com.ssafy.bid.domain.grade.service;
 
 import com.ssafy.bid.domain.grade.dto.GradeCreationRequest;
 import com.ssafy.bid.domain.grade.dto.GradeDTO;
+import com.ssafy.bid.domain.grade.dto.GradeStatisticsFindResponse;
 import com.ssafy.bid.domain.grade.repository.SchoolRepository;
 import com.ssafy.bid.domain.grade.repository.StudentRepository;
 import com.ssafy.bid.domain.user.School;
@@ -83,6 +84,11 @@ public class GradeServiceImpl implements GradeService {
     public void deleteGrade(Integer gradeNo) {
         gradeRepository.deleteById(gradeNo);
     }
+
+	@Override
+	public GradeStatisticsFindResponse findGrade(int gradeNo) {
+		return null;
+	}
 
 	@Override
 	public void modifySalary(int gradeNo, SalaryModifyRequest salaryModifyRequest) {
