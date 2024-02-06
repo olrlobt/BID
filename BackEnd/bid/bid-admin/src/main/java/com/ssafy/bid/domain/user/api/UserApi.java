@@ -31,7 +31,7 @@ import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.dto.StudentsResponse;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
 import com.ssafy.bid.domain.user.dto.UserWithdrawalRequest;
-import com.ssafy.bid.domain.user.service.AuthService;
+import com.ssafy.bid.domain.user.service.CoreUserService;
 import com.ssafy.bid.domain.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ import lombok.RequiredArgsConstructor;
 public class UserApi {
 
 	private final UserService userService;
-	private final AuthService authService;
+	private final CoreUserService coreUserService;
 
 	@GetMapping("/{gradeNo}/users")
 	public List<StudentsResponse> findStudents(@PathVariable int gradeNo) {
@@ -56,13 +56,13 @@ public class UserApi {
 
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginRequest request) {
-		String token = authService.login(request);
+		String token = coreUserService.login(request);
 		return ResponseEntity.status(HttpStatus.OK).body(token);
 	}
 
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authToken) {
-		authService.logout(authToken);
+		coreUserService.logout(authToken);
 		return ResponseEntity.ok().build();
 	}
 

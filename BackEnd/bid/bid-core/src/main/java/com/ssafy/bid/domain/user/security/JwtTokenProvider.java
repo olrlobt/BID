@@ -6,6 +6,9 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.ssafy.bid.configuration.security.JwtProperties;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -18,33 +21,29 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class JwtUtil {
+public class JwtTokenProvider {
 	private final Key key;
 	private final long accessTokenExpTime;
 
-	public JwtUtil(JwtProperties jwtProperties) {
-		try {
-			log.info("JWT Secret:{}", jwtProperties.getSecret());
-			byte[] keyBytes = Decoders.BASE64URL.decode(jwtProperties.getSecret());
-			this.key = Keys.hmacShaKeyFor(keyBytes);
-			this.accessTokenExpTime = jwtProperties.getExpirationTime();
-		} catch (IllegalArgumentException e) {
-			log.error("JWT Secret loading error: ", e);
-			throw new IllegalStateException("JWT configuration is invalid", e);
-		}
+	public JwtTokenProvider(JwtProperties jwtProperties) {
+		byte[] keyBytes = Decoders.BASE64URL.decode(jwtProperties.getSecret());
+		this.key = Keys.hmacShaKeyFor(keyBytes);
+		this.accessTokenExpTime = jwtProperties.getExpirationTime();
 	}
 
-	public String createAccessToken(CustomUserInfo user) {
-		return createToken(user, accessTokenExpTime);
+	public String createAccessToken(CustomUserInfo userInfo) {
+		return createToken(userInfo, accessTokenExpTime);
 	}
 
-	private String createToken(CustomUserInfo user, long expireTime) {
+	private String createToken(CustomUserInfo userInfo, long accessTokenExpTime) {
 		Claims claims = Jwts.claims();
-		claims.put("UserId", user.getId());
-		claims.put("name", user.getName());
+		claims.put("no", userInfo.getNo());
+		claims.put("id", userInfo.getId());
+		claims.put("name", userInfo.getName());
+		claims.put("gradeNo", userInfo.getGradeNo());
 
 		ZonedDateTime now = ZonedDateTime.now();
-		ZonedDateTime tokenValidity = now.plusSeconds(expireTime);
+		ZonedDateTime tokenValidity = now.plusSeconds(accessTokenExpTime);
 
 		return Jwts.builder()
 			.setClaims(claims)
@@ -55,7 +54,15 @@ public class JwtUtil {
 	}
 
 	public String getUserId(String token) {
-		return parseClaims(token).get("UserId", String.class);
+		return parseClaims(token).get("id", String.class);
+	}
+
+	private Claims parseClaims(String accessToken) {
+		return Jwts.parserBuilder()
+			.setSigningKey(key)
+			.build()
+			.parseClaimsJws(accessToken)
+			.getBody();
 	}
 
 	public boolean validateToken(String token) {
@@ -72,13 +79,5 @@ public class JwtUtil {
 			log.info("JWT claims string is empty", e);
 		}
 		return false;
-	}
-
-	public Claims parseClaims(String accessToken) {
-		try {
-			return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-		} catch (ExpiredJwtException e) {
-			return e.getClaims();
-		}
 	}
 }
