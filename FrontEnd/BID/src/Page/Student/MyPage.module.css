@@ -1,0 +1,40 @@
+.studentFinDataContainer {
+    background-color: white;
+}
+
+.dashboard {
+    margin-left: 2vw;
+    background-color: #FFFEF0;
+}
+
+
+.section {
+    max-width: 1138px;
+    width: calc(100% - 260px);
+    /* float: right; */
+    margin-left: 2vw;
+    background-color: #FFFEF0;
+    height: auto; 
+  
+  }
+.dashboardContainer {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    max-height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    justify-content: space-between; /* To separate left and right containers */
+}
+
+.additionalChartsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* To take up 50% of the parent container width */
+    margin-left: 20px;
+}
+
+.chartsContainer {
+    width: 50%; /* To take up 50% of the parent container width */
+}
