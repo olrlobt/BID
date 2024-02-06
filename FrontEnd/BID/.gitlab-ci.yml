@@ -4,6 +4,7 @@ image: node:latest
 
 stages:
   - build
+  - deploy
 # 이 전 작업과 동일한 내용인지를 확인해서 재사용 해주는 캐싱 메커니즘의 옵션입니다.
 
 cache:
