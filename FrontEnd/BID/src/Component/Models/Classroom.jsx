@@ -17,6 +17,7 @@ export function Classroom(props) {
         rotation={[0, 0, -Math.PI / 2]}
         scale={0.344}
       >
+
         <mesh
           castShadow
           receiveShadow
@@ -24,7 +25,7 @@ export function Classroom(props) {
           material={materials["Material.116"]}
         />
         <mesh
-          castShadow
+          castShadowa
           receiveShadow
           geometry={nodes.Cylinder017_1.geometry}
           material={materials["Material.214"]}
@@ -35,6 +36,7 @@ export function Classroom(props) {
           geometry={nodes.Cylinder017_2.geometry}
           material={materials["Material.213"]}
         />
+
         <mesh
           castShadow
           receiveShadow
@@ -407,6 +409,7 @@ export function Classroom(props) {
           geometry={nodes.Cylinder017_64.geometry}
           material={materials["03.132"]}
         />
+
         <mesh
           castShadow
           receiveShadow

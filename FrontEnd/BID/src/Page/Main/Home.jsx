@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { bidSelector } from "../../Store/bidSlice";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { viewDashboard } from "../../Apis/TeacherHomeApis";
+import { viewDashboard } from "../../Apis/TeacherManageApis";
 import useBid from "../../hooks/useBid";
 import useMoney from "../../hooks/useMoney";
 import useBidCount from "../../hooks/useBidCount";

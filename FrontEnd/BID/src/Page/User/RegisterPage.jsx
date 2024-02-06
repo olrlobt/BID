@@ -2,35 +2,48 @@ import React, { useState } from "react";
 import styled from "./RegisterPage.module.css";
 import { Link } from "react-router-dom";
 import Logo from "../../Component/Common/Logo";
-import { useDispatch } from "react-redux";
-import { registerUser } from "../../Store/UserSlice";
+import { addUserApi } from "../../Apis/UserApis";
+import { useMutation } from "@tanstack/react-query";
 
 function RegisterPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [verifyPwd, setverifyPwd] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [verifyCode, setVerifyCode] = useState("");
-  const [schoolCode, setSchoolCode] = useState("");
+  const [tel, setTel] = useState("");
+  const [verifyNo, setVerifyNo] = useState("");
+  const [schoolNo, setSchoolNo] = useState("");
 
-  // const { loading, error } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+
+  /** 새 회원 추가 쿼리 */
+  const addUserQuery = useMutation({
+    mutationKey: ["addNewUser"],
+    mutationFn: (newUserForm) => addUserApi(newUserForm),
+    onSuccess: (data) => {
+      // Dispatch an action to update the Redux store with the registered user data
+     console.log(data)
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const handleRegisterEvent = (e) => {
     e.preventDefault();
     let userData = {
       id,
       password,
+      confirmPassword,
       name,
-      phone,
-      verifyCode,
-      schoolCode,
+      tel,
+      schoolNo,
     };
-    dispatch(registerUser(userData)).then((result) => {
-      // 회원가입 성공 후 처리
-    });
+    // console.log(userData)
+    addUserQuery.mutate(userData);
   };
+
+
+  
 
   return (
     <section className={styled.back}>
@@ -54,8 +67,8 @@ function RegisterPage() {
           <input
             type="password"
             placeholder="비밀번호 확인"
-            value={verifyPwd}
-            onChange={(e) => setverifyPwd(e.target.value)}
+            value={confirmPassword}
+            onChange={(e) => setconfirmPassword(e.target.value)}
           />
           <input
             type="text"
@@ -66,20 +79,20 @@ function RegisterPage() {
           <input
             type="text"
             placeholder="휴대전화번호"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            value={tel}
+            onChange={(e) => setTel(e.target.value)}
           />
           <input
             type="text"
             placeholder="인증코드"
-            value={verifyCode}
-            onChange={(e) => setVerifyCode(e.target.value)}
+            value={verifyNo}
+            onChange={(e) => setVerifyNo(e.target.value)}
           />
           <input
             type="text"
             placeholder="학교코드"
-            value={schoolCode}
-            onChange={(e) => setSchoolCode(e.target.value)}
+            value={schoolNo}
+            onChange={(e) => setSchoolNo(e.target.value)}
           />
           <Link
             to="/login"
