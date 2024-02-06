@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AuthServiceImpl implements AuthService {
+
 	private final JwtUtil jwtUtil;
 	private final UserRepository userRepository;
 	private final PasswordEncoder encoder;

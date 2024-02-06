@@ -13,7 +13,6 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,7 +44,6 @@ public class User extends BaseEntity {
 	@NotNull
 	private Integer schoolNo;
 
-	@Builder
 	public User(
 		String id,
 		String password,
@@ -54,6 +52,11 @@ public class User extends BaseEntity {
 	) {
 		this.id = id;
 		this.password = password;
+		this.name = name;
+		this.schoolNo = schoolNo;
+	}
+
+	public void updateAdmin(String name, int schoolNo) {
 		this.name = name;
 		this.schoolNo = schoolNo;
 	}
