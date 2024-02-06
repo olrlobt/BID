@@ -59,5 +59,8 @@ public class User extends BaseEntity {
 	public void updateAdmin(String name, int schoolNo) {
 		this.name = name;
 		this.schoolNo = schoolNo;
+
+	public void changePassword(String encodedNewPassword) {
+		this.password = encodedNewPassword;
 	}
 }
