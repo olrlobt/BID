@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import styled from "./BankPage.module.css";
-import { updateSavingList, viewSavingList } from "../../Apis/TeacherBankApis";
+import { updateSavingList, viewSavingList } from "../../Apis/TeacherManageApis";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useSaving from "../../hooks/useSaving";
 import { useSelector } from "react-redux";
