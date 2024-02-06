@@ -17,21 +17,19 @@ import java.util.Optional;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.user.AccountType;
+import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.DealType;
-import com.ssafy.bid.domain.user.QAdmin;
-import com.ssafy.bid.domain.user.QSchool;
-import com.ssafy.bid.domain.user.QUser;
-import com.ssafy.bid.domain.user.School;
 import com.ssafy.bid.domain.user.Student;
-import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
 import com.ssafy.bid.domain.user.dto.BallsResponse;
+import com.ssafy.bid.domain.user.dto.SchoolResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.dto.StudentsResponse;
@@ -277,11 +275,25 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
-	public List<School> findByNameContaining(String name) {
+	public List<SchoolResponse> findByNameContaining(String name) {
 		return queryFactory
-			.selectFrom(school)
-			.where(school.name.like("%"+name+"%"))
+			.select(Projections.constructor(SchoolResponse.class,
+					school.no,
+					school.name,
+					school.region,
+					school.code
+				)
+			)
+			.from(school)
+			.where(nameCondition(name))
 			.fetch();
+	}
+
+	private BooleanExpression nameCondition(String name) {
+		if (name == null) {
+			return null;
+		}
+		return school.name.like("%" + name + "%");
 	}
 
 	@Override
@@ -297,16 +309,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 			.having(user.id.eq(id))
 			.fetchOne());
 
-	}
-
-	@Override
-	public Optional<School> findByCode(String code) {
-		return Optional.ofNullable(
-			queryFactory
-				.selectFrom(school)
-				.where(school.code.eq(code))
-				.fetchOne()
-		);
 	}
 
 	@Override
@@ -347,11 +349,22 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
-	public Optional<User> findByNameAndTel(String name, String tel) {
+	public Optional<String> findIdByNameAndTel(String name, String tel) {
+		return Optional.ofNullable(
+			queryFactory
+				.select(admin.id)
+				.from(admin)
+				.where(admin.name.eq(name), admin.tel.eq(tel))
+				.fetchOne()
+		);
+	}
+
+	@Override
+	public Optional<Admin> findAdminByUserNo(int userNo) {
 		return Optional.ofNullable(
 			queryFactory
 				.selectFrom(admin)
-				.where(admin.name.eq(name), admin.tel.eq(tel))
+				.where(admin.no.eq(userNo))
 				.fetchOne()
 		);
 	}

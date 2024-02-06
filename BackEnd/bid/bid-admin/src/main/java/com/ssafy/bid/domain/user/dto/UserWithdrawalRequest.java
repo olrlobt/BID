@@ -1,15 +1,14 @@
 package com.ssafy.bid.domain.user.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class UserWithdrawalRequest {
-    private String password;
+	private String password;
 
-    public UserWithdrawalRequest() {
-    }
-
-    public UserWithdrawalRequest(String password) {
-        this.password = password;
-    }
+	public UserWithdrawalRequest(String password) {
+		this.password = password;
+	}
 }
