@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { useEffect, useState } from "react";
+import { Canvas } from "@react-three/fiber";
 import {
   OrbitControls,
   CameraControls,
   PerspectiveCamera,
-} from '@react-three/drei';
-import { Classroom, Box } from '../../Component/Models/Classroom';
-import BlackBoard from '../../Component/Models/BlackBoard';
-import { Cactus } from '../../Component/Models/Cactus';
-import Alarm from '../../Component/Models/Alarm';
-import { BiddingPlace } from '../../Component/Models/BiddingPlace';
-import { Bank } from '../../Component/Models/Bank';
+} from "@react-three/drei";
+import { Classroom, Box } from "../../Component/Models/Classroom";
+import BlackBoard from "../../Component/Models/BlackBoard";
+import { Cactus } from "../../Component/Models/Cactus";
+import Alarm from "../../Component/Models/Alarm";
+import { BiddingPlace } from "../../Component/Models/BiddingPlace";
+import { Bank } from "../../Component/Models/Bank";
 // import { BasicBean } from "../../Component/Character/BasicBean";
-import { SnowBean } from '../../Component/Character/SnowBean';
+import { SnowBean } from "../../Component/Character/SnowBean";
+import AlarmWindow from "./AlarmWindow";
 
 function StudentMain() {
-  // const [isAlarmActive, setIsAlarmActive] = useState(false);
+  const [isAlarmActive, setIsAlarmActive] = useState(false);
   useEffect(() => {
     //SSE연결 로직
     const eventSource = new EventSource(
-      'http://i10a306.p.ssafy.io:8081/notification/subscribe'
+      "http://i10a306.p.ssafy.io:8081/notification/subscribe"
     );
 
-    eventSource.onopen = (event) => {
-      console.log(event);
-      eventSource.onmessage = (event) => {
-        console.log(event);
-      };
+    eventSource.onopen = () => {
+      eventSource.addEventListener("sse", (e) => {
+        console.log(e);
+      });
     };
 
     eventSource.onerror = (error) => {
-      console.error('EventSource failed: ' + error);
+      console.error("EventSource failed: " + error);
       eventSource.close();
     };
 
@@ -41,7 +41,7 @@ function StudentMain() {
   return (
     <>
       <Canvas
-        style={{ width: '100%', height: '100vh' }}
+        style={{ width: "100%", height: "100vh" }}
         camera={{ position: [12, 10, 20], fov: 20 }}
       >
         <CameraControls minPolarAngle={2} maxPolarAngle={Math.PI / 2} />
@@ -51,7 +51,12 @@ function StudentMain() {
           <Classroom />
           <BlackBoard />
           <Cactus />
-          <Alarm />
+          <Alarm
+            onClick={() => {
+              console.log("clicked");
+              setIsAlarmActive(!isAlarmActive);
+            }}
+          />
           <Bank />
           <BiddingPlace />
           {/* <BasicBean /> */}
@@ -71,7 +76,7 @@ function StudentMain() {
         />
         <PerspectiveCamera makeDefault position={[0, 10, 190]} />
       </Canvas>
-      {/* {isAlarmActive && <AlarmWindow />} */}
+      {isAlarmActive && <AlarmWindow />}
     </>
   );
 }
