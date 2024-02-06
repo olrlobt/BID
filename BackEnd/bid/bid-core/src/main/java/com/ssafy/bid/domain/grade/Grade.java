@@ -54,6 +54,11 @@ public class Grade extends BaseEntity {
 	@NotNull
 	private Integer userNo;
 
+	public Grade(String schoolCode, Integer year, Integer classRoom) {
+		this.schoolCode = schoolCode;
+		this.year = year;
+		this.classRoom = classRoom;
+
 	@Embedded
 	private ExpenditureStatistics expenditureStatistics;
 
