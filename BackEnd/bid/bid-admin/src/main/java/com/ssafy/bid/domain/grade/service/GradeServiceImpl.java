@@ -1,9 +1,7 @@
 package com.ssafy.bid.domain.grade.service;
 
-import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.dto.GradeCreationRequest;
 import com.ssafy.bid.domain.grade.dto.GradeDTO;
-import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.domain.grade.repository.SchoolRepository;
 import com.ssafy.bid.domain.grade.repository.StudentRepository;
 import com.ssafy.bid.domain.user.School;
@@ -12,13 +10,23 @@ import com.ssafy.bid.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.ssafy.bid.domain.grade.Grade;
+import com.ssafy.bid.domain.grade.dto.SalaryModifyRequest;
+import com.ssafy.bid.domain.grade.dto.SavingPeriodModifyRequest;
+import com.ssafy.bid.domain.grade.repository.GradeRepository;
+
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 
+@RequiredArgsConstructor
+@Transactional
 @Service
 public class GradeServiceImpl implements GradeService {
 
@@ -75,4 +83,23 @@ public class GradeServiceImpl implements GradeService {
     public void deleteGrade(Integer gradeNo) {
         gradeRepository.deleteById(gradeNo);
     }
+
+	@Override
+	public void modifySalary(int gradeNo, SalaryModifyRequest salaryModifyRequest) {
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new IllegalArgumentException(""));//TODO: 커스텀 예외처리
+
+		grade.modifySalary(salaryModifyRequest.getSalary());
+	}
+
+	@Override
+	public void modifySavingTime(int gradeNo, SavingPeriodModifyRequest savingPeriodModifyRequest) {
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new IllegalArgumentException(""));//TODO: 커스텀 예외처리
+
+		grade.modifySavingTime(
+			savingPeriodModifyRequest.getTransferAlertPeriod(),
+			savingPeriodModifyRequest.getTransferPeriod()
+		);
+	}
 }

@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -49,7 +50,6 @@ public class Board extends BaseEntity {
 	@ColumnDefault("0")
 	private Integer attendeeCount;
 
-	@NotNull
 	private Integer resultPrice;
 
 	@NotNull
@@ -66,8 +66,36 @@ public class Board extends BaseEntity {
 	private Integer userNo;
 
 	/**
+	 * grade : board(me) = 1 : N
+	 */
+	@NotNull
+	private Integer gradeNo;
+
+	/**
 	 * gradePeriod : board(me) = 1 : 1
 	 */
 	@NotNull
 	private Integer gradePeriodNo;
+
+	/**
+	 * bidding : board(me) = 1 : N
+	 */
+	private Long biddingNo;
+
+	@Builder
+	private Board(String title, String description, Integer startPrice, BoardStatus boardStatus, Integer totalPrice,
+		Integer attendeeCount, Category category, String goodsImgUrl, Integer userNo, Integer gradeNo,
+		Integer gradePeriodNo) {
+		this.title = title;
+		this.description = description;
+		this.startPrice = startPrice;
+		this.boardStatus = boardStatus;
+		this.totalPrice = totalPrice;
+		this.attendeeCount = attendeeCount;
+		this.category = category;
+		this.goodsImgUrl = goodsImgUrl;
+		this.userNo = userNo;
+		this.gradeNo = gradeNo;
+		this.gradePeriodNo = gradePeriodNo;
+	}
 }

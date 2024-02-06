@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -44,4 +45,24 @@ public class Bidding extends BaseEntity {
 	 */
 	@NotNull
 	private Long boardNo;
+
+	/**
+	 * grade : bidding(me) = 1 : N
+	 */
+	@NotNull
+	private Integer gradeNo;
+
+	@Builder
+	private Bidding(Integer price, BiddingStatus biddingStatus, Integer userNo, Long boardNo, Integer gradeNo) {
+		this.price = price;
+		this.biddingStatus = biddingStatus;
+		this.userNo = userNo;
+		this.boardNo = boardNo;
+		this.gradeNo = gradeNo;
+	}
+
+	public void rebidding(int price){
+		this.price = price;
+	}
+
 }

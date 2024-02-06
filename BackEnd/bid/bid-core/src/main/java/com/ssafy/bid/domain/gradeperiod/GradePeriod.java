@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "group_period")
+@Table(name = "grade_period")
 @Entity
 public class GradePeriod {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "group_period_no")
+	@Column(name = "grade_period_no")
 	private Integer no;
 
 	@NotNull
@@ -38,4 +38,12 @@ public class GradePeriod {
 	 */
 	@NotNull
 	private Integer gradeNo;
+
+	public void modify(
+		LocalTime startPeriod,
+		LocalTime endPeriod
+	) {
+		this.startPeriod = startPeriod;
+		this.endPeriod = endPeriod;
+	}
 }
