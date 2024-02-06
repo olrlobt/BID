@@ -13,16 +13,15 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 @Table(name = "users")
-@SuperBuilder
 @Entity
 public class User extends BaseEntity {
 
@@ -46,6 +45,7 @@ public class User extends BaseEntity {
 	@NotNull
 	private Integer schoolNo;
 
+	@Builder
 	public User(
 		String id,
 		String password,

@@ -30,10 +30,6 @@ public class GradeApi {
     private final GradeService gradeService;
 	private final CoreGradeService coreGradeService;
 
-    public GradeApi(GradeService gradeService) {
-        this.gradeService = gradeService;
-    }
-
     @PostMapping("/grade/register")
     public ResponseEntity<Void> createGrade(@RequestBody GradeCreationRequest request) {
         gradeService.createGrade(request);
