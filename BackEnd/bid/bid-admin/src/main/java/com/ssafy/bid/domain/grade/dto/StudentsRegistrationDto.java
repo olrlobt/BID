@@ -11,13 +11,6 @@ public class StudentsRegistrationDto {
     private Integer gradeNo;
 
     public Student toEntity(PasswordEncoder passwordEncoder, Integer schoolNo) {
-        return Student.builder()
-                .id(this.id)
-                .password(passwordEncoder.encode(this.password))
-                .name(this.name)
-                .schoolNo(schoolNo)
-                .birthDate(this.birthDate)
-                .gradeNo(this.gradeNo)
-                .build();
+        return new Student(id, passwordEncoder.encode(password), name, schoolNo, birthDate, 0, 0, null, gradeNo);
     }
 }
