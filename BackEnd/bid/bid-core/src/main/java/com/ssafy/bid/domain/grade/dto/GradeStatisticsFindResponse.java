@@ -1,7 +1,9 @@
 package com.ssafy.bid.domain.grade.dto;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -21,20 +23,7 @@ public class GradeStatisticsFindResponse {
 	private int asset;
 	private String transferAlertPeriod;
 	private String transferPeriod;
-	private int countFourteenDaysAgo;
-	private int countThirteenDaysAgo;
-	private int countTwelveDaysAgo;
-	private int countElevenDaysAgo;
-	private int countTenDaysAgo;
-	private int countNineDaysAgo;
-	private int countEightDaysAgo;
-	private int countSevenDaysAgo;
-	private int countSixDaysAgo;
-	private int countFiveDaysAgo;
-	private int countFourDaysAgo;
-	private int countThreeDaysAgo;
-	private int countTwoDaysAgo;
-	private int countOneDaysAgo;
+	private List<BiddingStatisticsFindResponse> biddingStatisticsFindResponses;
 	private List<GradePeriodsFindResponse> gradePeriodsFindResponses;
 
 	public GradeStatisticsFindResponse(
@@ -70,27 +59,42 @@ public class GradeStatisticsFindResponse {
 		this.sumCouponExpenditure = sumCouponExpenditure;
 		this.sumGameExpenditure = sumGameExpenditure;
 		this.sumEtcExpenditure = sumEtcExpenditure;
-		this.sumTotalExpenditure =
-			sumSnackExpenditure + sumLearningExpenditure + sumCouponExpenditure + sumGameExpenditure
-				+ sumEtcExpenditure;
+		this.sumTotalExpenditure = sumSnackExpenditure + sumLearningExpenditure + sumCouponExpenditure
+			+ sumGameExpenditure + sumEtcExpenditure;
 		this.asset = asset;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
 		this.transferAlertPeriod = transferAlertPeriod.format(formatter);
 		this.transferPeriod = transferPeriod.format(formatter);
-		this.countFourteenDaysAgo = countFourteenDaysAgo;
-		this.countThirteenDaysAgo = countThirteenDaysAgo;
-		this.countTwelveDaysAgo = countTwelveDaysAgo;
-		this.countElevenDaysAgo = countElevenDaysAgo;
-		this.countTenDaysAgo = countTenDaysAgo;
-		this.countNineDaysAgo = countNineDaysAgo;
-		this.countEightDaysAgo = countEightDaysAgo;
-		this.countSevenDaysAgo = countSevenDaysAgo;
-		this.countSixDaysAgo = countSixDaysAgo;
-		this.countFiveDaysAgo = countFiveDaysAgo;
-		this.countFourDaysAgo = countFourDaysAgo;
-		this.countThreeDaysAgo = countThreeDaysAgo;
-		this.countTwoDaysAgo = countTwoDaysAgo;
-		this.countOneDaysAgo = countOneDaysAgo;
+		List<BiddingStatisticsFindResponse> template = new ArrayList<>();
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(14))
+			.count(countFourteenDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(13))
+			.count(countThirteenDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(12))
+			.count(countTwelveDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(11))
+			.count(countElevenDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(10))
+			.count(countTenDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(9))
+			.count(countNineDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(8))
+			.count(countEightDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(7))
+			.count(countSevenDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(6))
+			.count(countSixDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(5))
+			.count(countFiveDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(4))
+			.count(countFourDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(3))
+			.count(countThreeDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(2))
+			.count(countTwoDaysAgo).build());
+		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(1))
+			.count(countOneDaysAgo).build());
+		this.biddingStatisticsFindResponses = template;
 	}
 
 	public void setGradePeriodsFindResponses(List<GradePeriodsFindResponse> gradePeriodsFindResponses) {
