@@ -17,15 +17,6 @@ export const couponSlice = createSlice({
       const couponList = action.payload;
       state.couponList = couponList;
     },
-    addCoupon: (state, action) => {
-      const newCoupon = action.payload;
-      state.couponList = [...state.couponList, newCoupon];
-    },
-    removeCoupon: (state, action) => {
-      const couponNo = action.payload;
-      const newList = state.couponList.filter((c) => c.no !== couponNo);
-      state.couponList = [...newList];
-    },
   },
 });
 

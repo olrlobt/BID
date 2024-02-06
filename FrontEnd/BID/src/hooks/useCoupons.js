@@ -8,17 +8,7 @@ export default function useCoupons() {
     dispatch(initCoupons(couponList));
   }
 
-  const handleAddCoupon = ({ newCoupon }) => {
-    dispatch(addCoupon(newCoupon));
-  }
-
-  const handleRemoveCoupon = ({ couponNo }) => {
-    dispatch(removeCoupon(couponNo));
-  }
-
   return {
     initCoupons: handleInitCoupons,
-    addCoupon: handleAddCoupon,
-    removeCoupon: handleRemoveCoupon
   };
 }
