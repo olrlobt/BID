@@ -2,6 +2,7 @@ package com.ssafy.bid.domain.user.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,8 @@ import com.ssafy.bid.domain.user.dto.StudentRegistrationRequest;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.dto.StudentsResponse;
+import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
+import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
 import com.ssafy.bid.domain.user.dto.UserWithdrawalRequest;
@@ -32,6 +35,16 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final MessageService messageService;
+
+	@Override
+	public TelAuthenticationSendResponse sendTelAuthentication(
+		TelAuthenticationSendRequest telAuthenticationSendRequest) {
+		String code = RandomStringUtils.randomNumeric(6);
+		messageService.sendAuthenticationCode(telAuthenticationSendRequest.getTel(), code);
+
+		return new TelAuthenticationSendResponse(code);
+	}
 
 	@Override
 	public List<StudentsResponse> findStudents(int gradeNo) {

@@ -29,6 +29,8 @@ import com.ssafy.bid.domain.user.dto.StudentRegistrationRequest;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.dto.StudentsResponse;
+import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
+import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
 import com.ssafy.bid.domain.user.dto.UserWithdrawalRequest;
 import com.ssafy.bid.domain.user.service.CoreUserService;
@@ -43,6 +45,13 @@ public class UserApi {
 
 	private final UserService userService;
 	private final CoreUserService coreUserService;
+
+	@PostMapping("/send-code")
+	public ResponseEntity<TelAuthenticationSendResponse> sendCode(
+		@RequestBody TelAuthenticationSendRequest telAuthenticationSendRequest) {
+		TelAuthenticationSendResponse response = userService.sendTelAuthentication(telAuthenticationSendRequest);
+		return ResponseEntity.status(OK).body(response);
+	}
 
 	@GetMapping("/{gradeNo}/users")
 	public List<StudentsResponse> findStudents(@PathVariable int gradeNo) {
