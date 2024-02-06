@@ -20,7 +20,7 @@ export default function Reward(props){
     onError: (error) => { console.log(error); }
   })
 
-    /** 리워드를 삭제하는 함수 */
+    /** 리워드 삭제 함수 */
   const deleteReward = () => {
     deleteRewardQuery.mutate();
   }
