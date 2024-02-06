@@ -36,7 +36,6 @@ public class Student extends User {
 	 */
 	private Integer gradeNo;
 
-	@Builder
 	public Student(
 		String id,
 		String password,
