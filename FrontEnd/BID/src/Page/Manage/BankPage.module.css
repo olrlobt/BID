@@ -121,20 +121,21 @@
   left: 15vw;
   font-size: 1.2rem;
   input {
-    width: 1vw;
+    width: 2vw;
     border: none;
+    font-size: 1.2rem;
   }
   .saving {
-    width: 2vw;
+    width: 3.5vw;
   }
   label {
     display: inline-block;
-    width: 9vw;
+    width: 8vw;
   }
   .isEdit {
     border: 1px solid #ececec;
     border-radius: 5px;
-    width: 2vw;
+    width: 3vw;
   }
 }
 

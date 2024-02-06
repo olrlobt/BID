@@ -1,71 +1,90 @@
-import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
-import styled from './BankPage.module.css';
-import { updateSavingList, viewSavingList } from '../../Apis/TeacherBankApis';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import useSaving from '../../hooks/useSaving';
-import { useSelector } from 'react-redux';
-import { moneySeletor } from '../../Store/moneySlice';
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
+import styled from "./BankPage.module.css";
+import { updateSavingList, viewSavingList } from "../../Apis/TeacherBankApis";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import useSaving from "../../hooks/useSaving";
+import { useSelector } from "react-redux";
+import { moneySeletor } from "../../Store/moneySlice";
 
 export default function BankPage() {
   // 이후 백엔드에서 국고 금액 받아오면 바꾸기
   const classMoney = useSelector(moneySeletor);
 
   const [isEdit, setIsEdit] = useState(false);
-  const { initSavingList } = useSaving();
-  const [savingBasket, setSavingBasket] = useState([]);
+  const { initSavingList, changeSavingList } = useSaving();
+  const [savingBasket, setSavingBasket] = useState([
+    {
+      no: 1,
+      depositPrice: 0,
+      interestRate: 0,
+    },
+    {
+      no: 2,
+      depositPrice: 0,
+      interestRate: 0,
+    },
+  ]);
+
   const handleClick = () => {
-    if (isEdit) {
-      handleSubmit();
-    }
     setIsEdit(!isEdit);
   };
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-
     setSavingBasket((prevSaving) => {
       const updatedSaving = [...prevSaving];
       updatedSaving[index] = { ...updatedSaving[index], [name]: value };
       return updatedSaving;
     });
-    console.log(savingBasket);
   };
 
   const handleSubmit = () => {
-    // 백엔드로 현재 savingInfo 넘기기
     changeSavings.mutate();
   };
 
   const changeSavings = useMutation({
-    mutationKey: ['changeSaving'],
+    mutationKey: ["changeSaving"],
     mutationFn: () =>
-      updateSavingList({ savingBasket })
-        .then((data) => {
-          console.log(data);
-          initSavingList(savingBasket);
+      updateSavingList(savingBasket)
+        .then(() => {
+          changeSavingList(savingBasket);
           setIsEdit(!isEdit);
+          alert("변경되었습니다.");
         })
         .catch(() => {
-          alert('변경이 되지 않았습니다.');
+          alert("변경이 되지 않았습니다.");
         }),
   });
 
   const { data: savingInfo } = useQuery({
-    queryKey: ['savingInfo'],
+    queryKey: ["savingInfo"],
     queryFn: () =>
       viewSavingList().then((res) => {
         initSavingList(res.data);
-        setSavingBasket(res.data);
+        setSavingBasket((prev) => [
+          {
+            ...prev[0],
+            depositPrice: res.data[0].savingDepositPrice,
+            interestRate: res.data[0].savingInterestRate,
+          },
+          {
+            ...prev[1],
+            depositPrice: res.data[1].savingDepositPrice,
+            interestRate: res.data[1].savingInterestRate,
+          },
+        ]);
         return res.data;
       }),
   });
+
+  useEffect(() => {}, [isEdit]);
+
   return (
     <>
       {savingInfo && (
         <section className={styled.bankPage}>
-          {console.log(savingBasket)};
           <section className={styled.bankSection}>
             <div className={styled.saveInfo}>
               현재 국고에는 <span>{classMoney}비드</span> 있어요
@@ -80,7 +99,7 @@ export default function BankPage() {
               </span>
             </div>
             {isEdit ? (
-              <button className={styled.classSetting} onClick={handleClick}>
+              <button className={styled.classSetting} onClick={handleSubmit}>
                 <FontAwesomeIcon className={styled.icon} icon={faGear} />
                 편집 완료
               </button>
@@ -127,8 +146,8 @@ export default function BankPage() {
                     }
                     type="number"
                     id="saving"
-                    name="savingDepositPrice"
-                    value={savingBasket[0].savingDepositPrice}
+                    name="depositPrice"
+                    value={savingBasket[0].depositPrice}
                     onChange={(e) => handleChange(e, 0)}
                     readOnly={isEdit ? false : true}
                   />
@@ -137,11 +156,11 @@ export default function BankPage() {
                 <div>
                   <label htmlFor="interest">금리</label>
                   <input
-                    className={isEdit ? `${styled.isEdit}` : ''}
+                    className={isEdit ? `${styled.isEdit}` : ""}
                     type="number"
-                    value={savingBasket[0].savingInterestRate}
+                    value={savingBasket[0].interestRate}
                     id="interest"
-                    name="savingInterestRate"
+                    name="interestRate"
                     onChange={(e) => handleChange(e, 0)}
                     readOnly={isEdit ? false : true}
                   />
@@ -185,10 +204,10 @@ export default function BankPage() {
                         : `${styled.saving}`
                     }
                     type="number"
-                    value={savingBasket[1].savingDepositPrice}
+                    value={savingBasket[1].depositPrice}
                     onChange={(e) => handleChange(e, 1)}
                     id="saving"
-                    name="savingDepositPrice"
+                    name="depositPrice"
                     readOnly={isEdit ? false : true}
                   />
                   비드
@@ -196,12 +215,12 @@ export default function BankPage() {
                 <div>
                   <label htmlFor="interest">금리</label>
                   <input
-                    className={isEdit ? `${styled.isEdit}` : ''}
+                    className={isEdit ? `${styled.isEdit}` : ""}
                     type="number"
-                    value={savingBasket[1].savingInterestRate}
+                    value={savingBasket[1].interestRate}
                     onChange={(e) => handleChange(e, 1)}
                     id="interest"
-                    name="interestB"
+                    name="interestRate"
                     readOnly={isEdit ? false : true}
                   />
                   %
