@@ -11,6 +11,9 @@ import PwdRemoveModal from '../Manage/PwdRemoveModal';
 import StudentEditModal from '../Manage/StudentEditModal';
 import ViewProductModal from '../Bid/ViewProductModal';
 import TimeModal from '../DashboardModals/TimeModal';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const MODAL_COMPONENTS = {
   coupon: CouponModal,
@@ -32,9 +35,9 @@ function ModalContainer() {
 
   const Modal = MODAL_COMPONENTS[type];
   return createPortal(
-    <>
+    <QueryClientProvider client={queryClient}>
       <Modal onClose={closeModal} {...props} />
-    </>,
+    </QueryClientProvider>,
     document.getElementById('modal')
   );
 }
