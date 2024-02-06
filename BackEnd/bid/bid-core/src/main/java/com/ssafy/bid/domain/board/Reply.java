@@ -47,7 +47,7 @@ public class Reply extends BaseEntity {
 		this.userNo = userNo;
 	}
 
-	public void modify(String content){
+	public void modify(String content) {
 		this.content = content;
 	}
 }

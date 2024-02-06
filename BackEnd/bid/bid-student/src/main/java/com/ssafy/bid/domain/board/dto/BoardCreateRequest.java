@@ -16,7 +16,17 @@ public class BoardCreateRequest {
 	private int startPrice;
 	private int gradePeriodNo;
 
-	public Board toEntity(int userNo, int gradeNo){
+	public BoardCreateRequest(String title, String description, Category category, String goodsImgUrl, int startPrice,
+		int gradePeriodNo) {
+		this.title = title;
+		this.description = description;
+		this.category = category;
+		this.goodsImgUrl = goodsImgUrl;
+		this.startPrice = startPrice;
+		this.gradePeriodNo = gradePeriodNo;
+	}
+
+	public Board toEntity(int userNo, int gradeNo) {
 		return Board.builder()
 			.title(this.title)
 			.description(this.description)
@@ -30,15 +40,5 @@ public class BoardCreateRequest {
 			.attendeeCount(0)
 			.boardStatus(BoardStatus.PROGRESS)
 			.build();
-	}
-
-	public BoardCreateRequest(String title, String description, Category category, String goodsImgUrl, int startPrice,
-		int gradePeriodNo) {
-		this.title = title;
-		this.description = description;
-		this.category = category;
-		this.goodsImgUrl = goodsImgUrl;
-		this.startPrice = startPrice;
-		this.gradePeriodNo = gradePeriodNo;
 	}
 }
