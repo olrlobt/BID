@@ -3,7 +3,7 @@
 }
 
 .Face {
-  width: 8vw;
+  
 }
 
 .logoInfo {
@@ -14,14 +14,12 @@
 
 .B_D {
   position: relative;
-  width: 9vw;
-  margin-left: 1vw;
+  margin-left: 0.5vw;
 }
 
 .logoContainer p {
   position: relative;
-  width: 5vw;
-  height: 2vh;
+
   margin-left: 1vw;
   font-size: 0.7rem;
   color: #a6a6a6;
