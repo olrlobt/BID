@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.bid.domain.grade.dto.GradeFindResponse;
+import com.ssafy.bid.domain.grade.dto.GradeStatisticsFindResponse;
 import com.ssafy.bid.domain.grade.dto.SalaryModifyRequest;
 import com.ssafy.bid.domain.grade.dto.SavingPeriodModifyRequest;
+import com.ssafy.bid.domain.grade.service.CoreGradeService;
 import com.ssafy.bid.domain.grade.service.GradeService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class GradeApi {
     private final GradeService gradeService;
+	private final CoreGradeService coreGradeService;
 
     public GradeApi(GradeService gradeService) {
         this.gradeService = gradeService;
@@ -51,8 +53,9 @@ public class GradeApi {
     }
 
 	@GetMapping("/{gradeNo}/statistics")
-	public GradeFindResponse findGrade(@PathVariable int gradeNo) {
-		return gradeService.findGrade(gradeNo);
+	public ResponseEntity<GradeStatisticsFindResponse> findGrade(@PathVariable int gradeNo) {
+		GradeStatisticsFindResponse response = coreGradeService.findGradeStatistics(gradeNo);
+		return ResponseEntity.ok(response);
 	}
 
 	@PatchMapping("/{gradeNo}/salaries")
