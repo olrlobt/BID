@@ -3,10 +3,10 @@ package com.ssafy.bid.domain.grade.dto;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class GradePeriodsFindResponse {
 	private int no;
@@ -20,9 +20,9 @@ public class GradePeriodsFindResponse {
 		LocalTime startPeriod,
 		LocalTime endPeriod
 	) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
 		this.no = no;
 		this.sequence = sequence;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
 		this.startPeriod = startPeriod.format(formatter);
 		this.endPeriod = endPeriod.format(formatter);
 	}

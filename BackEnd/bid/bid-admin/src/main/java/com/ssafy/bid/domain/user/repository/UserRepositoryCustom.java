@@ -1,7 +1,5 @@
 package com.ssafy.bid.domain.user.repository;
 
-import com.ssafy.bid.domain.user.dto.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -18,13 +16,13 @@ import com.ssafy.bid.domain.user.dto.StudentsResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
 
 public interface UserRepositoryCustom {
-    List<StudentsResponse> findStudents(int gradeNo);
+	List<StudentsResponse> findStudents(int gradeNo);
 
-    List<UserCouponsResponse> findUserCoupons(int userNo);
+	List<UserCouponsResponse> findUserCoupons(int userNo);
 
-    List<AccountsResponse> findAccounts(int userNo, StudentRequest studentRequest);
+	List<AccountsResponse> findAccounts(int userNo, StudentRequest studentRequest);
 
-    Optional<StudentResponse> findStudent(int userNo);
+	Optional<StudentResponse> findStudent(int userNo);
 
 	List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest);
 

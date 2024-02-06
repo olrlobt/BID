@@ -50,11 +50,11 @@ public class UserServiceImpl implements UserService {
 		StudentResponse studentResponse = userRepository.findStudent(userNo)
 				.orElseThrow(() -> new IllegalArgumentException("일치하는 회원정보가 없습니다."));//TODO: 글로벌 예외처리
 
-        studentResponse.setCouponsResponses(userCouponsResponses);
-        studentResponse.setAccountsResponses(accountsResponses);
+		studentResponse.setCouponsResponses(userCouponsResponses);
+		studentResponse.setAccountsResponses(accountsResponses);
 
-        return studentResponse;
-    }
+		return studentResponse;
+	}
 
 	@Override
 	@Transactional(readOnly = true)

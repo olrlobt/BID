@@ -9,6 +9,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class CouponListResponse {
 
-	private List<CouponResponse> registeredCoupons;
-	private List<CouponResponse> unregisteredCoupons;
+	private List<CouponResponse> coupons;
 }
