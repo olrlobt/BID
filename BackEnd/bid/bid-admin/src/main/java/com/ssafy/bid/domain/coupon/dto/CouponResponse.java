@@ -15,7 +15,8 @@ public class CouponResponse {
 	private CouponStatus couponStatus;
 
 	@Builder
-	public CouponResponse(Integer no, String name, String description, Integer gradeNo, Integer startPrice, CouponStatus couponStatus) {
+	public CouponResponse(Integer no, String name, String description, Integer gradeNo, Integer startPrice,
+		CouponStatus couponStatus) {
 		this.no = no;
 		this.name = name;
 		this.description = description;
