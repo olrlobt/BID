@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState, useMemo } from "react";
 import styled from "./BidPage.module.css";
 import WriterButton from "../../Component/Bid/WriterButton";
 import SettingButton from "../../Component/Common/SettingButton";
@@ -14,18 +14,11 @@ import { couponSelector } from "../../Store/couponSlice";
 import { productSelector } from "../../Store/productSlice";
 import { useDispatch } from "react-redux";
 import { DragDropContext } from "react-beautiful-dnd";
+import { getCouponListApi } from "../../Apis/CouponApis";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
 
 export default function BidPage(){
-
-  const dummyCoupons = [
-    {no: 1, name: '자유 이용 쿠폰', description: '원하는 무엇으로든 사용할 수 있는 쿠폰이에요!', startPrice: 200, selected: false},
-    {no: 2, name: '청소 역할 쿠폰', description: '이번 달 청소 역할은 꼭 먼저 정해야지! 청소 역할을 먼저 정해봐요', startPrice: 150, selected: false},
-    {no: 3, name: '1일 자리 쿠폰', description: '오늘 하루 내가 원하는 자리에 앉을 수 있는 쿠폰이에요!', startPrice: 170, selected: false},
-    {no: 4, name: '1인 1역 쿠폰', description: '원하는 무엇으로든 사용할 수 있는 쿠폰이에요!', startPrice: 130, selected: true},
-    {no: 5, name: '도서 이용 쿠폰', description: '이번 달 청소 역할은 꼭 먼저 정해야지! 청소 역할을 먼저 정해봐요', startPrice: 70, selected: true},
-    {no: 6, name: '자유시간 쿠폰', description: '오늘 하루 내가 원하는 자리에 앉을 수 있는 쿠폰이에요!', startPrice: 120, selected: true},
-    {no: 7, name: '고양이 쿠폰', description: '오늘 하루 내가 원하는 자리에 앉을 수 있는 쿠폰이에요!', startPrice: 300, selected: true},
-  ];
 
   const dummyProducts = [
     {
@@ -137,10 +130,12 @@ export default function BidPage(){
       createdAt: new Date('2022-5-20 10:30:20').toJSON()
     }
   ]
+  
+  const reduxCoupons = useSelector(couponSelector);
+  const queryClient = useQueryClient();
 
   const [isTeacher, setIsTeacher] = useState(true);
-  const [selectedCoupons, setSelectedCoupons] = useState([]);
-  const [notSelectedCoupons, setNotSelectedCoupons] = useState([]); 
+  const [coupons, setCoupons] = useState(reduxCoupons);
   const [productFilter, setProductFilter] = useState('전체');
   const [keyword, setKeyword] = useState('');
 
@@ -148,50 +143,70 @@ export default function BidPage(){
   const { openModal } = useModal();
   const { initCoupons } = useCoupons();
   const { initProducts } = useProducts();
-  const coupons = useSelector(couponSelector);
   const products = useSelector(productSelector);
-  
-  // let notSelected = [];
-  // let selected = [];
   let filteredProducts = [];
 
+  /** 경매 카테고리 초기 설정 */
   if(products !== null) {
     if(productFilter === '전체'){
-      if(keyword === ''){
-        filteredProducts = [...products];
-      }
+      if(keyword === ''){ filteredProducts = [...products]; }
       else{
         filteredProducts = products.filter((product) => product.title.includes(keyword));
       }
     }
     else{
-      if(keyword === ''){
-        filteredProducts = products.filter((product) => product.goodsType === productFilter);
-      }
+      if(keyword === ''){ filteredProducts = products.filter((product) => product.goodsType === productFilter); }
       else{
         filteredProducts = products.filter((product) => product.goodsType === productFilter && product.title.includes(keyword));
 
       }
     }
   }
+  
+  /** redux에 저장된 값으로 쿠폰 목록 세팅 */
+  useEffect(() => {
+    setCoupons(reduxCoupons);
+  }, [reduxCoupons]);
 
   useEffect(() => {
-    initCoupons({ couponList: dummyCoupons });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     initProducts({ productList: dummyProducts });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  useLayoutEffect(() => {
-    if(coupons!==null){
-    let copyCoupons = [...coupons];
-    let selected = copyCoupons.filter((coupon) => coupon.selected===true);
-    setSelectedCoupons(selected);
-    let notSelected = copyCoupons.filter((coupon) => coupon.selected===false);
-    setNotSelectedCoupons(notSelected);
-    }
-  }, [coupons]);
+  /** 쿠폰 목록 쿼리 */
+  useQuery({
+    queryKey: ['couponList'],
+    queryFn: () => 
+      getCouponListApi(1).then((res) => {
+        if(res.data !== undefined){
+          initCoupons({ couponList: res.data.coupons });
+        }
+        return res.data;
+      }),
+  });
   
+  /** 경매 포함/제외 쿠폰 구분 */
+  const { unregisteredCoupons, registeredCoupons } = useMemo(() => {
+    const unregisteredCoupons = coupons && coupons.filter((coupon) => coupon.couponStatus==='UNREGISTERED');
+    const registeredCoupons = coupons && coupons.filter((coupon) => coupon.couponStatus==='REGISTERED');
+    return { unregisteredCoupons, registeredCoupons };
+  }, [coupons]); 
+
+  /** 쿠폰 경매 포함 쿼리 */
+  const registerCouponQuery = useMutation({
+    mutationKey: ['includeCoupon'],
+    mutationFn: (couponNo) => registerCouponApi(1, couponNo),
+    onSuccess: () => { queryClient.invalidateQueries('couponList'); },
+    onError: (error) => { console.log(error); }
+  });
+
+  /** 쿠폰 경매 제외 쿼리 */
+  const unregisterCouponQuery = useMutation({
+    mutationKey: ['excludeCoupon'],
+    mutationFn: (couponNo) => unregisterCouponApi(1, couponNo),
+    onSuccess: () => { queryClient.invalidateQueries('couponList'); },
+    onError: (error) => { console.log(error); }
+  }); 
 
 
   /** 게시자 종류를 toggle하는 함수 */
@@ -217,19 +232,30 @@ export default function BidPage(){
 
   /** 쿠폰을 드래그 해서 옮길 때 실행되는 함수 */
   const onDragEnd = ({source, destination}) => {
-    if(destination===null) { return; }
-    let copyCoupons = [...coupons];
-    const destSelected = JSON.parse(destination.droppableId);
-    if(JSON.parse(source.droppableId) === destSelected) { return; }
-    copyCoupons = copyCoupons.map((coupon) =>
-      coupon.no === source.index ?
-      {...coupon, selected: destSelected} :
-      coupon
-      );
-    initCoupons({ couponList: copyCoupons });
+    console.log(source);
+    console.log(destination);
+    if(!destination || source.droppableId===destination.droppableId){ return; }
+    if(JSON.parse(destination.droppableId)){
+      registerCouponQuery.mutate(source.index);
+    }
+    else{
+      unregisterCouponQuery.mutate(source.index);
+    }
+
+    // if(destination===null) { return; }
+    // let copyCoupons = [...coupons];
+    // const destSelected = JSON.parse(destination.droppableId);
+    // if(JSON.parse(source.droppableId) === destSelected) { return; }
+    // copyCoupons = copyCoupons.map((coupon) =>
+    //   coupon.no === source.index ?
+    //   {...coupon, selected: destSelected} :
+    //   coupon
+    //   );
+    // initCoupons({ couponList: copyCoupons });
   }
 
   return (
+    <>
     <div className = {styled.bidSection}>
       <div className = {styled.bidHeader}>
         <div>
@@ -251,7 +277,7 @@ export default function BidPage(){
             onClick = {() =>
               openModal({
                 type: 'newCoupon',
-                props: ['새 쿠폰 등록',] })
+                props: ['새 쿠폰 등록', queryClient] })
               }
             svg = {AddIcon}
             text = '새 쿠폰 등록' 
@@ -314,14 +340,14 @@ export default function BidPage(){
                   <div className = {styled.couponListTitle}>미등록 쿠폰</div>
                   <CouponList
                     title = 'false'
-                    coupons = {notSelectedCoupons}
+                    coupons = {unregisteredCoupons? unregisteredCoupons: []}
                   />
                 </div>
                 <div>
                   <div className = {styled.couponListTitle}>등록된 쿠폰</div>
                   <CouponList
                     title= 'true'
-                    coupons = {selectedCoupons}
+                    coupons = {registeredCoupons? registeredCoupons: []}
                   />
                 </div>
               </DragDropContext>
@@ -373,5 +399,6 @@ export default function BidPage(){
         }
       </div>
     </div>
+    </>
   );
 }
