@@ -58,6 +58,7 @@ public class Grade extends BaseEntity {
 		this.schoolCode = schoolCode;
 		this.year = year;
 		this.classRoom = classRoom;
+	}
 
 	@Embedded
 	private ExpenditureStatistics expenditureStatistics;
