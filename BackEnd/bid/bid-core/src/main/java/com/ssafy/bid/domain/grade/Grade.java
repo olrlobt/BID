@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import com.ssafy.bid.domain.common.BaseEntity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -52,6 +53,12 @@ public class Grade extends BaseEntity {
 	 */
 	@NotNull
 	private Integer userNo;
+
+	@Embedded
+	private ExpenditureStatistics expenditureStatistics;
+
+	@Embedded
+	private BiddingStatistics biddingStatistics;
 
 	public void modifySalary(int salary) {
 		this.salary = salary;
