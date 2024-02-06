@@ -1,53 +1,67 @@
 import React,{useState} from "react";
 import styled from "./LoginPage.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import Logo from '../../Asset/Image/LoginLogo.png';
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../Store/UserSlice";
+import useUser from "../../hooks/useUser";
+import { loginUserApi } from "../../Apis/UserApis";
+import { useMutation } from "@tanstack/react-query";
 
 function LoginPage() {
 
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
-
-
-  const {loading, error} = useSelector((state)=>state.user)
-
-  const dispatch = useDispatch()
+  const { loginUser } = useUser();
   const navigate = useNavigate()
+
+
+  /** 로그인 쿼리 */
+  const loginUserQuery = useMutation({
+    mutationKey: ['loginUser'],
+    mutationFn: (userCredentials) => loginUserApi( userCredentials),
+    onSuccess: (data) => {
+      loginUser(data);
+      navigate('/');
+      console.log(data)
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  /** 로그인 버튼 */
   const handleLoginEvent = (e) => {
     e.preventDefault()
-    let userCredentials={
-      id, password
+    let userCredentials = {
+      id, 
+      password
     }
-    dispatch(loginUser(userCredentials)).then((result)=>{
-      if (result.payload){
-        setId('')
-        setPassword('')
-        navigate('/')
-      }
-    })
+    console.log(userCredentials)
+    loginUserQuery.mutate(userCredentials);
   }
-
+  
   return (
     <section className={styled.back}>
       <div className={styled.logo}>
         <img src={Logo} alt="로고" />
       </div>
       <div className={styled.content}>
-        <form className={styled.contentInput} onSubmit={handleLoginEvent}>
-          <input type="id" value={id} 
-          onChange={(e)=> setId(e.target.value)}
-          placeholder="아이디" />
-          <input type="password" value={password} 
-          onChange={(e)=> setPassword(e.target.value)}
-          placeholder="비밀번호" />
-          <button type="submit" disabled={loading}>
-            {loading?'Loading..':'LOGIN'}
-            </button>
-            {error&&(
-              <div>{error}</div>
-            )}
+        <form className={styled.contentInput} 
+        onSubmit={handleLoginEvent}>
+          <input 
+            type="id" 
+            value={id} 
+            onChange={(e)=> setId(e.target.value)}
+            placeholder="아이디" 
+          />
+          <input 
+            type="password" 
+            value={password} 
+            onChange={(e)=> setPassword(e.target.value)}
+            placeholder="비밀번호"
+          />
+          <button type="submit">
+            LOGIN
+          </button>
           <div className={styled.ContentOption}>
             <div className={styled.ContentOptions}>
               <Link to="/find_id" className={styled.findIdLink}>

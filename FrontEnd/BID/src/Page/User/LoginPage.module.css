@@ -53,7 +53,7 @@
     box-sizing: border-box;
 }
 
-.contentInput button {
+.contentInput button{
     width: 250px;
     height: 45px;
     margin-top: 1.5rem;
@@ -72,6 +72,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    margin-top: 0.5vw;
+    flex-direction: column;
 }
 
 .ContentOptions input {
@@ -127,19 +129,16 @@
 }
 
 
-.joinLink {
+.joinLink, .findIdBtn {
     width: 250px;
     height: 45px;
     margin-top: 1.5rem;
     font-size: 1.3rem;
-    background-color: #FFD43A;
     color: white;
+    background-color: #FFD43A;
     border-radius: .3rem;
-    border: none;
-    cursor: pointer;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
 }
