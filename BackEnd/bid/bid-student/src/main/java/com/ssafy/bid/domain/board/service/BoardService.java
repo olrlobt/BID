@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.board.Bidding;
 import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Reply;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
@@ -81,11 +82,18 @@ public class BoardService {
 	}
 
 	@Transactional
-	public void bidBoard(BiddingCreateRequest biddingCreateRequest, int boardNo, int gradeNo, int userNo) {
+	public void bidBoard(BiddingCreateRequest biddingCreateRequest, long boardNo, int gradeNo, int userNo) {
 
 		biddingCreateRequest.setBoardNo(boardNo);
 		biddingCreateRequest.setGradeNo(gradeNo);
 		biddingCreateRequest.setUserNo(userNo);
 		biddingRepository.save(biddingCreateRequest.toEntity());
+	}
+
+	@Transactional
+	public void rebidBoard(BiddingCreateRequest biddingCreateRequest, long boardNo, int gradeNo, int userNo) {
+
+		Bidding userBidding = biddingRepository.findByUserNoAndBoardNo(userNo, boardNo);
+		userBidding.rebidding(biddingCreateRequest.getPrice());
 	}
 }

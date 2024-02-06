@@ -88,11 +88,20 @@ public class BoardApi {
 	}
 
 	@PostMapping("/boards/{boardNo}/bid")
-	public ResponseEntity<?> bidBoard(@PathVariable int boardNo, @RequestBody BiddingCreateRequest biddingCreateRequest) {
+	public ResponseEntity<?> bidBoard(@PathVariable long boardNo, @RequestBody BiddingCreateRequest biddingCreateRequest) {
 
 		int userNo = 1;
 		int gradeNo = 1;
 		boardService.bidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
+	@PatchMapping("/boards/{boardNo}/bid")
+	public ResponseEntity<?> rebidBoard(@PathVariable long boardNo, @RequestBody BiddingCreateRequest biddingCreateRequest) {
+
+		int userNo = 1;
+		int gradeNo = 1;
+		boardService.rebidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
+		return ResponseEntity.noContent().build();
 	}
 }
