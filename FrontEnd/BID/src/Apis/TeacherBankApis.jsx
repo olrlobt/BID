@@ -13,3 +13,13 @@ export const TeacherBankApis = axios.create({
 export const viewSavingList = async () => {
   return await TeacherBankApis.get("/1/savings");
 };
+
+/**
+ * 적금 정보 편집
+ * @param gradeNo 학급 넘버
+ */
+
+export const updateSavingList = (savingList) => {
+  console.log(savingList);
+  return TeacherBankApis.patch("/1/savings", { savingRequests: savingList });
+};
