@@ -9,17 +9,16 @@ import SubmitButton from "../Common/SubmitButton";
 import Comment from "./Comment";
 
 export default function ViewProductModal({ onClose, ...props }) {
-  // 0  no,
-  // 1  title,
-  // 2  contents,
-  // 3  imgUrl,
-  // 4  goodsType,
-  // 5  goodsName,
-  // 6  userName,
-  // 7  startPrice,
-  // 8  avgPrice,
-  // 9  endTime,
-  // 10 createdAt,
+  // 0 no,
+  // 1 title,
+  // 2 description,
+  // 3 goodsImgUrl,
+  // 4 category,
+  // 5 userName,
+  // 6 startPrice,
+  // 7 averagePrice,
+  // 8 gradePeriodNo,
+  // 9 createdAt,
 
   const [form, setForm] = useState({
     price: 0,
@@ -48,7 +47,7 @@ export default function ViewProductModal({ onClose, ...props }) {
       <div className={styled.header}>
         <div className={styled.top}>
           <h1>{props[1]}</h1>
-          <span>{props[6]}</span>
+          <span>{props[5]}</span>
         </div>
         <div className={styled.info}>
           <div className = {styled.infoButton}>
@@ -63,7 +62,7 @@ export default function ViewProductModal({ onClose, ...props }) {
           </div>
           <div className = {styled.infoButton}>
             <RoundedInfoButton
-              value = { props[9] }
+              value = { props[8] }
               unit = '교시'
               textColor = 'white'
               borderColor = '#BBBD32'
@@ -73,7 +72,7 @@ export default function ViewProductModal({ onClose, ...props }) {
           </div>
           <div className = {styled.infoButton}>
             <RoundedInfoButton
-              value = { props[7] }
+              value = { props[6] }
               unit = '비드'
               textColor = '#F23F3F'
               borderColor = '#F23F3F'
@@ -89,7 +88,7 @@ export default function ViewProductModal({ onClose, ...props }) {
           </div>
           <div className = {styled.infoButton}>
             <RoundedInfoButton
-              value = { props[8] }
+              value = { props[7] }
               unit = '비드'
               textColor = 'white'
               borderColor = '#F23F3F'
