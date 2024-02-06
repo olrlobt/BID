@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import styled from "./BidPage.module.css";
 import WriterButton from "../../Component/Bid/WriterButton";
 import SettingButton from "../../Component/Common/SettingButton";
