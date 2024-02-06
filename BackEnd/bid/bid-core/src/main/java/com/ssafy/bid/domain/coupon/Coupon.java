@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -44,6 +45,17 @@ public class Coupon extends BaseEntity {
 	 */
 	@NotNull
 	private Integer gradeNo;
+
+	@Builder
+	private Coupon(Integer no, String name, String description, CouponStatus couponStatus, Integer startPrice,
+		Integer gradeNo) {
+		this.no = no;
+		this.name = name;
+		this.description = description;
+		this.couponStatus = couponStatus;
+		this.startPrice = startPrice;
+		this.gradeNo = gradeNo;
+	}
 
 	public void register() {
 		this.couponStatus = CouponStatus.REGISTERED;

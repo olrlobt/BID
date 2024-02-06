@@ -2,13 +2,18 @@ package com.ssafy.bid.domain.coupon.api;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bid.domain.coupon.dto.CouponCreateRequest;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
 import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 import com.ssafy.bid.domain.coupon.service.CouponService;
@@ -19,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class CouponApi {
 
 	private final CouponService couponService;
@@ -26,6 +32,20 @@ public class CouponApi {
 	@GetMapping("/{gradeNo}/coupons")
 	public ResponseEntity<CouponListResponse> findCoupons(@PathVariable int gradeNo) {
 		return ResponseEntity.ok(couponService.findCoupons(gradeNo));
+	}
+
+	@PostMapping("/{gradeNo}/coupons")
+	public ResponseEntity<?> addCoupon(@PathVariable int gradeNo,
+		@RequestBody CouponCreateRequest couponCreateRequest) {
+		couponService.addCoupon(gradeNo, couponCreateRequest);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
+	@DeleteMapping("/{gradeNo}/coupons/{couponNo}")
+	public ResponseEntity<?> deleteCoupon(@PathVariable int gradeNo,
+		@PathVariable int couponNo) {
+		couponService.deleteCoupon(couponNo);
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/{gradeNo}/user-coupons")
