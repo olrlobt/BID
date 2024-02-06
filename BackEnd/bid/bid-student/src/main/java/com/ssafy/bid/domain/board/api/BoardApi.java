@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
@@ -84,5 +85,14 @@ public class BoardApi {
 		@PathVariable int replyNo) {
 		boardService.deleteBoardReply(1, replyNo);
 		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping("/boards/{boardNo}/bid")
+	public ResponseEntity<?> bidBoard(@PathVariable int boardNo, @RequestBody BiddingCreateRequest biddingCreateRequest) {
+
+		int userNo = 1;
+		int gradeNo = 1;
+		boardService.bidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 }
