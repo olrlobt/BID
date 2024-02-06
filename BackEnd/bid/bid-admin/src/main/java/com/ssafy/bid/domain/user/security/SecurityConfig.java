@@ -19,13 +19,13 @@ import lombok.AllArgsConstructor;
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @AllArgsConstructor
 public class SecurityConfig {
-	private static final String[] AUTH_WHITELIST = {
-		"/**"
-	};
-	private final CustomUserDetailsService customUserDetailsService;
-	private final JwtUtil jwtUtil;
-	private final CustomAccessDeniedHandler accessDeniedHandler;
-	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private static final String[] AUTH_WHITELIST = {
+            "/login", "/join"
+    };
+    private final CustomUserDetailsService customUserDetailsService;
+    private final JwtUtil jwtUtil;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
