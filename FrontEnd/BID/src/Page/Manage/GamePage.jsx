@@ -11,7 +11,7 @@ export default function GamePage() {
   const ballList = useSelector(ballSelector);
 
   const { data: stuBalls } = useQuery({
-    queryKey: ["studentBall"],
+    queryKefinishGamey: ["studentBall"],
     queryFn: () =>
       viewStudentBalls().then((res) => {
         initBalls({ ballList: res.data });
