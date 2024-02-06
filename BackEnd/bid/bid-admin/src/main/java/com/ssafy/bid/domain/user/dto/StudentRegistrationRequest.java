@@ -13,16 +13,16 @@ public class StudentRegistrationRequest {
     private Integer gradeNo;
 
     public Student toEntity(PasswordEncoder passwordEncoder) {
-        return Student.builder()
-                .id(this.id)
-                .password(passwordEncoder.encode(this.password))
-                .name(this.name)
-                .schoolNo(this.schoolNo)
-                .gradeNo(this.gradeNo)
-                .birthDate(null)
-                .asset(0)
-                .ballCount(0)
-                .profileImgUrl(null)
-                .build();
+        return new Student(
+            this.id,
+            passwordEncoder.encode(this.password),
+            this.name,
+            this.schoolNo,
+            null,
+            0,
+            0,
+            null,
+            this.gradeNo
+        );
     }
 }
