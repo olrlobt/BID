@@ -4,7 +4,7 @@ import SubmitButton from "../../Component/Common/SubmitButton";
 import Reward from "../../Component/Reward/Reward";
 import SettingButton from "../../Component/Common/SettingButton";
 import SettingsIcon from '@mui/icons-material/Settings';
-import { getStudentList } from "../../Apis/StudentApis";
+import { getStudentListApi } from "../../Apis/StudentApis";
 import { getRewardListApi, addNewRewardApi, sendRewardApi } from "../../Apis/RewardApis";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -21,7 +21,7 @@ export default function RewardPage() {
   useQuery({
     queryKey: ['studentList'],
     queryFn: () => 
-      getStudentList().then((res) => {
+      getStudentListApi().then((res) => {
         if(res.data !== undefined) { setStudentList(res.data); }
         return res.data;
     }),
@@ -71,7 +71,6 @@ export default function RewardPage() {
     else if(e.target.comment.value===''){ console.log('리워드와 함께 전달할 코멘트를 입력해주세요'); }
     else{
       const rComment = e.target.comment.value;
-      console.log(rComment);
       const postData = {
         'no': rReward,
         'usersNos': rStudents,
