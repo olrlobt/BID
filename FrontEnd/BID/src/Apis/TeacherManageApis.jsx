@@ -40,3 +40,13 @@ export const updateSavingList = (savingList) => {
 export const viewStudentBalls = async () => {
   return await TeacherManageApis.get("/1/balls");
 };
+
+/**
+ * 학급 자리 공 개수 초기화
+ * @param gradeNo 학급 넘버
+ * @returns 학급 학생 공 개수
+ */
+
+export const resetStudentBalls = async () => {
+  return await TeacherManageApis.patch("/1/balls");
+};

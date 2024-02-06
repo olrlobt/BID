@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import useBalls from "../../hooks/useBalls";
 import html2canvas from "html2canvas";
+import { resetStudentBalls } from "../../Apis/TeacherManageApis";
+import { useMutation } from "@tanstack/react-query";
 
 export default function SeatGame() {
   const navigate = useNavigate();
@@ -94,6 +96,7 @@ export default function SeatGame() {
     if (pickList.length === 0) {
       alert("더 이상 뽑을 학생이 없습니다.");
       setIsBallOpen(false);
+      finishGame.mutate();
       // redux에 상태 업데이트 해주기
       removeBalls();
       return;
@@ -119,6 +122,18 @@ export default function SeatGame() {
     setPickList(pickList.filter((num) => num !== selectedNum));
     setSeatIndex(seatIndex + 1);
   };
+
+  const finishGame = useMutation({
+    mutationKey: ["resetBalls"],
+    mutationFn: () =>
+      resetStudentBalls()
+        .then(() => {
+          alert("게임이 성공적으로 끝났습니다.");
+        })
+        .catch(() => {
+          alert("에러가 발생했습니다.");
+        }),
+  });
 
   return (
     <section ref={captureRef} className={styled.seatGame}>
