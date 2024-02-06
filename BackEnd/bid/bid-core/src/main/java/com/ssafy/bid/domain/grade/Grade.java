@@ -53,9 +53,10 @@ public class Grade extends BaseEntity {
 	@NotNull
 	private Integer userNo;
 
-	public Grade(String schoolCode, Integer year, Integer classRoom) {
+	public Grade(String schoolCode, Integer year, Integer classRoom, Integer userNo) {
 		this.schoolCode = schoolCode;
 		this.year = year;
 		this.classRoom = classRoom;
+		this.userNo = userNo;
 	}
 }

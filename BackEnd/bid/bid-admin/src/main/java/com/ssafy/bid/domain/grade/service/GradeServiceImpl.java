@@ -40,7 +40,7 @@ public class GradeServiceImpl implements GradeService {
     @Override
     @Transactional
     public void createGrade(GradeCreationRequest request) {
-        Grade grade = new Grade(request.getSchoolCode(), request.getYear(), request.getClassRoom());
+        Grade grade = new Grade(request.getSchoolCode(), request.getYear(), request.getClassRoom(), request.getUserNo());
         gradeRepository.save(grade);
 
         School school = schoolRepository.findByCode(request.getSchoolCode())
