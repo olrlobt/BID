@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const TeacherBankApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
@@ -11,7 +11,7 @@ export const TeacherBankApis = axios.create({
  */
 
 export const viewSavingList = async () => {
-  return await TeacherBankApis.get('/1/savings');
+  return await TeacherBankApis.get("/1/savings");
 };
 
 /**
@@ -19,7 +19,7 @@ export const viewSavingList = async () => {
  * @param gradeNo 학급 넘버
  */
 
-export const updateSavingList = ({ savingList }) => {
+export const updateSavingList = (savingList) => {
   console.log(savingList);
-  return TeacherBankApis.patch('/1/savings', savingList);
+  return TeacherBankApis.patch("/1/savings", { savingRequests: savingList });
 };

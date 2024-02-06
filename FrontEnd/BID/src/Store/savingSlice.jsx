@@ -15,7 +15,18 @@ export const savingSlice = createSlice({
       const savingList = action.payload;
       state.savingList = savingList;
     },
+    changeSavingList: (state, action) => {
+      action.payload.forEach(({ no, depositPrice, interestRate }) => {
+        const savingItem = state.savingList.find(
+          (item) => item.savingNo === no
+        );
+        if (savingItem) {
+          savingItem.savingDepositPrice = depositPrice;
+          savingItem.savingInterestRate = interestRate;
+        }
+      });
+    },
   },
 });
 
-export const { initSavingList } = savingSlice.actions;
+export const { initSavingList, changeSavingList } = savingSlice.actions;
