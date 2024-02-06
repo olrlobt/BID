@@ -88,7 +88,8 @@ public class BoardApi {
 	}
 
 	@PostMapping("/boards/{boardNo}/bid")
-	public ResponseEntity<?> bidBoard(@PathVariable long boardNo, @RequestBody BiddingCreateRequest biddingCreateRequest) {
+	public ResponseEntity<?> bidBoard(@PathVariable long boardNo,
+		@RequestBody BiddingCreateRequest biddingCreateRequest) {
 
 		int userNo = 1;
 		int gradeNo = 1;
@@ -97,7 +98,8 @@ public class BoardApi {
 	}
 
 	@PatchMapping("/boards/{boardNo}/bid")
-	public ResponseEntity<?> rebidBoard(@PathVariable long boardNo, @RequestBody BiddingCreateRequest biddingCreateRequest) {
+	public ResponseEntity<?> rebidBoard(@PathVariable long boardNo,
+		@RequestBody BiddingCreateRequest biddingCreateRequest) {
 
 		int userNo = 1;
 		int gradeNo = 1;
