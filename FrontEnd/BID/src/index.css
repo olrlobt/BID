@@ -1,12 +1,13 @@
 @font-face {
-  font-family: 'Pretendard-Regular';
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
   font-weight: 400;
   font-style: normal;
 }
 
 body {
-	font-family: 'Pretendard-Regular';
+  font-family: "Pretendard-Regular";
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-use-select: none;
@@ -31,11 +32,11 @@ input, button{
   --color-point-yellow: #ffd43a;
   --color-point-warning: #ff3f3f;
   --color-divide: #868484;
-  --font-logo: 'Montserrat', sans-serif;
+  --font-logo: "Montserrat", sans-serif;
 }
 
 * {
-  font-family: 'Pretendard-Regular';
+  font-family: "Pretendard-Regular";
   margin: 0;
   padding: 0;
   list-style-type: none;
@@ -45,8 +46,8 @@ input, button{
 body {
   margin: 0;
   border: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -54,7 +55,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -66,4 +67,8 @@ a {
 button {
   border: none;
   background-color: transparent;
+}
+
+input {
+  font-family: "Pretendard-Regular";
 }
