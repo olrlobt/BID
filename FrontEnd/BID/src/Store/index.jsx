@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { modalSlice } from './modalSlice';
 import { productSlice } from './productSlice';
-import userReducer from './UserSlice';
+import { userSlice } from './userSlice';
 import { couponSlice } from './couponSlice';
 import { ballSlice } from './ballSlice';
 import { bidSlice } from './bidSlice';
@@ -9,7 +9,7 @@ import { moneySlice } from './moneySlice';
 import { bidCountSlice } from './bidCountSlice';
 
 const rootReducer = combineReducers({
-  user: userReducer,
+  user: userSlice.reducer,
   modal: modalSlice.reducer,
   coupons: couponSlice.reducer,
   seatBall: ballSlice.reducer,
