@@ -51,6 +51,8 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
         implementation 'org.springframework.boot:spring-boot-starter-batch'
+        implementation 'net.nurigo:sdk:4.2.7'
+        implementation 'org.apache.commons:commons-lang3'
         compileOnly 'org.projectlombok:lombok'
         runtimeOnly 'com.mysql:mysql-connector-j'
         annotationProcessor 'org.projectlombok:lombok'
