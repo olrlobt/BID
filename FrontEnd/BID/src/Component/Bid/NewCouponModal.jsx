@@ -1,44 +1,37 @@
 import React from 'react';
 import styled from './NewCouponModal.module.css';
-import { useState } from 'react';
 import Modal from '../Common/Modal';
 import SubmitButton from '../Common/SubmitButton';
-import useCoupons from "../../hooks/useCoupons";
+import { addNewCouponApi } from '../../Apis/CouponApis';
+import { useMutation } from '@tanstack/react-query';
 
 export default function NewCouponModal({ onClose, ...props }){
+  // const { addCoupon } = useCoupons();
 
-  const { addCoupon } = useCoupons();
+  /** 쿠폰 추가 쿼리 */
+  const addNewCouponQuery  = useMutation({
+    mutationKey: ['addNewCoupon'],
+    mutationFn: (form) => addNewCouponApi(1, form),
+    onSuccess: () => { props[1].invalidateQueries('couponList') },
+    onError: (error) => { console.log(error); }
+  })
 
-  const [form, setForm] = useState({
-    no: 10,
-    name: '',
-    description: '',
-    startPrice: 0,
-    selected: false,
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
-
+  /** 버튼 클릭 -> 쿠폰 추가 함수 */
   const addNewCoupon = (e) => {
     e.preventDefault();
-    if (form.name === '') {
+    if (e.target.name.value === '') {
       console.log('쿠폰 이름을 입력하세요');
-    } else if (form.desc === '') {
+    } else if (e.target.description.value === '') {
       console.log('쿠폰 설명을 입력하세요');
-    } else if (form.price === 0) {
+    } else if (e.target.startPrice.value === 0) {
       console.log('쿠폰 금액을 입력하세요');
-    } else{
-      // 데이터 저장
-
-      addCoupon({
-        newCoupon: form
-      });
+    } else {
+      const form = {
+        name: e.target.name.value,
+        description: e.target.description.value,
+        startPrice: e.target.startPrice.value,
+      };
+      addNewCouponQuery.mutate(form);
       onClose();
     }
   }
@@ -53,7 +46,6 @@ export default function NewCouponModal({ onClose, ...props }){
             id='couponName'
             name='name'
             type='text'
-            onChange={handleChange}
           />
         </div>
         <div className={styled.inputRow}>
@@ -62,7 +54,6 @@ export default function NewCouponModal({ onClose, ...props }){
             id='couponDesc'
             name='description'
             type='text'
-            onChange={handleChange}
           />
         </div>
         <div className={styled.inputRow}>
@@ -72,7 +63,6 @@ export default function NewCouponModal({ onClose, ...props }){
             name='startPrice'
             type='number'
             min={0}
-            onChange={handleChange}
           />
         </div>
         <SubmitButton
