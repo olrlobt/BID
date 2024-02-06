@@ -10,4 +10,5 @@ public class GradeCreationRequest {
     private Integer year;
     private Integer classRoom;
     private List<StudentsRegistrationDto> students;
+    private Integer userNo;
 }
