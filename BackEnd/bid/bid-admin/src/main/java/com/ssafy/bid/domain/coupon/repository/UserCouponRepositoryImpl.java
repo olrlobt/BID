@@ -26,7 +26,8 @@ public class UserCouponRepositoryImpl implements UserCouponCustomRepository {
 				student.no,
 				student.name,
 				coupon.no,
-				coupon.name
+				coupon.name,
+				coupon.startPrice
 			))
 			.from(userCoupon)
 			.innerJoin(student)
