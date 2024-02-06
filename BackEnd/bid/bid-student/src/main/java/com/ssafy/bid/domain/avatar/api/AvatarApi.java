@@ -2,6 +2,7 @@ package com.ssafy.bid.domain.avatar.api;
 
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.bid.domain.avatar.dto.UserAvatarModifyRequest;
 import com.ssafy.bid.domain.avatar.dto.UserAvatarsFindResponse;
 import com.ssafy.bid.domain.avatar.service.AvatarService;
+import com.ssafy.bid.domain.user.service.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,8 +30,11 @@ public class AvatarApi {
 	}
 
 	@PatchMapping("/avatars")
-	public void modifyUserAvatar(@RequestBody UserAvatarModifyRequest userAvatarModifyRequest) {
-		// TODO: SecurityUser
-		avatarService.modifyAvatar(2, userAvatarModifyRequest);
+	public void modifyUserAvatar(
+		@AuthenticationPrincipal CustomUserDetails customUserDetails,
+		@RequestBody UserAvatarModifyRequest userAvatarModifyRequest
+	) {
+		int userNo = customUserDetails.getUserInfo().getNo();
+		avatarService.modifyAvatar(userNo, userAvatarModifyRequest);
 	}
 }
