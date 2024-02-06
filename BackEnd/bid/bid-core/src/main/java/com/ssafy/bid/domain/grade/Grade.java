@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import com.ssafy.bid.domain.common.BaseEntity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,7 +49,7 @@ public class Grade extends BaseEntity {
 	private LocalTime transferPeriod;
 
 	/**
-	 * users : group(me) = 1 : N
+	 * users : grade(me) = 1 : N
 	 */
 	@NotNull
 	private Integer userNo;
@@ -58,5 +59,20 @@ public class Grade extends BaseEntity {
 		this.year = year;
 		this.classRoom = classRoom;
 		this.userNo = userNo;
+	}
+
+	@Embedded
+	private ExpenditureStatistics expenditureStatistics;
+
+	@Embedded
+	private BiddingStatistics biddingStatistics;
+
+	public void modifySalary(int salary) {
+		this.salary = salary;
+	}
+
+	public void modifySavingTime(LocalTime transferAlertPeriod, LocalTime transferPeriod) {
+		this.transferAlertPeriod = transferAlertPeriod;
+		this.transferPeriod = transferPeriod;
 	}
 }

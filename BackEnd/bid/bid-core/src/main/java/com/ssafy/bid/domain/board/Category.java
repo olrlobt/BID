@@ -1,5 +1,7 @@
 package com.ssafy.bid.domain.board;
 
+import java.util.Arrays;
+
 import lombok.Getter;
 
 @Getter
@@ -15,4 +17,15 @@ public enum Category {
 	private Category(String category) {
 		this.category = category;
 	}
+
+	public static Category from(String input) {
+
+		String inputUpperCase = input.toUpperCase();
+
+		return Arrays.stream(Category.values())
+			.filter(category -> category.toString().equals(inputUpperCase))
+			.findFirst()
+			.orElseThrow();
+	}
+
 }
