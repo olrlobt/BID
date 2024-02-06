@@ -29,8 +29,8 @@ public class CouponService {
 
 	@Transactional(readOnly = true)
 	public CouponListResponse findCoupons(int gradeNo) {
-		List<CouponResponse> registeredCoupons = couponRepository
-			.findByGradeNoAndCouponStatus(gradeNo, CouponStatus.REGISTERED)
+		List<CouponResponse> coupons = couponRepository
+			.findByGradeNo(gradeNo)
 			.stream()
 			.map(coupon -> CouponResponse.builder()
 				.no(coupon.getNo())
@@ -38,22 +38,11 @@ public class CouponService {
 				.description(coupon.getDescription())
 				.gradeNo(coupon.getGradeNo())
 				.startPrice(coupon.getStartPrice())
+				.couponStatus(coupon.getCouponStatus())
 				.build()
 			).toList();
 
-		List<CouponResponse> unregisteredCoupons = couponRepository
-			.findByGradeNoAndCouponStatus(gradeNo, CouponStatus.UNREGISTERED)
-			.stream()
-			.map(coupon -> CouponResponse.builder()
-				.no(coupon.getNo())
-				.name(coupon.getName())
-				.description(coupon.getDescription())
-				.gradeNo(coupon.getGradeNo())
-				.startPrice(coupon.getStartPrice())
-				.build()
-			).toList();
-
-		return new CouponListResponse(registeredCoupons, unregisteredCoupons);
+		return new CouponListResponse(coupons);
 	}
 
 	@Transactional(readOnly = true)
