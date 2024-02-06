@@ -31,7 +31,6 @@ public class SecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final CoreTokenBlacklistRepository coreTokenBlacklistRepository;
-	private final CorsConfigurationSource corsConfigurationSource;
 	private final CustomUserDetailsService customUserDetailsService;
 
 	@Bean
@@ -39,10 +38,11 @@ public class SecurityConfig {
 		http
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(CsrfConfigurer::disable)
-			.cors(cors -> cors.configurationSource(corsConfigurationSource))
+			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.sessionManagement(configuerer -> configuerer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize ->
 				authorize
+					.requestMatchers("/avatars").authenticated()
 					.requestMatchers("/**").permitAll()
 					.anyRequest().authenticated()
 			)
@@ -58,8 +58,7 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
+	private CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(
 			Arrays.asList("http://i10a306.p.ssafy.io", "https://localhost:3000", "https://i10a306.p.ssafy.io"));
