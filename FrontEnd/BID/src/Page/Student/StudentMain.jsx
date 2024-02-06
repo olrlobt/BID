@@ -1,52 +1,64 @@
 import React from "react";
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, CameraControls, PerspectiveCamera} from '@react-three/drei';
-import {Classroom,Box} from "../../Component/Models/Classroom";
-import BlackBoard from "../../Component/Models/BlackBoard";
-import { Cactus } from "../../Component/Models/Cactus";
-import Alarm from "../../Component/Models/Alarm";
-import { BiddingPlace } from "../../Component/Models/BiddingPlace";
-import { Bank } from "../../Component/Models/Bank";
-// import { BasicBean } from "../../Component/Character/BasicBean";
-import { SnowBean } from "../../Component/Character/SnowBean";
+import Models from "./Models";
+import { Link } from "react-router-dom";
+// import styled from "./StudentMain.module.css";
+import { socket } from "../../Component/Models/SocketManager";
+import { useState } from "react";
 
 function StudentMain() {
+
+    const [chatMessage, setChatMessage] = useState("");
+    const sendChatMessage = () => {
+        if (chatMessage.length > 0) {
+        socket.emit("chatMessage", chatMessage);
+        setChatMessage("");
+        }
+    };
+    
     return (
         <>
-      <Canvas 
-       style={{ width: '100%', height: '100vh' }}
-       camera={{ position: [12, 10, 20], fov: 20 }} 
-       >
-        <CameraControls minPolarAngle={2} maxPolarAngle={Math.PI / 2} />
-        <directionalLight position={[1, 1, 1]} intensity={2} />
-        <ambientLight intensity={2} />
-            <group scale={20} position={[0, 0, 0]}>
-            <Classroom />
-            <BlackBoard />
-            <Cactus />
-            <Alarm />
-            <Bank />
-            <BiddingPlace />
-            {/* <BasicBean /> */}
-            <SnowBean />
-            <Box position={[3, 1.5, -2]} scale={0.15} />
-            </group>
-            <OrbitControls
-                makeDefault
-                minAzimuthAngle={2.4}
-                maxAzimuthAngle={2.6}
-                minPolarAngle={Math.PI / 2.5}
-                maxPolarAngle={Math.PI / 2.7}
-                enableZoom={true}
-                enablePan={true}
-                enableRotate={false} // 회전 비활성화
-                zoomSpeed={0.3}
-            />
-            <PerspectiveCamera makeDefault position={[0, 10, 190]} />
-    
-        </Canvas>
+        
+        <Link to="/studentmain/:studentId/">
+            <button>캐릭터 이미지</button>
+          </Link>
+        <div>
+            안녕하세요!
+        </div>
+        <button>
+            출석
+        </button>
+        <Models />
+        <input type="text" 
+        className=""
+        placeholder="Message..."
+        onKeyDown={(e) => {
+            if (e.key === "Enter") {
+                sendChatMessage()
+            } 
+        }}
+        value={chatMessage}
+        onChange={(e) => setChatMessage(e.target.value)} 
+        />
+        <button
+        onClick={sendChatMessage}
+        >
+        <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+              />
+            </svg>
+        </button>
         </>
-    )
+    );
 }
 
 export default StudentMain;
