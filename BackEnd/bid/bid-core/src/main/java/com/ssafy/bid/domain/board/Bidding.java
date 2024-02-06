@@ -60,4 +60,9 @@ public class Bidding extends BaseEntity {
 		this.boardNo = boardNo;
 		this.gradeNo = gradeNo;
 	}
+
+	public void rebidding(int price){
+		this.price = price;
+	}
+
 }
