@@ -9,6 +9,6 @@ export const StudentApis = axios.create({
  * @param gradeNo 학급 넘버
  * @returns 학급 내 학생 목록
  */
-export const getStudentList = async () => {
+export const getStudentListApi = async () => {
   return await StudentApis.get(`/1/users`);
 };
