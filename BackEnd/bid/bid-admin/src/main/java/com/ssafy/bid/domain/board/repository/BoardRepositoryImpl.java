@@ -32,6 +32,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 			.innerJoin(student).on(board.userNo.eq(student.no))
 			.where(student.gradeNo.eq(gradeNo))
 			.orderBy(board.createdAt.desc())
+			.limit(20)
 			.fetch();
 	}
 }
