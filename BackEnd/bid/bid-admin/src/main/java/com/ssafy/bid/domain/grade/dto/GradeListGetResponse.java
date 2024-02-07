@@ -3,13 +3,18 @@ package com.ssafy.bid.domain.grade.dto;
 import lombok.Getter;
 
 @Getter
-public class GradeDTO {
-	private Integer no;
+public class GradeListGetResponse {
+	private int no;
 	private String schoolName;
-	private Integer year;
-	private Integer classRoom;
+	private int year;
+	private int classRoom;
 
-	public GradeDTO(Integer no, String schoolName, Integer year, Integer classRoom) {
+	public GradeListGetResponse(
+		int no,
+		String schoolName,
+		int year,
+		int classRoom
+	) {
 		this.no = no;
 		this.schoolName = schoolName;
 		this.year = year;

@@ -17,9 +17,9 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.board.BiddingStatus;
 import com.ssafy.bid.domain.coupon.UsageStatus;
-import com.ssafy.bid.domain.grade.dto.ExpenditureStatisticsFindResponse;
-import com.ssafy.bid.domain.grade.dto.GradeStatisticsFindResponse;
-import com.ssafy.bid.domain.grade.dto.WinningBiddingStatisticsFindResponse;
+import com.ssafy.bid.domain.grade.dto.ExpenditureStatisticsGetResponse;
+import com.ssafy.bid.domain.grade.dto.GradeStatisticsGetResponse;
+import com.ssafy.bid.domain.grade.dto.WinningBiddingStatisticsGetResponse;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.DealType;
 
@@ -31,10 +31,10 @@ public class CoreGradeRepositoryCustomImpl implements CoreGradeRepositoryCustom 
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public Optional<GradeStatisticsFindResponse> findGradeStatisticsByGradeNo(int gradeNo) {
+	public Optional<GradeStatisticsGetResponse> findGradeStatisticsByGradeNo(int gradeNo) {
 		return Optional.ofNullable(
 			queryFactory
-				.select(Projections.constructor(GradeStatisticsFindResponse.class,
+				.select(Projections.constructor(GradeStatisticsGetResponse.class,
 						ExpressionUtils.as(
 							JPAExpressions
 								.select(userCoupon.no.count())
@@ -79,9 +79,9 @@ public class CoreGradeRepositoryCustomImpl implements CoreGradeRepositoryCustom 
 	}
 
 	@Override
-	public List<ExpenditureStatisticsFindResponse> findAllBiddingDealTypeStatistics() {
+	public List<ExpenditureStatisticsGetResponse> findAllBiddingDealTypeStatistics() {
 		return queryFactory
-			.select(Projections.constructor(ExpenditureStatisticsFindResponse.class,
+			.select(Projections.constructor(ExpenditureStatisticsGetResponse.class,
 					account.price.sum(),
 					account.dealType,
 					account.gradeNo
@@ -97,7 +97,7 @@ public class CoreGradeRepositoryCustomImpl implements CoreGradeRepositoryCustom 
 	}
 
 	@Override
-	public List<WinningBiddingStatisticsFindResponse> findAllWinningBiddingStatistics() {
+	public List<WinningBiddingStatisticsGetResponse> findAllWinningBiddingStatistics() {
 		StringTemplate formattedDate = Expressions.stringTemplate(
 			"DATE_FORMAT({0}, {1})",
 			bidding.createdAt,
@@ -105,7 +105,7 @@ public class CoreGradeRepositoryCustomImpl implements CoreGradeRepositoryCustom 
 		);
 
 		return queryFactory
-			.select(Projections.constructor(WinningBiddingStatisticsFindResponse.class,
+			.select(Projections.constructor(WinningBiddingStatisticsGetResponse.class,
 					formattedDate,
 					bidding.no.count(),
 					bidding.gradeNo

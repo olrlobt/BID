@@ -39,7 +39,7 @@ public class GradePeriod {
 	@NotNull
 	private Integer gradeNo;
 
-	public void modify(
+	public void update(
 		LocalTime startPeriod,
 		LocalTime endPeriod
 	) {

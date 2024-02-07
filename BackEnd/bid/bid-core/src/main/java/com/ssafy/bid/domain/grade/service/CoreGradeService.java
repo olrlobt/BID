@@ -1,9 +1,9 @@
 package com.ssafy.bid.domain.grade.service;
 
-import com.ssafy.bid.domain.grade.dto.GradeStatisticsFindResponse;
+import com.ssafy.bid.domain.grade.dto.GradeStatisticsGetResponse;
 
 public interface CoreGradeService {
-	GradeStatisticsFindResponse findGradeStatistics(int gradeNo);
+	GradeStatisticsGetResponse findGradeStatistics(int gradeNo);
 
 	void updateGradeStatistics();
 }

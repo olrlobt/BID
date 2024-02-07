@@ -1,4 +1,4 @@
-package com.ssafy.bid.domain.user.dto;
+package com.ssafy.bid.domain.grade.dto;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -7,24 +7,22 @@ import com.ssafy.bid.domain.user.Attendance;
 import com.ssafy.bid.domain.user.Student;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-public class StudentSaveRequest {
-	private int schoolNo;
+public class StudentListSaveRequest {
 	private String id;
 	private String password;
 	private String name;
+	private String birthDate;
 	private int gradeNo;
 
-	public Student toEntity(PasswordEncoder passwordEncoder) {
+	public Student toEntity(PasswordEncoder passwordEncoder, int schoolNo, int gradeNo) {
 		return Student.builder()
 			.id(id)
 			.password(passwordEncoder.encode(password))
 			.name(name)
 			.schoolNo(schoolNo)
-			.birthDate(password)
+			.birthDate(birthDate)
 			.asset(0)
 			.ballCount(1)
 			.profileImgUrl("url") //TODO: 회원프로필이미지 디폴트 url로 대체하기

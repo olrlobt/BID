@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class WinningBiddingStatisticsFindResponse {
+public class WinningBiddingStatisticsGetResponse {
 	private int daysBefore;
 	private int count;
 	private int gradeNo;
 
-	public WinningBiddingStatisticsFindResponse(
+	public WinningBiddingStatisticsGetResponse(
 		String date,
 		long count,
 		int gradeNo
