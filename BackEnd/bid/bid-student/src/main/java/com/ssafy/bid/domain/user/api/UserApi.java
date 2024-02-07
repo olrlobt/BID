@@ -3,19 +3,14 @@ package com.ssafy.bid.domain.user.api;
 import com.ssafy.bid.domain.user.dto.AttendanceResponse;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.PasswordResetRequest;
-import com.ssafy.bid.domain.user.service.AuthService;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,33 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
-import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
 import com.ssafy.bid.domain.user.service.UserService;
 
-import lombok.RequiredArgsConstructor;
-
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(origins = "*")
 public class UserApi {
-	private final AuthService authService;
 	private final UserService userService;
 	private final CoreUserService coreUserService;
-
-	@PostMapping("/login")
-	public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
-		String token = this.authService.login(request);
-		return ResponseEntity.status(HttpStatus.OK).body(token);
-	}
-
-	@PostMapping("/logout")
-	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authToken) {
-		authService.logout(authToken);
-		return ResponseEntity.ok().build();
-	}
 
 	@PostMapping("/password")
 	public ResponseEntity<Void> resetPassword(@RequestBody PasswordResetRequest request) {
