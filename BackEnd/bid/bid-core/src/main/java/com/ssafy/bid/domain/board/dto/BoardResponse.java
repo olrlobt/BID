@@ -1,11 +1,14 @@
 package com.ssafy.bid.domain.board.dto;
 
+import java.util.List;
+
 import com.ssafy.bid.domain.board.BoardStatus;
 import com.ssafy.bid.domain.board.Category;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
 public class BoardResponse {
 
 	private long no;
@@ -19,6 +22,9 @@ public class BoardResponse {
 	private String goodsImgUrl;
 	private String userName;
 	private int gradePeriodNo;
+
+	@Setter
+	private List<ReplyResponse> replies;
 
 	public BoardResponse(long no, String title, String description, int startPrice, BoardStatus boardStatus,
 		int averagePrice, int resultPrice, Category category, String goodsImgUrl, String userName, int gradePeriodNo) {
