@@ -5,6 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserAvatarModifyRequest {
+public class UserAvatarUpdateRequest {
 	private int no;
 }

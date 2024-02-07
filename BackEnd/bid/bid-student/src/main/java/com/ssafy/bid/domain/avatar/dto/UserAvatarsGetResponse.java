@@ -5,12 +5,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserAvatarsFindResponse {
+public class UserAvatarsGetResponse {
 	private int userAvatarNo;
 	private String url;
 	private int avatarNo;
 
-	public UserAvatarsFindResponse(
+	public UserAvatarsGetResponse(
 		int userAvatarNo,
 		String url,
 		int avatarNo
