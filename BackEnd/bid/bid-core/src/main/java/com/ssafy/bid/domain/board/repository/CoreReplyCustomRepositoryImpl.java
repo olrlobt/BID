@@ -16,7 +16,7 @@ public class CoreReplyCustomRepositoryImpl implements CoreReplyCustomRepository 
 
 	private final JPAQueryFactory queryFactory;
 
-	public List<ReplyResponse> findReplies(long boardNo){
+	public List<ReplyResponse> findReplies(long boardNo) {
 
 		return queryFactory.select(Projections.constructor(ReplyResponse.class,
 				reply.content,
