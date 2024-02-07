@@ -3,22 +3,26 @@ package com.ssafy.bid.domain.user.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.ssafy.bid.domain.user.dto.AccountRequest;
-import com.ssafy.bid.domain.user.dto.AccountResponse;
-import com.ssafy.bid.domain.user.dto.AccountsResponse;
-import com.ssafy.bid.domain.user.dto.StudentRequest;
-import com.ssafy.bid.domain.user.dto.StudentResponse;
-import com.ssafy.bid.domain.user.dto.StudentsResponse;
-import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
+import com.ssafy.bid.domain.user.Admin;
+import com.ssafy.bid.domain.user.Student;
+import com.ssafy.bid.domain.user.dto.BallsFindResponse;
+import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
 
 public interface UserRepositoryCustom {
-	List<StudentsResponse> findStudents(int gradeNo);
+	boolean checkExistsById(String id);
 
-	List<UserCouponsResponse> findUserCoupons(int userNo);
+	List<SchoolsFindResponse> findSchoolsByName(String name);
 
-	List<AccountsResponse> findAccounts(int userNo, StudentRequest studentRequest);
+	List<StudentsFindResponse> findAllStudentByGradeNo(int gradeNo);
 
-	Optional<StudentResponse> findStudent(int userNo);
+	Optional<String> findUserIdByNameAndTel(String name, String tel);
 
-	List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest);
+	Optional<Admin> findAdminByUserNo(int userNo);
+
+	List<Student> findAllByIds(List<Integer> userNos);
+
+	List<BallsFindResponse> findAllBallsByGradeNo(int gradeNo);
+
+	List<Student> findAllStudentsByGradeNo(int gradeNo);
 }

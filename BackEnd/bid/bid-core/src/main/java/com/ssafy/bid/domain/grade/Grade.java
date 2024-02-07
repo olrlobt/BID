@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import com.ssafy.bid.domain.common.BaseEntity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,9 +15,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder
 @Table(name = "grade")
 @Entity
 public class Grade extends BaseEntity {
@@ -48,8 +51,24 @@ public class Grade extends BaseEntity {
 	private LocalTime transferPeriod;
 
 	/**
-	 * users : group(me) = 1 : N
+	 * users : grade(me) = 1 : N
 	 */
 	@NotNull
 	private Integer userNo;
+	@Embedded
+	private ExpenditureStatistics expenditureStatistics;
+	@Embedded
+	private BiddingStatistics biddingStatistics;
+
+	public void updateSalary(int salary) {
+		this.salary = salary;
+	}
+
+	public void updateSavingPeriod(
+		LocalTime transferAlertPeriod,
+		LocalTime transferPeriod
+	) {
+		this.transferAlertPeriod = transferAlertPeriod;
+		this.transferPeriod = transferPeriod;
+	}
 }
