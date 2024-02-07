@@ -13,12 +13,14 @@ import com.ssafy.bid.domain.saving.Saving;
 import com.ssafy.bid.domain.saving.UserSaving;
 import com.ssafy.bid.domain.saving.dto.SavingExpireAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
-import com.ssafy.bid.domain.saving.dto.SavingRequest;
+import com.ssafy.bid.domain.saving.dto.SavingSaveRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
 import com.ssafy.bid.domain.saving.repository.UserSavingRepository;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.repository.UserRepository;
+import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,16 +35,30 @@ public class SavingServiceImpl implements SavingService {
 
 	@Override
 	@Transactional
-	public void saveSaving(int userNo, SavingRequest savingRequest) {
-		Saving saving = savingRepository.findById(savingRequest.getNo())
-			.orElseThrow(() -> new IllegalArgumentException("적금 없음"));//TODO: 커스텀 예외처리
-		UserSaving userSaving = savingRequest.toEntity(saving, userNo);
+	public void saveSavings(CustomUserInfo userInfo, SavingSaveRequest savingSaveRequest) {
+		// 적금 조회 및 파라미터 검증
+		Saving saving = savingRepository.findById(savingSaveRequest.getNo())
+			.orElseThrow(() -> new ResourceNotFoundException("회원적금등록-적금PK", savingSaveRequest.getNo()));
+
+		// DTO -> Entity 변환
+		UserSaving userSaving = savingSaveRequest.toEntity(saving, userInfo);
+
+		// Entity DB에 저장
 		userSavingRepository.save(userSaving);
 	}
 
 	@Override
 	@Transactional
-	public void deleteSaving(int userNo, int savingNo) {
+	public void deleteSavings(int userNo, int savingNo) {
+		// 해당하는 회원적금 존재여부 조회
+		boolean exists = userSavingRepository.existsByUserNoAndSavingNo(userNo, savingNo);
+
+		// 파라미터 검증
+		if (!exists) {
+			throw new ResourceNotFoundException("회원적금삭제-회원PK", userNo);
+		}
+
+		// Entity DB에서 삭제
 		userSavingRepository.deleteByUserNoAndSavingNo(userNo, savingNo);
 	}
 
