@@ -386,18 +386,7 @@ export default function BidPage(){
                       type: 'viewProduct',
                       props: [
                         product.no,
-                        // product.title,
-                        // product.description,
-                        // product.startPrice,
-                        // product.boardStatus,
-                        // product.averagePrice,
-                        // product.resultPrice,
-                        // product.category,
-                        // product.goodsImgUrl,
-                        // product.userName,
-                        // product.gradePeriodNo,
-                        // product.createdAt,
-                        // product.comments
+                        queryClient
                       ] })
                   }}
                   key = {product.no}
