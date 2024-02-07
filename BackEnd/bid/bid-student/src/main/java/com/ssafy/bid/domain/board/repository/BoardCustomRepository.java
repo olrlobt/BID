@@ -2,14 +2,15 @@ package com.ssafy.bid.domain.board.repository;
 
 import java.util.List;
 
+import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 
 public interface BoardCustomRepository {
 
-	List<BoardResponse> findBoards(int gradeNo, String keyword);
+	List<BoardListResponse> findBoards(int gradeNo);
 
-	List<BoardResponse> findMyBoards(int userNo);
+	List<BoardListResponse> findMyBoards(int userNo);
 
-	List<BoardResponse> findMyBiddingBoards(int userNo);
+	List<BoardListResponse> findMyBiddingBoards(int userNo);
 
 }

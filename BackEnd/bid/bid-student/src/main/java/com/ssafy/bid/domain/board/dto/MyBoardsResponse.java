@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 public class MyBoardsResponse {
 
-	private List<BoardResponse> myBoards;
-	private List<BoardResponse> myBiddingBoards;
+	private List<BoardListResponse> myBoards;
+	private List<BoardListResponse> myBiddingBoards;
 
-	public MyBoardsResponse(List<BoardResponse> myBoards, List<BoardResponse> myBiddingBoards) {
+	public MyBoardsResponse(List<BoardListResponse> myBoards, List<BoardListResponse> myBiddingBoards) {
 		this.myBoards = myBoards;
 		this.myBiddingBoards = myBiddingBoards;
 	}

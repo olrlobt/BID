@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.service.BoardService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
@@ -26,7 +27,7 @@ public class BoardApi {
 	private final CoreBoardService coreBoardService;
 
 	@GetMapping("/{gradeNo}/boards")
-	public List<BoardResponse> findAllStudentBoards(@PathVariable int gradeNo) {
+	public List<BoardListResponse> findAllStudentBoards(@PathVariable int gradeNo) {
 		return boardService.findAllStudentBoards(gradeNo);
 	}
 
