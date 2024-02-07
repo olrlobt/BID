@@ -16,7 +16,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
-import com.ssafy.bid.domain.user.dto.SchoolResponse;
+import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -27,26 +27,25 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<StudentsFindResponse> findAllStudentByGradeNo(int gradeNo) {
-		return queryFactory.select(Projections.constructor(StudentsFindResponse.class,
-					student.no,
-					student.id,
-					student.name,
-					student.asset
-				)
+	public boolean checkExistsById(String id) {
+		return Boolean.TRUE.equals(queryFactory
+			.select(
+				new CaseBuilder()
+					.when(user.no.count().goe(1)).then(true)
+					.otherwise(false)
 			)
-			.from(student)
-			.where(
-				student.gradeNo.eq(gradeNo),
-				student.deletedAt.isNull()
-			)
-			.fetch();
+			.from(user)
+			.where(user.deletedAt.isNull())
+			.groupBy(user.id)
+			.having(user.id.eq(id))
+			.fetchOne());
+
 	}
 
 	@Override
-	public List<SchoolResponse> findByNameContaining(String name) {
+	public List<SchoolsFindResponse> findSchoolsByName(String name) {
 		return queryFactory
-			.select(Projections.constructor(SchoolResponse.class,
+			.select(Projections.constructor(SchoolsFindResponse.class,
 					school.no,
 					school.name,
 					school.region,
@@ -66,18 +65,45 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
-	public boolean checkExistsById(String id) {
-		return Boolean.TRUE.equals(queryFactory
-			.select(
-				new CaseBuilder()
-					.when(user.no.count().goe(1)).then(true)
-					.otherwise(false)
+	public List<StudentsFindResponse> findAllStudentByGradeNo(int gradeNo) {
+		return queryFactory.select(Projections.constructor(StudentsFindResponse.class,
+					student.no,
+					student.id,
+					student.name,
+					student.asset
+				)
 			)
-			.from(user)
-			.groupBy(user.id)
-			.having(user.id.eq(id))
-			.fetchOne());
+			.from(student)
+			.where(
+				student.gradeNo.eq(gradeNo),
+				student.deletedAt.isNull()
+			)
+			.fetch();
+	}
 
+	@Override
+	public Optional<String> findUserIdByNameAndTel(String name, String tel) {
+		return Optional.ofNullable(
+			queryFactory
+				.select(admin.id)
+				.from(admin)
+				.where(
+					admin.name.eq(name),
+					admin.tel.eq(tel),
+					admin.deletedAt.isNull()
+				)
+				.fetchOne()
+		);
+	}
+
+	@Override
+	public Optional<Admin> findAdminByUserNo(int userNo) {
+		return Optional.ofNullable(
+			queryFactory
+				.selectFrom(admin)
+				.where(admin.no.eq(userNo))
+				.fetchOne()
+		);
 	}
 
 	@Override
@@ -119,26 +145,5 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 				grade.deletedAt.isNull()
 			)
 			.fetch();
-	}
-
-	@Override
-	public Optional<String> findIdByNameAndTel(String name, String tel) {
-		return Optional.ofNullable(
-			queryFactory
-				.select(admin.id)
-				.from(admin)
-				.where(admin.name.eq(name), admin.tel.eq(tel))
-				.fetchOne()
-		);
-	}
-
-	@Override
-	public Optional<Admin> findAdminByUserNo(int userNo) {
-		return Optional.ofNullable(
-			queryFactory
-				.selectFrom(admin)
-				.where(admin.no.eq(userNo))
-				.fetchOne()
-		);
 	}
 }

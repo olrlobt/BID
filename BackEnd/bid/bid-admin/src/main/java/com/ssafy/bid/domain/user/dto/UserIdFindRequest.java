@@ -5,11 +5,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class FindUserIDRequest {
+public class UserIdFindRequest {
 	private String name;
 	private String tel;
 
-	public FindUserIDRequest(String name, String tel) {
+	public UserIdFindRequest(String name, String tel) {
 		this.name = name;
 		this.tel = tel;
 	}

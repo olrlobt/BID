@@ -5,16 +5,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class LoginRequest {
-
-	private String id;
+public class UserDeleteRequest {
 	private String password;
 
-	public LoginRequest(
-		String id,
-		String password
-	) {
-		this.id = id;
+	public UserDeleteRequest(String password) {
 		this.password = password;
 	}
 }

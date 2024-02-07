@@ -57,6 +57,8 @@ public class Student extends User {
 		this.ballCount = ballCount;
 		this.profileImgUrl = profileImgUrl;
 		this.gradeNo = gradeNo;
+		this.attendance = new Attendance();
+		this.expenditureStatistics = new ExpenditureStatistics();
 	}
 
 	public void addRewardPrice(int price) {
