@@ -1,8 +1,8 @@
 package com.ssafy.bid.domain.grade.dto;
 
-import lombok.Getter;
-
 import java.util.List;
+
+import lombok.Getter;
 
 @Getter
 public class GradeCreationRequest {
