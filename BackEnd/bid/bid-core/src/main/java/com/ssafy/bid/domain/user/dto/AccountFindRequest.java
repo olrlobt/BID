@@ -4,12 +4,14 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
-public class AccountRequest {
+@Getter
+public class AccountFindRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private LocalDate date;
+
+	public AccountFindRequest(LocalDate date) {
+		this.date = date;
+	}
 }

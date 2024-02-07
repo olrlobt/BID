@@ -5,26 +5,12 @@ import java.util.Optional;
 
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
-import com.ssafy.bid.domain.user.dto.AccountRequest;
-import com.ssafy.bid.domain.user.dto.AccountResponse;
-import com.ssafy.bid.domain.user.dto.AccountsResponse;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolResponse;
-import com.ssafy.bid.domain.user.dto.StudentRequest;
-import com.ssafy.bid.domain.user.dto.StudentResponse;
-import com.ssafy.bid.domain.user.dto.StudentsResponse;
-import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
+import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
 
 public interface UserRepositoryCustom {
-	List<StudentsResponse> findStudents(int gradeNo);
-
-	List<UserCouponsResponse> findUserCoupons(int userNo);
-
-	List<AccountsResponse> findAccounts(int userNo, StudentRequest studentRequest);
-
-	Optional<StudentResponse> findStudent(int userNo);
-
-	List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest);
+	List<StudentsFindResponse> findAllStudentByGradeNo(int gradeNo);
 
 	List<SchoolResponse> findByNameContaining(String name);
 

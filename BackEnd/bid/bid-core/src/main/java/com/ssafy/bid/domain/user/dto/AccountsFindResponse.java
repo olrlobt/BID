@@ -3,18 +3,18 @@ package com.ssafy.bid.domain.user.dto;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.DealType;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
-public class AccountsResponse {
+public class AccountsFindResponse {
 	private int day;
 	private int totalPrice;
 	private AccountType accountType;
 	private DealType dealType;
 
-	public AccountsResponse(
+	public AccountsFindResponse(
 		int day,
 		int totalPrice,
 		AccountType accountType,

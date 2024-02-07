@@ -5,19 +5,19 @@ import java.time.LocalDateTime;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.DealType;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
-public class AccountResponse {
+public class AccountFindResponse {
 	private AccountType accountType;
 	private int price;
 	private String content;
 	private DealType dealType;
 	private LocalDateTime createdAt;
 
-	public AccountResponse(
+	public AccountFindResponse(
 		AccountType accountType,
 		int price,
 		String content,

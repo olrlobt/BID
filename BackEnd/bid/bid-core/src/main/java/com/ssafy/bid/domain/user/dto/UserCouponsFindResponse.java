@@ -1,15 +1,15 @@
 package com.ssafy.bid.domain.user.dto;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
-public class UserCouponsResponse {
+public class UserCouponsFindResponse {
 	private String name;
 	private long count;
 
-	public UserCouponsResponse(
+	public UserCouponsFindResponse(
 		String name,
 		long count
 	) {
