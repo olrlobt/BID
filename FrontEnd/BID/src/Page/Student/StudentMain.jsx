@@ -14,18 +14,19 @@ import { Bank } from "../../Component/Models/Bank";
 // import { BasicBean } from "../../Component/Character/BasicBean";
 import { SnowBean } from "../../Component/Character/SnowBean";
 import AlarmWindow from "./AlarmWindow";
+import { updateAlarms } from "../../Store/alarmSlice";
 
 function StudentMain() {
   const [isAlarmActive, setIsAlarmActive] = useState(false);
+  const eventSource = new EventSource(
+    `${process.env.REACT_APP_TCH_IP}/notification/subscribe`
+  );
+
   useEffect(() => {
     //SSE연결 로직
-    const eventSource = new EventSource(
-      "http://i10a306.p.ssafy.io:8081/notification/subscribe"
-    );
-
     eventSource.onopen = () => {
       eventSource.addEventListener("sse", (e) => {
-        console.log(e);
+        updateAlarms(e.data);
       });
     };
 
@@ -53,7 +54,6 @@ function StudentMain() {
           <Cactus />
           <Alarm
             onClick={() => {
-              console.log("clicked");
               setIsAlarmActive(!isAlarmActive);
             }}
           />
