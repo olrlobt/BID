@@ -11,7 +11,6 @@ import com.ssafy.bid.domain.board.Reply;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardListResponse;
-import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.repository.BiddingRepository;

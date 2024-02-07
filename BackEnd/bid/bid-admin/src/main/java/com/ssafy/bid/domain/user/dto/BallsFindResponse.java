@@ -1,16 +1,16 @@
 package com.ssafy.bid.domain.user.dto;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
-public class BallsResponse {
+public class BallsFindResponse {
 	private int no;
 	private String name;
 	private int ballCount;
 
-	public BallsResponse(
+	public BallsFindResponse(
 		int no,
 		String name,
 		int ballCount

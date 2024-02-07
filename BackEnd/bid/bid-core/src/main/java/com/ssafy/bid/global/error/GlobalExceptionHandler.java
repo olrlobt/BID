@@ -1,6 +1,5 @@
 package com.ssafy.bid.global.error;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
 
 	@ExceptionHandler(AuthenticationFailedException.class)
 	public ResponseEntity<ErrorResponse> handleAuthenticationFailedException(AuthenticationFailedException e) {
@@ -98,7 +96,6 @@ public class GlobalExceptionHandler {
 		log.error("ResourceAlreadyExistsException ", e);
 		return ErrorResponse.toResponseEntity(ErrorCode.ResourceAlreadyExistsException);
 	}
-
 
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException e) {

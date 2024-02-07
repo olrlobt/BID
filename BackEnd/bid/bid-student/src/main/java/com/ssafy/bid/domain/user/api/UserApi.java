@@ -25,7 +25,6 @@ import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
 import com.ssafy.bid.domain.user.service.UserService;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
