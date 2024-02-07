@@ -1,36 +1,28 @@
 package com.ssafy.bid.domain.board.dto;
 
-import java.time.LocalTime;
-
 import com.ssafy.bid.domain.board.BoardStatus;
 import com.ssafy.bid.domain.board.Category;
 
 import lombok.Data;
 
 @Data
-public class BoardResponse {
+public class BoardListResponse {
 
 	private long no;
 	private String title;
-	private String description;
-	private int startPrice;
 	private BoardStatus boardStatus;
-	private int averagePrice;
-	private int resultPrice;
+	private int displayPrice;
 	private String category;
 	private String goodsImgUrl;
 	private String userName;
 	private int gradePeriodNo;
 
-	public BoardResponse(long no, String title, String description, int startPrice, BoardStatus boardStatus,
-		int averagePrice, int resultPrice, Category category, String goodsImgUrl, String userName, int gradePeriodNo) {
+	public BoardListResponse(long no, String title, BoardStatus boardStatus, int displayPrice, Category category,
+		String goodsImgUrl, String userName, int gradePeriodNo) {
 		this.no = no;
 		this.title = title;
-		this.description = description;
-		this.startPrice = startPrice;
 		this.boardStatus = boardStatus;
-		this.averagePrice = averagePrice;
-		this.resultPrice = resultPrice;
+		this.displayPrice = displayPrice;
 		this.category = category.getCategory();
 		this.goodsImgUrl = goodsImgUrl;
 		this.userName = userName;

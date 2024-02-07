@@ -6,9 +6,13 @@ import static com.ssafy.bid.domain.user.QStudent.*;
 
 import java.util.List;
 
+import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.board.BiddingStatus;
+import com.ssafy.bid.domain.board.BoardStatus;
+import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -18,62 +22,54 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 
 	private final JPAQueryFactory queryFactory;
 
-	@Override
-	public List<BoardResponse> findBoards(int gradeNo, String keyword) {
+	private final ConstructorExpression<BoardListResponse> constructor = Projections.constructor(
+		BoardListResponse.class,
+		board.no,
+		board.title,
+		board.boardStatus,
+		new CaseBuilder()
+			.when(board.attendeeCount.eq(0))
+			.then(board.startPrice)
+			.when(board.boardStatus.eq(BoardStatus.COMPLETED))
+			.then(board.resultPrice)
+			.otherwise(board.totalPrice.divide(board.attendeeCount)),
+		board.category,
+		board.goodsImgUrl,
+		student.name,
+		board.gradePeriodNo
+	);
 
-		return queryFactory.select(Projections.constructor(BoardResponse.class,
-				board.no,
-				board.title,
-				board.boardStatus,
-				board.startPrice,
-				board.totalPrice.divide(board.attendeeCount),
-				board.resultPrice,
-				board.goodsImgUrl,
-				student.name))
+	@Override
+	public List<BoardListResponse> findBoards(int gradeNo) {
+		return queryFactory.select(constructor)
 			.from(board)
-			.innerJoin(student).on(board.userNo.eq(student.no).and(student.gradeNo.eq(gradeNo)))
-			.where(board.title.contains(keyword)
-				.or(board.description.contains(keyword)))
+			.innerJoin(student)
+			.on(board.userNo.eq(student.no)
+				.and(student.gradeNo.eq(gradeNo))
+				.and(board.boardStatus.eq(BoardStatus.PROGRESS)))
 			.orderBy(board.createdAt.desc())
+			.limit(20)
 			.fetch();
 	}
 
 	@Override
-	public List<BoardResponse> findMyBoards(int userNo) {
-
-		return queryFactory.select(Projections.constructor(BoardResponse.class,
-				board.no,
-				board.title,
-				board.boardStatus,
-				board.startPrice,
-				board.totalPrice.divide(board.attendeeCount),
-				board.resultPrice,
-				board.goodsImgUrl,
-				student.name
-			))
+	public List<BoardListResponse> findMyBoards(int userNo) {
+		return queryFactory.select(constructor)
 			.from(board)
 			.innerJoin(student).on(board.userNo.eq(student.no).and(student.no.eq(userNo)))
 			.orderBy(board.createdAt.desc())
+			.limit(20)
 			.fetch();
 	}
 
 	@Override
-	public List<BoardResponse> findMyBiddingBoards(int userNo) {
-
-		return queryFactory.select(Projections.constructor(BoardResponse.class,
-				board.no,
-				board.title,
-				board.boardStatus,
-				board.startPrice,
-				board.totalPrice.divide(board.attendeeCount),
-				board.resultPrice,
-				board.goodsImgUrl,
-				student.name
-			))
+	public List<BoardListResponse> findMyBiddingBoards(int userNo) {
+		return queryFactory.select(constructor)
 			.from(board)
 			.innerJoin(bidding).on(bidding.boardNo.eq(board.no).and(bidding.biddingStatus.eq(BiddingStatus.BIDDING)))
 			.innerJoin(student).on(student.no.eq(board.userNo))
 			.orderBy(board.createdAt.desc())
+			.limit(20)
 			.fetch();
 	}
 }

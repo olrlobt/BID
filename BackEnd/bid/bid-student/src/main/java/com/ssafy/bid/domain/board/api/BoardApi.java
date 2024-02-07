@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
+import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
@@ -35,15 +35,14 @@ public class BoardApi {
 	private final CoreBoardService coreBoardService;
 
 	@GetMapping("/boards")
-	public ResponseEntity<?> findBoards(@RequestParam String keyword) {
-		List<BoardResponse> boards = boardService.findBoards(1, keyword);
+	public ResponseEntity<?> findBoards() {
+		List<BoardListResponse> boards = boardService.findBoards(1);
 		return ResponseEntity.ok(boards);
 	}
 
 	@GetMapping("/users/{userNo}/boards")
 	public ResponseEntity<?> findMyAllBoards(@PathVariable int userNo) {
 		MyBoardsResponse myAllBoards = boardService.findMyAllBoards(userNo);
-
 		return ResponseEntity.ok(myAllBoards);
 	}
 
