@@ -9,7 +9,7 @@ import Comment from "./Comment";
 import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProductDetailApi } from "../../Apis/BidApis";
+import { getProductDetailApi, deleteProductApi, deletCommentApi } from "../../Apis/BidApis";
 
 export default function ViewProductModal({ onClose, ...props }) {
   // 0 no,
@@ -38,6 +38,28 @@ export default function ViewProductModal({ onClose, ...props }) {
       })
   });
 
+  /** 경매 삭제 쿼리 */
+  const deleteProductQuery = useMutation({
+    mutationKey: ['delete'],
+    mutationFn: () => deleteProductApi(1, props[0]),
+    onSuccess: () => { props[1].invalidateQueries('productList') },
+    onError: (error) => { console.log("error;")}
+  });
+
+  /** 댓글 삭제 쿼리 */
+  const deleteCommentQuery = useMutation({
+    mutationKey: ['delete'],
+    mutationFn: (replyNo) => deletCommentApi(1, props[0], replyNo),
+    onSuccess: () => { console.log("success!!") },
+    onError: (error) => { console.log("error;")}
+  });
+
+  /** 경매 삭제 함수 */
+  const deleteProduct = () => {
+    deleteProductQuery.mutate();
+    onClose();
+  }
+
   /** 입찰 신청 함수 */
   const bidSubmit = (e) => {
     e.preventDefault();
@@ -56,19 +78,18 @@ export default function ViewProductModal({ onClose, ...props }) {
     console.log(e.target.newComment.value);
   }
 
-  console.log(props);
   return(
     <Modal onClose={onClose} {...props}>
       <div className={styled.header}>
         <div className={styled.top}>
-          <h1>{ productDetailIinfo.title }</h1>
-          <span>{ productDetailIinfo.userName }</span>
+          <h1>{ productDetailIinfo && productDetailIinfo.title }</h1>
+          <span>{ productDetailIinfo && productDetailIinfo.userName }</span>
         </div>
         <div className={styled.info}>
           <div className={styled.commonArea}>
             <div className = {styled.infoButton}>
               <RoundedInfoButton
-                value = { productDetailIinfo.category }
+                value = { productDetailIinfo && productDetailIinfo.category }
                 unit = ''
                 textColor = 'white'
                 borderColor = '#BBBD32'
@@ -78,7 +99,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
             <div className = {styled.infoButton}>
               <RoundedInfoButton
-                value = { productDetailIinfo.gradePeriodNo }
+                value = { productDetailIinfo && productDetailIinfo.gradePeriodNo }
                 unit = '교시'
                 textColor = 'white'
                 borderColor = '#BBBD32'
@@ -88,7 +109,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
             <div className = {styled.infoButton}>
               <RoundedInfoButton
-                value = { productDetailIinfo.startPrice }
+                value = { productDetailIinfo && productDetailIinfo.startPrice }
                 unit = '비드'
                 textColor = '#F23F3F'
                 borderColor = '#F23F3F'
@@ -104,7 +125,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
             <div className = {styled.infoButton}>
               <RoundedInfoButton
-                value = { productDetailIinfo.averagePrice }
+                value = { productDetailIinfo && productDetailIinfo.averagePrice }
                 unit = '비드'
                 textColor = 'white'
                 borderColor = '#F23F3F'
@@ -139,7 +160,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                 backgroundColor='#A6A6A6'
               />
               <SettingButton
-                onClick={ () => console.log('delete') }
+                onClick={ deleteProduct }
                 svg={ Delete }
                 text='삭제'
                 height='1vw'
@@ -153,10 +174,10 @@ export default function ViewProductModal({ onClose, ...props }) {
       <div className={styled.body}>
         <div className={styled.left}>
           <div className={styled.imgArea}>
-            <img src={ productDetailIinfo.goodsImgUrl } alt="제품 이미지" />
+            <img src={ productDetailIinfo && productDetailIinfo.goodsImgUrl } alt="제품 이미지" />
           </div>
           <div className={styled.content}>
-            <textarea name='bidContent' defaultValue={ productDetailIinfo.description } disabled/>
+            <textarea name='bidContent' defaultValue={ productDetailIinfo && productDetailIinfo.description } disabled/>
           </div>
         </div>
         <div className={styled.right}>
