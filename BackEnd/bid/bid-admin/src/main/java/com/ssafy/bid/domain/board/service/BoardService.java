@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
@@ -22,7 +23,7 @@ public class BoardService {
 	private final BoardRepository boardRepository;
 	private final ReplyRepository replyRepository;
 
-	public List<BoardResponse> findAllStudentBoards(int gradeNo) {
+	public List<BoardListResponse> findAllStudentBoards(int gradeNo) {
 		return boardRepository.findAllStudentBoards(gradeNo);
 	}
 
