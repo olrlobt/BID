@@ -1,7 +1,5 @@
 package com.ssafy.bid.domain.board.dto;
 
-import java.time.LocalTime;
-
 import com.ssafy.bid.domain.board.BoardStatus;
 import com.ssafy.bid.domain.board.Category;
 

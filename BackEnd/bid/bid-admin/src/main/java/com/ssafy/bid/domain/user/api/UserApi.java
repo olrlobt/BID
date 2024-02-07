@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
-import com.ssafy.bid.domain.user.dto.BallsResponse;
+import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.FindUserIDRequest;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.RegisterRequest;
@@ -99,13 +99,15 @@ public class UserApi {
 	}
 
 	@GetMapping("/{gradeNo}/balls")
-	public List<BallsResponse> findBalls(@PathVariable int gradeNo) {
-		return userService.findBalls(gradeNo);
+	public ResponseEntity<List<BallsFindResponse>> findAllBalls(@PathVariable int gradeNo) {
+		List<BallsFindResponse> responses = userService.findAllBalls(gradeNo);
+		return ResponseEntity.status(OK).body(responses);
 	}
 
 	@PatchMapping("/{gradeNo}/balls")
-	public void modifyBalls(@PathVariable int gradeNo) {
+	public ResponseEntity<?> modifyBalls(@PathVariable int gradeNo) {
 		userService.modifyBalls(gradeNo);
+		return ResponseEntity.status(OK).build();
 	}
 
 	@PostMapping("/find-id")

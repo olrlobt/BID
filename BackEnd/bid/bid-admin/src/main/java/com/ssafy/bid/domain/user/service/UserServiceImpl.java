@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.user.Admin;
+import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
-import com.ssafy.bid.domain.user.dto.BallsResponse;
+import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.RegisterRequest;
 import com.ssafy.bid.domain.user.dto.SchoolResponse;
 import com.ssafy.bid.domain.user.dto.StudentRegistrationRequest;
@@ -25,6 +26,7 @@ import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
 import com.ssafy.bid.domain.user.dto.UserWithdrawalRequest;
 import com.ssafy.bid.domain.user.repository.UserRepository;
+import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -86,14 +88,33 @@ public class UserServiceImpl implements UserService {
 		return userRepository.checkExistsById(id);
 	}
 
-	public List<BallsResponse> findBalls(int gradeNo) {
-		return userRepository.findBalls(gradeNo);
+	@Override
+	public List<BallsFindResponse> findAllBalls(int gradeNo) {
+		// 학급PK를 통해 학생들의 보유 공 개수 목록 조회
+		List<BallsFindResponse> responses = userRepository.findAllBallsByGradeNo(gradeNo);
+
+		// 파라미터 검증
+		if (responses.isEmpty()) {
+			throw new ResourceNotFoundException("보유공개수조회-학급PK", gradeNo);
+		}
+
+		// 응답 반환
+		return userRepository.findAllBallsByGradeNo(gradeNo);
 	}
 
 	@Override
 	@Transactional
 	public void modifyBalls(int gradeNo) {
-		userRepository.resetBallCounts(gradeNo);
+		// 학급PK를 통해 학생 목록 조회
+		List<Student> responses = userRepository.findAllStudentsByGradeNo(gradeNo);
+
+		// 파라미터 검증
+		if (responses.isEmpty()) {
+			throw new ResourceNotFoundException("학생목록조회-학급PK", gradeNo);
+		}
+
+		// 보유 공 개수 초기화
+		responses.forEach(Student::resetBalls);
 	}
 
 	@Override
