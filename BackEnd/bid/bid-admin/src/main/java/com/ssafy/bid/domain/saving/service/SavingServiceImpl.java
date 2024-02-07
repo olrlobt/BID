@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.saving.Saving;
-import com.ssafy.bid.domain.saving.dto.SavingModifyRequest;
-import com.ssafy.bid.domain.saving.dto.SavingRequest;
+import com.ssafy.bid.domain.saving.dto.SavingListUpdateRequest;
+import com.ssafy.bid.domain.saving.dto.SavingUpdateRequest;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
@@ -21,20 +21,14 @@ public class SavingServiceImpl implements SavingService {
 	private final SavingRepository savingRepository;
 
 	@Override
-	public void modifySaving(int gradeNo, SavingModifyRequest savingModifyRequest) {
-		// 학급PK를 통해 적금 목록 조회
+	public void updateSaving(int gradeNo, SavingListUpdateRequest savingListUpdateRequest) {
 		List<Saving> savings = savingRepository.findAllByGradeNo(gradeNo);
-
-		// 파라미터 검증
 		if (savings.isEmpty()) {
-			throw new ResourceNotFoundException("적금수정-학급PK", gradeNo);
+			throw new ResourceNotFoundException("수정하려는 Saving 엔티티 없음.", gradeNo);
 		}
 
-		// 클라이언트가 입력한 변경내역 DTO 추출
-		List<SavingRequest> savingRequests = savingModifyRequest.getSavingRequests();
-
-		// 적금 한꺼번에 수정
-		savings.forEach(saving -> savingRequests.stream()
+		List<SavingUpdateRequest> savingUpdateRequests = savingListUpdateRequest.getSavingUpdateRequests();
+		savings.forEach(saving -> savingUpdateRequests.stream()
 			.filter(request -> request.getNo() == saving.getNo())
 			.forEach(request -> saving.modify(request.getDepositPrice(), request.getInterestRate()))
 		);
