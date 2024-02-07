@@ -21,7 +21,7 @@ public class CoreSavingServiceImpl implements CoreSavingService {
 	@Override
 	public List<SavingFindResponse> findAllSaving(int gradeNo) {
 		// 학급PK를 통해 적금 목록 조회
-		List<SavingFindResponse> responses = coreSavingRepository.findAllSavingByGradeNo(gradeNo);
+		List<SavingFindResponse> responses = coreSavingRepository.findAllByGradeNo(gradeNo);
 
 		// 파라미터 검증
 		if (responses.isEmpty()) {

@@ -34,7 +34,9 @@ public class SavingApi {
 	}
 
 	@PatchMapping("/{gradeNo}/savings")
-	public void modifySavings(@PathVariable int gradeNo, @RequestBody SavingModifyRequest savingModifyRequest) {
-		savingService.modifySavings(gradeNo, savingModifyRequest);
+	public ResponseEntity<?> modifySavings(@PathVariable int gradeNo,
+		@RequestBody SavingModifyRequest savingModifyRequest) {
+		savingService.modifySaving(gradeNo, savingModifyRequest);
+		return ResponseEntity.status(OK).build();
 	}
 }

@@ -17,7 +17,7 @@ public class CoreSavingRepositoryCustomImpl implements CoreSavingRepositoryCusto
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<SavingFindResponse> findAllSavingByGradeNo(int gradeNo) {
+	public List<SavingFindResponse> findAllByGradeNo(int gradeNo) {
 		return queryFactory
 			.select(Projections.constructor(SavingFindResponse.class,
 					grade.asset,
