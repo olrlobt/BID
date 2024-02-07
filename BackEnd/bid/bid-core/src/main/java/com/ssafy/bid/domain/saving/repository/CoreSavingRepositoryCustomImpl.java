@@ -7,19 +7,19 @@ import java.util.List;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bid.domain.saving.dto.SavingsResponse;
+import com.ssafy.bid.domain.saving.dto.SavingFindResponse;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class SavingRepositoryCustomImpl implements SavingRepositoryCustom {
+public class CoreSavingRepositoryCustomImpl implements CoreSavingRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<SavingsResponse> findSavings(int gradeNo) {
+	public List<SavingFindResponse> findAllByGradeNo(int gradeNo) {
 		return queryFactory
-			.select(Projections.constructor(SavingsResponse.class,
+			.select(Projections.constructor(SavingFindResponse.class,
 					grade.asset,
 					saving.no,
 					saving.name,
@@ -33,7 +33,8 @@ public class SavingRepositoryCustomImpl implements SavingRepositoryCustom {
 			.from(saving)
 			.innerJoin(grade).on(grade.no.eq(saving.gradeNo))
 			.where(
-				saving.gradeNo.eq(gradeNo)
+				grade.no.eq(gradeNo),
+				grade.deletedAt.isNull()
 			)
 			.fetch();
 	}

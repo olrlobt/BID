@@ -6,9 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class GradeCreationRequest {
-    private String schoolCode;
-    private int year;
-    private int classRoom;
-    private List<StudentsRegistrationDto> students;
-    private Integer userNo;
+	private String schoolCode;
+	private int year;
+	private int classRoom;
+	private List<StudentsRegistrationDto> students;
+	private Integer userNo;
 }
