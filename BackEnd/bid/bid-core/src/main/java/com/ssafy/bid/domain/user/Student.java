@@ -3,6 +3,8 @@ package com.ssafy.bid.domain.user;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import com.ssafy.bid.domain.grade.ExpenditureStatistics;
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -29,6 +31,9 @@ public class Student extends User {
 
 	@Embedded
 	private Attendance attendance;
+
+	@Embedded
+	private ExpenditureStatistics expenditureStatistics;
 
 	/**
 	 * grade : users(me) = 1 : N

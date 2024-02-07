@@ -1,6 +1,7 @@
 package com.ssafy.bid.domain.user.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,18 @@ import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.TokenBlacklist;
 import com.ssafy.bid.domain.user.User;
+import com.ssafy.bid.domain.user.dto.AccountFindRequest;
+import com.ssafy.bid.domain.user.dto.AccountFindResponse;
+import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
+import com.ssafy.bid.domain.user.dto.StudentFindRequest;
+import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
 import com.ssafy.bid.domain.user.repository.CoreTokenBlacklistRepository;
 import com.ssafy.bid.domain.user.repository.CoreUserRepository;
 import com.ssafy.bid.domain.user.security.JwtTokenProvider;
+import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -64,5 +72,28 @@ public class CoreUserServiceImpl implements CoreUserService {
 			.build();
 
 		coreTokenBlacklistRepository.save(blacklist);
+	}
+
+	@Override
+	public StudentFindResponse findStudent(int userNo, StudentFindRequest studentFindRequest) {
+		// 학생PK를 통해 회원쿠폰목록 조회, 기간내 입출금내역목록 조회
+		List<UserCouponsFindResponse> couponResponses = coreUserRepository.findUserCouponsByUserNo(userNo);
+		List<AccountsFindResponse> accountResponses = coreUserRepository.findAccountsByUserNo(userNo,
+			studentFindRequest);
+
+		// 학생PK를 통해 회원 상세(통계) 정보 조회 및 파라미터 검증
+		StudentFindResponse response = coreUserRepository.findStudentByUserNo(userNo)
+			.orElseThrow(() -> new ResourceNotFoundException("학생상세조회-회원PK", userNo));
+
+		// 응답 데이터 완성
+		response.completeResponse(couponResponses, accountResponses);
+
+		// 응답 반환
+		return response;
+	}
+
+	@Override
+	public List<AccountFindResponse> findAccount(int userNo, AccountFindRequest accountFindRequest) {
+		return coreUserRepository.findAccountByUserNo(userNo, accountFindRequest);
 	}
 }

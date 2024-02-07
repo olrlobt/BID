@@ -10,19 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.User;
-import com.ssafy.bid.domain.user.dto.AccountRequest;
-import com.ssafy.bid.domain.user.dto.AccountResponse;
-import com.ssafy.bid.domain.user.dto.AccountsResponse;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.RegisterRequest;
 import com.ssafy.bid.domain.user.dto.SchoolResponse;
 import com.ssafy.bid.domain.user.dto.StudentRegistrationRequest;
-import com.ssafy.bid.domain.user.dto.StudentRequest;
-import com.ssafy.bid.domain.user.dto.StudentResponse;
-import com.ssafy.bid.domain.user.dto.StudentsResponse;
+import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
-import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
 import com.ssafy.bid.domain.user.dto.UserWithdrawalRequest;
 import com.ssafy.bid.domain.user.repository.UserRepository;
@@ -49,26 +43,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<StudentsResponse> findStudents(int gradeNo) {
-		return userRepository.findStudents(gradeNo);
-	}
+	public List<StudentsFindResponse> findAllStudents(int gradeNo) {
+		List<StudentsFindResponse> responses = userRepository.findAllStudentByGradeNo(gradeNo);
 
-	@Override
-	public StudentResponse findStudent(int userNo, StudentRequest studentRequest) {
-		List<UserCouponsResponse> userCouponsResponses = userRepository.findUserCoupons(userNo);
-		List<AccountsResponse> accountsResponses = userRepository.findAccounts(userNo, studentRequest);
-		StudentResponse studentResponse = userRepository.findStudent(userNo)
-			.orElseThrow(() -> new IllegalArgumentException("일치하는 회원정보가 없습니다."));//TODO: 글로벌 예외처리
+		if (responses.isEmpty()) {
+			throw new ResourceNotFoundException("학생목록조회-학급PK", gradeNo);
+		}
 
-		studentResponse.setCouponsResponses(userCouponsResponses);
-		studentResponse.setAccountsResponses(accountsResponses);
-
-		return studentResponse;
-	}
-
-	@Override
-	public List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest) {
-		return userRepository.findAccount(userNo, accountRequest);
+		return responses;
 	}
 
 	@Override
