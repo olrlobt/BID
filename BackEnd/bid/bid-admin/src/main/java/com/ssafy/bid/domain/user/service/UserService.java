@@ -6,7 +6,7 @@ import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
-import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
 import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
@@ -16,23 +16,23 @@ import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
 public interface UserService {
 	TelAuthenticationSendResponse sendTelAuthentication(TelAuthenticationSendRequest telAuthenticationSendRequest);
 
-	boolean isIdDuplicate(String id);
+	boolean isDuplicated(String id);
 
-	List<SchoolsFindResponse> findSchools(String name);
+	List<SchoolsFindResponse> getSchools(String name);
 
 	void saveAdmin(AdminSaveRequest request);
 
 	void saveStudent(StudentSaveRequest request);
 
-	List<StudentsFindResponse> findAllStudents(int gradeNo);
+	List<StudentsGetResponse> getStudents(int gradeNo);
 
-	String findUserId(UserIdFindRequest request);
+	String getUserId(UserIdFindRequest request);
 
 	void updateUser(Integer userNo, UserUpdateRequest request);
 
 	void deleteUser(Integer userNo, UserDeleteRequest request);
 
-	List<BallsFindResponse> findAllBalls(int gradeNo);
+	List<BallsFindResponse> getAllBalls(int gradeNo);
 
 	void resetAllBalls(int gradeNo);
 }
