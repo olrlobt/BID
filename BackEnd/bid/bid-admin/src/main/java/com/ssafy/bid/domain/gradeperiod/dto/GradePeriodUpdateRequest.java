@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class GradePeriodsRequest {
+public class GradePeriodUpdateRequest {
 	private int no;
 	private LocalTime startPeriod;
 	private LocalTime endPeriod;
