@@ -162,6 +162,7 @@ export default function RewardPage() {
               svg={ SettingsIcon }
               text='리워드 편집' 
               height='2vw'
+              backgroundColor='#5FA1C4'
             />
           </div>
           <div className = {styled.rewardContainer}>

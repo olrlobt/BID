@@ -20,4 +20,4 @@ export const couponSlice = createSlice({
   },
 });
 
-export const { initCoupons, addCoupon, removeCoupon } = couponSlice.actions;
+export const { initCoupons } = couponSlice.actions;
