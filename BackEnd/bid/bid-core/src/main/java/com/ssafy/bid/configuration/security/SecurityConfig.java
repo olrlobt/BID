@@ -42,7 +42,7 @@ public class SecurityConfig {
 			.sessionManagement(configuerer -> configuerer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize ->
 				authorize
-					.requestMatchers("/avatars").authenticated()
+					.requestMatchers("/savings/**").authenticated()
 					.requestMatchers("/**").permitAll()
 					.anyRequest().authenticated()
 			)

@@ -1,11 +1,11 @@
 package com.ssafy.bid.domain.saving.dto;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
-public class SavingsResponse {
+public class SavingFindResponse {
 	private int asset;
 	private int savingNo;
 	private String savingName;
@@ -15,7 +15,7 @@ public class SavingsResponse {
 	private int savingInterestRate;
 	private String savingTerms;
 
-	public SavingsResponse(
+	public SavingFindResponse(
 		int asset,
 		int savingNo,
 		String savingName,
