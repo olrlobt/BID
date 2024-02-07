@@ -51,14 +51,14 @@ function ClassPage() {
   
   const { openModal } = useModal();
   
-  // const dummyData = [
-  //   { no:1, number: 1, name: '백지윤', asset: '5,678' },
-  //   { no:2, number: 2, name: '유현지', asset: '4,321' },
-  //   { no:3, number: 3, name: '배민지', asset: '9,321' },
-  //   { no:4, number: 4, name: '이현진', asset: '92,394' },
-  //   { no:5, number: 8, name: '이승헌', asset: '321' },
-  //   { no:6, number: 6, name: '김예림', asset: '54,321' },
-  // ];
+  const dummyData = [
+    { no:1, number: 1, name: '백지윤', asset: '5,678' },
+    { no:2, number: 2, name: '유현지', asset: '4,321' },
+    { no:3, number: 3, name: '배민지', asset: '9,321' },
+    { no:4, number: 4, name: '이현진', asset: '92,394' },
+    { no:5, number: 8, name: '이승헌', asset: '321' },
+    { no:6, number: 6, name: '김예림', asset: '54,321' },
+  ];
 
   useEffect(() => {
     setSelectedStudent(studentList[0]); 
@@ -165,7 +165,7 @@ function ClassPage() {
           </thead>
           <StudentList
               info={sortedInfo}
-              students={studentList} 
+              students={studentList.concat(dummyData)}
               handleStudentClick={handleStudentClick}
               handleRemove={handleRemove}
               showRemove={showRemove}
@@ -173,9 +173,9 @@ function ClassPage() {
               handleEdit={handleEdit}
             />
         </table>
-        {selectedStudent && (
+        { (selectedStudent || dummyData.length > 0)  && (
             <div className={`${styled.studentFinDataContainer} ${styled.studentFinDataTable}`}>
-              <StudentFinData student={selectedStudent} />
+              <StudentFinData student={selectedStudent || dummyData[0]} />
             </div>
           )}
         </div>

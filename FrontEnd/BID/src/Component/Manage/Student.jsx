@@ -18,7 +18,7 @@ const Student = ({ item, onClick, handleRemove, handleEdit, showRemove }) => {
 
   return (
     <>
-      <tr class={styled.table} onClick={onClick}>
+      <tr className={styled.table} onClick={onClick}>
         <td>{item.number}</td>
         <td>{item.name}</td>
         <td>{item.asset}</td>

@@ -43,7 +43,7 @@ const io = new Server({
         id: socket.id,
         position: generateRandomPosition(),
         bodyColor: generateRandomHexColor(),
-        selectedCharacter: "DefaultBody",
+        selectedCharacter: "AvocadoBody",
       });
     }
 
