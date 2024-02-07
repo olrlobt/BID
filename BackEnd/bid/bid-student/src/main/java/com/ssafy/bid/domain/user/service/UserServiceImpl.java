@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.user.Attendance;
 import com.ssafy.bid.domain.user.Student;
+import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
@@ -18,6 +19,8 @@ import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
 import com.ssafy.bid.domain.user.repository.StudentRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
+import com.ssafy.bid.global.error.exception.InvalidParameterException;
+import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,21 +33,16 @@ public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
-	public StudentResponse findStudent(int userNo, StudentRequest studentRequest) {
-		List<UserCouponsResponse> userCouponsResponses = userRepository.findUserCoupons(userNo);
-		List<AccountsResponse> accountsResponses = userRepository.findAccounts(userNo, studentRequest);
-		StudentResponse studentResponse = userRepository.findStudent(userNo)
-			.orElseThrow(() -> new IllegalArgumentException("일치하는 회원정보가 없습니다."));//TODO: 글로벌 예외처리
+	public void checkAttendance(int userNo) {
+		User user = userRepository.findById(userNo)
+			.orElseThrow(() -> new ResourceNotFoundException("출석등록-회원PK", userNo));
 
-		studentResponse.setCouponsResponses(userCouponsResponses);
-		studentResponse.setAccountsResponses(accountsResponses);
+		if (user instanceof Student) {
+			((Student)user).checkAttendance();
+			return;
+		}
 
-		return studentResponse;
-	}
-
-	@Override
-	public List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest) {
-		return userRepository.findAccount(userNo, accountRequest);
+		throw new InvalidParameterException("출석등록-회원PK", userNo);
 	}
 
 	@Transactional

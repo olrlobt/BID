@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
-public class StudentResponse {
+public class StudentFindResponse {
 	private int savingNo;
 	private int savingDepositPeriod;
 	private int savingInterestRate;
@@ -30,50 +30,61 @@ public class StudentResponse {
 	private int etcSum;
 	private int totalIncome;
 	private int totalExpense;
-	private List<UserCouponsResponse> couponsResponses;
-	private List<AccountsResponse> accountsResponses;
+	private List<UserCouponsFindResponse> couponsResponses;
+	private List<AccountsFindResponse> accountsResponses;
 
-	public StudentResponse(
+	public StudentFindResponse(
 		int savingNo,
 		int savingDepositPeriod,
 		int savingInterestRate,
 		LocalDateTime savingStartPeriod,
 		int savingDepositPrice,
-		int savingResultPrice,
-		boolean attendanceMonday,
-		boolean attendanceTuesday,
-		boolean attendanceWednesday,
-		boolean attendanceThursday,
-		boolean attendanceFriday,
-		int ballCount,
-		int totalCategorySum,
-		int snackSum,
-		int learningSum,
-		int couponSum,
-		int gameSum,
-		int etcSum,
+		int savingCurrentPrice,
+		Boolean attendanceMonday,
+		Boolean attendanceTuesday,
+		Boolean attendanceWednesday,
+		Boolean attendanceThursday,
+		Boolean attendanceFriday,
+		Integer ballCount,
+		Integer snackSum,
+		Integer learningSum,
+		Integer couponSum,
+		Integer gameSum,
+		Integer etcSum,
 		int totalIncome,
 		int totalExpense
 	) {
 		this.savingNo = savingNo;
 		this.savingDepositPeriod = savingDepositPeriod;
 		this.savingInterestRate = savingInterestRate;
-		this.savingCurrentPeriod = (int)ChronoUnit.DAYS.between(savingStartPeriod, LocalDateTime.now());
-		this.savingCurrentPrice = savingDepositPrice * savingCurrentPeriod;
-		this.savingResultPrice = savingResultPrice;
+		if (savingStartPeriod != null) {
+			this.savingCurrentPeriod = (int)ChronoUnit.DAYS.between(savingStartPeriod, LocalDateTime.now());
+		}
+		this.savingCurrentPrice = savingCurrentPrice;
+		this.savingResultPrice =
+			savingResultPrice + (savingDepositPeriod - savingCurrentPeriod) * savingDepositPrice * (1
+				+ savingInterestRate / 100);
 		this.attendanceMonday = attendanceMonday;
 		this.attendanceTuesday = attendanceTuesday;
 		this.attendanceWednesday = attendanceWednesday;
 		this.attendanceThursday = attendanceThursday;
 		this.attendanceFriday = attendanceFriday;
 		this.ballCount = ballCount;
-		this.totalCategorySum = totalCategorySum;
 		this.snackSum = snackSum;
 		this.learningSum = learningSum;
 		this.couponSum = couponSum;
 		this.gameSum = gameSum;
 		this.etcSum = etcSum;
+		this.totalCategorySum = snackSum + learningSum + couponSum + gameSum + etcSum;
 		this.totalIncome = totalIncome;
 		this.totalExpense = totalExpense;
+	}
+
+	public void completeResponse(
+		List<UserCouponsFindResponse> couponsResponses,
+		List<AccountsFindResponse> accountsResponses
+	) {
+		this.couponsResponses = couponsResponses;
+		this.accountsResponses = accountsResponses;
 	}
 }

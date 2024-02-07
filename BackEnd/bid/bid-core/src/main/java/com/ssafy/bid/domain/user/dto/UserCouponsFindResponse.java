@@ -5,12 +5,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class FindUserIDRequest {
+public class UserCouponsFindResponse {
 	private String name;
-	private String tel;
+	private long count;
 
-	public FindUserIDRequest(String name, String tel) {
+	public UserCouponsFindResponse(
+		String name,
+		long count
+	) {
 		this.name = name;
-		this.tel = tel;
+		this.count = count;
 	}
 }
