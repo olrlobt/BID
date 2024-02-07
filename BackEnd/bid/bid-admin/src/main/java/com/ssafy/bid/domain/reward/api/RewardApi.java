@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bid.domain.reward.dto.RewardListGetResponse;
 import com.ssafy.bid.domain.reward.dto.RewardSaveRequest;
 import com.ssafy.bid.domain.reward.dto.RewardSendRequest;
-import com.ssafy.bid.domain.reward.dto.RewardsFindResponse;
 import com.ssafy.bid.domain.reward.service.RewardService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,25 +28,27 @@ public class RewardApi {
 	private final RewardService rewardService;
 
 	@PostMapping("/{gradeNo}/rewards")
-	public ResponseEntity<Void> saveReward(@PathVariable int gradeNo,
+	public ResponseEntity<?> saveReward(@PathVariable int gradeNo,
 		@RequestBody RewardSaveRequest rewardSaveRequest) {
 		rewardService.saveReward(gradeNo, rewardSaveRequest);
 		return ResponseEntity.status(CREATED).build();
 	}
 
 	@GetMapping("/{gradeNo}/rewards")
-	public List<RewardsFindResponse> findRewards(@PathVariable int gradeNo) {
-		return rewardService.findRewards(gradeNo);
+	public ResponseEntity<List<RewardListGetResponse>> getRewards(@PathVariable int gradeNo) {
+		List<RewardListGetResponse> responses = rewardService.getRewards(gradeNo);
+		return ResponseEntity.status(OK).body(responses);
 	}
 
-	@DeleteMapping("/rewards/{rewardsNo}")
-	public ResponseEntity<Void> deleteReward(@PathVariable int rewardsNo) {
+	@DeleteMapping("/{gradeNo}/rewards/{rewardsNo}")
+	public ResponseEntity<?> deleteReward(@PathVariable int rewardsNo) {
 		rewardService.deleteReward(rewardsNo);
 		return ResponseEntity.status(NO_CONTENT).build();
 	}
 
-	@PostMapping("/rewards/send")
-	public void sendReward(@RequestBody RewardSendRequest rewardSendRequest) {
+	@PostMapping("/{gradeNo}/rewards/send")
+	public ResponseEntity<?> sendReward(@RequestBody RewardSendRequest rewardSendRequest) {
 		rewardService.sendReward(rewardSendRequest);
+		return ResponseEntity.status(OK).build();
 	}
 }
