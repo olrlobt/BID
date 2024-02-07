@@ -100,11 +100,11 @@ public class NotificationServiceImpl implements NotificationService {
 					.id(id)
 					.name(SSE)
 					.data(data, MediaType.APPLICATION_JSON)
-				// .reconnectTime(0)
+					.reconnectTime(0)
 			);
 
-			sseEmitter.complete();
-			sseEmitterRepository.deleteSseEmitter(id);
+			// sseEmitter.complete();
+			// sseEmitterRepository.deleteSseEmitter(id);
 
 		} catch (IOException e) {
 			sseEmitterRepository.deleteSseEmitter(id);
