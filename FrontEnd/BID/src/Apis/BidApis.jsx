@@ -20,3 +20,21 @@ export const getProductListApi = async (gradeNo) => {
 export const getProductDetailApi = async (gradeNo, boardNo) => {
   return BidApis.get(`${gradeNo}/boards/${boardNo}`);
 }
+
+/**
+ * 경매 삭제하기
+ * @param gradeNo 학급 넘버
+ * @param boardNo 경매글 넘버
+ */
+export const deleteProductApi = async (gradeNo, boardNo) => {
+  return BidApis.delete(`${gradeNo}/boards/${boardNo}`);
+}
+
+/**
+ * 댓글 삭제하기
+ * @param gradeNo 학급 넘버
+ * @param boardNo 경매글 넘버
+ */
+export const deletCommentApi = async (gradeNo, boardNo, replyNos) => {
+  return BidApis.delete(`${gradeNo}/boards/${boardNo}/${replyNos}`);
+}
