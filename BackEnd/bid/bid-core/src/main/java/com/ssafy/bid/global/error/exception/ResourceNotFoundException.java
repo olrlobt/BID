@@ -6,7 +6,11 @@ package com.ssafy.bid.global.error.exception;
  */
 
 public class ResourceNotFoundException extends RuntimeException {
-	public ResourceNotFoundException(String message) {
-		super(message);
+
+	private final Object parameterValue;
+
+	public ResourceNotFoundException(String message, Object parameterValue) {
+		super(message + " Parameter Value: " + parameterValue.toString());
+		this.parameterValue = parameterValue;
 	}
 }
