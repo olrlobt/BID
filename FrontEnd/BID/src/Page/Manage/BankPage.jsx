@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
-import styled from "./BankPage.module.css";
-import { updateSavingList, viewSavingList } from "../../Apis/TeacherManageApis";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import useSaving from "../../hooks/useSaving";
-import { useSelector } from "react-redux";
-import { moneySeletor } from "../../Store/moneySlice";
+import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import styled from './BankPage.module.css';
+import { updateSavingList, viewSavingList } from '../../Apis/TeacherManageApis';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import useSaving from '../../hooks/useSaving';
+import { useSelector } from 'react-redux';
+import { moneySeletor } from '../../Store/moneySlice';
 
 export default function BankPage() {
   // 이후 백엔드에서 국고 금액 받아오면 바꾸기
@@ -45,21 +45,21 @@ export default function BankPage() {
   };
 
   const changeSavings = useMutation({
-    mutationKey: ["changeSaving"],
+    mutationKey: ['changeSaving'],
     mutationFn: () =>
       updateSavingList(savingBasket)
         .then(() => {
           changeSavingList(savingBasket);
           setIsEdit(!isEdit);
-          alert("변경되었습니다.");
+          alert('변경되었습니다.');
         })
         .catch(() => {
-          alert("변경이 되지 않았습니다.");
+          alert('변경이 되지 않았습니다.');
         }),
   });
 
   const { data: savingInfo } = useQuery({
-    queryKey: ["savingInfo"],
+    queryKey: ['savingInfo'],
     queryFn: () =>
       viewSavingList().then((res) => {
         initSavingList(res.data);
@@ -156,7 +156,7 @@ export default function BankPage() {
                 <div>
                   <label htmlFor="interest">금리</label>
                   <input
-                    className={isEdit ? `${styled.isEdit}` : ""}
+                    className={isEdit ? `${styled.isEdit}` : ''}
                     type="number"
                     value={savingBasket[0].interestRate}
                     id="interest"
@@ -215,7 +215,7 @@ export default function BankPage() {
                 <div>
                   <label htmlFor="interest">금리</label>
                   <input
-                    className={isEdit ? `${styled.isEdit}` : ""}
+                    className={isEdit ? `${styled.isEdit}` : ''}
                     type="number"
                     value={savingBasket[1].interestRate}
                     onChange={(e) => handleChange(e, 1)}
