@@ -5,13 +5,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SchoolResponse {
+public class SchoolsFindResponse {
 	private Integer no;
 	private String name;
 	private String region;
 	private String code;
 
-	public SchoolResponse(
+	public SchoolsFindResponse(
 		Integer no,
 		String name,
 		String region,

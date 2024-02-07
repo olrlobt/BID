@@ -11,9 +11,7 @@ import com.ssafy.bid.domain.user.dto.StudentResponse;
 
 public interface UserService {
 
-	StudentResponse findStudent(int userNo, StudentRequest studentRequest);
-
-	List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest);
+	void checkAttendance(int userNo);
 
 	void resetPassword(String userId, PasswordResetRequest passwordResetRequest);
 

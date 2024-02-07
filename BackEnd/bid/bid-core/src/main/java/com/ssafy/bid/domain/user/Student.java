@@ -3,6 +3,8 @@ package com.ssafy.bid.domain.user;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import com.ssafy.bid.domain.grade.ExpenditureStatistics;
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -30,6 +32,9 @@ public class Student extends User {
 	@Embedded
 	private Attendance attendance;
 
+	@Embedded
+	private ExpenditureStatistics expenditureStatistics;
+
 	/**
 	 * grade : users(me) = 1 : N
 	 */
@@ -52,6 +57,8 @@ public class Student extends User {
 		this.ballCount = ballCount;
 		this.profileImgUrl = profileImgUrl;
 		this.gradeNo = gradeNo;
+		this.attendance = new Attendance();
+		this.expenditureStatistics = new ExpenditureStatistics();
 	}
 
 	public void addRewardPrice(int price) {
@@ -72,5 +79,9 @@ public class Student extends User {
 
 	public void resetBalls() {
 		this.ballCount = 1;
+	}
+
+	public void checkAttendance() {
+		this.attendance.checkAttendance();
 	}
 }

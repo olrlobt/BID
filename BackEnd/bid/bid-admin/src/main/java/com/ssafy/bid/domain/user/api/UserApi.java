@@ -18,21 +18,21 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.bid.domain.user.dto.AccountRequest;
-import com.ssafy.bid.domain.user.dto.AccountResponse;
+import com.ssafy.bid.domain.user.dto.AccountFindRequest;
+import com.ssafy.bid.domain.user.dto.AccountFindResponse;
+import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
-import com.ssafy.bid.domain.user.dto.FindUserIDRequest;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
-import com.ssafy.bid.domain.user.dto.RegisterRequest;
-import com.ssafy.bid.domain.user.dto.SchoolResponse;
-import com.ssafy.bid.domain.user.dto.StudentRegistrationRequest;
-import com.ssafy.bid.domain.user.dto.StudentRequest;
-import com.ssafy.bid.domain.user.dto.StudentResponse;
-import com.ssafy.bid.domain.user.dto.StudentsResponse;
+import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentFindRequest;
+import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
+import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
+import com.ssafy.bid.domain.user.dto.UserIdFindRequest;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
-import com.ssafy.bid.domain.user.dto.UserWithdrawalRequest;
+import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
 import com.ssafy.bid.domain.user.service.CoreUserService;
 import com.ssafy.bid.domain.user.service.UserService;
 
@@ -48,19 +48,34 @@ public class UserApi {
 
 	@PostMapping("/send-code")
 	public ResponseEntity<TelAuthenticationSendResponse> sendCode(
-		@RequestBody TelAuthenticationSendRequest telAuthenticationSendRequest) {
+		@RequestBody TelAuthenticationSendRequest telAuthenticationSendRequest
+	) {
 		TelAuthenticationSendResponse response = userService.sendTelAuthentication(telAuthenticationSendRequest);
 		return ResponseEntity.status(OK).body(response);
 	}
 
-	@GetMapping("/{gradeNo}/users")
-	public List<StudentsResponse> findStudents(@PathVariable int gradeNo) {
-		return userService.findStudents(gradeNo);
+	@GetMapping("/check-id")
+	public ResponseEntity<Boolean> checkIdDuplicate(@RequestParam String id) {
+		boolean isDuplicate = userService.isIdDuplicate(id);
+		return ResponseEntity.ok().body(isDuplicate);
 	}
 
-	@GetMapping("/users/{userNo}")
-	public StudentResponse findStudent(@PathVariable int userNo, @ModelAttribute StudentRequest studentRequest) {
-		return userService.findStudent(userNo, studentRequest);
+	@GetMapping("/schools")
+	public ResponseEntity<List<SchoolsFindResponse>> findSchools(@RequestParam String name) {
+		List<SchoolsFindResponse> response = userService.findSchools(name);
+		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/register")
+	public ResponseEntity<?> saveAdmin(@RequestBody AdminSaveRequest request) {
+		userService.saveAdmin(request);
+		return ResponseEntity.status(CREATED).build();
+	}
+
+	@PostMapping("/students")
+	public ResponseEntity<Void> saveStudent(@RequestBody StudentSaveRequest request) {
+		userService.saveStudent(request);
+		return ResponseEntity.status(CREATED).build();
 	}
 
 	@PostMapping("/login")
@@ -75,27 +90,46 @@ public class UserApi {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/users/{userNo}/accounts")
-	public List<AccountResponse> findAccount(@PathVariable int userNo, @ModelAttribute AccountRequest accountRequest) {
-		return userService.findAccount(userNo, accountRequest);
+	@GetMapping("/{gradeNo}/users")
+	public ResponseEntity<List<StudentsFindResponse>> findStudents(@PathVariable int gradeNo) {
+		List<StudentsFindResponse> responses = userService.findAllStudents(gradeNo);
+		return ResponseEntity.status(OK).body(responses);
 	}
 
-	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
-		userService.registerUser(request);
-		return ResponseEntity.status(CREATED).build();
+	@GetMapping("{grageNo}/users/{userNo}")
+	public ResponseEntity<StudentFindResponse> findStudent(
+		@PathVariable int userNo,
+		@ModelAttribute StudentFindRequest studentFindRequest
+	) {
+		StudentFindResponse response = coreUserService.findStudent(userNo, studentFindRequest);
+		return ResponseEntity.status(OK).body(response);
 	}
 
-	@GetMapping("/check-id")
-	public ResponseEntity<Boolean> checkIdDuplicate(@RequestParam String id) {
-		boolean isDuplicate = userService.isIdDuplicate(id);
-		return ResponseEntity.ok().body(isDuplicate);
+	@GetMapping("{gradeNo}/users/{userNo}/accounts")
+	public ResponseEntity<List<AccountFindResponse>> findAccount(
+		@PathVariable int userNo,
+		@ModelAttribute AccountFindRequest accountFindRequest
+	) {
+		List<AccountFindResponse> responses = coreUserService.findAccount(userNo, accountFindRequest);
+		return ResponseEntity.status(OK).body(responses);
 	}
 
-	@GetMapping("/schools")
-	public ResponseEntity<List<SchoolResponse>> searchSchools(@RequestParam String name) {
-		List<SchoolResponse> response = userService.searchSchools(name);
-		return ResponseEntity.ok(response);
+	@PostMapping("/find-id")
+	public ResponseEntity<String> findUserId(@RequestBody UserIdFindRequest request) {
+		String id = userService.findUserId(request);
+		return ResponseEntity.ok(id);
+	}
+
+	@PatchMapping("/users/{userNo}")
+	public ResponseEntity<?> updateUser(@PathVariable Integer userNo, @RequestBody UserUpdateRequest request) {
+		userService.updateUser(userNo, request);
+		return ResponseEntity.status(OK).build();
+	}
+
+	@DeleteMapping("/users/{userNo}")
+	public ResponseEntity<?> deleteUser(@PathVariable Integer userNo, @RequestBody UserDeleteRequest request) {
+		userService.deleteUser(userNo, request);
+		return ResponseEntity.status(NO_CONTENT).build();
 	}
 
 	@GetMapping("/{gradeNo}/balls")
@@ -105,32 +139,8 @@ public class UserApi {
 	}
 
 	@PatchMapping("/{gradeNo}/balls")
-	public ResponseEntity<?> modifyBalls(@PathVariable int gradeNo) {
-		userService.modifyBalls(gradeNo);
+	public ResponseEntity<?> resetAllBalls(@PathVariable int gradeNo) {
+		userService.resetAllBalls(gradeNo);
 		return ResponseEntity.status(OK).build();
-	}
-
-	@PostMapping("/find-id")
-	public ResponseEntity<String> findUserId(@RequestBody FindUserIDRequest request) {
-		String id = userService.findUserId(request.getName(), request.getTel());
-		return ResponseEntity.ok(id);
-	}
-
-	@DeleteMapping("/users/{userNo}")
-	public ResponseEntity<?> deleteUser(@PathVariable Integer userNo, @RequestBody UserWithdrawalRequest request) {
-		userService.deleteUser(userNo, request);
-		return ResponseEntity.status(NO_CONTENT).build();
-	}
-
-	@PatchMapping("/users/{userNo}")
-	public ResponseEntity<?> updateUser(@PathVariable Integer userNo, @RequestBody UserUpdateRequest request) {
-		userService.updateUser(userNo, request);
-		return ResponseEntity.status(OK).build();
-	}
-
-	@PostMapping("/students")
-	public ResponseEntity<Void> registerStudent(@RequestBody StudentRegistrationRequest request) {
-		userService.registerStudent(request);
-		return ResponseEntity.status(CREATED).build();
 	}
 }

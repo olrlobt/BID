@@ -1,17 +1,17 @@
 package com.ssafy.bid.domain.user.dto;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
-public class StudentsResponse {
+public class StudentsFindResponse {
 	private int no;
 	private int number;
 	private String name;
 	private int asset;
 
-	public StudentsResponse(
+	public StudentsFindResponse(
 		int no,
 		String id,
 		String name,
