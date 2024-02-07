@@ -10,6 +10,7 @@ import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Reply;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
+import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
@@ -31,14 +32,14 @@ public class BoardService {
 	private final ReplyRepository replyRepository;
 	private final BiddingRepository biddingRepository;
 
-	public List<BoardResponse> findBoards(int gradeNo, String keyword) {
-		return boardRepository.findBoards(gradeNo, keyword);
+	public List<BoardListResponse> findBoards(int gradeNo) {
+		return boardRepository.findBoards(gradeNo);
 	}
 
 	public MyBoardsResponse findMyAllBoards(int userNo) {
 
-		List<BoardResponse> myBoards = boardRepository.findMyBoards(userNo);
-		List<BoardResponse> myBiddingBoards = boardRepository.findMyBiddingBoards(userNo);
+		List<BoardListResponse> myBoards = boardRepository.findMyBoards(userNo);
+		List<BoardListResponse> myBiddingBoards = boardRepository.findMyBiddingBoards(userNo);
 
 		return new MyBoardsResponse(myBoards, myBiddingBoards);
 	}
