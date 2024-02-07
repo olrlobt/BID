@@ -1,13 +1,13 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { modalSlice } from "./modalSlice";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { modalSlice } from './modalSlice';
 import { userSlice } from './userSlice';
-import { productSlice } from "./productSlice";
-import { couponSlice } from "./couponSlice";
-import { ballSlice } from "./ballSlice";
-import { bidSlice } from "./bidSlice";
-import { moneySlice } from "./moneySlice";
-import { bidCountSlice } from "./bidCountSlice";
-import { savingSlice } from "./savingSlice";
+import { productSlice } from './productSlice';
+import { couponSlice } from './couponSlice';
+import { ballSlice } from './ballSlice';
+import { bidSlice } from './bidSlice';
+import { moneySlice } from './moneySlice';
+import { bidCountSlice } from './bidCountSlice';
+import { savingSlice } from './savingSlice';
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,

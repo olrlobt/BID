@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  classMoney: null,
+  classMoney: 0,
 };
 
 export const moneySeletor = (state) => state.classMoney.classMoney;
