@@ -68,8 +68,8 @@ export default function Models() {
             <Alarm />
             <Bank />
             <BiddingPlace />
-            {/* <CharacterModel selectedCharacter="SnowmanBody" bodyColor="green"/>
-            <CharacterModel 
+            {/* <CharacterModel selectedCharacter="SnowmanBody" bodyColor="green"/> */}
+            {/* <CharacterModel 
             selectedCharacter="DefaultBody" 
              position-x={1} 
              
