@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.bid.domain.board.QReply;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,10 @@ public class CoreBoardRepositoryImpl implements CoreBoardCustomRepository {
 					board.gradePeriodNo
 				))
 				.from(board)
-				.innerJoin(student).on(board.userNo.eq(student.no))
-				.where(student.gradeNo.eq(board.gradeNo).and(board.no.eq(boardNo)))
+				.innerJoin(student)
+				.on(board.userNo.eq(student.no)
+					.and(board.gradeNo.eq(student.gradeNo))
+					.and(board.no.eq(boardNo)))
 				.fetchOne());
 	}
 }
