@@ -58,12 +58,14 @@ public class UserSaving {
 		LocalDateTime endPeriod,
 		Integer currentPrice,
 		Integer userNo,
-		Integer savingNo
+		Integer savingNo,
+		Integer gradeNo
 	) {
 		this.startPeriod = startPeriod;
 		this.endPeriod = endPeriod;
 		this.currentPrice = currentPrice;
 		this.userNo = userNo;
 		this.savingNo = savingNo;
+		this.gradeNo = gradeNo;
 	}
 }
