@@ -8,6 +8,8 @@ import SubmitButton from "../Common/SubmitButton";
 import Comment from "./Comment";
 import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getProductDetailApi } from "../../Apis/BidApis";
 
 export default function ViewProductModal({ onClose, ...props }) {
   // 0 no,
@@ -23,6 +25,18 @@ export default function ViewProductModal({ onClose, ...props }) {
   // 10 gradePeriodNo,
   // 11 createdAt
   // 12 comments
+
+  /** 경매 상세 쿼리 */
+  const { data: productDetailIinfo } = useQuery({
+    queryKey: ['getProductDetail'],
+    queryFn: () =>
+      getProductDetailApi(1, props[0]).then((res) => {
+        if(res.data !== undefined){
+          console.log(res.data);
+          return res.data;
+        }
+      })
+  });
 
   /** 입찰 신청 함수 */
   const bidSubmit = (e) => {
@@ -42,18 +56,19 @@ export default function ViewProductModal({ onClose, ...props }) {
     console.log(e.target.newComment.value);
   }
 
+  console.log(props);
   return(
     <Modal onClose={onClose} {...props}>
       <div className={styled.header}>
         <div className={styled.top}>
-          <h1>{props[1]}</h1>
-          <span>{props[9]}</span>
+          <h1>{ productDetailIinfo.title }</h1>
+          <span>{ productDetailIinfo.userName }</span>
         </div>
         <div className={styled.info}>
           <div className={styled.commonArea}>
             <div className = {styled.infoButton}>
               <RoundedInfoButton
-                value = { props[7] }
+                value = { productDetailIinfo.category }
                 unit = ''
                 textColor = 'white'
                 borderColor = '#BBBD32'
@@ -63,7 +78,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
             <div className = {styled.infoButton}>
               <RoundedInfoButton
-                value = { props[10] }
+                value = { productDetailIinfo.gradePeriodNo }
                 unit = '교시'
                 textColor = 'white'
                 borderColor = '#BBBD32'
@@ -73,7 +88,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
             <div className = {styled.infoButton}>
               <RoundedInfoButton
-                value = { props[3] }
+                value = { productDetailIinfo.startPrice }
                 unit = '비드'
                 textColor = '#F23F3F'
                 borderColor = '#F23F3F'
@@ -89,7 +104,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
             <div className = {styled.infoButton}>
               <RoundedInfoButton
-                value = { props[5] }
+                value = { productDetailIinfo.averagePrice }
                 unit = '비드'
                 textColor = 'white'
                 borderColor = '#F23F3F'
@@ -99,7 +114,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
           </div>
           <div className={styled.isWriterArea}>
-            <div className={styled.notWriterArea}>
+            {/* <div className={styled.notWriterArea}>
               <form id='newProductForm' onSubmit={bidSubmit}>
                 <input
                   type='number'
@@ -114,8 +129,8 @@ export default function ViewProductModal({ onClose, ...props }) {
                   fontSize = '1.7vw'
                 />
               </form>
-            </div>
-            {/* <div className={styled.writerArea}>
+            </div> */}
+            <div className={styled.writerArea}>
               <SettingButton
                 onClick={ () => console.log('modify') }
                 svg={ Edit }
@@ -130,7 +145,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                 height='1vw'
                 backgroundColor='#F23F3F'
               />
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
@@ -138,10 +153,10 @@ export default function ViewProductModal({ onClose, ...props }) {
       <div className={styled.body}>
         <div className={styled.left}>
           <div className={styled.imgArea}>
-            <img src={props[8]} alt="제품 이미지" />
+            <img src={ productDetailIinfo.goodsImgUrl } alt="제품 이미지" />
           </div>
           <div className={styled.content}>
-            <textarea name='bidContent' defaultValue={props[2]} disabled/>
+            <textarea name='bidContent' defaultValue={ productDetailIinfo.description } disabled/>
           </div>
         </div>
         <div className={styled.right}>
