@@ -125,6 +125,7 @@ export function CharacterModel({
         </p>
       </div>
     </Html>
+    
 
       {/* 얼굴 */}
       <mesh 
@@ -330,8 +331,72 @@ export function CharacterModel({
         />
       </group>
     )}
+
+    {/* 마리오 */}
+    {selectedCharacter === "MarioBody" && (
+      <group 
+      position={[2.84, 0.43, -1.897]}
+      rotation={[Math.PI / 2, 0, -Math.PI / 2]} 
+      scale={0.001}
+      >
+        <mesh geometry={nodes.Mesh040.geometry} material={materials['08 - Default.004']} />
+        <mesh geometry={nodes.Mesh040_1.geometry} material={materials['Material.026']} />
+        <mesh geometry={nodes.Mesh040_2.geometry} material={materials['03 - Default']} />
+        <mesh geometry={nodes.Mesh040_3.geometry} material={materials['09 - Default.001']} />
+        <mesh geometry={nodes.Mesh040_4.geometry} material={materials['14 - Default.001']} />
+        <mesh geometry={nodes.Mesh040_5.geometry} material={materials['07 - Default.003']} />
+        <mesh geometry={nodes.Mesh040_6.geometry} material={materials['08 - Default.003']} />
+      </group>
+        )}
+
+      {/* 아이언맨 */}
+    {selectedCharacter === "IronManBody" && (
+      <group 
+      position={[2.824, 0.553, -1.781]} 
+      rotation={[0, Math.PI / 2, 0]} 
+      scale={0.029}>
+        <mesh geometry={nodes.Cube012.geometry} material={materials['gold.002']} />
+        <mesh geometry={nodes.Cube012_1.geometry} material={materials['gold.001']} />
+        <mesh geometry={nodes.Cube012_2.geometry} material={materials['Iron_man_leg:red.001']} />
+        <mesh geometry={nodes.Cube012_3.geometry} material={materials['red.006']} />
+        <mesh geometry={nodes.Cube012_4.geometry} material={materials['Iron_man_leg:red.006']} />
+        <mesh geometry={nodes.Cube012_5.geometry} material={materials['red.007']} />
+        <mesh geometry={nodes.Cube012_6.geometry} material={materials['Material.029']} />
+        <mesh geometry={nodes.Cube012_7.geometry} material={materials['08 - Default.001']} />
+      </group>
+        )}
+
+      {/* 미니언 */}
+
+    {selectedCharacter === "MinionBody" && (
+    <group position={[2.909, 0.57, -1.893]} rotation={[Math.PI / 2, 0.194, -Math.PI / 2]} scale={[0.066, 0.058, 0.058]}>
+        <mesh geometry={nodes.Torus003.geometry} material={materials['silver.007']} />
+        <mesh geometry={nodes.Torus003_1.geometry} material={materials.GLOVE} />
+        <mesh geometry={nodes.Torus003_2.geometry} material={materials.final} />
+        <mesh geometry={nodes.Torus003_3.geometry} material={materials['silver.001']} />
+        <mesh geometry={nodes.Torus003_4.geometry} material={materials['Material.011']} />
+        <mesh geometry={nodes.Torus003_6.geometry} material={materials['GLOVE.002']} scale={0.8}/>
+      </group>
+        )}
+
+      {/* 뚱이 */}
+    {selectedCharacter === "PatrikBody" && (
+    <group position={[2.84, 0.57, -1.914]} rotation={[2.167, -0.112, -1.701]} scale={[0.001, 0.0013,0.00029]}>
+        <mesh geometry={nodes.Mesh005_1.geometry} material={materials.Skin} />
+        <mesh geometry={nodes.Mesh005_2.geometry} material={materials.Pants} />
+        <mesh geometry={nodes.Mesh005_3.geometry} material={materials['lambert1.007']} />
+      </group>
+      )}
+      
+      {/* 아보카도 */}
+    {selectedCharacter === "AvocadoBody" && (
+    <group position={[2.84, 0.573, -1.781]} rotation={[0, Math.PI / 2, 0]} scale={0.029}>
+      <mesh geometry={nodes.Cube016.geometry} material={materials.light} />
+      <mesh geometry={nodes.Cube016_1.geometry} material={materials.dark} />
+      <mesh geometry={nodes.Cube016_2.geometry} material={materials['pit.001']} />
+    </group>
+      )}
       <Box position={[2.892, 1, -1.964]} />
-    
     </group>
   );
 }
