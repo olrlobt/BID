@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
-import com.ssafy.bid.domain.user.dto.BallsResponse;
+import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.RegisterRequest;
 import com.ssafy.bid.domain.user.dto.SchoolResponse;
 import com.ssafy.bid.domain.user.dto.StudentRegistrationRequest;
@@ -32,7 +32,7 @@ public interface UserService {
 
 	boolean isIdDuplicate(String id);
 
-	List<BallsResponse> findBalls(int gradeNo);
+	List<BallsFindResponse> findAllBalls(int gradeNo);
 
 	void modifyBalls(int gradeNo);
 

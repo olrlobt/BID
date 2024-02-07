@@ -13,7 +13,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.board.BiddingStatus;
 import com.ssafy.bid.domain.board.BoardStatus;
 import com.ssafy.bid.domain.board.dto.BoardListResponse;
-import com.ssafy.bid.domain.board.dto.BoardResponse;
 
 import lombok.RequiredArgsConstructor;
 

@@ -69,4 +69,8 @@ public class Student extends User {
 	public void addSavingPrice(int price) {
 		this.asset += price;
 	}
+
+	public void resetBalls() {
+		this.ballCount = 1;
+	}
 }

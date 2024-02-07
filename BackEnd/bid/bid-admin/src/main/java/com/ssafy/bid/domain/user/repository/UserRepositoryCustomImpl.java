@@ -3,6 +3,7 @@ package com.ssafy.bid.domain.user.repository;
 import static com.querydsl.core.types.ExpressionUtils.*;
 import static com.ssafy.bid.domain.coupon.QCoupon.*;
 import static com.ssafy.bid.domain.coupon.QUserCoupon.*;
+import static com.ssafy.bid.domain.grade.QGrade.*;
 import static com.ssafy.bid.domain.saving.QSaving.*;
 import static com.ssafy.bid.domain.saving.QUserSaving.*;
 import static com.ssafy.bid.domain.user.QAccount.*;
@@ -28,7 +29,7 @@ import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
-import com.ssafy.bid.domain.user.dto.BallsResponse;
+import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
@@ -320,32 +321,36 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
-	public List<BallsResponse> findBalls(int gradeNo) {
+	public List<BallsFindResponse> findAllBallsByGradeNo(int gradeNo) {
 		return queryFactory
-			.select(Projections.constructor(BallsResponse.class,
+			.select(Projections.constructor(BallsFindResponse.class,
 					student.no,
 					student.name,
 					student.ballCount
 				)
 			)
 			.from(student)
+			.innerJoin(grade).on(grade.no.eq(student.gradeNo))
 			.where(
-				student.gradeNo.eq(gradeNo)
+				student.gradeNo.eq(gradeNo),
+				student.deletedAt.isNull(),
+				grade.deletedAt.isNull()
 			)
 			.orderBy(student.no.asc())
 			.fetch();
 	}
 
 	@Override
-	public void resetBallCounts(int gradeNo) {
-		queryFactory
-			.update(student)
-			.set(student.ballCount, 1)
+	public List<Student> findAllStudentsByGradeNo(int gradeNo) {
+		return queryFactory
+			.selectFrom(student)
+			.innerJoin(grade).on(grade.no.eq(student.gradeNo))
 			.where(
 				student.gradeNo.eq(gradeNo),
-				student.deletedAt.isNull()
+				student.deletedAt.isNull(),
+				grade.deletedAt.isNull()
 			)
-			.execute();
+			.fetch();
 	}
 
 	@Override
