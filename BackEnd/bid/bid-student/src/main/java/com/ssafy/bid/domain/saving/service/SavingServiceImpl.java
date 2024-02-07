@@ -16,7 +16,6 @@ import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
 import com.ssafy.bid.domain.saving.dto.SavingRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
-import com.ssafy.bid.domain.saving.dto.SavingsResponse;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
 import com.ssafy.bid.domain.saving.repository.UserSavingRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
@@ -31,11 +30,6 @@ public class SavingServiceImpl implements SavingService {
 	private final SavingRepository savingRepository;
 	private final UserSavingRepository userSavingRepository;
 	private final UserRepository userRepository;
-
-	@Override
-	public List<SavingsResponse> findSavings(int gradeNo) {
-		return savingRepository.findSavings(gradeNo);
-	}
 
 	@Override
 	@Transactional
