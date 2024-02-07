@@ -58,10 +58,11 @@ public class Grade extends BaseEntity {
 	@Embedded
 	private BiddingStatistics biddingStatistics;
 
-	public Grade(String schoolCode, Integer year, Integer classRoom) {
+	public Grade(String schoolCode, Integer year, Integer classRoom, Integer userNo) {
 		this.schoolCode = schoolCode;
 		this.year = year;
 		this.classRoom = classRoom;
+		this.userNo = userNo;
 	}
 
 	public void modifySalary(int salary) {

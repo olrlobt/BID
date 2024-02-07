@@ -8,6 +8,9 @@ import com.ssafy.bid.domain.grade.dto.GradeStatisticsFindResponse;
 import com.ssafy.bid.domain.grade.dto.SalaryModifyRequest;
 import com.ssafy.bid.domain.grade.dto.SavingPeriodModifyRequest;
 
+
+import java.util.List;
+
 public interface GradeService {
 	void createGrade(GradeCreationRequest request);
 
