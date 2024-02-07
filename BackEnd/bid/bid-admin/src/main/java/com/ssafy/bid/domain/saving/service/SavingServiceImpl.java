@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.saving.Saving;
 import com.ssafy.bid.domain.saving.dto.SavingModifyRequest;
 import com.ssafy.bid.domain.saving.dto.SavingRequest;
-import com.ssafy.bid.domain.saving.dto.SavingsResponse;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,12 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class SavingServiceImpl implements SavingService {
 
 	private final SavingRepository savingRepository;
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<SavingsResponse> findSavings(int gradeNo) {
-		return savingRepository.findSavings(gradeNo);
-	}
 
 	@Override
 	public void modifySavings(int gradeNo, SavingModifyRequest savingModifyRequest) {
