@@ -15,120 +15,144 @@ import { productSelector } from "../../Store/productSlice";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
-import { getProductListApi } from "../../Apis/BidApis";
+import { getProductListApi, getProductDetailApi } from "../../Apis/BidApis";
 
 export default function BidPage(){
 
-  // const dummyProducts = [
-  //   {
-  //     no: 1,
-  //     title: '곰돌이 인형',
-  //     contents: '제가 좋아하던 곰돌이 인형이에요! 조금 오래됐지만 깨끗해요 ㅎㅎ',
-  //     imgUrl: 'https://sitem.ssgcdn.com/64/46/21/item/1000524214664_i1_750.jpg',
-  //     goodsType: '기타',
-  //     goodsName: '인형',
-  //     userName: '백지윤',
-  //     startPrice: 360,
-  //     avgPrice: 480,
-  //     endTime: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON(),
-  //     comments: [
-  //       {
-  //         userNo: 17,
-  //         name: '유현지',
-  //         content: '우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 ',
-  //         createdAt: new Date('2022-5-20 10:32:20').toJSON(),
-  //         deleteAt: null,
-  //       },
-  //       {
-  //         userNo: 3,
-  //         name: '곽희웅',
-  //         content: '음 친구군',
-  //         createdAt: new Date('2022-5-20 10:32:25').toJSON(),
-  //         deleteAt: null,
-  //       },
-  //       {
-  //         userNo: 34,
-  //         name: '장수민',
-  //         content: '3대 몇인가요?',
-  //         createdAt: new Date('2022-5-20 10:33:20').toJSON(),
-  //         deleteAt: null,
-  //       },
-  //       {
-  //         userNo: 25,
-  //         name: '왕종욱',
-  //         content: '후욱 곰돌쟝...',
-  //         createdAt: new Date('2022-5-20 10:42:20').toJSON(),
-  //         deleteAt: null,
-  //       }
-  //     ],
-  //   }, 
-  //   {
-  //     no: 2,
-  //     title: '주판',
-  //     contents: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다!',
-  //     imgUrl: 'https://img.freepik.com/premium-psd/abacus-icon-3d-render-illustration-for-children-education_620202-2754.jpg?w=2000',
-  //     goodsType: '기타',
-  //     goodsName: '인형',
-  //     userName: '김예림',
-  //     startPrice: 360,
-  //     avgPrice: 480,
-  //     endTime: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON()
-  //   },
-  //   {
-  //     no: 3,
-  //     title: 'ABC 초콜릿',
-  //     contents: '맛있는 쪼꼬',
-  //     imgUrl: 'https://img.freepik.com/premium-psd/chocolate-3d-render_553817-59.jpg',
-  //     goodsType: '간식',
-  //     goodsName: '초콜릿',
-  //     userName: '이승헌',
-  //     startPrice: 360,
-  //     avgPrice: 480,
-  //     endTime: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON()
-  //   }, 
-  //   {
-  //     no: 4,
-  //     title: '초미니 퍼즐',
-  //     contents: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다!',
-  //     imgUrl: 'https://img.freepik.com/premium-psd/jigsaw-puzzle-cube-isolated-gaming-and-streaming-icon-set-cute-minimal-style-3d-render_570783-710.jpg',
-  //     goodsType: '기타',
-  //     goodsName: '퍼즐',
-  //     userName: '이현진',
-  //     startPrice: 360,
-  //     avgPrice: 480,
-  //     endTime: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON()
-  //   },
-  //   {
-  //     no: 5,
-  //     title: '빈츠',
-  //     contents: '제가 좋아하던 곰돌이 인형이에요! 조금 오래됐지만 깨끗해요 ㅎㅎ',
-  //     imgUrl: 'https://img.freepik.com/free-psd/3d-birthday-icon-with-candy_23-2149664024.jpg?size=338&ext=jpg&ga=GA1.1.1546980028.1703721600&semt=ais',
-  //     goodsType: '간식',
-  //     goodsName: '과자',
-  //     userName: '유현지',
-  //     startPrice: 360,
-  //     avgPrice: 480,
-  //     endTime: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON()
-  //   }, 
-  //   {
-  //     no: 6,
-  //     title: '사탕',
-  //     contents: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다!',
-  //     imgUrl: 'https://previews.123rf.com/images/virtosmedia/virtosmedia2303/virtosmedia230311535/199668012-%ED%8C%8C%EB%9E%80%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%ED%99%94%EB%A0%A4%ED%95%9C-%EC%82%AC%ED%83%95%EA%B3%BC-%EA%B3%BC%EC%9E%90%EC%9E%85%EB%8B%88%EB%8B%A4-3d-%EA%B7%B8%EB%A6%BC.jpg',
-  //     goodsType: '간식',
-  //     goodsName: '사탕',
-  //     userName: '배민지',
-  //     startPrice: 360,
-  //     avgPrice: 480,
-  //     endTime: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON()
-  //   }
-  // ]
+  const dummyProducts = [
+    {
+      no: 1,
+      title: '곰돌이 인형',
+      description: '제가 좋아하던 곰돌이 인형이에요! 조금 오래됐지만 깨끗해요 ㅎㅎ',
+      goodsImgUrl: 'https://sitem.ssgcdn.com/64/46/21/item/1000524214664_i1_750.jpg',
+      category: '기타',
+      userName: '백지윤',
+      startPrice: 360,
+      averagePrice: 480,
+      gradePeriodNo: 6,
+      createdAt: new Date('2022-5-20 10:30:20').toJSON(),
+      comments: [
+        {
+          userNo: 17,
+          name: '유현지',
+          content: '우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 ',
+          createdAt: new Date('2022-5-20 10:32:20').toJSON(),
+          deleteAt: null,
+        },
+        {
+          userNo: 3,
+          name: '곽희웅',
+          content: '음 친구군',
+          createdAt: new Date('2022-5-20 10:32:25').toJSON(),
+          deleteAt: null,
+        },
+        {
+          userNo: 34,
+          name: '장수민',
+          content: '3대 몇인가요?',
+          createdAt: new Date('2022-5-20 10:33:20').toJSON(),
+          deleteAt: null,
+        },
+        {
+          userNo: 25,
+          name: '왕종욱',
+          content: '후욱 곰돌쟝...',
+          createdAt: new Date('2022-5-20 10:42:20').toJSON(),
+          deleteAt: null,
+        }
+      ],
+    }, 
+    {
+      no: 2,
+      title: '주판',
+      description: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다! 연락 많이 주세용',
+      goodsImgUrl: 'https://img.freepik.com/premium-psd/abacus-icon-3d-render-illustration-for-children-education_620202-2754.jpg?w=2000',
+      category: '기타',
+      userName: '김예림',
+      startPrice: 360,
+      averagePrice: 480,
+      gradePeriodNo: 6,
+      createdAt: new Date('2022-5-20 10:30:20').toJSON(),
+      comments: [
+        {
+          userNo: 17,
+          name: '유현지',
+          content: '우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 ',
+          createdAt: new Date('2022-5-20 10:32:20').toJSON(),
+          deleteAt: null,
+        },
+        {
+          userNo: 3,
+          name: '곽희웅',
+          content: '음 친구군',
+          createdAt: new Date('2022-5-20 10:32:25').toJSON(),
+          deleteAt: null,
+        },
+        {
+          userNo: 34,
+          name: '장수민',
+          content: '3대 몇인가요?',
+          createdAt: new Date('2022-5-20 10:33:20').toJSON(),
+          deleteAt: null,
+        },
+        {
+          userNo: 25,
+          name: '왕종욱',
+          content: '후욱 곰돌쟝...',
+          createdAt: new Date('2022-5-20 10:42:20').toJSON(),
+          deleteAt: null,
+        }
+      ],
+    },
+    {
+      no: 3,
+      title: 'ABC 초콜릿',
+      description: '맛있는 쪼꼬',
+      goodsImgUrl: 'https://img.freepik.com/premium-psd/chocolate-3d-render_553817-59.jpg',
+      category: '간식',
+      userName: '이승헌',
+      startPrice: 360,
+      averagePrice: 480,
+      gradePeriodNo: 6,
+      createdAt: new Date('2022-5-20 10:30:20').toJSON()
+    }, 
+    {
+      no: 4,
+      title: '초미니 퍼즐',
+      description: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다!',
+      goodsImgUrl: 'https://img.freepik.com/premium-psd/jigsaw-puzzle-cube-isolated-gaming-and-streaming-icon-set-cute-minimal-style-3d-render_570783-710.jpg',
+      category: '기타',
+      userName: '이현진',
+      startPrice: 360,
+      averagePrice: 480,
+      gradePeriodNo: 6,
+      createdAt: new Date('2022-5-20 10:30:20').toJSON()
+    },
+    {
+      no: 5,
+      title: '빈츠',
+      description: '제가 좋아하던 곰돌이 인형이에요! 조금 오래됐지만 깨끗해요 ㅎㅎ',
+      goodsImgUrl: 'https://img.freepik.com/free-psd/3d-birthday-icon-with-candy_23-2149664024.jpg?size=338&ext=jpg&ga=GA1.1.1546980028.1703721600&semt=ais',
+      category: '간식',
+      userName: '유현지',
+      startPrice: 360,
+      averagePrice: 480,
+      gradePeriodNo: 6,
+      createdAt: new Date('2022-5-20 10:30:20').toJSON()
+    }, 
+    {
+      no: 6,
+      title: '사탕',
+      description: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다!',
+      goodsImgUrl: 'https://previews.123rf.com/images/virtosmedia/virtosmedia2303/virtosmedia230311535/199668012-%ED%8C%8C%EB%9E%80%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%ED%99%94%EB%A0%A4%ED%95%9C-%EC%82%AC%ED%83%95%EA%B3%BC-%EA%B3%BC%EC%9E%90%EC%9E%85%EB%8B%88%EB%8B%A4-3d-%EA%B7%B8%EB%A6%BC.jpg',
+      category: '간식',
+      userName: '배민지',
+      startPrice: 360,
+      averagePrice: 480,
+      gradePeriodNo: 6,
+      createdAt: new Date('2022-5-20 10:30:20').toJSON()
+    }
+  ]
   
   const queryClient = useQueryClient();
   const reduxCoupons = useSelector(couponSelector);
@@ -208,9 +232,12 @@ export default function BidPage(){
 
 /******************************* 경매 */
   /** redux에 저장된 값 변경될 때마다 경매 목록 세팅 */
+  // useEffect(() => {
+  //   setProducts(reduxProducts);
+  // }, [reduxProducts]);
   useEffect(() => {
-    setProducts(reduxProducts);
-  }, [reduxProducts]);
+    setProducts(dummyProducts);
+  }, []);
 
   /** 경매 목록 쿼리 */
   useQuery({
@@ -223,6 +250,13 @@ export default function BidPage(){
         return res.data;
       }),
   });
+
+  const productDetailQuery = useMutation({
+    mutationKey: ['productDetail'],
+    mutationFn: (gradeNo, boardNo) => getProductDetailApi(gradeNo, boardNo),
+    onSuccess: (res) => { console.log(res); },
+    onError: (error) => console.error(error)
+  })
   
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
@@ -235,7 +269,6 @@ export default function BidPage(){
   const handleChange = (e) => {
     const { value } = e.target;
     setKeyword(value);
-    console.log(keyword);
   };
 
   /** 경매 카테고리 초기 설정 */
@@ -283,6 +316,7 @@ export default function BidPage(){
             svg = {AddIcon}
             text = '새 쿠폰 등록' 
             height = '3vw'
+            backgroundColor = '#5FA1C4'
           /> :
           <div className = {styled.filterArea}>
             <div className = {styled.filterButtons}>
@@ -355,32 +389,34 @@ export default function BidPage(){
           (<div className = {styled.productsWrapper}>
             {
               filteredProducts.length === 0?
-              <NoContent/>
+              <NoContent text='현재 진행 중인 경매가 없어요'/>
               :
               filteredProducts.map((product) => 
                 <Product
-                  onClick = {() =>{
-                    console.log(product);
+                  onClick = {() => {
                     openModal({
                       type: 'viewProduct',
                       props: [
                         product.no,
                         product.title,
                         product.description,
-                        product.goodsImgUrl,
-                        product.category,
-                        product.userName,
                         product.startPrice,
+                        product.boardStatus,
                         product.averagePrice,
+                        product.resultPrice,
+                        product.category,
+                        product.goodsImgUrl,
+                        product.userName,
                         product.gradePeriodNo,
                         product.createdAt,
+                        product.comments
                       ] })
                   }}
                   key = {product.no}
                   title = {product.title}
-                  imgUrl = {product.goodsImgUrl}
+                  goodsImgUrl = {product.goodsImgUrl}
                   userName = {product.userName}
-                  avgPrice = {product.averagePrice}
+                  averagePrice = {product.averagePrice}
                 />
               )
             }

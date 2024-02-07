@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "./NoContent.module.css";
 
-export default function NoContent(){
+export default function NoContent(props){
+  const { text } = props;
+
   return(
     <div className = {styled.noContents}>
-      현재 진행 중인 경매가 없어요
+      {text}
     </div>
   );
 }
