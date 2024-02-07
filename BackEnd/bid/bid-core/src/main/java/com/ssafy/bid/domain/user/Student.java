@@ -40,7 +40,7 @@ public class Student extends User {
 		this.asset += price;
 	}
 
-	public void modifyProfileImgUrl(String url) {
+	public void updateAvatar(String url) {
 		this.profileImgUrl = url;
 	}
 
