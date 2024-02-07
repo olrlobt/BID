@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ExpenditureStatisticsFindResponse {
+public class ExpenditureStatisticsGetResponse {
 	private int sumExpenditure;
 	private DealType dealType;
 	private int gradeNo;
 
-	public ExpenditureStatisticsFindResponse(
+	public ExpenditureStatisticsGetResponse(
 		int sumExpenditure,
 		DealType dealType,
 		int gradeNo

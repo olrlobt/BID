@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.bid.domain.grade.dto.GradeStatisticsFindResponse;
+import com.ssafy.bid.domain.grade.dto.GradeStatisticsGetResponse;
 import com.ssafy.bid.domain.grade.service.CoreGradeService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,8 @@ public class GradeApi {
 	private final CoreGradeService coreGradeService;
 
 	@GetMapping("/{gradeNo}/statistics")
-	public ResponseEntity<GradeStatisticsFindResponse> findGradeStatistics(@PathVariable int gradeNo) {
-		GradeStatisticsFindResponse response = coreGradeService.findGradeStatistics(gradeNo);
+	public ResponseEntity<GradeStatisticsGetResponse> findGradeStatistics(@PathVariable int gradeNo) {
+		GradeStatisticsGetResponse response = coreGradeService.findGradeStatistics(gradeNo);
 		return ResponseEntity.ok(response);
 	}
 }

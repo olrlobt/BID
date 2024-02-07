@@ -15,9 +15,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder
 @Table(name = "grade")
 @Entity
 public class Grade extends BaseEntity {
@@ -58,18 +60,14 @@ public class Grade extends BaseEntity {
 	@Embedded
 	private BiddingStatistics biddingStatistics;
 
-	public Grade(String schoolCode, Integer year, Integer classRoom, Integer userNo) {
-		this.schoolCode = schoolCode;
-		this.year = year;
-		this.classRoom = classRoom;
-		this.userNo = userNo;
-	}
-
-	public void modifySalary(int salary) {
+	public void updateSalary(int salary) {
 		this.salary = salary;
 	}
 
-	public void modifySavingTime(LocalTime transferAlertPeriod, LocalTime transferPeriod) {
+	public void updateSavingPeriod(
+		LocalTime transferAlertPeriod,
+		LocalTime transferPeriod
+	) {
 		this.transferAlertPeriod = transferAlertPeriod;
 		this.transferPeriod = transferPeriod;
 	}

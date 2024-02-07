@@ -1,7 +1,5 @@
 package com.ssafy.bid.domain.user.service;
 
-import java.util.List;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,14 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.user.Attendance;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.User;
-import com.ssafy.bid.domain.user.dto.AccountRequest;
-import com.ssafy.bid.domain.user.dto.AccountResponse;
-import com.ssafy.bid.domain.user.dto.AccountsResponse;
 import com.ssafy.bid.domain.user.dto.AttendanceResponse;
 import com.ssafy.bid.domain.user.dto.PasswordResetRequest;
-import com.ssafy.bid.domain.user.dto.StudentRequest;
-import com.ssafy.bid.domain.user.dto.StudentResponse;
-import com.ssafy.bid.domain.user.dto.UserCouponsResponse;
 import com.ssafy.bid.domain.user.repository.StudentRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import com.ssafy.bid.global.error.exception.InvalidParameterException;

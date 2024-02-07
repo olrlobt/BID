@@ -1,14 +1,13 @@
 package com.ssafy.bid.domain.grade;
 
-import com.ssafy.bid.domain.grade.dto.WinningBiddingStatisticsFindResponse;
+import com.ssafy.bid.domain.grade.dto.WinningBiddingStatisticsGetResponse;
 
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Embeddable
 public class BiddingStatistics {
 	private int countFourteenDaysAgo;
@@ -26,7 +25,7 @@ public class BiddingStatistics {
 	private int countTwoDaysAgo;
 	private int countOneDaysAgo;
 
-	public void updateBiddingStatistics(WinningBiddingStatisticsFindResponse response) {
+	public void updateBiddingStatistics(WinningBiddingStatisticsGetResponse response) {
 		switch (response.getDaysBefore()) {
 			case 14 -> this.countFourteenDaysAgo = response.getCount();
 			case 13 -> this.countThirteenDaysAgo = response.getCount();
