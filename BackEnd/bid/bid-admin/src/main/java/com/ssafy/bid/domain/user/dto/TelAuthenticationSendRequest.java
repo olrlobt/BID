@@ -5,8 +5,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserUpdateRequest {
-	private String name;
-	private Integer schoolNo;
+public class TelAuthenticationSendRequest {
 	private String tel;
+
+	public TelAuthenticationSendRequest(
+		String tel
+	) {
+		this.tel = tel;
+	}
 }

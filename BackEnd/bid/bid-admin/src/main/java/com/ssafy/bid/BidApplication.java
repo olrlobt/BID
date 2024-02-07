@@ -6,9 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import com.ssafy.bid.domain.user.security.JwtProperties;
+import com.ssafy.bid.configuration.message.CoolSMSProperties;
 
-@EnableConfigurationProperties(JwtProperties.class)
+@EnableConfigurationProperties(CoolSMSProperties.class)
 @ConfigurationPropertiesScan
 @EnableJpaAuditing
 @SpringBootApplication

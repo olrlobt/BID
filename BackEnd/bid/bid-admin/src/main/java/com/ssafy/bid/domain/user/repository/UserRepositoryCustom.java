@@ -3,13 +3,13 @@ package com.ssafy.bid.domain.user.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.ssafy.bid.domain.user.School;
+import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
-import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
 import com.ssafy.bid.domain.user.dto.BallsResponse;
+import com.ssafy.bid.domain.user.dto.SchoolResponse;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.dto.StudentsResponse;
@@ -26,11 +26,9 @@ public interface UserRepositoryCustom {
 
 	List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest);
 
-	List<School> findByNameContaining(String name);
+	List<SchoolResponse> findByNameContaining(String name);
 
 	boolean checkExistsById(String id);
-
-	Optional<School> findByCode(String code);
 
 	List<Student> findAllByIds(List<Integer> userNos);
 
@@ -38,5 +36,7 @@ public interface UserRepositoryCustom {
 
 	void resetBallCounts(int gradeNo);
 
-	Optional<User> findByNameAndTel(String name, String tel);
+	Optional<String> findIdByNameAndTel(String name, String tel);
+
+	Optional<Admin> findAdminByUserNo(int userNo);
 }

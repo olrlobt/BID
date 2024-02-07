@@ -1,4 +1,4 @@
-package com.ssafy.bid.domain.user.security;
+package com.ssafy.bid.configuration.security;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -10,7 +10,10 @@ public class JwtProperties {
 	private final String secret;
 	private final long expirationTime;
 
-	public JwtProperties(String secret, long expirationTime) {
+	public JwtProperties(
+		String secret,
+		long expirationTime
+	) {
 		this.secret = secret;
 		this.expirationTime = expirationTime;
 	}
