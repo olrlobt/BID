@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GradeStatisticsFindResponse {
+public class GradeStatisticsGetResponse {
 	private int unapprovedCouponCount;
 	private int salary;
 	private int sumTotalExpenditure;
@@ -23,10 +23,10 @@ public class GradeStatisticsFindResponse {
 	private int asset;
 	private String transferAlertPeriod;
 	private String transferPeriod;
-	private List<BiddingStatisticsFindResponse> biddingStatisticsFindResponses;
-	private List<GradePeriodsFindResponse> gradePeriodsFindResponses;
+	private List<BiddingStatisticsGetResponse> biddingStatisticsGetResponses;
+	private List<GradePeriodsGetResponse> gradePeriodsGetResponses;
 
-	public GradeStatisticsFindResponse(
+	public GradeStatisticsGetResponse(
 		long unapprovedCouponCount,
 		int salary,
 		int sumSnackExpenditure,
@@ -65,39 +65,39 @@ public class GradeStatisticsFindResponse {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
 		this.transferAlertPeriod = transferAlertPeriod.format(formatter);
 		this.transferPeriod = transferPeriod.format(formatter);
-		List<BiddingStatisticsFindResponse> template = new ArrayList<>();
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(14))
+		List<BiddingStatisticsGetResponse> template = new ArrayList<>();
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(14))
 			.count(countFourteenDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(13))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(13))
 			.count(countThirteenDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(12))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(12))
 			.count(countTwelveDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(11))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(11))
 			.count(countElevenDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(10))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(10))
 			.count(countTenDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(9))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(9))
 			.count(countNineDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(8))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(8))
 			.count(countEightDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(7))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(7))
 			.count(countSevenDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(6))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(6))
 			.count(countSixDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(5))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(5))
 			.count(countFiveDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(4))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(4))
 			.count(countFourDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(3))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(3))
 			.count(countThreeDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(2))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(2))
 			.count(countTwoDaysAgo).build());
-		template.add(BiddingStatisticsFindResponse.builder().date(LocalDate.now().minusDays(1))
+		template.add(BiddingStatisticsGetResponse.builder().date(LocalDate.now().minusDays(1))
 			.count(countOneDaysAgo).build());
-		this.biddingStatisticsFindResponses = template;
+		this.biddingStatisticsGetResponses = template;
 	}
 
-	public void setGradePeriodsFindResponses(List<GradePeriodsFindResponse> gradePeriodsFindResponses) {
-		this.gradePeriodsFindResponses = gradePeriodsFindResponses;
+	public void setGradePeriodsGetResponses(List<GradePeriodsGetResponse> gradePeriodsGetRespons) {
+		this.gradePeriodsGetResponses = gradePeriodsGetRespons;
 	}
 }

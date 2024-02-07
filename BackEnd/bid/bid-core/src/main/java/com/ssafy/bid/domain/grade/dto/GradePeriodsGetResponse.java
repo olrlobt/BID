@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GradePeriodsFindResponse {
+public class GradePeriodsGetResponse {
 	private int no;
 	private int sequence;
 	private String startPeriod;
 	private String endPeriod;
 
-	public GradePeriodsFindResponse(
+	public GradePeriodsGetResponse(
 		int no,
 		int sequence,
 		LocalTime startPeriod,

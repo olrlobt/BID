@@ -4,7 +4,6 @@ import static org.springframework.http.HttpStatus.*;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,15 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
-import com.ssafy.bid.domain.user.dto.AccountRequest;
-import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AttendanceResponse;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.PasswordResetRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
-import com.ssafy.bid.domain.user.dto.StudentRequest;
-import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
 import com.ssafy.bid.domain.user.service.CustomUserDetails;
 import com.ssafy.bid.domain.user.service.UserService;

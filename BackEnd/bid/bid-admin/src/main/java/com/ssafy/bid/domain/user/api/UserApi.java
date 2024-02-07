@@ -30,9 +30,9 @@ import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
 import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
+import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
 import com.ssafy.bid.domain.user.dto.UserIdFindRequest;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
-import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
 import com.ssafy.bid.domain.user.service.CoreUserService;
 import com.ssafy.bid.domain.user.service.UserService;
 

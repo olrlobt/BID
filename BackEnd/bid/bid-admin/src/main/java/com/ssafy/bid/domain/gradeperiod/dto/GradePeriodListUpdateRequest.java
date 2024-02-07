@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GradePeriodModifyRequest {
-	List<GradePeriodsRequest> gradePeriodsRequests;
+public class GradePeriodListUpdateRequest {
+	List<GradePeriodUpdateRequest> gradePeriodUpdateRequests;
 }
