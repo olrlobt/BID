@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class BiddingStatisticsGetResponse {
+public class BiddingStatisticsFindResponses {
 	private LocalDate date;
 	private int count;
 
 	@Builder
-	public BiddingStatisticsGetResponse(
+	public BiddingStatisticsFindResponses(
 		LocalDate date,
 		int count
 	) {
