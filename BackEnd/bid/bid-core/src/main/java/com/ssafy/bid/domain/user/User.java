@@ -15,9 +15,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 @Table(name = "users")
@@ -26,7 +28,7 @@ public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "users_no")
+	@Column(name = "user_no")
 	private Integer no;
 
 	@NotNull
@@ -54,5 +56,14 @@ public class User extends BaseEntity {
 		this.password = password;
 		this.name = name;
 		this.schoolNo = schoolNo;
+	}
+
+	public void updateAdmin(String name, int schoolNo) {
+		this.name = name;
+		this.schoolNo = schoolNo;
+	}
+
+	public void changePassword(String encodedNewPassword) {
+		this.password = encodedNewPassword;
 	}
 }
