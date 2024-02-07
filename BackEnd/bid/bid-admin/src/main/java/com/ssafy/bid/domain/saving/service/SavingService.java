@@ -1,7 +1,7 @@
 package com.ssafy.bid.domain.saving.service;
 
-import com.ssafy.bid.domain.saving.dto.SavingModifyRequest;
+import com.ssafy.bid.domain.saving.dto.SavingListUpdateRequest;
 
 public interface SavingService {
-	void modifySaving(int gradeNo, SavingModifyRequest savingModifyRequest);
+	void updateSaving(int gradeNo, SavingListUpdateRequest savingListUpdateRequest);
 }
