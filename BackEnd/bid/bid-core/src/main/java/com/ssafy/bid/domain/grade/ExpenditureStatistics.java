@@ -1,9 +1,8 @@
 package com.ssafy.bid.domain.grade;
 
-import com.ssafy.bid.domain.grade.dto.ExpenditureStatisticsFindResponse;
+import com.ssafy.bid.domain.grade.dto.ExpenditureStatisticsGetResponse;
 
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +16,7 @@ public class ExpenditureStatistics {
 	private int sumGameExpenditure;
 	private int sumEtcExpenditure;
 
-	public void updateExpenditureStatistics(ExpenditureStatisticsFindResponse response) {
+	public void updateExpenditureStatistics(ExpenditureStatisticsGetResponse response) {
 		switch (response.getDealType()) {
 			case SNACK -> this.sumSnackExpenditure = response.getSumExpenditure();
 			case LEARNING -> this.sumLearningExpenditure = response.getSumExpenditure();

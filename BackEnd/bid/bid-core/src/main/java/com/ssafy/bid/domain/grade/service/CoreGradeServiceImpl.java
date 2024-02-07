@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.grade.Grade;
-import com.ssafy.bid.domain.grade.dto.GradePeriodsFindResponse;
-import com.ssafy.bid.domain.grade.dto.GradeStatisticsFindResponse;
+import com.ssafy.bid.domain.grade.dto.GradePeriodsGetResponse;
+import com.ssafy.bid.domain.grade.dto.GradeStatisticsGetResponse;
 import com.ssafy.bid.domain.grade.repository.CoreGradePeriodRepository;
 import com.ssafy.bid.domain.grade.repository.CoreGradeRepository;
+import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,11 +23,13 @@ public class CoreGradeServiceImpl implements CoreGradeService {
 	private final CoreGradePeriodRepository coreGradePeriodRepository;
 
 	@Override
-	public GradeStatisticsFindResponse findGradeStatistics(int gradeNo) {
-		List<GradePeriodsFindResponse> periods = coreGradePeriodRepository.findAllGradePeriodByGradeNo(gradeNo);
-		GradeStatisticsFindResponse statistics = coreGradeRepository.findGradeStatisticsByGradeNo(gradeNo)
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 학급이 없음"));//TODO: 커스텀 예외처리
-		statistics.setGradePeriodsFindResponses(periods);
+	public GradeStatisticsGetResponse findGradeStatistics(int gradeNo) {
+		List<GradePeriodsGetResponse> periods = coreGradePeriodRepository.findAllGradePeriodByGradeNo(gradeNo);
+
+		GradeStatisticsGetResponse statistics = coreGradeRepository.findGradeStatisticsByGradeNo(gradeNo)
+			.orElseThrow(() -> new ResourceNotFoundException("조회하려는 Grade 엔티티가 없음.", gradeNo));
+
+		statistics.setGradePeriodsGetResponses(periods);
 		return statistics;
 	}
 

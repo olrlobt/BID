@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bid.domain.grade.dto.GradePeriodsFindResponse;
+import com.ssafy.bid.domain.grade.dto.GradePeriodsGetResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,9 +16,9 @@ public class CoreGradePeriodRepositoryCustomImpl implements CoreGradePeriodRepos
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<GradePeriodsFindResponse> findAllGradePeriodByGradeNo(int gradeNo) {
+	public List<GradePeriodsGetResponse> findAllGradePeriodByGradeNo(int gradeNo) {
 		return queryFactory
-			.select(Projections.constructor(GradePeriodsFindResponse.class,
+			.select(Projections.constructor(GradePeriodsGetResponse.class,
 					gradePeriod.no,
 					gradePeriod.sequence,
 					gradePeriod.startPeriod,

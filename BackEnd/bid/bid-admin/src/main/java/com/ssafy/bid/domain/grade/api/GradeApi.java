@@ -1,5 +1,7 @@
 package com.ssafy.bid.domain.grade.api;
 
+import static org.springframework.http.HttpStatus.*;
+
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -13,11 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.bid.domain.grade.dto.GradeCreationRequest;
-import com.ssafy.bid.domain.grade.dto.GradeDTO;
-import com.ssafy.bid.domain.grade.dto.GradeStatisticsFindResponse;
-import com.ssafy.bid.domain.grade.dto.SalaryModifyRequest;
-import com.ssafy.bid.domain.grade.dto.SavingPeriodModifyRequest;
+import com.ssafy.bid.domain.grade.dto.GradeListGetResponse;
+import com.ssafy.bid.domain.grade.dto.GradeSaveRequest;
+import com.ssafy.bid.domain.grade.dto.GradeStatisticsGetResponse;
+import com.ssafy.bid.domain.grade.dto.SalaryUpdateRequest;
+import com.ssafy.bid.domain.grade.dto.SavingPeriodUpdateRequest;
 import com.ssafy.bid.domain.grade.service.CoreGradeService;
 import com.ssafy.bid.domain.grade.service.GradeService;
 
@@ -30,38 +32,41 @@ public class GradeApi {
 	private final GradeService gradeService;
 	private final CoreGradeService coreGradeService;
 
-	@PostMapping("/grade/register")
-	public ResponseEntity<Void> createGrade(@RequestBody GradeCreationRequest request) {
-		gradeService.createGrade(request);
-		return ResponseEntity.ok().build();
+	@PostMapping("/grades")
+	public ResponseEntity<?> saveGrade(@RequestBody GradeSaveRequest request) {
+		gradeService.saveGrade(request);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@GetMapping("/grade")
-	public ResponseEntity<List<GradeDTO>> listGrades() {
-		List<GradeDTO> grades = gradeService.listGrades();
-		return ResponseEntity.ok(grades);
+	@GetMapping("/grades")
+	public ResponseEntity<List<GradeListGetResponse>> getGrades() {
+		List<GradeListGetResponse> responses = gradeService.getGrades();
+		return ResponseEntity.status(OK).body(responses);
 	}
 
-	@DeleteMapping("/grade/{gradeNo}")
-	public ResponseEntity<Void> deleteGrade(@PathVariable Integer gradeNo) {
+	@DeleteMapping("/grades/{gradeNo}")
+	public ResponseEntity<?> deleteGrade(@PathVariable int gradeNo) {
 		gradeService.deleteGrade(gradeNo);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		return ResponseEntity.status(NO_CONTENT).build();
 	}
 
 	@GetMapping("/{gradeNo}/statistics")
-	public ResponseEntity<GradeStatisticsFindResponse> findGrade(@PathVariable int gradeNo) {
-		GradeStatisticsFindResponse response = coreGradeService.findGradeStatistics(gradeNo);
-		return ResponseEntity.ok(response);
+	public ResponseEntity<GradeStatisticsGetResponse> findGrade(@PathVariable int gradeNo) {
+		GradeStatisticsGetResponse response = coreGradeService.findGradeStatistics(gradeNo);
+		return ResponseEntity.status(OK).body(response);
 	}
 
 	@PatchMapping("/{gradeNo}/salaries")
-	public void modifySalary(@PathVariable int gradeNo, @RequestBody SalaryModifyRequest salaryModifyRequest) {
-		gradeService.modifySalary(gradeNo, salaryModifyRequest);
+	public ResponseEntity<?> updateSalary(@PathVariable int gradeNo,
+		@RequestBody SalaryUpdateRequest salaryUpdateRequest) {
+		gradeService.updateSalary(gradeNo, salaryUpdateRequest);
+		return ResponseEntity.status(OK).build();
 	}
 
 	@PatchMapping("/{gradeNo}/saving-periods")
-	public void modifySavingPeriod(@PathVariable int gradeNo,
-		@RequestBody SavingPeriodModifyRequest savingPeriodModifyRequest) {
-		gradeService.modifySavingTime(gradeNo, savingPeriodModifyRequest);
+	public ResponseEntity<?> updateSavingPeriod(@PathVariable int gradeNo,
+		@RequestBody SavingPeriodUpdateRequest savingPeriodUpdateRequest) {
+		gradeService.updateSavingPeriod(gradeNo, savingPeriodUpdateRequest);
+		return ResponseEntity.status(OK).build();
 	}
 }

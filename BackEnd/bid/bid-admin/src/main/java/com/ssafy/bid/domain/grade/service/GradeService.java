@@ -2,22 +2,19 @@ package com.ssafy.bid.domain.grade.service;
 
 import java.util.List;
 
-import com.ssafy.bid.domain.grade.dto.GradeCreationRequest;
-import com.ssafy.bid.domain.grade.dto.GradeDTO;
-import com.ssafy.bid.domain.grade.dto.GradeStatisticsFindResponse;
-import com.ssafy.bid.domain.grade.dto.SalaryModifyRequest;
-import com.ssafy.bid.domain.grade.dto.SavingPeriodModifyRequest;
+import com.ssafy.bid.domain.grade.dto.GradeListGetResponse;
+import com.ssafy.bid.domain.grade.dto.GradeSaveRequest;
+import com.ssafy.bid.domain.grade.dto.SalaryUpdateRequest;
+import com.ssafy.bid.domain.grade.dto.SavingPeriodUpdateRequest;
 
 public interface GradeService {
-	void createGrade(GradeCreationRequest request);
+	void saveGrade(GradeSaveRequest request);
 
-	List<GradeDTO> listGrades();
+	List<GradeListGetResponse> getGrades();
 
-	void deleteGrade(Integer gradeNo);
+	void deleteGrade(int gradeNo);
 
-	GradeStatisticsFindResponse findGrade(int gradeNo);
+	void updateSalary(int gradeNo, SalaryUpdateRequest salaryUpdateRequest);
 
-	void modifySalary(int gradeNo, SalaryModifyRequest salaryModifyRequest);
-
-	void modifySavingTime(int gradeNo, SavingPeriodModifyRequest savingPeriodModifyRequest);
+	void updateSavingPeriod(int gradeNo, SavingPeriodUpdateRequest savingPeriodUpdateRequest);
 }
