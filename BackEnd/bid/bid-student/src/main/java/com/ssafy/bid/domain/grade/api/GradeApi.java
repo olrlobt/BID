@@ -17,8 +17,8 @@ public class GradeApi {
 	private final CoreGradeService coreGradeService;
 
 	@GetMapping("/{gradeNo}/statistics")
-	public ResponseEntity<GradeStatisticsGetResponse> findGradeStatistics(@PathVariable int gradeNo) {
-		GradeStatisticsGetResponse response = coreGradeService.findGradeStatistics(gradeNo);
+	public ResponseEntity<GradeStatisticsGetResponse> getGradeStatistics(@PathVariable int gradeNo) {
+		GradeStatisticsGetResponse response = coreGradeService.getGradeStatistics(gradeNo);
 		return ResponseEntity.ok(response);
 	}
 }
