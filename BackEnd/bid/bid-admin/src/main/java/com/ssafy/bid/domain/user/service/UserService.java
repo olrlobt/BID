@@ -2,37 +2,37 @@ package com.ssafy.bid.domain.user.service;
 
 import java.util.List;
 
+import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
-import com.ssafy.bid.domain.user.dto.RegisterRequest;
-import com.ssafy.bid.domain.user.dto.SchoolResponse;
-import com.ssafy.bid.domain.user.dto.StudentRegistrationRequest;
+import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
 import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
+import com.ssafy.bid.domain.user.dto.UserIdFindRequest;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
-import com.ssafy.bid.domain.user.dto.UserWithdrawalRequest;
+import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
 
 public interface UserService {
-	public TelAuthenticationSendResponse sendTelAuthentication(
-		TelAuthenticationSendRequest telAuthenticationSendRequest);
-
-	List<StudentsFindResponse> findAllStudents(int gradeNo);
-
-	List<SchoolResponse> searchSchools(String name);
-
-	void registerUser(RegisterRequest request);
+	TelAuthenticationSendResponse sendTelAuthentication(TelAuthenticationSendRequest telAuthenticationSendRequest);
 
 	boolean isIdDuplicate(String id);
 
-	List<BallsFindResponse> findAllBalls(int gradeNo);
+	List<SchoolsFindResponse> findSchools(String name);
 
-	void modifyBalls(int gradeNo);
+	void saveAdmin(AdminSaveRequest request);
 
-	String findUserId(String name, String tel);
+	void saveStudent(StudentSaveRequest request);
 
-	void deleteUser(Integer userNo, UserWithdrawalRequest request);
+	List<StudentsFindResponse> findAllStudents(int gradeNo);
+
+	String findUserId(UserIdFindRequest request);
 
 	void updateUser(Integer userNo, UserUpdateRequest request);
 
-	void registerStudent(StudentRegistrationRequest request);
+	void deleteUser(Integer userNo, UserDeleteRequest request);
+
+	List<BallsFindResponse> findAllBalls(int gradeNo);
+
+	void resetAllBalls(int gradeNo);
 }
