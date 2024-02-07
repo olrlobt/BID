@@ -80,4 +80,8 @@ public class Student extends User {
 	public void resetBalls() {
 		this.ballCount = 1;
 	}
+
+	public void checkAttendance() {
+		this.attendance.checkAttendance();
+	}
 }
