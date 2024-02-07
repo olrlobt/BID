@@ -12,6 +12,7 @@ export default function CouponList(props){
 			<div
 				className = {styled.couponListWrapper}
 				ref={provided.innerRef}
+				style = {{background: snapshot.isDraggingOver ? '#ececec' : 'white'}}
 				{...provided.droppableProps}
 			>
 				{
