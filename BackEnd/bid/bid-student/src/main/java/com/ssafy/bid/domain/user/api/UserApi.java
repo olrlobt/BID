@@ -1,16 +1,11 @@
 package com.ssafy.bid.domain.user.api;
 
-import com.ssafy.bid.domain.user.dto.AttendanceResponse;
-import com.ssafy.bid.domain.user.dto.LoginRequest;
-import com.ssafy.bid.domain.user.dto.PasswordResetRequest;
+import java.util.List;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import java.util.List;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,10 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
+import com.ssafy.bid.domain.user.dto.AttendanceResponse;
+import com.ssafy.bid.domain.user.dto.LoginRequest;
+import com.ssafy.bid.domain.user.dto.PasswordResetRequest;
 import com.ssafy.bid.domain.user.dto.StudentRequest;
 import com.ssafy.bid.domain.user.dto.StudentResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
 import com.ssafy.bid.domain.user.service.UserService;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController

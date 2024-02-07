@@ -45,11 +45,12 @@ public class GradeServiceImpl implements GradeService {
 		this.schoolRepository = schoolRepository;
 	}
 
-    @Override
-    @Transactional
-    public void createGrade(GradeCreationRequest request) {
-        Grade grade = new Grade(request.getSchoolCode(), request.getYear(), request.getClassRoom(), request.getUserNo());
-        gradeRepository.save(grade);
+	@Override
+	@Transactional
+	public void createGrade(GradeCreationRequest request) {
+		Grade grade = new Grade(request.getSchoolCode(), request.getYear(), request.getClassRoom(),
+			request.getUserNo());
+		gradeRepository.save(grade);
 
 		School school = schoolRepository.findByCode(request.getSchoolCode())
 			.orElseThrow(() -> new EntityNotFoundException("해당코드를 가진 학교가 없습니다."));
