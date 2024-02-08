@@ -12,13 +12,15 @@ public class GradeListGetResponse {
 	private int year;
 	private int classRoom;
 	private int createdAt;
+	private boolean isMain;
 
 	public GradeListGetResponse(
 		int no,
 		String schoolName,
 		int year,
 		int classRoom,
-		LocalDateTime createdAt
+		LocalDateTime createdAt,
+		int mainGradeNo
 	) {
 		this.no = no;
 		this.schoolName = schoolName;
@@ -26,5 +28,6 @@ public class GradeListGetResponse {
 		this.classRoom = classRoom;
 		DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		this.createdAt = createdAt.getYear();
+		this.isMain = this.no == mainGradeNo;
 	}
 }
