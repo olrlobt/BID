@@ -63,7 +63,14 @@ public class SecurityConfig {
 	private CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(
-			Arrays.asList("http://i10a306.p.ssafy.io", "https://localhost:3000", "https://i10a306.p.ssafy.io"));
+			Arrays.asList(
+				"http://i10a306.p.ssafy.io",
+				"https://localhost:3000",
+				"https://i10a306.p.ssafy.io",
+				"http://bid-project.s3-website.ap-northeast-2.amazonaws.com/",
+				"http://bid-project.s3-website.ap-northeast-2.amazonaws.com:3000"
+			)
+		);
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
