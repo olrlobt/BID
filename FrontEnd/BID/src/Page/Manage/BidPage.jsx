@@ -19,7 +19,10 @@ import {
   registerCouponApi,
   unregisterCouponApi,
 } from "../../Apis/CouponApis";
-import { getProductListApi, getProductDetailApi } from "../../Apis/BidApis";
+import {
+  getProductListApi,
+  // getProductDetailApi
+} from "../../Apis/BidApis";
 
 export default function BidPage() {
   const dummyProducts = [
