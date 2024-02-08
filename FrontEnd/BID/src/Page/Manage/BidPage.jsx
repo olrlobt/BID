@@ -280,18 +280,34 @@ export default function BidPage(){
     <>
     <div className = {styled.bidSection}>
       <div className = {styled.bidHeader}>
-        <div>
-          <WriterButton
-            onClick = {() => changeWriter('teacher')}
-            text = {'선생님'}
-            active = { isTeacher }
-          />
-          <WriterButton
-            onClick = {() => changeWriter('student')}
-            text = {'학생'}
-            active = { !isTeacher }
-          />
+        <div className={styled.headerTeacher}>
+          <div>
+            <WriterButton
+              onClick = {() => changeWriter('teacher')}
+              text = {'선생님'}
+              active = { isTeacher }
+            />
+            <WriterButton
+              onClick = {() => changeWriter('student')}
+              text = {'학생'}
+              active = { !isTeacher }
+            />
+          </div>
         </div>
+        
+        {/* <div className={styled.headerStudent}>
+          <SettingButton
+            onClick = {() =>
+              openModal({
+                type: 'makeNewPost',
+                props: ['경매 올리기', queryClient] })
+              }
+            svg = {AddIcon}
+            text = '경매 올리기' 
+            height = '3vw'
+            backgroundColor = '#5FA1C4'
+          />
+        </div> */}
         <div>
         {
           isTeacher ?
