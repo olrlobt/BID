@@ -24,7 +24,7 @@ public class BoardResponse {
 	private int gradePeriodNo;
 
 	@Setter
-	private List<ReplyResponse> replies;
+	private List<ReplyResponse> comments;
 
 	public BoardResponse(long no, String title, String description, int startPrice, BoardStatus boardStatus,
 		int averagePrice, int resultPrice, Category category, String goodsImgUrl, String userName, int gradePeriodNo) {
