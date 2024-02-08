@@ -66,6 +66,7 @@ public class SecurityConfig {
 			Arrays.asList(
 				"http://i10a306.p.ssafy.io",
 				"https://localhost:3000",
+				"http://localhost:3000",
 				"https://i10a306.p.ssafy.io",
 				"http://bid-project.s3-website.ap-northeast-2.amazonaws.com/",
 				"http://bid-project.s3-website.ap-northeast-2.amazonaws.com:3000"
