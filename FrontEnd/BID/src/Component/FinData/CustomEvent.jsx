@@ -1,5 +1,4 @@
 import React from "react";
-import SmallEvent from "./SmallEvent";
 const CustomEvent = ({ event }) => {
   const getAmountColor = () => {
     if (event.amount < 0) {

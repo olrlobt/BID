@@ -19,10 +19,14 @@ import {
   registerCouponApi,
   unregisterCouponApi,
 } from "../../Apis/CouponApis";
+<<<<<<< d6fde453238f9a72244bf28e3f6f162f5ba64291
+import { getProductListApi, getProductDetailApi } from "../../Apis/BidApis";
+=======
 import {
   getProductListApi,
   // getProductDetailApi
 } from "../../Apis/BidApis";
+>>>>>>> 74ebbdecb71d1f77b028073b89c36bd9c2d13f91
 
 export default function BidPage() {
   const dummyProducts = [
@@ -286,12 +290,23 @@ export default function BidPage() {
       }),
   });
 
+<<<<<<< d6fde453238f9a72244bf28e3f6f162f5ba64291
+  const productDetailQuery = useMutation({
+    mutationKey: ["productDetail"],
+    mutationFn: (gradeNo, boardNo) => getProductDetailApi(gradeNo, boardNo),
+    onSuccess: (res) => {
+      console.log(res);
+    },
+    onError: (error) => console.error(error),
+  });
+=======
   // const productDetailQuery = useMutation({
   //   mutationKey: ['productDetail'],
   //   mutationFn: (gradeNo, boardNo) => getProductDetailApi(gradeNo, boardNo),
   //   onSuccess: (res) => { console.log(res); },
   //   onError: (error) => console.error(error)
   // })
+>>>>>>> 74ebbdecb71d1f77b028073b89c36bd9c2d13f91
 
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
