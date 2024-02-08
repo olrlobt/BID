@@ -1,0 +1,25 @@
+.rbc_toolbar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-self: flex-end;
+  height: 10vh;
+}
+
+.rbc_toolbar_label {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #5fa1c4;
+}
+.buttonPrev {
+  margin-right: 1vw;
+}
+
+.buttonNext {
+  margin-left: 1vw;
+}
+
+.buttonPrev > path,
+.buttonNext > path {
+  color: #a6a6a6;
+}
