@@ -26,8 +26,8 @@ export const addNewRewardApi = async (gradeNo, newRewardForm) => {
  * 리워드 삭제
  * @param rNo 리워드 번호
  */
-export const deleteRewardApi = async (rNo) => {
-  return await RewardApis.delete(`rewards/${rNo}`);
+export const deleteRewardApi = async (gradeNo, rNo) => {
+  return await RewardApis.delete(`${gradeNo}/rewards/${rNo}`);
 
 }
 
@@ -35,6 +35,6 @@ export const deleteRewardApi = async (rNo) => {
  * 리워드 지급
  * @param postData 리워드 지급 정보
  */
-export const sendRewardApi = async (postData) => {
-  return await RewardApis.post(`/rewards/send`, postData);
+export const sendRewardApi = async (gradeNo, postData) => {
+  return await RewardApis.post(`${gradeNo}/rewards/send`, postData);
 }
