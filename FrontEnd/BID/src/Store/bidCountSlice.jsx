@@ -15,7 +15,7 @@ export const bidCountSlice = createSlice({
   reducers: {
     initCount: (state, action) => {
       const bidCount = action.payload;
-      state.bidPrice = bidCount;
+      state.bidCount = bidCount;
     },
   },
 });
