@@ -11,7 +11,7 @@ import com.ssafy.bid.domain.grade.dto.SavingPeriodUpdateRequest;
 public interface GradeService {
 	void saveGrade(GradeSaveRequest request);
 
-	List<GradeListGetResponse> getGrades();
+	List<GradeListGetResponse> getGrades(int userNo);
 
 	void updateMainGrade(int userNo, GradeUpdateRequest gradeUpdateRequest);
 

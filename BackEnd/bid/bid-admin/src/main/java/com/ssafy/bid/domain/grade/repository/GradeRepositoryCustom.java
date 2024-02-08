@@ -7,7 +7,7 @@ import com.ssafy.bid.domain.grade.dto.GradeListGetResponse;
 import com.ssafy.bid.domain.user.Admin;
 
 public interface GradeRepositoryCustom {
-	List<GradeListGetResponse> findAllWithSchoolName();
+	List<GradeListGetResponse> findAllWithSchoolName(int userNo);
 
 	boolean existsByGradeNo(int gradeNo);
 
