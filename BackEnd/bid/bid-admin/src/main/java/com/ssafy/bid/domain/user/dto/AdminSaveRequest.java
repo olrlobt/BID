@@ -17,8 +17,14 @@ public class AdminSaveRequest {
 	private String tel;
 	private int schoolNo;
 
-	//TODO: SuperBuilder 등 적용 방안 적용
 	public Admin toEntity(PasswordEncoder passwordEncoder) {
-		return new Admin(id, passwordEncoder.encode(password), name, schoolNo, tel);
+		return Admin.builder()
+			.id(id)
+			.password(passwordEncoder.encode(password))
+			.name(name)
+			.schoolNo(schoolNo)
+			.tel(tel)
+			.mainGradeNo(null)
+			.build();
 	}
 }

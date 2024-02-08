@@ -12,6 +12,8 @@ import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
 public interface UserRepositoryCustom {
 	boolean existsById(String id);
 
+	Optional<Student> findStudentByUserNo(int userNo);
+
 	List<SchoolsFindResponse> findSchoolsByName(String name);
 
 	List<StudentsGetResponse> findAllStudentByGradeNo(int gradeNo);

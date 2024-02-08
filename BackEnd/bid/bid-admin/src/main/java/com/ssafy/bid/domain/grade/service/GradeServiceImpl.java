@@ -9,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.dto.GradeListGetResponse;
 import com.ssafy.bid.domain.grade.dto.GradeSaveRequest;
+import com.ssafy.bid.domain.grade.dto.GradeUpdateRequest;
 import com.ssafy.bid.domain.grade.dto.SalaryUpdateRequest;
 import com.ssafy.bid.domain.grade.dto.SavingPeriodUpdateRequest;
 import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.domain.grade.repository.StudentRepository;
+import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
@@ -31,18 +33,29 @@ public class GradeServiceImpl implements GradeService {
 	@Transactional
 	public void saveGrade(GradeSaveRequest request) {
 		Grade grade = request.toEntity();
-		gradeRepository.save(grade);
+		Grade savedGrade = gradeRepository.save(grade);
 
 		int schoolNo = request.getSchoolNo();
 		List<Student> students = request.getStudentListSaveRequests().stream()
 			.map(studentListSaveRequest -> studentListSaveRequest.toEntity(passwordEncoder, schoolNo, grade.getNo()))
 			.toList();
 		studentRepository.saveAll(students);
+
+		Admin admin = gradeRepository.findAdminByUserNo(request.getUserNo())
+			.orElseThrow(() -> new ResourceNotFoundException("학급을 등록하려는 User 엔티티가 없음.", ""));
+		admin.alterMainGrade(savedGrade.getNo());
 	}
 
 	@Override
 	public List<GradeListGetResponse> getGrades() {
 		return gradeRepository.findAllWithSchoolName();
+	}
+
+	@Override
+	public void updateMainGrade(int userNo, GradeUpdateRequest gradeUpdateRequest) {
+		Admin admin = gradeRepository.findAdminByUserNo(userNo)
+			.orElseThrow(() -> new ResourceNotFoundException("메인학급을 등록하려는 User 엔티티가 없음.", ""));
+		admin.alterMainGrade(gradeUpdateRequest.getNo());
 	}
 
 	@Override
