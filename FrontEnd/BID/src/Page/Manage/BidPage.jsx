@@ -287,13 +287,11 @@ export default function BidPage() {
   });
 
   // const productDetailQuery = useMutation({
-  //   mutationKey: ["productDetail"],
+  //   mutationKey: ['productDetail'],
   //   mutationFn: (gradeNo, boardNo) => getProductDetailApi(gradeNo, boardNo),
-  //   onSuccess: (res) => {
-  //     console.log(res);
-  //   },
-  //   onError: (error) => console.error(error),
-  // });
+  //   onSuccess: (res) => { console.log(res); },
+  //   onError: (error) => console.error(error)
+  // })
 
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
