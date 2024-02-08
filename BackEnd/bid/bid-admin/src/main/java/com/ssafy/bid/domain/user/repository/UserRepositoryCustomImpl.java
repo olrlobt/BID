@@ -64,6 +64,16 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 			.fetch();
 	}
 
+	@Override
+	public Optional<Admin> findAdminByTelAndId(String tel, String id) {
+		return Optional.ofNullable(
+			queryFactory
+				.selectFrom(admin)
+				.where(admin.tel.eq(tel), admin.id.eq(id))
+				.fetchOne()
+		);
+	}
+
 	private BooleanExpression nameCondition(String name) {
 		if (name == null) {
 			return null;

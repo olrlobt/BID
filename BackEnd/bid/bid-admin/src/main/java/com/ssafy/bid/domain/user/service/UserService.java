@@ -2,6 +2,7 @@ package com.ssafy.bid.domain.user.service;
 
 import java.util.List;
 
+import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
@@ -25,6 +26,8 @@ public interface UserService {
 	void saveStudent(StudentSaveRequest request);
 
 	void resetStudentPassword(int userNo);
+
+	void updateAdminPassword(AdminPasswordUpdateRequest adminPasswordUpdateRequest);
 
 	List<StudentsGetResponse> getStudents(int gradeNo);
 
