@@ -10,7 +10,7 @@ export const CouponApis = axios.create({
  * @returns 쿠폰 목록
  */
 export const getCouponListApi = async (gradeNo) => {
-  return await CouponApis.get(gradeNo+'/coupons');
+  return await CouponApis.get(`${gradeNo}/coupons`);
 }
 
 /**
@@ -19,7 +19,7 @@ export const getCouponListApi = async (gradeNo) => {
  * @param newCoupon 새 쿠폰 정보
  */
 export const addNewCouponApi = async (gradeNo, newCoupon) => {
-  return await CouponApis.post(gradeNo+'/coupons', newCoupon);
+  return await CouponApis.post(`${gradeNo}/coupons`, newCoupon);
 }
 
 /**
@@ -28,7 +28,7 @@ export const addNewCouponApi = async (gradeNo, newCoupon) => {
  * @param couponNo 쿠폰 번호
  */
 export const deleteCouponApi = async (gradeNo, couponNo) => {
-  return await CouponApis.delete(gradeNo+'/coupons/'+couponNo);
+  return await CouponApis.delete(`${gradeNo}/coupons/${couponNo}`);
 }
 
 /**
@@ -37,7 +37,7 @@ export const deleteCouponApi = async (gradeNo, couponNo) => {
  * @param couponNo 쿠폰 번호
  */
 export const registerCouponApi = async (gradeNo, couponNo) => {
-  return await CouponApis.patch(gradeNo+'/coupons/'+couponNo+'/register');
+  return await CouponApis.patch(`${gradeNo}/coupons/${couponNo}/register`);
 }
 
 /**
@@ -46,5 +46,5 @@ export const registerCouponApi = async (gradeNo, couponNo) => {
  * @param couponNo 쿠폰 번호
  */
 export const unregisterCouponApi = async (gradeNo, couponNo) => {
-  return await CouponApis.patch(gradeNo+'/coupons/'+couponNo+'/unregister');
+  return await CouponApis.patch(`${gradeNo}/coupons/${couponNo}/unregister`);
 }

@@ -6,7 +6,7 @@
 	line-height: 3vh;
 	width: 26vw;
 	display: flex;
-	box-shadow: 2px 4px 12px rgba(0,0,0,.08);
+	box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
 }
 
 .left{
