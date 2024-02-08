@@ -7,19 +7,19 @@ import java.util.List;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bid.domain.saving.dto.SavingFindResponse;
+import com.ssafy.bid.domain.saving.dto.SavingListGetResponse;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class CoreSavingRepositoryCustomImpl implements CoreSavingRepositoryCustom {
+public class SavingRepositoryCustomImpl implements SavingRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<SavingFindResponse> findAllByGradeNo(int gradeNo) {
+	public List<SavingListGetResponse> findAllSavingsByGradeNo(int gradeNo) {
 		return queryFactory
-			.select(Projections.constructor(SavingFindResponse.class,
+			.select(Projections.constructor(SavingListGetResponse.class,
 					grade.asset,
 					saving.no,
 					saving.name,
