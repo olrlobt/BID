@@ -227,10 +227,10 @@ export default function ViewProductModal({ onClose, ...props }) {
           <div className={styled.commentArea}>
             <div className={styled.comments}>
             {
-              productDetailIinfo && productDetailIinfo.replies.length===0?
+              productDetailIinfo && productDetailIinfo.comments.length===0?
               <NoContent text='아직 작성된 댓글이 없어요! 제일 먼저 달아볼까요? : )'/>
               :
-              productDetailIinfo && productDetailIinfo.replies.map((c) =>
+              productDetailIinfo && productDetailIinfo.comments.map((c) =>
                 <Comment
                   key = {c.createdAt}
                   userNo = {c.userNo}
