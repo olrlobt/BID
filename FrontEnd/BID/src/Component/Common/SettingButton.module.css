@@ -1,0 +1,14 @@
+.newCouponButton{
+	box-sizing: border-box;
+	border: none;
+	border-radius: 0.5vh;
+	padding: 0.5vh 1vh;
+	display: flex;
+	align-items: center;
+}
+
+.text{
+	font-size: 1.4vw;
+	margin-left: 0.3vw;
+	color: white;
+}

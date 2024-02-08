@@ -17,7 +17,7 @@ export default function InfoBox({ info, icons, text, modalClick }) {
         <img className={styled.icon} src={icons[0].src} alt={icons[0].alt} />
       )}
       <div className={styled.infoText}>
-        {info[0].text[0]}
+        <div>{info[0].text[0]}</div>
         <span className={styled.infoImportant}> {text} </span>
         {info[0].text[1]}
       </div>

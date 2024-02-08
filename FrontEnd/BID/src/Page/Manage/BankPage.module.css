@@ -1,0 +1,144 @@
+.bankPage {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 80vw;
+  justify-content: space-evenly;
+}
+
+.bankSection {
+  text-align: end;
+}
+
+.saveInfo {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.saveInfo span {
+  color: var(--color-text-important);
+}
+
+.saveTime {
+  margin-top: 2vh;
+  margin-left: 12.5vw;
+  margin-bottom: 2vh;
+  display: flex;
+  flex-direction: column;
+  width: 55vw;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  height: 10vh;
+}
+
+.saveTimeAlarm {
+  margin-top: 2vh;
+}
+
+.savingView {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.savingA,
+.savingB {
+  position: relative;
+  width: 32vw;
+  height: 60vh;
+  margin-top: -2vh;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgb(0, 0, 0, 0.25);
+}
+
+.savingAImage {
+  background-image: url("../../Asset/Image/HOME_icons/savingA.png");
+  width: 19vw;
+  height: 50vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: -2vw -2vh;
+}
+
+.savingBImage {
+  width: 20vw;
+  height: 50vh;
+  background-image: url("../../Asset/Image/HOME_icons/savingB.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: -1vw -3vh;
+}
+
+.classSetting {
+  margin-right: 5vw;
+  width: 9vw;
+  height: 4vh;
+  border-radius: 20px;
+  color: #ffffff;
+  background-color: var(--color-text-important);
+  margin-top: -1vh;
+}
+
+.icon {
+  padding-right: 0.5vw;
+}
+
+.icon > path {
+  color: #ffffff;
+}
+
+.savingTitle {
+  position: absolute;
+  top: 8vh;
+  left: 20vw;
+  display: flex;
+  font-size: 1.4rem;
+  color: #f23f3f;
+  font-weight: 800;
+}
+
+.kind {
+  position: absolute;
+  top: 0vh;
+  left: 22vw;
+  font-style: italic;
+  color: #f23f3f;
+  font-weight: 900;
+  font-size: 10rem;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.version2 {
+  color: #bbbd32;
+}
+
+.inputArea {
+  position: absolute;
+  width: 15vw;
+  top: 30vh;
+  left: 15vw;
+  font-size: 1.2rem;
+  input {
+    width: 2vw;
+    border: none;
+    font-size: 1.2rem;
+  }
+  .saving {
+    width: 3.5vw;
+  }
+  label {
+    display: inline-block;
+    width: 8vw;
+  }
+  .isEdit {
+    border: 1px solid #ececec;
+    border-radius: 5px;
+    width: 3vw;
+  }
+}
+
+.inputArea div {
+  height: 6vh;
+}

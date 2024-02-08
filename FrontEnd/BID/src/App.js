@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import MainPage from './Page/Main/MainPage';
 import RegisterPage from './Page/User/RegisterPage';
+import ManageLoginPage from './Page/User/ManageLoginPage'
 import LoginPage from './Page/User/LoginPage';
 import FindIdPage from './Page/User/FindIdPage';
 import ChangePwdPage from './Page/User/ChangePwdPage';
@@ -14,30 +15,43 @@ import ClassPage from './Page/Manage/ClassPage';
 import ClassList from './Page/ClassManage/ClassList';
 import MainClass from './Page/Main/MainClass';
 import AddClass from './Page/ClassManage/MakeClass';
+import SeatGame from './Page/Manage/SeatGame';
+import StudentMain from './Page/Student/StudentMain';
+import MyPage from './Page/Student/MyPage';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<MainPage />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/class" element={<ClassPage />} />
-        <Route path="/bid" element={<BidPage />} />
-        <Route path="/reward" element={<RewardPage />} />
-        <Route path="/bank" element={<BankPage />} />
-        <Route path="/game" element={<GamePage />} />
-      </Route>
-      <Route path="/classlist" element={<MainClass />}>
-        <Route path="/classlist/:teacherId/" element={<ClassList />} />
-        <Route path="/classlist/:teacherId/modify/" element={<ClassList />} />
-        <Route path="/classlist/:teacherId/make/" element={<AddClass />} />
-      </Route>
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/find_id" element={<FindIdPage />} />
-      <Route path="/change_pwd" element={<ChangePwdPage />} />
-      <Route path="/delete/:id/" element={<DeletePage />} />
-      <Route />
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={true} />
+      <Routes>
+        <Route path="/" element={<MainPage />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/class" element={<ClassPage />} />
+          <Route path="/bid" element={<BidPage />} />
+          <Route path="/reward" element={<RewardPage />} />
+          <Route path="/bank" element={<BankPage />} />
+          <Route path="/game" element={<GamePage />} />
+        </Route>
+        <Route path="/classlist/:teacherId/" element={<MainClass />}>
+          <Route path="/classlist/:teacherId/" element={<ClassList />} />
+          <Route path="/classlist/:teacherId/modify/" element={<ClassList />} />
+          <Route path="/classlist/:teacherId/make/" element={<AddClass />} />
+        </Route>
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/managelogin" element={<ManageLoginPage />} />
+        <Route path="/find_id" element={<FindIdPage />} />
+        <Route path="/change_pwd" element={<ChangePwdPage />} />
+        <Route path="/delete/:id/" element={<DeletePage />} />
+        <Route path="/game/seat" element={<SeatGame />} />
+        <Route path="/studentmain/" element={<StudentMain />} />
+        <Route path="/studentmain/:studentId/" element={<MyPage />} />
+      </Routes>
+    </QueryClientProvider>
   );
 }
 

@@ -6,13 +6,8 @@ import AttendRec from '../FinData/AttendRec'
 import CalendarChart from "../FinData/CalendarChart";
 import styled from './StudentFinData.module.css';
 
-
 const StudentFinData = ({ student }) => {
   // 가상의 데이터
-  const savingsData = {
-    total: 800,
-    saved: 450
-  };
 
   const categoryData = [
     { category: '식비', percentage: 30 },
@@ -30,12 +25,10 @@ const StudentFinData = ({ student }) => {
       <PieChart data={categoryData} />
       <Coupon />
       {student.name}
-
       </div>
       <div className={styled.additionalChartsContainer}>
-      <AttendRec />
+      <AttendRec className={styled.AttendRec} />
       <CalendarChart />
-      
       </div>
     </div>
   );
