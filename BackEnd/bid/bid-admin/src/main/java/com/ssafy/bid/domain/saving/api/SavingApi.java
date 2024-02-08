@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.bid.domain.saving.dto.SavingFindResponse;
+import com.ssafy.bid.domain.saving.dto.SavingListGetResponse;
 import com.ssafy.bid.domain.saving.dto.SavingListUpdateRequest;
-import com.ssafy.bid.domain.saving.service.CoreSavingService;
 import com.ssafy.bid.domain.saving.service.SavingService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,11 +24,10 @@ import lombok.RequiredArgsConstructor;
 public class SavingApi {
 
 	private final SavingService savingService;
-	private final CoreSavingService coreSavingService;
 
 	@GetMapping("/{gradeNo}/savings")
-	public ResponseEntity<List<SavingFindResponse>> findSavings(@PathVariable int gradeNo) {
-		List<SavingFindResponse> responses = coreSavingService.findAllSaving(gradeNo);
+	public ResponseEntity<List<SavingListGetResponse>> findSavings(@PathVariable int gradeNo) {
+		List<SavingListGetResponse> responses = savingService.getAllSaving(gradeNo);
 		return ResponseEntity.status(OK).body(responses);
 	}
 
