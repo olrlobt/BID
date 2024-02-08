@@ -3,15 +3,21 @@ import styled from "./ViewProductModal.module.css";
 import Modal from '../Common/Modal';
 import RoundedInfoButton from "../Common/RoundedInfoButton";
 import { SvgIcon } from "@material-ui/core";
-import { ArrowForward, Edit, Delete, Eject } from "@material-ui/icons";
+import { ArrowForward, Eject } from "@material-ui/icons";
 import SubmitButton from "../Common/SubmitButton";
 import Comment from "./Comment";
-import SettingButton from "../Common/SettingButton"
+// import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProductDetailApi, deleteProductApi, deletCommentApi } from "../../Apis/BidApis";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { getProductDetailApi,
+          // deleteProductApi,
+          addCommentApi,
+          // deleteCommentApi,
+          firstBiddingApi
+        } from "../../Apis/BidApis";
 
 export default function ViewProductModal({ onClose, ...props }) {
+  const boardNo = props[0];
   // 0 no,
   // 1 title,
   // 2 description,
@@ -30,7 +36,7 @@ export default function ViewProductModal({ onClose, ...props }) {
   const { data: productDetailIinfo } = useQuery({
     queryKey: ['getProductDetail'],
     queryFn: () =>
-      getProductDetailApi(1, props[0]).then((res) => {
+      getProductDetailApi(1, boardNo).then((res) => {
         if(res.data !== undefined){
           console.log(res.data);
           return res.data;
@@ -39,26 +45,42 @@ export default function ViewProductModal({ onClose, ...props }) {
   });
 
   /** 경매 삭제 쿼리 */
-  const deleteProductQuery = useMutation({
-    mutationKey: ['delete'],
-    mutationFn: () => deleteProductApi(1, props[0]),
-    onSuccess: () => { props[1].invalidateQueries('productList') },
-    onError: (error) => { console.log("error;")}
-  });
+  // const deleteProductQuery = useMutation({
+  //   mutationKey: ['delete'],
+  //   mutationFn: (boardNo) => { deleteProductApi(1, boardNo) },
+  //   onSuccess: () => { props[1].invalidateQueries('productList') },
+  //   onError: (error) => { console.log("error;")}
+  // });
+
+  /** 댓글 작성 쿼리 */
+  const addCommentQuery = useMutation({
+    mutationKey: ['addComment'],
+    mutationFn: (params) => { addCommentApi(params.boardNo, params.commentInfo) },
+    onSuccess:(res) => { props[1].invalidateQueries('getProductDetail') },
+    onError: (error) => { console.log(error); }
+  })
 
   /** 댓글 삭제 쿼리 */
-  const deleteCommentQuery = useMutation({
-    mutationKey: ['delete'],
-    mutationFn: (replyNo) => deletCommentApi(1, props[0], replyNo),
-    onSuccess: () => { console.log("success!!") },
-    onError: (error) => { console.log("error;")}
+  // const deleteCommentQuery = useMutation({
+  //   mutationKey: ['delete'],
+  //   mutationFn: (boardNo, replyNo) => { deleteCommentApi(1, boardNo, replyNo) },
+  //   onSuccess: () => { console.log("success!!") },
+  //   onError: (error) => { console.log("error;")}
+  // });
+
+  /** 첫 입찰 쿼리 */
+  const firstBiddingQuery = useMutation({
+    mutationKey: ['firstBidding'],
+    mutationFn: (params) => { firstBiddingApi(params.boardNo, params.biddingInfo); },
+    onSuccess: (res) => { console.log(res); },
+    onError: (error) => { console.log(error); }
   });
 
   /** 경매 삭제 함수 */
-  const deleteProduct = () => {
-    deleteProductQuery.mutate();
-    onClose();
-  }
+  // const deleteProduct = () => {
+  //   deleteProductQuery.mutate(boardNo);
+  //   onClose();
+  // }
 
   /** 입찰 신청 함수 */
   const bidSubmit = (e) => {
@@ -67,7 +89,14 @@ export default function ViewProductModal({ onClose, ...props }) {
     if(biddingPrice==='' || biddingPrice===null || biddingPrice<1) {
       console.log('금액을 입력해주세요');
     } else{
-      // 입찰 API
+      const biddingInfo = {
+        price: e.target.price.value
+      }
+      const params = {
+        boardNo: boardNo,
+        biddingInfo:biddingInfo
+      }
+      firstBiddingQuery.mutate(params);
       console.log(biddingPrice+'비드 입찰되었습니다');
     }
   }
@@ -75,7 +104,19 @@ export default function ViewProductModal({ onClose, ...props }) {
   /** 댓글 생성 함수 */
   const addNewComment = (e) => {
     e.preventDefault();
-    console.log(e.target.newComment.value);
+    const comment = e.target.newComment.value;
+    if(comment === ''){
+      console.log('댓글을 입력해주세요');
+    }else{
+      const commentInfo = {
+        content: comment
+      }
+      const params = {
+        boardNo: boardNo,
+        commentInfo: commentInfo
+      }
+      addCommentQuery.mutate(params);
+    }
   }
 
   return(
@@ -135,7 +176,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
           </div>
           <div className={styled.isWriterArea}>
-            {/* <div className={styled.notWriterArea}>
+            <div className={styled.notWriterArea}>
               <form id='newProductForm' onSubmit={bidSubmit}>
                 <input
                   type='number'
@@ -150,8 +191,8 @@ export default function ViewProductModal({ onClose, ...props }) {
                   fontSize = '1.7vw'
                 />
               </form>
-            </div> */}
-            <div className={styled.writerArea}>
+            </div>
+            {/* <div className={styled.writerArea}>
               <SettingButton
                 onClick={ () => console.log('modify') }
                 svg={ Edit }
@@ -166,7 +207,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                 height='1vw'
                 backgroundColor='#F23F3F'
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -185,17 +226,16 @@ export default function ViewProductModal({ onClose, ...props }) {
           <div className={styled.commentArea}>
             <div className={styled.comments}>
             {
-              props[12]===undefined?
+              productDetailIinfo && productDetailIinfo.replies.length===0?
               <NoContent text='아직 작성된 댓글이 없어요! 제일 먼저 달아볼까요? : )'/>
               :
-              props[12].map((c) =>
+              productDetailIinfo && productDetailIinfo.replies.map((c) =>
                 <Comment
                   key = {c.createdAt}
                   userNo = {c.userNo}
                   name = {c.name}
                   content = {c.content}
                   createdAt = {c.createdAt}
-                  deleteAt = {c.deleteAt}
                 />
               )
             }
