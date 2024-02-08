@@ -33,16 +33,21 @@ public class GradeServiceImpl implements GradeService {
 	@Transactional
 	public void saveGrade(GradeSaveRequest request) {
 		Grade grade = request.toEntity();
+		System.out.println("grade 저장");
 		Grade savedGrade = gradeRepository.save(grade);
 
 		int schoolNo = request.getSchoolNo();
 		List<Student> students = request.getStudentListSaveRequests().stream()
 			.map(studentListSaveRequest -> studentListSaveRequest.toEntity(passwordEncoder, schoolNo, grade.getNo()))
 			.toList();
+
+		System.out.println("students 저장");
 		studentRepository.saveAll(students);
 
 		Admin admin = gradeRepository.findAdminByUserNo(request.getUserNo())
 			.orElseThrow(() -> new ResourceNotFoundException("학급을 등록하려는 User 엔티티가 없음.", ""));
+
+		System.out.println("main 학급 저장");
 		admin.alterMainGrade(savedGrade.getNo());
 	}
 
