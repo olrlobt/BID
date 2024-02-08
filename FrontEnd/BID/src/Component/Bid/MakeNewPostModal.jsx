@@ -1,20 +1,18 @@
 import React from 'react';
 import styled from './MakeNewPostModal.module.css';
 import Modal from '../Common/Modal';
-import { useState } from 'react';
 import DropDownSelect from '../Common/DropDownSelect';
 import SquareButton from '../Common/SquareButton';
-import SubmitButton from '../Common/SubmitButton';
 
 export default function MakeNewPostModal({ onClose, ...props }) {
 
-  let profileImage = '';
+  // let profileImage = '';
 
   /** 경매 등록 함수 */
-  const submitPost = (e) => {
-    e.preventDefault();
-    console.log(e.target);
-  }
+  // const submitPost = (e) => {
+  //   e.preventDefault();
+  //   console.log(e.target);
+  // }
 
   const changeProfileImage = async () => {
     console.log('img uploaded');
@@ -68,7 +66,7 @@ export default function MakeNewPostModal({ onClose, ...props }) {
       <div className={styled.body}>
         <div className={styled.left}>
           <div class={styled.myInfoImgPre}>
-            <img src={'data:image/gif;base64' + profileImage}/>
+            {/* <img src={'data:image/gif;base64' + profileImage}/> */}
           </div>
           <div class={styled.fileSelect}>
             <input id='uploadName' class={styled.uploadName} value='첨부파일' placeholder='첨부파일'/>
