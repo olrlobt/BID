@@ -55,8 +55,10 @@ public class Grade extends BaseEntity {
 	 */
 	@NotNull
 	private Integer userNo;
+
 	@Embedded
 	private ExpenditureStatistics expenditureStatistics;
+
 	@Embedded
 	private BiddingStatistics biddingStatistics;
 
