@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+
+  frontend:
+    image: olrlobt/bid-front:latest
+    container_name: bid-front
+    ports:
+      - "3000:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+    environment:
+      TZ: Asia/Seoul
+
+  bid-socket:
+    image: olrlobt/bid-socket:latest
+    container_name: bid-socket
+    ports:
+      - "3001:3001"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+    environment:
+      TZ: Asia/Seoul
+
