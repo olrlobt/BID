@@ -77,6 +77,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
+	public void resetStudentPassword(int userNo) {
+		Student student = userRepository.findStudentByUserNo(userNo)
+			.orElseThrow(() -> new ResourceNotFoundException("패스워드 초기화하려는 User 엔티티가 없음.", userNo));
+		student.resetPassword(passwordEncoder);
+	}
+
+	@Override
 	public List<StudentsGetResponse> getStudents(int gradeNo) {
 		List<StudentsGetResponse> responses = userRepository.findAllStudentByGradeNo(gradeNo);
 		if (responses.isEmpty()) {

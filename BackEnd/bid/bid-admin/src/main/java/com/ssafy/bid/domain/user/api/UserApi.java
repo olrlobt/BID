@@ -78,6 +78,12 @@ public class UserApi {
 		return ResponseEntity.status(CREATED).build();
 	}
 
+	@PatchMapping("/password/{userNo}")
+	public ResponseEntity<?> resetStudentPassword(@PathVariable int userNo) {
+		userService.resetStudentPassword(userNo);
+		return ResponseEntity.status(OK).build();
+	}
+
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginRequest request) {
 		String token = coreUserService.login(request);
