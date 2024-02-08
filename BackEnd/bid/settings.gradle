@@ -1,0 +1,5 @@
+rootProject.name = 'bid'
+include 'bid-admin'
+include 'bid-student'
+include 'bid-core'
+
