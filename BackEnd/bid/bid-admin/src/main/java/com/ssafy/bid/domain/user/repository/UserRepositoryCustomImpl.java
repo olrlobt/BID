@@ -40,6 +40,16 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
+	public Optional<Student> findStudentByUserNo(int userNo) {
+		return Optional.ofNullable(
+			queryFactory
+				.selectFrom(student)
+				.where(student.no.eq(userNo))
+				.fetchOne()
+		);
+	}
+
+	@Override
 	public List<SchoolsFindResponse> findSchoolsByName(String name) {
 		return queryFactory
 			.select(Projections.constructor(SchoolsFindResponse.class,

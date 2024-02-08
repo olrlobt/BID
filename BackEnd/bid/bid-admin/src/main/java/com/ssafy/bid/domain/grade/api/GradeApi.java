@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.bid.domain.grade.dto.GradeListGetResponse;
 import com.ssafy.bid.domain.grade.dto.GradeSaveRequest;
 import com.ssafy.bid.domain.grade.dto.GradeStatisticsGetResponse;
+import com.ssafy.bid.domain.grade.dto.GradeUpdateRequest;
 import com.ssafy.bid.domain.grade.dto.SalaryUpdateRequest;
 import com.ssafy.bid.domain.grade.dto.SavingPeriodUpdateRequest;
 import com.ssafy.bid.domain.grade.service.CoreGradeService;
@@ -42,6 +43,13 @@ public class GradeApi {
 	public ResponseEntity<List<GradeListGetResponse>> getGrades() {
 		List<GradeListGetResponse> responses = gradeService.getGrades();
 		return ResponseEntity.status(OK).body(responses);
+	}
+
+	@PatchMapping("/grades")
+	public ResponseEntity<?> updateMainGrade(@RequestBody GradeUpdateRequest gradeUpdateRequest) {
+		//TODO: CustomUserDetails
+		gradeService.updateMainGrade(22, gradeUpdateRequest);
+		return ResponseEntity.status(OK).build();
 	}
 
 	@DeleteMapping("/grades/{gradeNo}")

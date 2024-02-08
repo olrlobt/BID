@@ -8,7 +8,6 @@ import com.ssafy.bid.domain.user.Attendance;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AttendanceResponse;
-import com.ssafy.bid.domain.user.dto.PasswordResetRequest;
 import com.ssafy.bid.domain.user.repository.StudentRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import com.ssafy.bid.global.error.exception.InvalidParameterException;
@@ -17,6 +16,7 @@ import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
+	@Transactional
 	public void checkAttendance(int userNo) {
 		User user = userRepository.findById(userNo)
 			.orElseThrow(() -> new ResourceNotFoundException("출석등록-회원PK", userNo));
@@ -37,25 +38,7 @@ public class UserServiceImpl implements UserService {
 		throw new InvalidParameterException("출석등록-회원PK", userNo);
 	}
 
-	@Transactional
-	public void resetPassword(String userId, PasswordResetRequest passwordResetRequest) {
-		Student student = studentRepository.findStudentById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("학생 정보를 찾을 수 없습니다."));
-
-		if (!passwordEncoder.matches(passwordResetRequest.getCurrentPassword(), student.getPassword())) {
-			throw new IllegalArgumentException(("현재 비밀번호가 일치하지 않습니다."));
-		}
-
-		if (!passwordResetRequest.getNewPassword().equals(passwordResetRequest.getConfirmPassword())) {
-			throw new IllegalArgumentException("비밀번호 확인 값이 일치하지 않습니다.");
-		}
-
-		String encodedNewPassword = passwordEncoder.encode(passwordResetRequest.getNewPassword());
-		student.changePassword(encodedNewPassword);
-		studentRepository.save(student);
-	}
-
-	@Transactional(readOnly = true)
+	@Override
 	public AttendanceResponse getStudentAttendance(Integer userNo) {
 		Student student = studentRepository.findById(userNo)
 			.orElseThrow(() -> new IllegalArgumentException("학생 정보를 찾을 수 없습니다."));
