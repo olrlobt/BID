@@ -19,7 +19,7 @@ export const addUserApi = async (userData) => {
  * @param id 작성 아이디
  * @returns
  */
-export const duplicateId = async (id) => {
+export const duplicateIdApi = async (id) => {
     return await UserApis.get(`/check-id`,id);
   };
   
@@ -30,7 +30,7 @@ export const duplicateId = async (id) => {
  * @returns
  */
 export const loginUserApi = async (userData) => {
-    return await UserApis.post(`/login`, userData);
+  return await UserApis.post(`/login`, userData);
   };
   
 
@@ -44,3 +44,37 @@ export const findIdApi = async (userData) => {
     return await UserApis.post(`/find-id`, userData);
   };
   
+
+/**
+* 비밀번호 재설정 휴대폰 코드 전송
+* @param userData 해당 id, 전화번호
+* @returns  
+*/
+
+export const sendCodeApi = async (userData) => {
+  console.log(userData)
+  return await UserApis.post(`/password/code/send`, userData);
+};
+
+
+/**
+* 비밀번호 재설정 휴대폰 코드 인증
+* @param userData 해당 id, 전화번호, verifyCode
+* @returns 해당 관리자 pk, isAuthenticated(true/false)
+*/
+
+export const authenticateApi = async (userData) => {
+  return await UserApis.post(`/password/code/authenticate`, userData);
+};
+
+
+/**
+* 비밀번호 재설정
+* @param userNo 새 비밀번호, 새 비밀번호 확인
+* @returns 해당 관리자 pk, isAuthenticated(true/false)
+*/
+
+export const changePwdApi = async (userNo, userData) => {
+  return await UserApis.patch(`/password/`+userNo, userData);
+};
+

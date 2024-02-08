@@ -1,5 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import styled from "./ToolBar.module.css";
 
 export default function Toolbar(props) {
   const { date } = props;
@@ -9,16 +13,35 @@ export default function Toolbar(props) {
   };
 
   return (
-    <div className="rbc-toolbar">
-      <span className="rbc-btn-group">
-        <span type="button" onClick={navigate.bind(null, 'PREV')}>
-          <FontAwesomeIcon icon={faChevronLeft} />
+    <div className={styled.rbc_toolbar}>
+      <div>
+        <p>
+          지출 <span></span>비드
+        </p>
+        <p className={styled.import}>
+          수입 <span></span>비드
+        </p>
+      </div>
+      <span className={styled.rbc_btn_group}>
+        <span
+          className={styled.button}
+          type="button"
+          onClick={navigate.bind(null, "PREV")}
+        >
+          <FontAwesomeIcon icon={faChevronLeft} className={styled.buttonPrev} />
         </span>
-        <span className="rbc-toolbar-label" style={{ fontSize: '2rem', fontWeight:'bold',color: '#5FA1C4' }}>
+        <span className={styled.rbc_toolbar_label}>
           {`${date.getMonth() + 1}월`}
         </span>
-        <span type="button" onClick={navigate.bind(null, 'NEXT')}>
-          <FontAwesomeIcon icon={faChevronRight} style={{color:'A6A6A6'}} />
+        <span
+          className={styled.button}
+          type="button"
+          onClick={navigate.bind(null, "NEXT")}
+        >
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            className={styled.buttonNext}
+          />
         </span>
       </span>
     </div>

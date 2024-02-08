@@ -38,7 +38,7 @@
   }
 
 
-  .contentInput input:focus {
+.contentInput input:focus {
     outline: none; /* 클릭할 때 검정색 테두리 제거 */
     border: 1px solid #A6A6A6; /* 클릭 시 보여질 테두리 스타일 */
 }
@@ -56,7 +56,29 @@
 
 
 
-.joinLink {
+
+
+.findIdLink {
+    text-decoration: none;
+    color: #A6A6A6;
+    cursor: pointer;
+    margin-right: 1.2rem;
+}
+
+.registerLink {
+    text-decoration: none;
+    color: #A6A6A6;
+    cursor: pointer;
+    margin-left: 1.2rem;
+  }
+
+.changePwdLink {
+    text-decoration: none;
+    color: #A6A6A6;
+    cursor: pointer;
+}
+
+.IdLink{
     width: 250px;
     height: 45px;
     margin-top: 1.5rem;
@@ -74,28 +96,30 @@
 }
 
 
-.registerInput {
-    position: relative;
+.changePwdBtn {
+    width: 250px;
+    height: 45px;
+    margin-top: 1.5rem;
+    font-size: 1.3rem;
+    color: white;
+    background-color: #FFD43A;
+    border-radius: .3rem;
+    font-weight: bold;
     display: flex;
-    flex-direction: column; /* Added to ensure inputs are displayed vertically */
     align-items: center;
-  }
-  
-  .duplicateIdBtn {
-      position: absolute;
-      width: 70px;
-      height: 22px;
-      color: white;
-      background-color: #A6A6A6;
-      font-size: 0.8rem;
-      right:10px;
-      top: 9px;
-      border-radius: 10px;
-      cursor: pointer;
-  }
+    justify-content: center;
+    cursor: pointer;
 
-  .sendCodeBtn
-  {
+}
+
+.telInput {
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Added to ensure inputs are displayed vertically */
+  align-items: center;
+}
+
+.telInput button {
     position: absolute;
     width: 70px;
     height: 22px;
@@ -103,21 +127,13 @@
     background-color: #A6A6A6;
     font-size: 0.8rem;
     right:10px;
-    top: 168px;
+    top: 49px;
     border-radius: 10px;
     cursor: pointer;
 }
 
-.searchSchool
-  {
-    position: absolute;
-    width: 70px;
-    height: 22px;
-    color: white;
-    background-color: #A6A6A6;
-    font-size: 0.8rem;
-    right:10px;
-    top: 248px;
-    border-radius: 10px;
-    cursor: pointer;
+.error { 
+    margin-top: 0.5vh;
+    font-size: 1rem;
+    color: #E81818;
 }
