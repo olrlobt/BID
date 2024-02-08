@@ -41,14 +41,15 @@ public class GradeApi {
 
 	@GetMapping("/grades")
 	public ResponseEntity<List<GradeListGetResponse>> getGrades() {
-		List<GradeListGetResponse> responses = gradeService.getGrades();
+		//TODO: CustomUserDetails
+		List<GradeListGetResponse> responses = gradeService.getGrades(43);
 		return ResponseEntity.status(OK).body(responses);
 	}
 
 	@PatchMapping("/grades")
 	public ResponseEntity<?> updateMainGrade(@RequestBody GradeUpdateRequest gradeUpdateRequest) {
 		//TODO: CustomUserDetails
-		gradeService.updateMainGrade(22, gradeUpdateRequest);
+		gradeService.updateMainGrade(43, gradeUpdateRequest);
 		return ResponseEntity.status(OK).build();
 	}
 

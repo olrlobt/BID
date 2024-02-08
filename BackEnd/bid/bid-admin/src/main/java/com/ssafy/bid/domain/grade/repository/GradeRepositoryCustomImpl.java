@@ -7,7 +7,9 @@ import static com.ssafy.bid.domain.user.QSchool.*;
 import java.util.List;
 import java.util.Optional;
 
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.grade.dto.GradeListGetResponse;
 import com.ssafy.bid.domain.user.Admin;
@@ -20,14 +22,21 @@ public class GradeRepositoryCustomImpl implements GradeRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<GradeListGetResponse> findAllWithSchoolName() {
+	public List<GradeListGetResponse> findAllWithSchoolName(int userNo) {
 		return queryFactory
 			.select(Projections.constructor(GradeListGetResponse.class,
 					grade.no,
 					school.name,
 					grade.year,
 					grade.classRoom,
-					grade.createdAt
+					grade.createdAt,
+					ExpressionUtils.as(
+						JPAExpressions
+							.select(admin.mainGradeNo)
+							.from(admin)
+							.where(admin.no.eq(userNo))
+						, "mainGradeNo"
+					)
 				)
 			)
 			.from(grade)
