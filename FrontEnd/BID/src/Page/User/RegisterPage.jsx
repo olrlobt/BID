@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "./RegisterPage.module.css";
 import { Link } from "react-router-dom";
+import useModal from "../../hooks/useModal";
 import Logo from "../../Component/Common/Logo";
-import { addUserApi } from "../../Apis/UserApis";
+import { addUserApi, duplicateIdApi } from "../../Apis/UserApis";
 import { useMutation } from "@tanstack/react-query";
 
 function RegisterPage() {
@@ -13,7 +14,21 @@ function RegisterPage() {
   const [tel, setTel] = useState("");
   const [verifyNo, setVerifyNo] = useState("");
   const [schoolNo, setSchoolNo] = useState("");
+  const { openModal } = useModal();
 
+  /** 아이디 중복 검사 */
+  const duplicateIdQuery = useMutation({
+    mutationKey: ["sendCode"],
+    mutationFn: (userData) => duplicateIdApi(userData),
+    onSuccess: (data) => {
+      console.log(data);
+      // Move to the next step upon successful submission
+      // setStep(2);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   /** 새 회원 추가 쿼리 */
   const addUserQuery = useMutation({
@@ -42,7 +57,14 @@ function RegisterPage() {
     addUserQuery.mutate(userData);
   };
 
-
+  const handleDuplicateId = (e) => {
+    // 코드 발송 동작 구현
+    e.preventDefault();
+    let userData = {
+      id,
+    };
+    duplicateIdQuery.mutate(userData);
+  };
   
 
   return (
@@ -51,13 +73,20 @@ function RegisterPage() {
         <Logo text="회원가입" />
       </div>
       <div className={styled.content}>
-        <div className={styled.contentInput}>
+        <form className={styled.contentInput}>
+        <div className={styled.registerInput}>
           <input
             type="text"
             placeholder="아이디"
             value={id}
             onChange={(e) => setId(e.target.value)}
           />
+          <button
+              className={styled.duplicateIdBtn}
+              onClick={handleDuplicateId}
+          >
+          중복 검사
+          </button>
           <input
             type="password"
             placeholder="비밀번호"
@@ -82,6 +111,12 @@ function RegisterPage() {
             value={tel}
             onChange={(e) => setTel(e.target.value)}
           />
+          <button
+              className={styled.sendCodeBtn}
+              // onClick={handleSendCodeBtn}
+          >
+          코드 발송
+          </button>
           <input
             type="text"
             placeholder="인증코드"
@@ -94,6 +129,18 @@ function RegisterPage() {
             value={schoolNo}
             onChange={(e) => setSchoolNo(e.target.value)}
           />
+          <button
+            className={styled.searchSchool}
+            onClick={(e) => {
+              e.preventDefault(); // Prevent default form submission behavior
+              openModal({
+                type: "searchSchool",
+                props: ["학교 검색"]
+              });
+            }}
+          >
+          학교 검색
+          </button>
           <Link
             to="/login"
             className={styled.joinLink}
@@ -101,7 +148,8 @@ function RegisterPage() {
           >
             <p>JOIN</p>
           </Link>
-        </div>
+          </div>
+        </form>
       </div>
     </section>
   );
