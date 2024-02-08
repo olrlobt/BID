@@ -12,6 +12,7 @@ import StudentEditModal from '../Manage/StudentEditModal';
 import ViewProductModal from '../Bid/ViewProductModal';
 import TimeModal from '../DashboardModals/TimeModal';
 import SearchSchoolModal from '../User/SearchSchoolModal';
+import MakeNewPostModal from "../Bid/MakeNewPostModal";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const MODAL_COMPONENTS = {
   pwdRemove: PwdRemoveModal,
   editStudent: StudentEditModal,
   viewProduct: ViewProductModal,
+  makeNewPost: MakeNewPostModal,
   searchSchool: SearchSchoolModal
 };
 
