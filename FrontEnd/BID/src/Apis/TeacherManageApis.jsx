@@ -14,6 +14,17 @@ export const viewDashboard = async () => {
 };
 
 /**
+ * 주급 수정
+ * @param  salary 주급
+ * @returns 200 OK
+ */
+
+export const changeSalaries = (salary) => {
+  console.log(salary);
+  return TeacherManageApis.patch(`/1/salaries`, { salary: salary });
+};
+
+/**
  * 은행 적금 정보 확인
  * @param gradeNo 학급 넘버
  * @returns 은행 적금 정보
