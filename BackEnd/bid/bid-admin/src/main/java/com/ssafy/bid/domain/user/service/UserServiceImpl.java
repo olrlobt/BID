@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.User;
+import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
@@ -82,6 +83,19 @@ public class UserServiceImpl implements UserService {
 		Student student = userRepository.findStudentByUserNo(userNo)
 			.orElseThrow(() -> new ResourceNotFoundException("패스워드 초기화하려는 User 엔티티가 없음.", userNo));
 		student.resetPassword(passwordEncoder);
+	}
+
+	@Override
+	@Transactional
+	public void updateAdminPassword(AdminPasswordUpdateRequest request) {
+		Admin admin = userRepository.findAdminByTelAndId(request.getTel(), request.getId())
+			.orElseThrow(() -> new ResourceNotFoundException("패스워드 수정하려는 User 엔티티가 없음.", request.getTel()));
+
+		if (!request.getNewPassword().equals(request.getNewPasswordCheck())) {
+			throw new InvalidParameterException("패스워드와 패스워드 확인 불일치.", request.getNewPassword());
+		}
+
+		admin.changePassword(passwordEncoder.encode(request.getNewPassword()));
 	}
 
 	@Override
