@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bid.domain.avatar.dto.UserAvatarsFindResponse;
+import com.ssafy.bid.domain.avatar.dto.UserAvatarsGetResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,9 +18,9 @@ public class UserAvatarRepositoryCustomImpl implements UserAvatarRepositoryCusto
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<UserAvatarsFindResponse> findUserAvatars(int userNo) {
+	public List<UserAvatarsGetResponse> findAllByUserNo(int userNo) {
 		return queryFactory
-			.select(Projections.constructor(UserAvatarsFindResponse.class,
+			.select(Projections.constructor(UserAvatarsGetResponse.class,
 					userAvatar.no,
 					avatar.url,
 					avatar.no

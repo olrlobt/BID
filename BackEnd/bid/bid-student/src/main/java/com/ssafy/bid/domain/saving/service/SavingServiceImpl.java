@@ -16,6 +16,7 @@ import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
 import com.ssafy.bid.domain.saving.dto.SavingSaveRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
+import com.ssafy.bid.domain.saving.dto.UserSavingListGetResponse;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
 import com.ssafy.bid.domain.saving.repository.UserSavingRepository;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
@@ -34,31 +35,26 @@ public class SavingServiceImpl implements SavingService {
 	private final UserRepository userRepository;
 
 	@Override
+	public List<UserSavingListGetResponse> getAllSavings(int gradeNo, int userNo) {
+		return userSavingRepository.findAllByUserNoAndGradeNo(userNo, gradeNo);
+	}
+
+	@Override
 	@Transactional
 	public void saveSavings(CustomUserInfo userInfo, SavingSaveRequest savingSaveRequest) {
-		// 적금 조회 및 파라미터 검증
 		Saving saving = savingRepository.findById(savingSaveRequest.getNo())
-			.orElseThrow(() -> new ResourceNotFoundException("회원적금등록-적금PK", savingSaveRequest.getNo()));
-
-		// DTO -> Entity 변환
+			.orElseThrow(() -> new ResourceNotFoundException("등록하려는 Saving 엔티티가 없음.", savingSaveRequest.getNo()));
 		UserSaving userSaving = savingSaveRequest.toEntity(saving, userInfo);
-
-		// Entity DB에 저장
 		userSavingRepository.save(userSaving);
 	}
 
 	@Override
 	@Transactional
 	public void deleteSavings(int userNo, int savingNo) {
-		// 해당하는 회원적금 존재여부 조회
 		boolean exists = userSavingRepository.existsByUserNoAndSavingNo(userNo, savingNo);
-
-		// 파라미터 검증
 		if (!exists) {
-			throw new ResourceNotFoundException("회원적금삭제-회원PK", userNo);
+			throw new ResourceNotFoundException("삭제하려는 UserSaving 엔티티가 없음.", userNo);
 		}
-
-		// Entity DB에서 삭제
 		userSavingRepository.deleteByUserNoAndSavingNo(userNo, savingNo);
 	}
 

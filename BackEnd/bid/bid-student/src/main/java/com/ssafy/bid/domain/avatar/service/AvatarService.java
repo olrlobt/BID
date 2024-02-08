@@ -2,11 +2,11 @@ package com.ssafy.bid.domain.avatar.service;
 
 import java.util.List;
 
-import com.ssafy.bid.domain.avatar.dto.UserAvatarModifyRequest;
-import com.ssafy.bid.domain.avatar.dto.UserAvatarsFindResponse;
+import com.ssafy.bid.domain.avatar.dto.UserAvatarUpdateRequest;
+import com.ssafy.bid.domain.avatar.dto.UserAvatarsGetResponse;
 
 public interface AvatarService {
-	List<UserAvatarsFindResponse> findUserAvatars(int userNo);
+	List<UserAvatarsGetResponse> getUserAvatars(int userNo);
 
-	void modifyAvatar(int userNo, UserAvatarModifyRequest userAvatarModifyRequest);
+	void updateUserAvatar(int userNo, UserAvatarUpdateRequest userAvatarUpdateRequest);
 }
