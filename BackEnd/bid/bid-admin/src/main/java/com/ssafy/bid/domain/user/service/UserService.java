@@ -24,6 +24,8 @@ public interface UserService {
 
 	void saveStudent(StudentSaveRequest request);
 
+	void resetStudentPassword(int userNo);
+
 	List<StudentsGetResponse> getStudents(int gradeNo);
 
 	String getUserId(UserIdFindRequest request);
