@@ -6,20 +6,20 @@ const initialState = {
 };
 
 export const userSelector = (state) => {
-  return state.user ? state.user.currentUser : null;
+  return state.user.currentUser;
 };
 
 export const userLoggedInSelector = (state) => {
-  return state.user ? state.user.isLoggedIn : false;
+  return state.user.isLoggedIn;
 };
 
 export const userSlice = createSlice({
   name: "user",
-  initialState,
+  initialState: initialState,
   reducers: {
     loginUser: (state, action) => {
-      const user = action.payload;
-      state.currentUser = user;
+      const currentUser = action.payload;
+      state.currentUser = currentUser;
       state.isLoggedIn = true;
     },
     logoutUser: (state) => {
