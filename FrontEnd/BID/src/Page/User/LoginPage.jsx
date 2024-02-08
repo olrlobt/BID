@@ -2,25 +2,25 @@ import React,{useState} from "react";
 import styled from "./LoginPage.module.css";
 import { Link , useNavigate } from "react-router-dom";
 import Logo from '../../Asset/Image/LoginLogo.png';
-import useUser from "../../hooks/useUser";
-import { loginUserApi } from "../../Apis/UserApis";
+import useModels from "../../hooks/useModels";
+import { studentLoginApi } from "../../Apis/StudentPageApis";
 import { useMutation } from "@tanstack/react-query";
 
 function LoginPage() {
 
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
-  const { loginUser } = useUser();
+  const { loginStudent } = useModels();
   const navigate = useNavigate()
 
 
   /** 로그인 쿼리 */
-  const loginUserQuery = useMutation({
-    mutationKey: ['loginUser'],
-    mutationFn: (userCredentials) => loginUserApi( userCredentials),
+  const studentLoginQuery = useMutation({
+    mutationKey: ['studentLogin'],
+    mutationFn: (userCredentials) => studentLoginApi( userCredentials),
     onSuccess: (data) => {
-      loginUser(data);
-      navigate('/');
+      loginStudent(data);
+      navigate('/studentmain');
       console.log(data)
     },
     onError: (error) => {
@@ -36,7 +36,7 @@ function LoginPage() {
       password
     }
     console.log(userCredentials)
-    loginUserQuery.mutate(userCredentials);
+    studentLoginQuery.mutate(userCredentials);
   }
   
   return (
@@ -64,15 +64,9 @@ function LoginPage() {
           </button>
           <div className={styled.ContentOption}>
             <div className={styled.ContentOptions}>
-              <Link to="/find_id" className={styled.findIdLink}>
-                <p>아이디 찾기</p> 
+              <Link to="/managelogin" className={styled.findIdLink}>
+                <p>선생님으로 로그인하기</p> 
               </Link >
-              <Link to="/change_pwd" className={styled.changePwdLink}>
-                <p>비밀번호 찾기</p> 
-              </Link >
-              <Link to="/register" className={styled.registerLink}>
-                <p>회원가입</p>
-              </Link>
             </div>
           </div>
         </form>
