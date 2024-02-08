@@ -1,0 +1,10 @@
+.infoWrapper{
+	display: inline-flex;
+	width: auto;
+	border-radius: 2vw;
+	box-sizing: border-box;
+
+  span{
+    font-weight: 400;
+  }
+}

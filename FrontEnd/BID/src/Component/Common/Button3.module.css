@@ -4,8 +4,9 @@
     text-align: center;
     border-radius: 4px; 
     cursor: pointer;
-    width: 5.5vw;
-    height: 3vh;
+    border-radius: 0.5vh;
+	line-height: 3vh;
+	padding: 0.3vh 1vh;
 }
 .logoContainer p {
     position: relative;

@@ -10,6 +10,8 @@ export default function useModal() {
   const handleCloseModal = (type) => {
     dispatch(closeModal());
   };
-
-  return { openModal: handleOpenModal, closeModal: handleCloseModal };
+  return {
+    openModal: handleOpenModal,
+    closeModal: handleCloseModal,
+  };
 }

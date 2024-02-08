@@ -1,19 +1,11 @@
-// Button3.jsx
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from './Button3.module.css';
 import PropTypes from "prop-types";
 
-function Button3({ text, onClick, active }) {
-  const [isClicked, setIsClicked] = useState(active);
+function Button3(props) {
 
-  useEffect(() => {
-    setIsClicked(active);
-  }, [active]);
+  const {onClick, text} = props;
 
-  const handleClick = () => {
-    setIsClicked(!isClicked);
-    onClick(); // 이 부분에서 onClick을 호출합니다.
-  };
 
   return (
     <button
@@ -26,7 +18,7 @@ function Button3({ text, onClick, active }) {
         justifyContent: 'center',
         cursor: 'pointer'
       }}
-      onClick={handleClick}
+      onClick={onClick}
     >
       <p style={{
         color: "#FFFFFF",
@@ -44,8 +36,6 @@ function Button3({ text, onClick, active }) {
 
 Button3.propTypes = {
   text: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired, // onClick props 추가
-  active: PropTypes.bool,
 };
 
 export default Button3;

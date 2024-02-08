@@ -1,0 +1,11 @@
+select {
+  width: 10vw;
+  height: 3.5vw;
+  text-align: center;
+  border-radius: 0.5vw;
+  border: none;
+  background-color: #E6E6E6;
+}
+select:focus {
+  outline: none;
+}

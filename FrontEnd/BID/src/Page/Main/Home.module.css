@@ -44,6 +44,7 @@
 }
 
 .graphSec {
+  display: flex;
   width: 40vw;
   height: 34vh;
   background-color: #ffffff;
@@ -63,4 +64,44 @@
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.infoBox {
+  width: 35vw;
+  height: 15vh;
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgb(0, 0, 0, 0.25);
+}
+
+.icon {
+  width: 35%;
+  height: 100%;
+}
+
+.infoText {
+  width: 80%;
+  padding-right: 5%;
+  font-size: 1.2rem;
+  font-weight: 600;
+  align-self: center;
+  text-align: end;
+}
+
+.infoImportant {
+  color: var(--color-text-important);
+}
+
+.line {
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  margin-right: 3vw;
+  align-items: center;
+  height: 85%;
+}
+
+.category {
+  font-weight: 600;
 }
