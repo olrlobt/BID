@@ -34,6 +34,7 @@ public class GradeServiceImpl implements GradeService {
 	public void saveGrade(GradeSaveRequest request) {
 		Grade grade = request.toEntity();
 		System.out.println("grade 저장");
+		System.out.println(grade.toString());
 		Grade savedGrade = gradeRepository.save(grade);
 
 		int schoolNo = request.getSchoolNo();
