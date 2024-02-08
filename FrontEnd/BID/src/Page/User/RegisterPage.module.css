@@ -7,13 +7,14 @@
     display: flex; 
     justify-content: center; 
     align-items: center; 
-}
+    position: relative; /* Added position relative */
 
+}
 
 .logo {
     position: absolute;
     display: flex;
-    top:  113px;
+    top:  204px; /* 상단에서 비율로 설정 */ 
     align-items: center; 
     justify-content: center; /* 수평 가운데 정렬 */
 }
@@ -25,19 +26,19 @@
     align-items: center; 
     justify-content: center;
     box-sizing: border-box;
-    top: 231px;
+    top: 324px;
 }
 
 .contentInput {
-    padding: 0 1rem;
     display: flex;
     justify-content: center;
-    flex-direction: column;
     align-items: center;
-    box-sizing: border-box; 
-}
+    flex-direction: column; /* Changed to column layout */
+    box-sizing: border-box;
+  }
 
-.contentInput input:focus {
+
+  .contentInput input:focus {
     outline: none; /* 클릭할 때 검정색 테두리 제거 */
     border: 1px solid #A6A6A6; /* 클릭 시 보여질 테두리 스타일 */
 }
@@ -52,6 +53,7 @@
     border: 1px solid #A6A6A6;
     box-sizing: border-box;
 }
+
 
 
 .joinLink {
@@ -71,3 +73,51 @@
     text-decoration: none;
 }
 
+
+.registerInput {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Added to ensure inputs are displayed vertically */
+    align-items: center;
+  }
+  
+  .duplicateIdBtn {
+      position: absolute;
+      width: 70px;
+      height: 22px;
+      color: white;
+      background-color: #A6A6A6;
+      font-size: 0.8rem;
+      right:10px;
+      top: 9px;
+      border-radius: 10px;
+      cursor: pointer;
+  }
+
+  .sendCodeBtn
+  {
+    position: absolute;
+    width: 70px;
+    height: 22px;
+    color: white;
+    background-color: #A6A6A6;
+    font-size: 0.8rem;
+    right:10px;
+    top: 168px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.searchSchool
+  {
+    position: absolute;
+    width: 70px;
+    height: 22px;
+    color: white;
+    background-color: #A6A6A6;
+    font-size: 0.8rem;
+    right:10px;
+    top: 248px;
+    border-radius: 10px;
+    cursor: pointer;
+}
