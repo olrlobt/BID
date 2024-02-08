@@ -1,10 +1,27 @@
 import React from "react";
 import styled from "./Comment.module.css";
-import { Edit, Delete } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import SettingButton from "../Common/SettingButton"
+import { useMutation } from "@tanstack/react-query";
+import { deleteCommentApi } from "../../Apis/BidApis";
 
 export default function Comment(props){
-  const { name, content, createdAt } = props;
+  const { userNo, name, content, createdAt } = props;
+
+  /** 댓글 삭제 쿼리 */
+  const deleteCommentQuery = useMutation({
+    mutationKey: ['deleteComment'],
+    mutationFn: () => deleteCommentApi(userNo),
+    onSuccess: () => { console.log("deleted!"); },
+    onError: (error) => { console.log(error); },
+  });
+
+
+  /** 댓글 삭제 함수 */
+  const deleteComment = (e) => {
+    e.preventDefault();
+    deleteCommentQuery.mutate();
+  }
 
   return(
     <div className={styled.commentWrapper}>
@@ -22,17 +39,8 @@ export default function Comment(props){
           <div>{ content }</div>
         </div>
         <div className={styled.commentFooter}>
-          {
           <SettingButton
-            onClick={ () => console.log('modify') }
-            svg={ Edit }
-            text='수정'
-            height='1vw'
-            backgroundColor='#A6A6A6'
-          />
-          }
-          <SettingButton
-            onClick={ () => console.log('delete') }
+            onClick={ deleteComment }
             svg={ Delete }
             text='삭제'
             height='1vw'

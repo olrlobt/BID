@@ -53,7 +53,7 @@
   .commentFooter{
     display: flex;
     flex-direction: row;
-    justify-content: end;
+    justify-content: flex-end;
     gap: 0 1.5vw;
     margin: 0.5vw -1.5vw 0.5vw 0;
   }
