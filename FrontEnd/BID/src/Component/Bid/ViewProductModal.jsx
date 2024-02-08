@@ -90,7 +90,6 @@ export default function ViewProductModal({ onClose, ...props }) {
   const bidSubmit = (e) => {
     e.preventDefault();
     const biddingPrice = e.target.price.value;
-<<<<<<< FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
     if(biddingPrice==='' || biddingPrice===null || biddingPrice<1) {
       console.log('금액을 입력해주세요');
     } else{
@@ -103,20 +102,13 @@ export default function ViewProductModal({ onClose, ...props }) {
       }
       firstBiddingQuery.mutate(params);
       console.log(biddingPrice+'비드 입찰되었습니다');
-=======
-    if (biddingPrice === "" || biddingPrice === null || biddingPrice < 1) {
-      console.log("금액을 입력해주세요");
-    } else {
-      // 입찰 API
-      console.log(biddingPrice + "비드 입찰되었습니다");
->>>>>>> FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
+
     }
   };
 
   /** 댓글 생성 함수 */
   const addNewComment = (e) => {
     e.preventDefault();
-<<<<<<< FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
     const comment = e.target.newComment.value;
     if(comment === ''){
       console.log('댓글을 입력해주세요');
@@ -131,10 +123,6 @@ export default function ViewProductModal({ onClose, ...props }) {
       addCommentQuery.mutate(params);
     }
   }
-=======
-    console.log(e.target.newComment.value);
-  };
->>>>>>> FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
 
   return (
     <Modal onClose={onClose} {...props}>
@@ -147,59 +135,32 @@ export default function ViewProductModal({ onClose, ...props }) {
           <div className={styled.commonArea}>
             <div className={styled.infoButton}>
               <RoundedInfoButton
-<<<<<<< FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
                 value = { productDetailIinfo && productDetailIinfo.category }
                 unit = ''
                 textColor = 'white'
                 borderColor = '#BBBD32'
                 backgroundColor = '#BBBD32'
                 padding = '0.5vw 1vw'
-=======
-                value={props[7]}
-                unit=""
-                textColor="white"
-                borderColor="#BBBD32"
-                backgroundColor="#BBBD32"
-                padding="0.5vw 1vw"
->>>>>>> FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
               />
             </div>
             <div className={styled.infoButton}>
               <RoundedInfoButton
-<<<<<<< FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
                 value = { productDetailIinfo && productDetailIinfo.gradePeriodNo }
                 unit = '교시'
                 textColor = 'white'
                 borderColor = '#BBBD32'
                 backgroundColor = '#BBBD32'
                 padding = '0.5vw 1vw'
-=======
-                value={props[10]}
-                unit="교시"
-                textColor="white"
-                borderColor="#BBBD32"
-                backgroundColor="#BBBD32"
-                padding="0.5vw 1vw"
->>>>>>> FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
               />
             </div>
             <div className={styled.infoButton}>
               <RoundedInfoButton
-<<<<<<< FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
                 value = { productDetailIinfo && productDetailIinfo.startPrice }
                 unit = '비드'
                 textColor = '#F23F3F'
                 borderColor = '#F23F3F'
                 backgroundColor = 'white'
                 padding = '0.5vw 1vw'
-=======
-                value={props[3]}
-                unit="비드"
-                textColor="#F23F3F"
-                borderColor="#F23F3F"
-                backgroundColor="white"
-                padding="0.5vw 1vw"
->>>>>>> FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
               />
             </div>
             <div className={styled.arrowArea}>
@@ -207,21 +168,12 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
             <div className={styled.infoButton}>
               <RoundedInfoButton
-<<<<<<< FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
                 value = { productDetailIinfo && productDetailIinfo.averagePrice }
                 unit = '비드'
                 textColor = 'white'
                 borderColor = '#F23F3F'
                 backgroundColor = '#F23F3F'
                 padding = '0.5vw 1vw'
-=======
-                value={props[5]}
-                unit="비드"
-                textColor="white"
-                borderColor="#F23F3F"
-                backgroundColor="#F23F3F"
-                padding="0.5vw 1vw"
->>>>>>> FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
               />
             </div>
           </div>
@@ -268,17 +220,12 @@ export default function ViewProductModal({ onClose, ...props }) {
             <img src={ productDetailIinfo && productDetailIinfo.goodsImgUrl } alt="제품 이미지" />
           </div>
           <div className={styled.content}>
-<<<<<<< FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
             <textarea name='bidContent' defaultValue={ productDetailIinfo && productDetailIinfo.description } disabled/>
-=======
-            <textarea name="bidContent" defaultValue={props[2]} disabled />
->>>>>>> FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
           </div>
         </div>
         <div className={styled.right}>
           <div className={styled.commentArea}>
             <div className={styled.comments}>
-<<<<<<< FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
             {
               productDetailIinfo && productDetailIinfo.replies.length===0?
               <NoContent text='아직 작성된 댓글이 없어요! 제일 먼저 달아볼까요? : )'/>
@@ -293,22 +240,6 @@ export default function ViewProductModal({ onClose, ...props }) {
                 />
               )
             }
-=======
-              {props[12] === undefined ? (
-                <NoContent text="아직 작성된 댓글이 없어요! 제일 먼저 달아볼까요? : )" />
-              ) : (
-                props[12].map((c) => (
-                  <Comment
-                    key={c.createdAt}
-                    userNo={c.userNo}
-                    name={c.name}
-                    content={c.content}
-                    createdAt={c.createdAt}
-                    deleteAt={c.deleteAt}
-                  />
-                ))
-              )}
->>>>>>> FrontEnd/BID/src/Component/Bid/ViewProductModal.jsx
             </div>
             <div className={styled.newComment}>
               <form onSubmit={addNewComment}>
