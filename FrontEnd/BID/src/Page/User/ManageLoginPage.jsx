@@ -2,25 +2,25 @@ import React,{useState} from "react";
 import styled from "./LoginPage.module.css";
 import { Link , useNavigate } from "react-router-dom";
 import Logo from '../../Asset/Image/LoginLogo.png';
-import useModels from "../../hooks/useModels";
-import { studentLoginApi } from "../../Apis/StudentPageApis";
+import useUser from "../../hooks/useUser";
+import { loginUserApi } from "../../Apis/UserApis";
 import { useMutation } from "@tanstack/react-query";
 
-function LoginPage() {
+function ManageLoginPage() {
 
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
-  const { loginStudent } = useModels();
+  const { loginUser } = useUser();
   const navigate = useNavigate()
 
 
   /** 로그인 쿼리 */
-  const studentLoginQuery = useMutation({
-    mutationKey: ['studentLogin'],
-    mutationFn: (userCredentials) => studentLoginApi( userCredentials),
+  const loginUserQuery = useMutation({
+    mutationKey: ['loginUser'],
+    mutationFn: (userCredentials) => loginUserApi( userCredentials),
     onSuccess: (data) => {
-      loginStudent(data);
-      navigate('/studentmain');
+      loginUser(data);
+      navigate('/');
       console.log(data)
     },
     onError: (error) => {
@@ -36,7 +36,7 @@ function LoginPage() {
       password
     }
     console.log(userCredentials)
-    studentLoginQuery.mutate(userCredentials);
+    loginUserQuery.mutate(userCredentials);
   }
   
   return (
@@ -64,9 +64,15 @@ function LoginPage() {
           </button>
           <div className={styled.ContentOption}>
             <div className={styled.ContentOptions}>
-              <Link to="/managelogin" className={styled.findIdLink}>
-                <p>선생님으로 로그인하기</p> 
+              <Link to="/find_id" className={styled.findIdLink}>
+                <p>아이디 찾기</p> 
               </Link >
+              <Link to="/change_pwd" className={styled.changePwdLink}>
+                <p>비밀번호 찾기</p> 
+              </Link >
+              <Link to="/register" className={styled.registerLink}>
+                <p>회원가입</p>
+              </Link>
             </div>
           </div>
         </form>
@@ -75,4 +81,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default ManageLoginPage;
