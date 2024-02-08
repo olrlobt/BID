@@ -4,6 +4,8 @@ import styled from './ChangeBidModal.module.css';
 import { useSelector } from 'react-redux';
 import { bidSelector } from '../../Store/bidSlice';
 import useBid from '../../hooks/useBid';
+import { useMutation } from '@tanstack/react-query';
+import { changeSalaries } from '../../Apis/TeacherManageApis';
 
 export default function ChangeBidModal({ onClose, ...props }) {
   const currentBid = useSelector(bidSelector);
@@ -14,9 +16,20 @@ export default function ChangeBidModal({ onClose, ...props }) {
   };
 
   const handleSubmit = () => {
-    changeBid(bid);
-    onClose();
+    changeBidSalary.mutate();
   };
+
+  const changeBidSalary = useMutation({
+    mutationKey: ['changeSalaries'],
+    mutationFn: () =>
+      changeSalaries(bid)
+        .then(() => {
+          changeBid(bid);
+          alert('변경되었습니다.');
+          onClose();
+        })
+        .catch(() => alert('변경이 되지 않았습니다.')),
+  });
 
   return (
     <Modal onClose={onClose} {...props}>

@@ -43,13 +43,9 @@ export default function Home() {
         if (res.data !== undefined) {
           changeBid(res.data.salary);
           initMoney(res.data.asset);
-          initCount(res.data.dealCount);
-
-          const sortWinningBiddingCounts = res.data.winningBiddingCounts.sort(
-            (a, b) => new Date(a.date) - new Date(b.date)
-          );
+          initCount(res.data.biddingStatisticsFindResponses[13].count);
           setLineData(
-            sortWinningBiddingCounts.map((item) => {
+            res.data.biddingStatisticsFindResponses.map((item) => {
               return {
                 x: `${item.date.split("-")[1]}.${item.date.split("-")[2]}`,
                 y: item.count,
@@ -100,12 +96,12 @@ export default function Home() {
               />
               <PieChart
                 data={[
-                  dashboardInfo.totalCategorySum,
-                  dashboardInfo.couponSum,
-                  dashboardInfo.etcSum,
-                  dashboardInfo.gameSum,
-                  dashboardInfo.learningSum,
-                  dashboardInfo.snackSum,
+                  dashboardInfo.sumTotalExpenditure,
+                  dashboardInfo.sumCouponExpenditure,
+                  dashboardInfo.sumEtcExpenditure,
+                  dashboardInfo.sumGameExpenditure,
+                  dashboardInfo.sumLearningExpenditure,
+                  dashboardInfo.sumSnackExpenditure,
                 ]}
               />
             </section>
@@ -171,7 +167,7 @@ export default function Home() {
             </section>
             <section className={styled.schedule}>
               <TimeTable
-                gradePeriods={dashboardInfo.gradePeriods}
+                gradePeriods={dashboardInfo.gradePeriodsGetResponses}
                 modalClick={() =>
                   openModal({
                     type: "timeModal",

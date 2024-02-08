@@ -3,10 +3,8 @@
   border-radius: 1vw;
   background-color: #00000050;
   color: white;
-  margin: 5vw auto 0 auto;
+  margin: auto;
   padding: 5vw 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
   font-weight: 500;
 }

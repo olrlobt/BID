@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const TeacherManageApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
@@ -10,7 +10,18 @@ export const TeacherManageApis = axios.create({
  * @returns 대시보드 정보
  */
 export const viewDashboard = async () => {
-  return await TeacherManageApis.get(`/1/statistics`);
+  return await TeacherManageApis.get('/1/statistics');
+};
+
+/**
+ * 주급 수정
+ * @param  salary 주급
+ * @returns 200 OK
+ */
+
+export const changeSalaries = (salary) => {
+  console.log(salary);
+  return TeacherManageApis.patch(`/1/salaries`, { salary: salary });
 };
 
 /**
@@ -20,7 +31,7 @@ export const viewDashboard = async () => {
  */
 
 export const viewSavingList = async () => {
-  return await TeacherManageApis.get("/1/savings");
+  return await TeacherManageApis.get('/1/savings');
 };
 
 /**
@@ -28,7 +39,7 @@ export const viewSavingList = async () => {
  * @param gradeNo 학급 넘버
  */
 export const updateSavingList = (savingList) => {
-  return TeacherManageApis.patch("/1/savings", { savingRequests: savingList });
+  return TeacherManageApis.patch('/1/savings', { savingRequests: savingList });
 };
 
 /**
@@ -38,7 +49,7 @@ export const updateSavingList = (savingList) => {
  */
 
 export const viewStudentBalls = async () => {
-  return await TeacherManageApis.get("/1/balls");
+  return await TeacherManageApis.get('/1/balls');
 };
 
 /**
@@ -48,5 +59,5 @@ export const viewStudentBalls = async () => {
  */
 
 export const resetStudentBalls = async () => {
-  return await TeacherManageApis.patch("/1/balls");
+  return await TeacherManageApis.patch('/1/balls');
 };
