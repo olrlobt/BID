@@ -129,7 +129,7 @@
 }
 
 
-.joinLink, .findIdBtn {
+.joinLink, .findIdBtn, .changePwdBtn {
     width: 250px;
     height: 45px;
     margin-top: 1.5rem;
@@ -142,3 +142,5 @@
     align-items: center;
     justify-content: center;
 }
+
+
