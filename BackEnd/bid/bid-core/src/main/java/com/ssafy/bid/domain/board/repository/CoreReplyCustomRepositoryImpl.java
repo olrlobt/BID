@@ -19,8 +19,11 @@ public class CoreReplyCustomRepositoryImpl implements CoreReplyCustomRepository 
 	public List<ReplyResponse> findReplies(long boardNo) {
 
 		return queryFactory.select(Projections.constructor(ReplyResponse.class,
+				reply.no,
 				reply.content,
-				student.name
+				student.name,
+				student.profileImgUrl,
+				reply.createdAt
 			))
 			.from(reply)
 			.innerJoin(student)
