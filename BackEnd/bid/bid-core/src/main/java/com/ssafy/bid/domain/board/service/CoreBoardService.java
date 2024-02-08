@@ -21,7 +21,7 @@ public class CoreBoardService {
 		BoardResponse boardResponse = coreBoardRepository.getStudentBoard(boardNo)
 			.orElseThrow(() -> new NoSuchElementException("해당 글이 없습니다."));
 
-		boardResponse.setReplies(coreReplyRepository.findReplies(boardResponse.getNo()));
+		boardResponse.setComments(coreReplyRepository.findReplies(boardResponse.getNo()));
 		return boardResponse;
 	}
 }

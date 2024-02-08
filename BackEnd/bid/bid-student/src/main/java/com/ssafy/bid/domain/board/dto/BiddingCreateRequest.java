@@ -15,7 +15,7 @@ public class BiddingCreateRequest {
 	private int gradeNo;
 	private long boardNo;
 
-	private BiddingCreateRequest(int price, int userNo, int gradeNo, int boardNo) {
+	private BiddingCreateRequest(int price, int userNo, int gradeNo, long boardNo) {
 		this.price = price;
 		this.userNo = userNo;
 		this.gradeNo = gradeNo;
