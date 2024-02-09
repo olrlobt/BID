@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const ClassManageApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
@@ -9,7 +9,7 @@ export const ClassManageApis = axios.create({
  * @returns 학급 조회
  */
 export const getGrades = async () => {
-  return await ClassManageApis.get("/grades");
+  return await ClassManageApis.get('/grades');
 };
 
 /**
@@ -18,7 +18,7 @@ export const getGrades = async () => {
  * @returns created 201
  */
 export const AddClass = ({ classInfo }) => {
-  return ClassManageApis.post("/grades", classInfo);
+  return ClassManageApis.post('/grades', classInfo);
 };
 
 /**
@@ -30,4 +30,15 @@ export const AddClass = ({ classInfo }) => {
 export const deleteClass = (gradeNo) => {
   console.log(gradeNo);
   return ClassManageApis.delete(`/grades/${gradeNo}`);
+};
+
+/**
+ * 메인 학급 변경
+ * @param gradeNo 변경하고 싶은 메인 학급 PK
+ * @returns 200 OK
+ */
+
+export const editMainClass = (gradeNo) => {
+  console.log('gradeNo ' + gradeNo);
+  return ClassManageApis.patch('/grades', { no: gradeNo });
 };
