@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.board.api;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.service.BoardService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
+import com.ssafy.bid.domain.gradeperiod.service.CoreGradePeriodService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,7 @@ public class BoardApi {
 
 	private final BoardService boardService;
 	private final CoreBoardService coreBoardService;
+	private final CoreGradePeriodService coreGradePeriodService;
 
 	@GetMapping("/boards")
 	public ResponseEntity<?> findBoards() {
@@ -58,12 +61,18 @@ public class BoardApi {
 
 	@PostMapping("/boards")
 	public ResponseEntity<?> addBoard(@RequestBody BoardCreateRequest boardCreateRequest) {
-		boardService.addBoard(1, 1, boardCreateRequest);
+		long boardNo = boardService.addBoard(1, 1, boardCreateRequest);
+
+		LocalTime startTime = coreGradePeriodService.findStartTime(1,
+			boardCreateRequest.getGradePeriodNo());
+
+		coreBoardService.registerBoardTask(startTime, boardNo);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PatchMapping("/boards/{boardNo}")
-	public ResponseEntity<?> modifyBoard(@PathVariable int boardNo, @RequestBody BoardModifyRequest boardModifyRequest) {
+	public ResponseEntity<?> modifyBoard(@PathVariable int boardNo,
+		@RequestBody BoardModifyRequest boardModifyRequest) {
 		return ResponseEntity.ok(boardService.modifyBoard(boardNo, boardModifyRequest));
 	}
 

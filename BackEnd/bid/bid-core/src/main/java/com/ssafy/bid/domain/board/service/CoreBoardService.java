@@ -1,7 +1,16 @@
 package com.ssafy.bid.domain.board.service;
 
-import org.springframework.stereotype.Service;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.repository.CoreBiddingRepository;
 import com.ssafy.bid.domain.board.repository.CoreBoardRepository;
@@ -12,11 +21,13 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CoreBoardService {
 
 	private final CoreBoardRepository coreBoardRepository;
 	private final CoreReplyRepository coreReplyRepository;
 	private final CoreBiddingRepository coreBiddingRepository;
+	private final TaskScheduler taskScheduler;
 
 	public BoardResponse getBoardDetail(int userNo, long boardNo, int gradeNo) {
 
@@ -31,4 +42,33 @@ public class CoreBoardService {
 		boardResponse.setComments(coreReplyRepository.findReplies(boardResponse.getNo()));
 		return boardResponse;
 	}
+
+	@Transactional
+	public void registerBoardTask(LocalTime time, long boardNo) {
+
+		LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), time);
+		Instant instant = dateTime.atZone(ZoneId.systemDefault()).toInstant();
+
+		taskScheduler.schedule(() -> {
+
+			Board board = coreBoardRepository.findById(boardNo)
+				.orElseThrow(() -> new ResourceNotFoundException("게시물이 없습니다.", boardNo));
+
+			board.complete();
+
+			coreBiddingRepository.findAllByBoardNo(board.getNo())
+				.forEach(bidding -> {
+					if (bidding.getNo().equals(board.getBiddingNo())) {
+						bidding.bidFail();
+						// 유찰 알림
+					} else {
+						bidding.bidSuccess();
+						// 낙찰 알림
+					}
+				});
+
+			// 낙찰자가 없을 경우?
+		}, instant);
+	}
+
 }
