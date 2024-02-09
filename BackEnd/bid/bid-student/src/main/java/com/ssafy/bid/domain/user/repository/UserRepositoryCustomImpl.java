@@ -16,7 +16,6 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.DealType;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
@@ -244,21 +243,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 				)
 			)
 			.orderBy(account.createdAt.desc())
-			.fetch();
-	}
-
-	@Override
-	public List<SavingTransferRequest> findAllByIds(List<Integer> userNos) {
-		return queryFactory
-			.select(Projections.constructor(SavingTransferRequest.class,
-					saving.depositPrice,
-					student
-				)
-			)
-			.from(student)
-			.innerJoin(userSaving).on(userSaving.userNo.eq(student.no))
-			.innerJoin(saving).on(saving.no.eq(userSaving.savingNo))
-			.where(student.no.in(userNos))
 			.fetch();
 	}
 }
