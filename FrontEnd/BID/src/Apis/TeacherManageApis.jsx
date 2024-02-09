@@ -20,7 +20,6 @@ export const viewDashboard = async () => {
  */
 
 export const changeSalaries = (salary) => {
-  console.log(salary);
   return TeacherManageApis.patch(`/1/salaries`, { salary: salary });
 };
 
