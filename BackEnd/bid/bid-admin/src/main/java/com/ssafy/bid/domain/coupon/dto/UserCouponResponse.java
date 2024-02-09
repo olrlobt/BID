@@ -12,4 +12,5 @@ public class UserCouponResponse {
 	private String userName;
 	private int couponNo;
 	private String couponName;
+	private int startPrice;
 }
