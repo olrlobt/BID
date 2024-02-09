@@ -29,8 +29,8 @@ import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
 import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
+import com.ssafy.bid.domain.user.dto.TelAuthenticationCheckRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
-import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
 import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
 import com.ssafy.bid.domain.user.dto.UserIdFindRequest;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
@@ -47,11 +47,31 @@ public class UserApi {
 	private final UserService userService;
 	private final CoreUserService coreUserService;
 
-	@PostMapping("/send-code")
-	public ResponseEntity<TelAuthenticationSendResponse> sendCode(
+	@PostMapping("/password/send-code")
+	public ResponseEntity<?> sendCode(
 		@RequestBody TelAuthenticationSendRequest telAuthenticationSendRequest
 	) {
-		TelAuthenticationSendResponse response = userService.sendTelAuthentication(telAuthenticationSendRequest);
+		userService.sendTelAuthentication(telAuthenticationSendRequest);
+		return ResponseEntity.status(OK).build();
+	}
+
+	@PostMapping("/password/check-code")
+	public ResponseEntity<Boolean> checkCode(@RequestBody TelAuthenticationCheckRequest request) {
+		boolean response = userService.checkTelAuthentication(request);
+		return ResponseEntity.status(OK).body(response);
+	}
+
+	@PostMapping("/send-code")
+	public ResponseEntity<?> sendRegisterCode(
+		@RequestBody TelAuthenticationSendRequest telAuthenticationSendRequest
+	) {
+		userService.sendRegisterTelAuthentication(telAuthenticationSendRequest);
+		return ResponseEntity.status(OK).build();
+	}
+
+	@PostMapping("/check-code")
+	public ResponseEntity<Boolean> checkRegistCode(@RequestBody TelAuthenticationCheckRequest request) {
+		boolean response = userService.checkTelAuthentication(request);
 		return ResponseEntity.status(OK).body(response);
 	}
 

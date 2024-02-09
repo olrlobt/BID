@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdminPasswordUpdateRequest {
 	private String id;
-	private String tel;
 	private String newPassword;
 	private String newPasswordCheck;
 }
