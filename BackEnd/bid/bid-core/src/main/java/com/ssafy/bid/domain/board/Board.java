@@ -2,6 +2,7 @@ package com.ssafy.bid.domain.board;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.ssafy.bid.domain.board.dto.BoardModifyRequest;
 import com.ssafy.bid.domain.common.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -100,4 +101,12 @@ public class Board extends BaseEntity {
 		this.gradeNo = gradeNo;
 		this.gradePeriodNo = gradePeriodNo;
 	}
+
+	public Long modify(BoardModifyRequest boardModifyRequest) {
+		this.title = boardModifyRequest.getTitle();
+		this.category = boardModifyRequest.getCategory();
+		this.description = boardModifyRequest.getDescription();
+		return this.no;
+	}
+
 }
