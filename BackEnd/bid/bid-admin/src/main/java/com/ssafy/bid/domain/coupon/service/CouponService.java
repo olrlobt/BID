@@ -14,6 +14,7 @@ import com.ssafy.bid.domain.coupon.dto.CouponResponse;
 import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 import com.ssafy.bid.domain.coupon.repository.CouponRepository;
 import com.ssafy.bid.domain.coupon.repository.UserCouponRepository;
+import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +44,17 @@ public class CouponService {
 	}
 
 	public void addCoupon(int gradeNo, CouponCreateRequest couponCreateRequest) {
+		// admin의 gradeNO 이 gradeNo과 다르면 error
+
 		couponCreateRequest.setGradeNo(gradeNo);
 		couponRepository.save(couponCreateRequest.toEntity());
 	}
 
-	public void deleteCoupon(int couponNo) {
+	public void deleteCoupon(int couponNo, int gradeNo) {
+		// admin의 gradeNO 이 gradeNo과 다르면 error
+
 		if (!couponRepository.existsById(couponNo)) {
-			throw new EntityNotFoundException("쿠폰이 없습니다.");
+			throw new ResourceNotFoundException("쿠폰이 없습니다.", couponNo);
 		}
 		couponRepository.deleteById(couponNo);
 	}

@@ -44,7 +44,7 @@ public class CouponApi {
 	@DeleteMapping("/{gradeNo}/coupons/{couponNo}")
 	public ResponseEntity<?> deleteCoupon(@PathVariable int gradeNo,
 		@PathVariable int couponNo) {
-		couponService.deleteCoupon(couponNo);
+		couponService.deleteCoupon(couponNo, gradeNo);
 		return ResponseEntity.noContent().build();
 	}
 
