@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CoreGradePeriodService {
 
-	private CoreGradePeriodRepository coreGradePeriodRepository;
+	private final CoreGradePeriodRepository coreGradePeriodRepository;
 
 	public LocalTime findStartTime(int gradeNo, int sequence) {
 
