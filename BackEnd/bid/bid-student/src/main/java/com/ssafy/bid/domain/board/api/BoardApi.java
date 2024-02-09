@@ -50,8 +50,8 @@ public class BoardApi {
 	public ResponseEntity<BoardResponse> getBoardDetail(@PathVariable long boardNo) {
 
 		int userNo = 1;
-
-		BoardResponse boardResponse = coreBoardService.getBoardDetail(userNo, boardNo);
+		int gradeNo = 1;
+		BoardResponse boardResponse = coreBoardService.getBoardDetail(userNo, boardNo, gradeNo);
 		return ResponseEntity.ok(boardResponse);
 	}
 
