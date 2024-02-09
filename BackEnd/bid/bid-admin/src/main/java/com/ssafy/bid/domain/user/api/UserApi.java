@@ -138,7 +138,7 @@ public class UserApi {
 		HttpServletRequest request
 	) {
 		// int userNo = userDetails.getUserInfo().getNo();
-		coreUserService.logout(2, request);
+		coreUserService.logout(99, request);
 		return ResponseEntity.ok().build();
 	}
 
