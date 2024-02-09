@@ -14,7 +14,6 @@ public class StudentListSaveRequest {
 	private String password;
 	private String name;
 	private String birthDate;
-	private int gradeNo;
 
 	public Student toEntity(PasswordEncoder passwordEncoder, int schoolNo, int gradeNo) {
 		return Student.builder()

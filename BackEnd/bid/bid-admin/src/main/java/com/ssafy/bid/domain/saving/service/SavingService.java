@@ -1,7 +1,12 @@
 package com.ssafy.bid.domain.saving.service;
 
-import com.ssafy.bid.domain.saving.dto.SavingModifyRequest;
+import java.util.List;
+
+import com.ssafy.bid.domain.saving.dto.SavingListGetResponse;
+import com.ssafy.bid.domain.saving.dto.SavingListUpdateRequest;
 
 public interface SavingService {
-	void modifySaving(int gradeNo, SavingModifyRequest savingModifyRequest);
+	List<SavingListGetResponse> getAllSaving(int gradeNo);
+
+	void updateSaving(int gradeNo, SavingListUpdateRequest savingListUpdateRequest);
 }

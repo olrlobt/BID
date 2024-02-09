@@ -23,7 +23,7 @@ public class CoreGradeServiceImpl implements CoreGradeService {
 	private final CoreGradePeriodRepository coreGradePeriodRepository;
 
 	@Override
-	public GradeStatisticsGetResponse findGradeStatistics(int gradeNo) {
+	public GradeStatisticsGetResponse getGradeStatistics(int gradeNo) {
 		List<GradePeriodsGetResponse> periods = coreGradePeriodRepository.findAllGradePeriodByGradeNo(gradeNo);
 
 		GradeStatisticsGetResponse statistics = coreGradeRepository.findGradeStatisticsByGradeNo(gradeNo)

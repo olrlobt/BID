@@ -5,12 +5,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RewardsFindResponse {
+public class RewardListGetResponse {
 	private int no;
 	private String name;
 	private int price;
 
-	public RewardsFindResponse(
+	public RewardListGetResponse(
 		int no,
 		String name,
 		int price

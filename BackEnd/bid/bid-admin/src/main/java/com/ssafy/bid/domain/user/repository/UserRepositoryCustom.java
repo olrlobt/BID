@@ -7,14 +7,16 @@ import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
-import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
 
 public interface UserRepositoryCustom {
-	boolean checkExistsById(String id);
+	boolean existsById(String id);
+
+	Optional<Student> findStudentByUserNo(int userNo);
 
 	List<SchoolsFindResponse> findSchoolsByName(String name);
 
-	List<StudentsFindResponse> findAllStudentByGradeNo(int gradeNo);
+	List<StudentsGetResponse> findAllStudentByGradeNo(int gradeNo);
 
 	Optional<String> findUserIdByNameAndTel(String name, String tel);
 

@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SavingFindResponse {
+public class UserSavingListGetResponse {
 	private int asset;
 	private int savingNo;
 	private String savingName;
@@ -14,8 +14,9 @@ public class SavingFindResponse {
 	private int savingDepositPrice;
 	private int savingInterestRate;
 	private String savingTerms;
+	private boolean isMySaving;
 
-	public SavingFindResponse(
+	public UserSavingListGetResponse(
 		int asset,
 		int savingNo,
 		String savingName,
@@ -23,7 +24,8 @@ public class SavingFindResponse {
 		int savingDepositCycle,
 		int savingDepositPrice,
 		int savingInterestRate,
-		String savingTerms
+		String savingTerms,
+		long countMySaving
 	) {
 		this.asset = asset;
 		this.savingNo = savingNo;
@@ -33,5 +35,6 @@ public class SavingFindResponse {
 		this.savingDepositPrice = savingDepositPrice;
 		this.savingInterestRate = savingInterestRate;
 		this.savingTerms = savingTerms;
+		this.isMySaving = countMySaving >= 1;
 	}
 }

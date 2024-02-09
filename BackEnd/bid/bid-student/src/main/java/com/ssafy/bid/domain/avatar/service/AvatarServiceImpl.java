@@ -5,11 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.bid.domain.avatar.dto.UserAvatarModifyRequest;
-import com.ssafy.bid.domain.avatar.dto.UserAvatarsFindResponse;
+import com.ssafy.bid.domain.avatar.dto.UserAvatarUpdateRequest;
+import com.ssafy.bid.domain.avatar.dto.UserAvatarsGetResponse;
 import com.ssafy.bid.domain.avatar.repository.UserAvatarRepository;
 import com.ssafy.bid.domain.user.Student;
+import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.repository.UserRepository;
+import com.ssafy.bid.global.error.exception.InvalidParameterException;
+import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,19 +25,23 @@ public class AvatarServiceImpl implements AvatarService {
 	private final UserRepository userRepository;
 
 	@Override
-	public List<UserAvatarsFindResponse> findUserAvatars(int userNo) {
-		return userAvatarRepository.findUserAvatars(userNo);
+	public List<UserAvatarsGetResponse> getUserAvatars(int userNo) {
+		return userAvatarRepository.findAllByUserNo(userNo);
 	}
 
 	@Override
 	@Transactional
-	public void modifyAvatar(int userNo, UserAvatarModifyRequest userAvatarModifyRequest) {
-		Student student = (Student)userRepository.findById(userNo)
-			.orElseThrow(() -> new IllegalArgumentException(""));//TODO: 커스텀 예외
+	public void updateUserAvatar(int userNo, UserAvatarUpdateRequest userAvatarUpdateRequest) {
+		User user = userRepository.findById(userNo)
+			.orElseThrow(() -> new ResourceNotFoundException("아바타를 수정하려는 User 가 없음.", userNo));
 
-		String url = userAvatarRepository.findUrlByUserAvatarNo(userAvatarModifyRequest.getNo())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저아바타"));//TODO: 커스텀 예외처리
+		if (!(user instanceof Student student)) {
+			throw new InvalidParameterException("아바타를 수정하려는 User 의 타입이 올바르지 않음.", userNo);
+		}
 
-		student.modifyProfileImgUrl(url);
+		String url = userAvatarRepository.findUrlByUserAvatarNo(userAvatarUpdateRequest.getNo())
+			.orElseThrow(
+				() -> new ResourceNotFoundException("수정하려는 UserAvatar 가 없음.", userAvatarUpdateRequest.getNo()));
+		student.updateAvatar(url);
 	}
 }
