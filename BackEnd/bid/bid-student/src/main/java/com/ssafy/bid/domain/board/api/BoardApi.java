@@ -41,8 +41,8 @@ public class BoardApi {
 	}
 
 	@GetMapping("/users/{userNo}/boards")
-	public ResponseEntity<?> findMyAllBoards(@PathVariable int userNo) {
-		MyBoardsResponse myAllBoards = boardService.findMyAllBoards(userNo);
+	public ResponseEntity<?> findAllBoardsByUserNo(@PathVariable int userNo) {
+		MyBoardsResponse myAllBoards = boardService.findAllBoardsByUserNo(userNo);
 		return ResponseEntity.ok(myAllBoards);
 	}
 
@@ -74,13 +74,13 @@ public class BoardApi {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@PatchMapping("/boards/{boardNo}/reply/{replyNo}")
-	public ResponseEntity<?> modifyBoardReply(@PathVariable int boardNo,
-		@PathVariable int replyNo,
-		@RequestBody ReplyCreateRequest replyCreateRequest) {
-		boardService.modifyBoardReply(1, replyNo, replyCreateRequest);
-		return ResponseEntity.noContent().build();
-	}
+	// @PatchMapping("/boards/{boardNo}/reply/{replyNo}")
+	// public ResponseEntity<?> modifyBoardReply(@PathVariable int boardNo,
+	// 	@PathVariable int replyNo,
+	// 	@RequestBody ReplyCreateRequest replyCreateRequest) {
+	// 	boardService.modifyBoardReply(1, replyNo, replyCreateRequest);
+	// 	return ResponseEntity.noContent().build();
+	// }
 
 	@DeleteMapping("/boards/{boardNo}/reply/{replyNo}")
 	public ResponseEntity<?> deleteBoardReply(@PathVariable int boardNo,
