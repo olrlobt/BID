@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
+import styled from './MakeClass.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import styled from './MakeClass.module.css';
 import { useCallback, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { AddClass } from '../../Apis/ClassManageApis';
