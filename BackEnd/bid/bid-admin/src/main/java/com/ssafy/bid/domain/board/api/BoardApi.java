@@ -33,13 +33,15 @@ public class BoardApi {
 
 	@GetMapping("/{gradeNo}/boards/{boardNo}")
 	public ResponseEntity<BoardResponse> getBoardDetail(@PathVariable int gradeNo, @PathVariable long boardNo) {
-		BoardResponse boardResponse = coreBoardService.getBoardDetail(boardNo);
+		int userNo = 21; // security
+		BoardResponse boardResponse = coreBoardService.getBoardDetail(userNo, boardNo, gradeNo);
 		return ResponseEntity.ok(boardResponse);
 	}
 
 	@DeleteMapping("/{gradeNo}/boards/{boardNo}")
 	public ResponseEntity<?> deleteBoard(@PathVariable int gradeNo, @PathVariable long boardNo) {
-		boardService.deleteBoard(boardNo);
+		int userNo = 21; // security
+		boardService.deleteBoard(boardNo, gradeNo, userNo);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -47,7 +49,8 @@ public class BoardApi {
 	public ResponseEntity<?> deleteReply(@PathVariable int gradeNo,
 		@PathVariable long boardNo,
 		@PathVariable long replyNo) {
-		boardService.deleteReply(replyNo);
+		int userNo = 21; // security
+		boardService.deleteReply(replyNo, gradeNo, userNo);
 		return ResponseEntity.noContent().build();
 	}
 }
