@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
@@ -22,10 +21,14 @@ import com.ssafy.bid.domain.user.dto.AttendanceResponse;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
 import com.ssafy.bid.domain.user.service.CustomUserDetails;
 import com.ssafy.bid.domain.user.service.UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -70,14 +73,29 @@ public class UserApi {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody LoginRequest request) {
-		String token = coreUserService.login(request);
-		return ResponseEntity.status(OK).body(token);
+	public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+		TokenResponse tokenResponse = coreUserService.login(request);
+		Cookie cookie = createCookie(tokenResponse.getRefreshToken());
+		response.addCookie(cookie);
+		return ResponseEntity.status(OK).body(tokenResponse.getAccessToken());
 	}
 
-	@PostMapping("/logout")
-	public ResponseEntity<?> logout(@RequestHeader("Authorization") String authToken) {
-		coreUserService.logout(authToken);
+	private Cookie createCookie(String refreshToken) {
+		Cookie cookie = new Cookie("refreshToken", refreshToken);
+		cookie.setHttpOnly(true);
+		// cookie.setSecure(true);
+		cookie.setPath("/");
+		cookie.setMaxAge(60 * 30);
+		return cookie;
+	}
+
+	@GetMapping("/signout")
+	public ResponseEntity<?> logout(
+		// @AuthenticationPrincipal CustomUserDetails userDetails,
+		HttpServletRequest request
+	) {
+		// int userNo = userDetails.getUserInfo().getNo();
+		coreUserService.logout(2, request);
 		return ResponseEntity.ok().build();
 	}
 }
