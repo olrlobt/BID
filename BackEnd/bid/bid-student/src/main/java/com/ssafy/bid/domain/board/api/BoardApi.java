@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardListResponse;
+import com.ssafy.bid.domain.board.dto.BoardModifyRequest;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
@@ -41,8 +42,8 @@ public class BoardApi {
 	}
 
 	@GetMapping("/users/{userNo}/boards")
-	public ResponseEntity<?> findMyAllBoards(@PathVariable int userNo) {
-		MyBoardsResponse myAllBoards = boardService.findMyAllBoards(userNo);
+	public ResponseEntity<?> findAllBoardsByUserNo(@PathVariable int userNo) {
+		MyBoardsResponse myAllBoards = boardService.findAllBoardsByUserNo(userNo);
 		return ResponseEntity.ok(myAllBoards);
 	}
 
@@ -61,6 +62,11 @@ public class BoardApi {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
+	@PatchMapping("/boards/{boardNo}")
+	public ResponseEntity<?> modifyBoard(@PathVariable int boardNo, @RequestBody BoardModifyRequest boardModifyRequest) {
+		return ResponseEntity.ok(boardService.modifyBoard(boardNo, boardModifyRequest));
+	}
+
 	@DeleteMapping("/boards/{boardNo}")
 	public ResponseEntity<?> deleteBoard(@PathVariable int boardNo) {
 		boardService.deleteBoard(boardNo);
@@ -74,13 +80,13 @@ public class BoardApi {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@PatchMapping("/boards/{boardNo}/reply/{replyNo}")
-	public ResponseEntity<?> modifyBoardReply(@PathVariable int boardNo,
-		@PathVariable int replyNo,
-		@RequestBody ReplyCreateRequest replyCreateRequest) {
-		boardService.modifyBoardReply(1, replyNo, replyCreateRequest);
-		return ResponseEntity.noContent().build();
-	}
+	// @PatchMapping("/boards/{boardNo}/reply/{replyNo}")
+	// public ResponseEntity<?> modifyBoardReply(@PathVariable int boardNo,
+	// 	@PathVariable int replyNo,
+	// 	@RequestBody ReplyCreateRequest replyCreateRequest) {
+	// 	boardService.modifyBoardReply(1, replyNo, replyCreateRequest);
+	// 	return ResponseEntity.noContent().build();
+	// }
 
 	@DeleteMapping("/boards/{boardNo}/reply/{replyNo}")
 	public ResponseEntity<?> deleteBoardReply(@PathVariable int boardNo,
@@ -95,17 +101,7 @@ public class BoardApi {
 
 		int userNo = 1;
 		int gradeNo = 1;
-		boardService.bidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-
-	@PatchMapping("/boards/{boardNo}/bid")
-	public ResponseEntity<?> rebidBoard(@PathVariable long boardNo,
-		@RequestBody BiddingCreateRequest biddingCreateRequest) {
-
-		int userNo = 1;
-		int gradeNo = 1;
-		boardService.rebidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
-		return ResponseEntity.noContent().build();
+		HttpStatus httpStatus = boardService.bidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
+		return ResponseEntity.status(httpStatus).build();
 	}
 }
