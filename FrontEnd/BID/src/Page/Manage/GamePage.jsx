@@ -1,19 +1,20 @@
-import { Link } from "react-router-dom";
-import styled from "./GamePage.module.css";
-import { useSelector } from "react-redux";
-import useBalls from "../../hooks/useBalls";
-import { ballSelector } from "../../Store/ballSlice";
-import { useQuery } from "@tanstack/react-query";
-import { viewStudentBalls } from "../../Apis/TeacherManageApis";
+import { Link } from 'react-router-dom';
+import styled from './GamePage.module.css';
+import { useSelector } from 'react-redux';
+import useBalls from '../../hooks/useBalls';
+import { ballSelector } from '../../Store/ballSlice';
+import { useQuery } from '@tanstack/react-query';
+import { viewStudentBalls } from '../../Apis/TeacherManageApis';
 
 export default function GamePage() {
   const { initBalls } = useBalls();
   const ballList = useSelector(ballSelector);
 
+  const groupNo = 1;
   const { data: stuBalls } = useQuery({
-    queryKefinishGamey: ["studentBall"],
+    queryKefinishGamey: ['studentBall'],
     queryFn: () =>
-      viewStudentBalls().then((res) => {
+      viewStudentBalls(groupNo).then((res) => {
         initBalls({ ballList: res.data });
         return res.data;
       }),
