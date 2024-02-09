@@ -1,34 +1,51 @@
 package com.ssafy.bid.domain.saving.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.bid.domain.saving.dto.SavingFindResponse;
-import com.ssafy.bid.domain.saving.repository.CoreSavingRepository;
-import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
+import com.ssafy.bid.domain.saving.dto.SavingExpireAlertRequest;
+import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
+import com.ssafy.bid.domain.saving.repository.CoreUserSavingRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class CoreSavingServiceImpl implements CoreSavingService {
 
-	private final CoreSavingRepository coreSavingRepository;
+	private final CoreUserSavingRepository coreUserSavingRepository;
 
 	@Override
-	public List<SavingFindResponse> findAllSaving(int gradeNo) {
-		// 학급PK를 통해 적금 목록 조회
-		List<SavingFindResponse> responses = coreSavingRepository.findAllByGradeNo(gradeNo);
+	@Transactional
+	public List<SavingExpireAlertRequest> expire() {
+		List<Integer> userSavings = new ArrayList<>();
+		List<SavingExpireAlertRequest> savingExpireAlertRequests = new ArrayList<>();
 
-		// 파라미터 검증
-		if (responses.isEmpty()) {
-			throw new ResourceNotFoundException("적금목록조회-학급PK", gradeNo);
-		}
+		coreUserSavingRepository.findAllSavingExpireInfos().stream()
+			.filter(savingExpireRequest -> isExpireTarget(savingExpireRequest.getUserSavingEndPeriod()))
+			.forEach(savingExpireRequest -> {
+				userSavings.add(savingExpireRequest.getUserSavingNo());
+				savingExpireAlertRequests.add(createSavingTransferAlertRequest(savingExpireRequest));
+				savingExpireRequest.getStudent().addSavingPrice(savingExpireRequest.getCurrentPrice());
+			});
 
-		// 응답 데이터 반환
-		return responses;
+		coreUserSavingRepository.deleteAllById(userSavings);
+		return savingExpireAlertRequests;
+	}
+
+	private boolean isExpireTarget(LocalDate userSavingEndPeriod) {
+		return userSavingEndPeriod.equals(LocalDate.now());
+	}
+
+	private SavingExpireAlertRequest createSavingTransferAlertRequest(SavingExpireRequest savingExpireRequest) {
+		return SavingExpireAlertRequest.builder()
+			.price(savingExpireRequest.getCurrentPrice())
+			.endDate(savingExpireRequest.getUserSavingEndPeriod())
+			.userNo(savingExpireRequest.getStudent().getNo())
+			.build();
 	}
 }

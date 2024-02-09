@@ -15,7 +15,7 @@ import com.ssafy.bid.domain.notification.NotificationType;
 import com.ssafy.bid.domain.notification.dto.NotificationRequest;
 import com.ssafy.bid.domain.notification.service.NotificationService;
 import com.ssafy.bid.domain.saving.dto.SavingExpireAlertRequest;
-import com.ssafy.bid.domain.saving.service.SavingService;
+import com.ssafy.bid.domain.saving.service.CoreSavingService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class SavingExpireBatchJob {
 
-	private final SavingService savingService;
+	private final CoreSavingService coreSavingService;
 	private final NotificationService notificationService;
 
 	@Bean
@@ -48,7 +48,7 @@ public class SavingExpireBatchJob {
 	@Bean
 	public Tasklet savingExpireTasklet() {
 		return ((contribution, chunkContext) -> {
-			savingService.expire().forEach(savingExpireAlertRequest -> {
+			coreSavingService.expire().forEach(savingExpireAlertRequest -> {
 				NotificationRequest notificationRequest = createNotificationRequest(savingExpireAlertRequest);
 				notificationService.send(notificationRequest);
 			});

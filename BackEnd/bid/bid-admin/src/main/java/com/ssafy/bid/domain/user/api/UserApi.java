@@ -27,7 +27,7 @@ import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
-import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
 import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
@@ -56,13 +56,13 @@ public class UserApi {
 
 	@GetMapping("/check-id")
 	public ResponseEntity<Boolean> checkIdDuplicate(@RequestParam String id) {
-		boolean isDuplicate = userService.isIdDuplicate(id);
+		boolean isDuplicate = userService.isDuplicated(id);
 		return ResponseEntity.ok().body(isDuplicate);
 	}
 
 	@GetMapping("/schools")
-	public ResponseEntity<List<SchoolsFindResponse>> findSchools(@RequestParam String name) {
-		List<SchoolsFindResponse> response = userService.findSchools(name);
+	public ResponseEntity<List<SchoolsFindResponse>> getSchools(@RequestParam String name) {
+		List<SchoolsFindResponse> response = userService.getSchools(name);
 		return ResponseEntity.ok(response);
 	}
 
@@ -78,6 +78,12 @@ public class UserApi {
 		return ResponseEntity.status(CREATED).build();
 	}
 
+	@PatchMapping("/password/{userNo}")
+	public ResponseEntity<?> resetStudentPassword(@PathVariable int userNo) {
+		userService.resetStudentPassword(userNo);
+		return ResponseEntity.status(OK).build();
+	}
+
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginRequest request) {
 		String token = coreUserService.login(request);
@@ -91,12 +97,12 @@ public class UserApi {
 	}
 
 	@GetMapping("/{gradeNo}/users")
-	public ResponseEntity<List<StudentsFindResponse>> findStudents(@PathVariable int gradeNo) {
-		List<StudentsFindResponse> responses = userService.findAllStudents(gradeNo);
+	public ResponseEntity<List<StudentsGetResponse>> findStudents(@PathVariable int gradeNo) {
+		List<StudentsGetResponse> responses = userService.getStudents(gradeNo);
 		return ResponseEntity.status(OK).body(responses);
 	}
 
-	@GetMapping("{grageNo}/users/{userNo}")
+	@GetMapping("/{grageNo}/users/{userNo}")
 	public ResponseEntity<StudentFindResponse> findStudent(
 		@PathVariable int userNo,
 		@ModelAttribute StudentFindRequest studentFindRequest
@@ -105,7 +111,7 @@ public class UserApi {
 		return ResponseEntity.status(OK).body(response);
 	}
 
-	@GetMapping("{gradeNo}/users/{userNo}/accounts")
+	@GetMapping("/{gradeNo}/users/{userNo}/accounts")
 	public ResponseEntity<List<AccountFindResponse>> findAccount(
 		@PathVariable int userNo,
 		@ModelAttribute AccountFindRequest accountFindRequest
@@ -116,17 +122,17 @@ public class UserApi {
 
 	@PostMapping("/find-id")
 	public ResponseEntity<String> findUserId(@RequestBody UserIdFindRequest request) {
-		String id = userService.findUserId(request);
+		String id = userService.getUserId(request);
 		return ResponseEntity.ok(id);
 	}
 
-	@PatchMapping("/users/{userNo}")
+	@PatchMapping("/{gradeNo}/users/{userNo}")
 	public ResponseEntity<?> updateUser(@PathVariable Integer userNo, @RequestBody UserUpdateRequest request) {
 		userService.updateUser(userNo, request);
 		return ResponseEntity.status(OK).build();
 	}
 
-	@DeleteMapping("/users/{userNo}")
+	@DeleteMapping("/{gradeNo}/users/{userNo}")
 	public ResponseEntity<?> deleteUser(@PathVariable Integer userNo, @RequestBody UserDeleteRequest request) {
 		userService.deleteUser(userNo, request);
 		return ResponseEntity.status(NO_CONTENT).build();
@@ -134,7 +140,7 @@ public class UserApi {
 
 	@GetMapping("/{gradeNo}/balls")
 	public ResponseEntity<List<BallsFindResponse>> findAllBalls(@PathVariable int gradeNo) {
-		List<BallsFindResponse> responses = userService.findAllBalls(gradeNo);
+		List<BallsFindResponse> responses = userService.getAllBalls(gradeNo);
 		return ResponseEntity.status(OK).body(responses);
 	}
 

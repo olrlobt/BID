@@ -16,20 +16,28 @@ public class Admin extends User {
 
 	private String tel;
 
+	private Integer mainGradeNo;
+
 	public Admin(
 		String id,
 		String password,
 		String name,
 		Integer schoolNo,
-		String tel
+		String tel,
+		Integer mainGradeNo
 	) {
 
 		super(id, password, name, schoolNo);
 		this.tel = tel;
+		this.mainGradeNo = mainGradeNo;
 	}
 
 	public void update(String name, int schoolNo, String tel) {
 		super.updateAdmin(name, schoolNo);
 		this.tel = tel;
+	}
+
+	public void alterMainGrade(int mainGradeNo) {
+		this.mainGradeNo = mainGradeNo;
 	}
 }

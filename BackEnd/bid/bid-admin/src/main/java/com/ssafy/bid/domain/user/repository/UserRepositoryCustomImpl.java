@@ -11,13 +11,12 @@ import java.util.Optional;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
-import com.ssafy.bid.domain.user.dto.StudentsFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,19 +26,27 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public boolean checkExistsById(String id) {
-		return Boolean.TRUE.equals(queryFactory
-			.select(
-				new CaseBuilder()
-					.when(user.no.count().goe(1)).then(true)
-					.otherwise(false)
-			)
+	public boolean existsById(String id) {
+		Integer fetchOne = queryFactory
+			.selectOne()
 			.from(user)
-			.where(user.deletedAt.isNull())
-			.groupBy(user.id)
-			.having(user.id.eq(id))
-			.fetchOne());
+			.where(
+				user.deletedAt.isNull(),
+				user.id.eq(id)
+			)
+			.fetchFirst();
 
+		return fetchOne != null;
+	}
+
+	@Override
+	public Optional<Student> findStudentByUserNo(int userNo) {
+		return Optional.ofNullable(
+			queryFactory
+				.selectFrom(student)
+				.where(student.no.eq(userNo))
+				.fetchOne()
+		);
 	}
 
 	@Override
@@ -65,8 +72,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	}
 
 	@Override
-	public List<StudentsFindResponse> findAllStudentByGradeNo(int gradeNo) {
-		return queryFactory.select(Projections.constructor(StudentsFindResponse.class,
+	public List<StudentsGetResponse> findAllStudentByGradeNo(int gradeNo) {
+		return queryFactory.select(Projections.constructor(StudentsGetResponse.class,
 					student.no,
 					student.id,
 					student.name,

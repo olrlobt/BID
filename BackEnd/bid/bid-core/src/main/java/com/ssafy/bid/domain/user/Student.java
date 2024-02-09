@@ -1,5 +1,7 @@
 package com.ssafy.bid.domain.user;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.ssafy.bid.domain.grade.ExpenditureStatistics;
 
 import jakarta.persistence.DiscriminatorValue;
@@ -40,7 +42,7 @@ public class Student extends User {
 		this.asset += price;
 	}
 
-	public void modifyProfileImgUrl(String url) {
+	public void updateAvatar(String url) {
 		this.profileImgUrl = url;
 	}
 
@@ -58,5 +60,9 @@ public class Student extends User {
 
 	public void checkAttendance() {
 		this.attendance.checkAttendance();
+	}
+
+	public void resetPassword(PasswordEncoder passwordEncoder) {
+		super.changePassword(passwordEncoder.encode(this.birthDate));
 	}
 }

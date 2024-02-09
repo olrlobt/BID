@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bid.domain.board.QReply;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,8 @@ public class CoreBoardRepositoryImpl implements CoreBoardCustomRepository {
 					board.category,
 					board.goodsImgUrl,
 					student.name,
-					board.gradePeriodNo
+					board.gradePeriodNo,
+					board.createdAt
 				))
 				.from(board)
 				.innerJoin(student)

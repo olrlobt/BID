@@ -5,9 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,7 +20,6 @@ import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AttendanceResponse;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
-import com.ssafy.bid.domain.user.dto.PasswordResetRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
@@ -37,14 +34,6 @@ import lombok.RequiredArgsConstructor;
 public class UserApi {
 	private final UserService userService;
 	private final CoreUserService coreUserService;
-
-	@PostMapping("/password")
-	public ResponseEntity<Void> resetPassword(@RequestBody PasswordResetRequest request) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String userId = authentication.getName();
-		userService.resetPassword(userId, request);
-		return ResponseEntity.ok().build();
-	}
 
 	@PatchMapping("/users/attendance/check")
 	public ResponseEntity<?> checkAttendance(
