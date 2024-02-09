@@ -1,7 +1,6 @@
 package com.ssafy.bid.domain.board.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
