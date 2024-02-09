@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.coupon.Coupon;
+import com.ssafy.bid.domain.coupon.CouponStatus;
 import com.ssafy.bid.domain.coupon.UsageStatus;
 import com.ssafy.bid.domain.coupon.UserCoupon;
 import com.ssafy.bid.domain.coupon.dto.CouponCreateRequest;
@@ -83,15 +84,21 @@ public class CouponService {
 	}
 
 	public void registerCoupon(int couponNo) {
-		Coupon coupon = couponRepository.findById(couponNo)
-			.orElseThrow(() -> new NoSuchElementException("쿠폰이 없습니다."));
+		// admin의 gradeNO 이 gradeNo과 다르면 error
+
+		Coupon coupon = couponRepository.findByNoAndCouponStatus(couponNo,
+			CouponStatus.UNREGISTERED)
+			.orElseThrow(() -> new ResourceNotFoundException("쿠폰이 없습니다."));
 
 		coupon.register();
 	}
 
 	public void unRegisterCoupon(int couponNo) {
-		Coupon coupon = couponRepository.findById(couponNo)
-			.orElseThrow(() -> new NoSuchElementException("쿠폰이 없습니다."));
+		// admin의 gradeNO 이 gradeNo과 다르면 error
+
+		Coupon coupon = couponRepository.findByNoAndCouponStatus(couponNo,
+				CouponStatus.REGISTERED)
+			.orElseThrow(() -> new ResourceNotFoundException("쿠폰이 없습니다."));
 
 		coupon.unRegister();
 	}
