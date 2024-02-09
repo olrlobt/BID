@@ -18,6 +18,8 @@ public class BoardResponse {
 	private int startPrice;
 	private BoardStatus boardStatus;
 	private int averagePrice;
+	@Setter
+	private int displayPrice;
 	private int resultPrice;
 	private String category;
 	private String goodsImgUrl;
@@ -44,4 +46,5 @@ public class BoardResponse {
 		this.gradePeriodNo = gradePeriodNo;
 		this.createdAt = createdAt;
 	}
+
 }

@@ -33,7 +33,8 @@ public class BoardApi {
 
 	@GetMapping("/{gradeNo}/boards/{boardNo}")
 	public ResponseEntity<BoardResponse> getBoardDetail(@PathVariable int gradeNo, @PathVariable long boardNo) {
-		BoardResponse boardResponse = coreBoardService.getBoardDetail(boardNo);
+		int userNo = 21; // security
+		BoardResponse boardResponse = coreBoardService.getBoardDetail(userNo ,boardNo);
 		return ResponseEntity.ok(boardResponse);
 	}
 
