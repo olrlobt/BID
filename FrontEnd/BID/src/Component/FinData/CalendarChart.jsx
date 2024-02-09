@@ -1,63 +1,65 @@
 // CalendarChart.js
-import React from "react";
-import styled from "./CalendarChart.module.css";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import moment from "moment";
-import Toolbar from "./ToolBar";
-import CustomEvent from "./CustomEvent";
-import monthDate from "./monthDate";
-import monthHeader from "./monthHeader";
+import { React, useState } from 'react';
+import styled from './CalendarChart.module.css';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import moment from 'moment';
+import Toolbar from './ToolBar';
+import CustomEvent from './CustomEvent';
+import monthDate from './monthDate';
+import monthHeader from './monthHeader';
+import smallEvent from './SmallEvent';
+
 function CalendarChart() {
-  moment.locale("ko-KR");
+  moment.locale('ko-KR');
   const localizer = momentLocalizer(moment);
 
   const events = [
     {
       id: 0,
-      title: "지출",
+      title: '지출',
       start: new Date(2024, 0, 15),
       end: new Date(2024, 0, 15),
       amount: -50,
     },
     {
       id: 1,
-      title: "지출",
+      title: '지출',
       start: new Date(2024, 0, 26),
       end: new Date(2024, 0, 26),
       amount: -100,
     },
     {
       id: 2,
-      title: "수입",
+      title: '수입',
       start: new Date(2024, 0, 15),
       end: new Date(2024, 0, 15),
       amount: 200,
     },
     {
       id: 3,
-      title: "수입",
+      title: '수입',
       start: new Date(2024, 0, 1),
       end: new Date(2024, 0, 1),
       amount: 200,
     },
     {
       id: 4,
-      title: "수입",
+      title: '수입',
       start: new Date(2024, 0, 8),
       end: new Date(2024, 0, 8),
       amount: 200,
     },
     {
       id: 5,
-      title: "수입",
+      title: '수입',
       start: new Date(2024, 0, 22),
       end: new Date(2024, 0, 22),
       amount: 200,
     },
     {
       id: 6,
-      title: "수입",
+      title: '수입',
       start: new Date(2024, 0, 29),
       end: new Date(2024, 0, 29),
       amount: 180,
@@ -67,31 +69,31 @@ function CalendarChart() {
 
   // const calculateTotalAmount = (events, type) => {
   //   return events.reduce((total, event) => {
-  //     if (type === "지출") {
+  //     if (type === '지출') {
   //       return event.amount < 0 ? total + event.amount : total;
-  //     } else if (type === "수입") {
+  //     } else if (type === '수입') {
   //       return event.amount > 0 ? total + event.amount : total;
   //     }
   //     return total;
   //   }, 0);
   // };
 
-  // const totalExpense = calculateTotalAmount(events, "지출");
-  // const totalIncome = calculateTotalAmount(events, "수입");
+  // const totalExpense = calculateTotalAmount(events, '지출');
+  // const totalIncome = calculateTotalAmount(events, '수입');
 
-  // const [selectedEvent, setSelectedEvent] = useState(null);
-  // const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
-      borderRadius: "0px",
+      borderRadius: '0px',
       opacity: 0.8,
-      color: "white",
-      border: "0px",
-      display: "block",
-      backgroundColor: "transparent", // Set background color to transparent
-      width: "100%", // Make the event fill the entire day cell
-      cursor: "pointer", // Enable cursor for events
+      color: 'white',
+      border: '0px',
+      display: 'block',
+      backgroundColor: 'transparent', // Set background color to transparent
+      width: '100%', // Make the event fill the entire day cell
+      cursor: 'pointer', // Enable cursor for events
     };
 
     const content = (
@@ -99,17 +101,16 @@ function CalendarChart() {
         <div onClick={() => handleEventClick(event)}>{event.amount}</div>
       </div>
     );
-
-    if (isSelected) {
-      handleEventClick(event);
-    }
     return {
       style,
       content, // Set the selected event on click
     };
   };
 
-  const handleEventClick = (event) => {};
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+    setModalIsOpen(true);
+  };
 
   return (
     <div className={styled.chartContainer}>
@@ -130,10 +131,28 @@ function CalendarChart() {
                 dateHeader: monthDate,
               },
             }}
+            onSelectEvent={(eventInfo) => {
+              smallEvent(eventInfo);
+            }}
             eventPropGetter={eventStyleGetter}
           />
         </div>
       </div>
+      {modalIsOpen && (
+        <div className={styled.modal}>
+          <div className={styled.modalContent}>
+            <span
+              onClick={() => setModalIsOpen(false)}
+              className={styled.close}
+            >
+              &times;
+            </span>
+            <h2>{selectedEvent.title}</h2>
+            <p>Amount: {selectedEvent.amount}</p>
+            {/* Add more event details as needed */}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
