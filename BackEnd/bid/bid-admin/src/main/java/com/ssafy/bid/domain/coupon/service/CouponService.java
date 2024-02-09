@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.coupon.Coupon;
+import com.ssafy.bid.domain.coupon.UsageStatus;
 import com.ssafy.bid.domain.coupon.UserCoupon;
 import com.ssafy.bid.domain.coupon.dto.CouponCreateRequest;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
@@ -40,6 +41,8 @@ public class CouponService {
 
 	@Transactional(readOnly = true)
 	public List<UserCouponResponse> findUserCoupons(int gradeNo) {
+		// admin의 gradeNO 이 gradeNo과 다르면 error
+
 		return userCouponRepository.findUserCoupons(gradeNo);
 	}
 
@@ -60,17 +63,22 @@ public class CouponService {
 	}
 
 	public void acceptUserCoupon(long userCouponNo) {
+		// admin의 gradeNO 이 gradeNo과 다르면 error
+
 		if (!userCouponRepository.existsById(userCouponNo)) {
-			throw new EntityNotFoundException("쿠폰이 없습니다.");
+			throw new ResourceNotFoundException("사용할 쿠폰이 없습니다.", userCouponNo);
 		}
 		// Todo. 해당 학생 알림 주기
-		userCouponRepository.deleteById(userCouponNo);
+		userCouponRepository.deleteByNoAndUseStatus(userCouponNo, UsageStatus.REQUEST_PROGRESS);
 	}
 
 	public void rejectUserCoupon(long userCouponNo) {
-		UserCoupon userCoupon = userCouponRepository.findById(userCouponNo)
-			.orElseThrow(() -> new NoSuchElementException("쿠폰이 없습니다."));
+		// admin의 gradeNO 이 gradeNo과 다르면 error
 
+		UserCoupon userCoupon = userCouponRepository.findByNoAndUseStatus(userCouponNo, UsageStatus.REQUEST_PROGRESS)
+			.orElseThrow(() -> new ResourceNotFoundException("사용할 쿠폰이 없습니다.", userCouponNo));
+
+		// Todo. 해당 학생 알림 주기
 		userCoupon.reject();
 	}
 
