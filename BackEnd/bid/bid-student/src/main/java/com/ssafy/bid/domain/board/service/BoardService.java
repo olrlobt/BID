@@ -11,6 +11,7 @@ import com.ssafy.bid.domain.board.Reply;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardListResponse;
+import com.ssafy.bid.domain.board.dto.BoardModifyRequest;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.repository.BiddingRepository;
@@ -51,6 +52,16 @@ public class BoardService {
 
 		Board board = boardCreateRequest.toEntity(1, 1);
 		boardRepository.save(board);
+	}
+
+	@Transactional
+	public Long modifyBoard(long boardNo, BoardModifyRequest boardModifyRequest) {
+		// 내 게시글이 맞는지 확인 로직 필요
+
+		Board board = boardRepository.findById(boardNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 게시물이 없습니다." + boardNo));
+
+		return board.modify(boardModifyRequest);
 	}
 
 	@Transactional
@@ -114,4 +125,5 @@ public class BoardService {
 			return HttpStatus.CREATED;
 		});
 	}
+
 }

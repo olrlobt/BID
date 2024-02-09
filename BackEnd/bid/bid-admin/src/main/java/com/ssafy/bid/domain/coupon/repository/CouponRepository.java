@@ -12,5 +12,6 @@ import jakarta.validation.constraints.NotNull;
 
 public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 	List<Coupon> findByGradeNo(int gradeNo);
+
 	Optional<Coupon> findByNoAndCouponStatus(Integer no, @NotNull CouponStatus couponStatus);
 }

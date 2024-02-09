@@ -26,7 +26,7 @@ public class CouponResponse {
 		this.couponStatus = couponStatus;
 	}
 
-	public static CouponResponse to(Coupon coupon){
+	public static CouponResponse to(Coupon coupon) {
 		return CouponResponse.builder()
 			.no(coupon.getNo())
 			.name(coupon.getName())

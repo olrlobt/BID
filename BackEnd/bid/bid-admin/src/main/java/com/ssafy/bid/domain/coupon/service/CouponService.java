@@ -1,7 +1,6 @@
 package com.ssafy.bid.domain.coupon.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ import com.ssafy.bid.domain.coupon.repository.CouponRepository;
 import com.ssafy.bid.domain.coupon.repository.UserCouponRepository;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -87,7 +85,7 @@ public class CouponService {
 		// admin의 gradeNO 이 gradeNo과 다르면 error
 
 		Coupon coupon = couponRepository.findByNoAndCouponStatus(couponNo,
-			CouponStatus.UNREGISTERED)
+				CouponStatus.UNREGISTERED)
 			.orElseThrow(() -> new ResourceNotFoundException("쿠폰이 없습니다."));
 
 		coupon.register();
