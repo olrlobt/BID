@@ -2,10 +2,10 @@ package com.ssafy.bid.domain.board.service;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.bid.domain.board.Bidding;
 import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Reply;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
@@ -16,9 +16,9 @@ import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.repository.BiddingRepository;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
+import com.ssafy.bid.global.error.exception.InvalidParameterException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +48,6 @@ public class BoardService {
 
 	@Transactional
 	public void addBoard(int userNo, int gradeNo, BoardCreateRequest boardCreateRequest) {
-
 
 		Board board = boardCreateRequest.toEntity(1, 1);
 		boardRepository.save(board);
@@ -94,19 +93,25 @@ public class BoardService {
 	}
 
 	@Transactional
-	public void bidBoard(BiddingCreateRequest biddingCreateRequest, long boardNo, int gradeNo, int userNo) {
+	public HttpStatus bidBoard(BiddingCreateRequest biddingCreateRequest, long boardNo, int gradeNo, int userNo) {
 
+		// board가 gradeNo이 user와 gradeNo이 맞나 확인
+		// user의 자산이 입찰가보다 낮은 경우 확인
 
-		biddingCreateRequest.setBoardNo(boardNo);
-		biddingCreateRequest.setGradeNo(gradeNo);
-		biddingCreateRequest.setUserNo(userNo);
-		biddingRepository.save(biddingCreateRequest.toEntity());
-	}
-
-	@Transactional
-	public void rebidBoard(BiddingCreateRequest biddingCreateRequest, long boardNo, int gradeNo, int userNo) {
-
-		Bidding userBidding = biddingRepository.findByUserNoAndBoardNo(userNo, boardNo);
-		userBidding.rebidding(biddingCreateRequest.getPrice());
+		return biddingRepository.findByUserNoAndBoardNo(userNo, boardNo).map(myBidding -> {
+				if (myBidding.getPrice() >= biddingCreateRequest.getPrice()) {
+					throw new InvalidParameterException("새로운 입찰가가 현재 입찰가보다 낮거나 같습니다.", myBidding.getPrice(),
+						biddingCreateRequest.getPrice());
+				}
+				myBidding.rebidding(biddingCreateRequest.getPrice());
+				return HttpStatus.NO_CONTENT;
+			}
+		).orElseGet(() -> {
+			biddingCreateRequest.setBoardNo(boardNo);
+			biddingCreateRequest.setUserNo(userNo);
+			biddingCreateRequest.setGradeNo(gradeNo);
+			biddingRepository.save(biddingCreateRequest.toEntity());
+			return HttpStatus.CREATED;
+		});
 	}
 }
