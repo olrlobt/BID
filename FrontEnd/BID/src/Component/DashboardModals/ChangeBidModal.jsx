@@ -19,10 +19,12 @@ export default function ChangeBidModal({ onClose, ...props }) {
     changeBidSalary.mutate();
   };
 
+  const groupNo = 1;
+
   const changeBidSalary = useMutation({
     mutationKey: ['changeSalaries'],
     mutationFn: () =>
-      changeSalaries(bid)
+      changeSalaries(groupNo, bid)
         .then(() => {
           changeBid(bid);
           alert('변경되었습니다.');
