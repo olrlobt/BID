@@ -63,7 +63,7 @@ public class BoardApi {
 	}
 
 	@PatchMapping("/boards/{boardNo}")
-	public ResponseEntity<?> modifyBoard(@PathVariable int boardNo, BoardModifyRequest boardModifyRequest) {
+	public ResponseEntity<?> modifyBoard(@PathVariable int boardNo, @RequestBody BoardModifyRequest boardModifyRequest) {
 		return ResponseEntity.ok(boardService.modifyBoard(boardNo, boardModifyRequest));
 	}
 
