@@ -1,11 +1,7 @@
 package com.ssafy.bid.domain.board.service;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
-import com.ssafy.bid.domain.board.Bidding;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.repository.CoreBiddingRepository;
 import com.ssafy.bid.domain.board.repository.CoreBoardRepository;
@@ -29,7 +25,8 @@ public class CoreBoardService {
 		BoardResponse boardResponse = coreBoardRepository.getStudentBoard(boardNo)
 			.orElseThrow(() -> new ResourceNotFoundException("해당 글이 없습니다.", boardNo));
 
-		coreBiddingRepository.findByUserNoAndBoardNo(userNo, boardNo).ifPresent(value -> boardResponse.setDisplayPrice(value.getPrice()));
+		coreBiddingRepository.findByUserNoAndBoardNo(userNo, boardNo)
+			.ifPresent(value -> boardResponse.setDisplayPrice(value.getPrice()));
 
 		boardResponse.setComments(coreReplyRepository.findReplies(boardResponse.getNo()));
 		return boardResponse;
