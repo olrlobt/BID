@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.coupon.dto;
 
+import com.ssafy.bid.domain.coupon.Coupon;
 import com.ssafy.bid.domain.coupon.CouponStatus;
 
 import lombok.Builder;
@@ -23,5 +24,16 @@ public class CouponResponse {
 		this.gradeNo = gradeNo;
 		this.startPrice = startPrice;
 		this.couponStatus = couponStatus;
+	}
+
+	public static CouponResponse to(Coupon coupon){
+		return CouponResponse.builder()
+			.no(coupon.getNo())
+			.name(coupon.getName())
+			.description(coupon.getDescription())
+			.gradeNo(coupon.getGradeNo())
+			.startPrice(coupon.getStartPrice())
+			.couponStatus(coupon.getCouponStatus())
+			.build();
 	}
 }
