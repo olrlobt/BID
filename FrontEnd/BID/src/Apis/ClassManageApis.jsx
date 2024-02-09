@@ -1,0 +1,33 @@
+import axios from "axios";
+
+export const ClassManageApis = axios.create({
+  baseURL: process.env.REACT_APP_TCH_API,
+});
+
+/**
+ * 선생님 개인 학급 조회
+ * @returns 학급 조회
+ */
+export const getGrades = async () => {
+  return await ClassManageApis.get("/grades");
+};
+
+/**
+ * 학급 등록
+ * @param 클래스 정보
+ * @returns created 201
+ */
+export const AddClass = ({ classInfo }) => {
+  return ClassManageApis.post("/grades", classInfo);
+};
+
+/**
+ * 학급 삭제
+ * @param gradeNo 삭제하고 싶은 학급 PK
+ * @returns No_CONTENT 204
+ */
+
+export const deleteClass = (gradeNo) => {
+  console.log(gradeNo);
+  return ClassManageApis.delete(`/grades/${gradeNo}`);
+};
