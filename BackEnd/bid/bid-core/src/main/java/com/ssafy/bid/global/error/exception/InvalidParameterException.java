@@ -13,7 +13,6 @@ public class InvalidParameterException extends RuntimeException {
 
 	private final Object[] parameterValues;
 
-
 	public InvalidParameterException(String message, Object... parameterValues) {
 		super(message + " Parameter Value: " + Arrays.toString(parameterValues));
 		this.parameterValues = parameterValues;
