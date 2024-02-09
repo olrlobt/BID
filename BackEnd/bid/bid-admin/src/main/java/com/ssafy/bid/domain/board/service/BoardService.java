@@ -23,6 +23,7 @@ public class BoardService {
 	private final ReplyRepository replyRepository;
 
 	public List<BoardListResponse> findAllStudentBoards(int gradeNo) {
+		// user와 gradeNo이 다를 경우 error
 		return boardRepository.findAllStudentBoards(gradeNo);
 	}
 
