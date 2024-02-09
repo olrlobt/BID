@@ -5,11 +5,11 @@ import java.io.IOException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.ssafy.bid.domain.user.repository.CoreTokenBlacklistRepository;
 import com.ssafy.bid.domain.user.service.CustomUserDetailsService;
+import com.ssafy.bid.global.util.SecurityUtils;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
 		IOException,
 		ServletException {
-		String token = getAccessToken((HttpServletRequest)request);
+		String token = SecurityUtils.getAccessToken((HttpServletRequest)request);
 
 		if (token != null && jwtTokenProvider.validateToken(token)) {
 			if (isTokenBlacklisted(token)) {
@@ -50,14 +50,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 			}
 		}
 		chain.doFilter(request, response);
-	}
-
-	private String getAccessToken(HttpServletRequest request) {
-		String bearerToken = request.getHeader("Authorization");
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-			return bearerToken.substring(7);
-		}
-		return null;
 	}
 
 	private boolean isTokenBlacklisted(String token) {
