@@ -10,7 +10,6 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.dto.UserSavingListGetResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -47,22 +46,6 @@ public class UserSavingRepositoryCustomImpl implements UserSavingRepositoryCusto
 				grade.no.eq(gradeNo),
 				grade.deletedAt.isNull()
 			)
-			.fetch();
-	}
-
-	@Override
-	public List<SavingTransferAlertRequest> findAllSavingTransferInfos() {
-		return queryFactory
-			.select(Projections.constructor(SavingTransferAlertRequest.class,
-					userSaving.userNo,
-					saving.depositPrice,
-					grade.transferPeriod
-				)
-			)
-			.from(userSaving)
-			.innerJoin(saving).on(saving.no.eq(userSaving.savingNo))
-			.innerJoin(grade).on(grade.no.eq(saving.gradeNo))
-			.where(grade.deletedAt.isNull())
 			.fetch();
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.saving.dto.SavingExpireAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
+import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.repository.CoreUserSavingRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,10 @@ public class CoreSavingServiceImpl implements CoreSavingService {
 			.endDate(savingExpireRequest.getUserSavingEndPeriod())
 			.userNo(savingExpireRequest.getStudent().getNo())
 			.build();
+	}
+
+	@Override
+	public List<SavingTransferAlertRequest> findAllSavingTransferInfos() {
+		return coreUserSavingRepository.findAllSavingTransferInfos();
 	}
 }
