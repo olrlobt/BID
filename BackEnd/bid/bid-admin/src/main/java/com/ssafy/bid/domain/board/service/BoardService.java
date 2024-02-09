@@ -40,9 +40,12 @@ public class BoardService {
 	}
 
 	@Transactional
-	public void deleteReply(long replyNo) {
+	public void deleteReply(long replyNo, int gradeNo, int userNo) {
+
+		// user와 gradeNo 이 다른 경우 error
+
 		if (!replyRepository.existsById(replyNo)) {
-			throw new NoSuchElementException("해당 댓글이 없습니다.");
+			throw new ResourceNotFoundException("해당 댓글이 없습니다.", replyNo);
 		}
 		replyRepository.deleteById(replyNo);
 	}

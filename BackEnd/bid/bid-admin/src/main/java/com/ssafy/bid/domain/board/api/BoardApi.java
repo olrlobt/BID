@@ -49,7 +49,8 @@ public class BoardApi {
 	public ResponseEntity<?> deleteReply(@PathVariable int gradeNo,
 		@PathVariable long boardNo,
 		@PathVariable long replyNo) {
-		boardService.deleteReply(replyNo);
+		int userNo = 21; // security
+		boardService.deleteReply(replyNo, gradeNo, userNo);
 		return ResponseEntity.noContent().build();
 	}
 }
