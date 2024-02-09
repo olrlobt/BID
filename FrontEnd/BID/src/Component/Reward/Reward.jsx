@@ -13,7 +13,7 @@ export default function Reward(props){
   /** 리워드 삭제 쿼리 */
   const deleteRewardQuery = useMutation({
     mutationKey: ['deleteReward'],
-    mutationFn: () => deleteRewardApi(rNo),
+    mutationFn: () => deleteRewardApi(1, rNo),
     onSuccess: () => {
       queryClient.invalidateQueries('rewardList');
     },
