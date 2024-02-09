@@ -12,6 +12,4 @@ public interface SavingService {
 	void saveSavings(CustomUserInfo userInfo, SavingSaveRequest savingSaveRequest);
 
 	void deleteSavings(int userNo, int savingNo);
-
-	void transfer();
 }

@@ -9,4 +9,6 @@ public interface CoreSavingService {
 	List<SavingExpireAlertRequest> expire();
 
 	List<SavingTransferAlertRequest> findAllSavingTransferInfos();
+
+	void transfer();
 }
