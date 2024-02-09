@@ -15,7 +15,7 @@ import com.ssafy.bid.domain.notification.NotificationType;
 import com.ssafy.bid.domain.notification.dto.NotificationRequest;
 import com.ssafy.bid.domain.notification.service.NotificationService;
 import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
-import com.ssafy.bid.domain.saving.service.SavingService;
+import com.ssafy.bid.domain.saving.service.CoreSavingService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class SavingNotificationBatchJob {
 
 	private final NotificationService notificationService;
-	private final SavingService savingService;
+	private final CoreSavingService coreSavingService;
 
 	@Bean
 	public Job savingTransferAlertJob(JobRepository jobRepository, Step savingTransferAlertStep) {
@@ -48,7 +48,7 @@ public class SavingNotificationBatchJob {
 	@Bean
 	public Tasklet savingTransferAlertTasklet() {
 		return ((contribution, chunkContext) -> {
-			savingService.findAllSavingTransferInfos().forEach(transferAlertRequest -> {
+			coreSavingService.findAllSavingTransferInfos().forEach(transferAlertRequest -> {
 				NotificationRequest notificationRequest = createRequest(transferAlertRequest);
 				notificationService.send(notificationRequest);
 			});

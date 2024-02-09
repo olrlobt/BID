@@ -3,7 +3,6 @@ package com.ssafy.bid.domain.user.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
@@ -19,6 +18,4 @@ public interface UserRepositoryCustom {
 	Optional<StudentResponse> findStudent(int userNo);
 
 	List<AccountResponse> findAccount(int userNo, AccountRequest accountRequest);
-
-	List<SavingTransferRequest> findAllByIds(List<Integer> userNos);
 }
