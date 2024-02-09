@@ -48,10 +48,11 @@ public class BoardService {
 	}
 
 	@Transactional
-	public void addBoard(int userNo, int gradeNo, BoardCreateRequest boardCreateRequest) {
+	public long addBoard(int userNo, int gradeNo, BoardCreateRequest boardCreateRequest) {
+		// 현재시간보다 일찍이면 에러
 
 		Board board = boardCreateRequest.toEntity(1, 1);
-		boardRepository.save(board);
+		return boardRepository.save(board).getNo();
 	}
 
 	@Transactional
