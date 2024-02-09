@@ -95,17 +95,7 @@ public class BoardApi {
 
 		int userNo = 1;
 		int gradeNo = 1;
-		boardService.bidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-
-	@PatchMapping("/boards/{boardNo}/bid")
-	public ResponseEntity<?> rebidBoard(@PathVariable long boardNo,
-		@RequestBody BiddingCreateRequest biddingCreateRequest) {
-
-		int userNo = 1;
-		int gradeNo = 1;
-		boardService.rebidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
-		return ResponseEntity.noContent().build();
+		HttpStatus httpStatus = boardService.bidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
+		return ResponseEntity.status(httpStatus).build();
 	}
 }
