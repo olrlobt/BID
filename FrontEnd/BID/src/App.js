@@ -19,6 +19,7 @@ import StudentMain from './Page/Student/StudentMain';
 import MyPage from './Page/Student/MyPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import NoClass from './Page/ClassManage/NoClass';
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ function App() {
         </Route>
         <Route path="/classlist/:teacherId/" element={<MainClass />}>
           <Route path="/classlist/:teacherId/" element={<ClassList />} />
+          <Route path="/classlist/:teacherId/no-class/" element={<NoClass />} />
           <Route path="/classlist/:teacherId/modify/" element={<ClassList />} />
           <Route path="/classlist/:teacherId/make/" element={<AddClass />} />
         </Route>
