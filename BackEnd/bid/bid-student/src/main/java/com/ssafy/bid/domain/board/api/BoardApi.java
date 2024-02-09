@@ -48,7 +48,10 @@ public class BoardApi {
 
 	@GetMapping("/boards/{boardNo}")
 	public ResponseEntity<BoardResponse> getBoardDetail(@PathVariable long boardNo) {
-		BoardResponse boardResponse = coreBoardService.getBoardDetail(boardNo);
+
+		int userNo = 1;
+
+		BoardResponse boardResponse = coreBoardService.getBoardDetail(userNo, boardNo);
 		return ResponseEntity.ok(boardResponse);
 	}
 
