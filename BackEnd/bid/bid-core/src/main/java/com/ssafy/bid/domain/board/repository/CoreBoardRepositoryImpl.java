@@ -31,7 +31,8 @@ public class CoreBoardRepositoryImpl implements CoreBoardCustomRepository {
 					board.category,
 					board.goodsImgUrl,
 					student.name,
-					board.gradePeriodNo
+					board.gradePeriodNo,
+					board.createdAt
 				))
 				.from(board)
 				.innerJoin(student)
