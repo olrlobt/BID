@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.ssafy.bid.domain.saving.service.SavingService;
+import com.ssafy.bid.domain.saving.service.CoreSavingService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class SavingTransferBatchJob {
 
-	private final SavingService savingService;
+	private final CoreSavingService coreSavingService;
 
 	@Bean
 	public Job savingTransferJob(JobRepository jobRepository, Step savingTransferStep) {
@@ -43,7 +43,7 @@ public class SavingTransferBatchJob {
 	@Bean
 	public Tasklet savingTransferTasklet() {
 		return ((contribution, chunkContext) -> {
-			savingService.transfer();
+			coreSavingService.transfer();
 			return RepeatStatus.FINISHED;
 		});
 	}
