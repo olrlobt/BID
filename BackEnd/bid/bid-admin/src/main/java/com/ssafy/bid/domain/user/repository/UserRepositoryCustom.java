@@ -16,7 +16,9 @@ public interface UserRepositoryCustom {
 
 	List<SchoolsFindResponse> findSchoolsByName(String name);
 
-	Optional<Admin> findAdminByTelAndId(String tel, String id);
+	Optional<Admin> findAdminById(String id);
+
+	boolean existsByIdAndTel(String id, String tel);
 
 	List<StudentsGetResponse> findAllStudentByGradeNo(int gradeNo);
 

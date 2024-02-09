@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
+import com.ssafy.bid.domain.user.TelAuthentication;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
@@ -16,12 +17,14 @@ import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
 import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
+import com.ssafy.bid.domain.user.dto.TelAuthenticationCheckRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
-import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
 import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
 import com.ssafy.bid.domain.user.dto.UserIdFindRequest;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
+import com.ssafy.bid.domain.user.repository.TelAuthenticationRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
+import com.ssafy.bid.global.error.exception.AuthenticationFailedException;
 import com.ssafy.bid.global.error.exception.InvalidParameterException;
 import com.ssafy.bid.global.error.exception.ResourceAlreadyExistsException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
@@ -36,15 +39,58 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final MessageService messageService;
+	private final TelAuthenticationRepository telAuthenticationRepository;
 
-	@Override //TODO: 회원가입 인증코드 전송 로직 수정
-	public TelAuthenticationSendResponse sendTelAuthentication(
-		TelAuthenticationSendRequest telAuthenticationSendRequest
+	@Override
+	@Transactional
+	public void sendTelAuthentication(
+		TelAuthenticationSendRequest request
 	) {
-		String code = RandomStringUtils.randomNumeric(6);
-		messageService.sendAuthenticationCode(telAuthenticationSendRequest.getTel(), code);
+		boolean exists = userRepository.existsByIdAndTel(request.getId(), request.getTel());
+		if (!exists) {
+			throw new ResourceNotFoundException("해당 id와 tel을 가진 User 엔티티가 없음.", request.getTel());
+		}
 
-		return new TelAuthenticationSendResponse(code);
+		TelAuthentication telAuthentication = createAndSendAuthenticationCode(request.getTel());
+		telAuthenticationRepository.save(telAuthentication);
+	}
+
+	@Override
+	@Transactional
+	public void sendRegisterTelAuthentication(TelAuthenticationSendRequest request) {
+		TelAuthentication telAuthentication = createAndSendAuthenticationCode(request.getTel());
+		telAuthenticationRepository.save(telAuthentication);
+	}
+
+	private TelAuthentication createAndSendAuthenticationCode(String tel) {
+		String code = RandomStringUtils.randomNumeric(6);
+		messageService.sendAuthenticationCode(tel, code);
+
+		return createTelAuthentication(tel, code);
+	}
+
+	private TelAuthentication createTelAuthentication(String tel, String code) {
+		return TelAuthentication.builder()
+			.tel(tel)
+			.code(code)
+			.isAuthenticated(false)
+			.build();
+	}
+
+	@Override
+	@Transactional
+	public boolean checkTelAuthentication(TelAuthenticationCheckRequest request) {
+		TelAuthentication telAuthentication = telAuthenticationRepository.findById(request.getTel())
+			.orElseThrow(() -> new InvalidParameterException("해당 번호로 전송된 인증코드가 만료됐거나 없음.", request.getTel()));
+
+		boolean equals = telAuthentication.getCode().equals(request.getCode());
+		if (!equals) {
+			new AuthenticationFailedException("인증코드 불일치.");
+		}
+
+		telAuthentication.authenticate();
+		telAuthenticationRepository.save(telAuthentication);
+		return equals;
 	}
 
 	@Override //TODO: 아이디 중복여부 체크 인덱스 조회로 수정
@@ -63,6 +109,13 @@ public class UserServiceImpl implements UserService {
 		if (!request.getPassword().equals(request.getConfirmPassword())) {
 			throw new InvalidParameterException("패스워드와 패스워드 확인 불일치..", request.getPassword());
 		}
+
+		TelAuthentication telAuthentication = telAuthenticationRepository.findById(request.getTel())
+			.orElseThrow(() -> new AuthenticationFailedException("인증되지 않은 회원임."));
+		if (!telAuthentication.getIsAuthenticated()) {
+			throw new AuthenticationFailedException("인증되지 않은 회원임.");
+		}
+
 		Admin admin = request.toEntity(passwordEncoder);
 		userRepository.save(admin);
 	}
@@ -88,11 +141,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void updateAdminPassword(AdminPasswordUpdateRequest request) {
-		Admin admin = userRepository.findAdminByTelAndId(request.getTel(), request.getId())
-			.orElseThrow(() -> new ResourceNotFoundException("패스워드 수정하려는 User 엔티티가 없음.", request.getTel()));
+		Admin admin = userRepository.findAdminById(request.getId())
+			.orElseThrow(() -> new ResourceNotFoundException("패스워드 수정하려는 User 엔티티가 없음.", request.getId()));
 
 		if (!request.getNewPassword().equals(request.getNewPasswordCheck())) {
 			throw new InvalidParameterException("패스워드와 패스워드 확인 불일치.", request.getNewPassword());
+		}
+
+		TelAuthentication telAuthentication = telAuthenticationRepository.findById(admin.getTel())
+			.orElseThrow(() -> new AuthenticationFailedException("인증되지 않은 회원임."));
+		if (!telAuthentication.getIsAuthenticated()) {
+			throw new AuthenticationFailedException("인증되지 않은 회원임.");
 		}
 
 		admin.changePassword(passwordEncoder.encode(request.getNewPassword()));

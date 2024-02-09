@@ -5,12 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TelAuthenticationSendResponse {
+public class TelAuthenticationCheckRequest {
+	private String tel;
 	private String code;
-
-	public TelAuthenticationSendResponse(
-		String code
-	) {
-		this.code = code;
-	}
 }

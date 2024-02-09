@@ -1,4 +1,4 @@
-package com.ssafy.bid.configuration;
+package com.ssafy.bid.configuration.datasource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
