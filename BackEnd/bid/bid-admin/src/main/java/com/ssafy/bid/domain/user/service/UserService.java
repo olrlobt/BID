@@ -8,14 +8,18 @@ import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
 import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
+import com.ssafy.bid.domain.user.dto.TelAuthenticationCheckRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
-import com.ssafy.bid.domain.user.dto.TelAuthenticationSendResponse;
 import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
 import com.ssafy.bid.domain.user.dto.UserIdFindRequest;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
 
 public interface UserService {
-	TelAuthenticationSendResponse sendTelAuthentication(TelAuthenticationSendRequest telAuthenticationSendRequest);
+	void sendTelAuthentication(TelAuthenticationSendRequest telAuthenticationSendRequest);
+
+	void sendRegisterTelAuthentication(TelAuthenticationSendRequest request);
+
+	boolean checkTelAuthentication(TelAuthenticationCheckRequest request);
 
 	boolean isDuplicated(String id);
 
