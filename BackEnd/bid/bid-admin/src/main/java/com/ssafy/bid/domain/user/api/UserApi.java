@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
+import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
@@ -81,6 +82,13 @@ public class UserApi {
 	@PatchMapping("/password/{userNo}")
 	public ResponseEntity<?> resetStudentPassword(@PathVariable int userNo) {
 		userService.resetStudentPassword(userNo);
+		return ResponseEntity.status(OK).build();
+	}
+
+	@PatchMapping("/password")
+	public ResponseEntity<?> updateAdminPassword(@RequestBody AdminPasswordUpdateRequest adminPasswordUpdateRequest) {
+		// TODO: CustomUserDetails
+		userService.updateAdminPassword(adminPasswordUpdateRequest);
 		return ResponseEntity.status(OK).build();
 	}
 
