@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.board.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.ssafy.bid.domain.board.BoardStatus;
@@ -17,17 +18,21 @@ public class BoardResponse {
 	private int startPrice;
 	private BoardStatus boardStatus;
 	private int averagePrice;
+	@Setter
+	private int displayPrice;
 	private int resultPrice;
 	private String category;
 	private String goodsImgUrl;
 	private String userName;
 	private int gradePeriodNo;
+	private LocalDateTime createdAt;
 
 	@Setter
 	private List<ReplyResponse> comments;
 
 	public BoardResponse(long no, String title, String description, int startPrice, BoardStatus boardStatus,
-		int averagePrice, int resultPrice, Category category, String goodsImgUrl, String userName, int gradePeriodNo) {
+		int averagePrice, int resultPrice, Category category, String goodsImgUrl, String userName, int gradePeriodNo,
+		LocalDateTime createdAt) {
 		this.no = no;
 		this.title = title;
 		this.description = description;
@@ -39,5 +44,7 @@ public class BoardResponse {
 		this.goodsImgUrl = goodsImgUrl;
 		this.userName = userName;
 		this.gradePeriodNo = gradePeriodNo;
+		this.createdAt = createdAt;
 	}
+
 }
