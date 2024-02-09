@@ -5,7 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faStar } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { editMainClass, getGrades } from '../../Apis/ClassManageApis';
+import {
+  deleteClass,
+  editMainClass,
+  getGrades,
+} from '../../Apis/ClassManageApis';
 export default function ClassList() {
   const location = useLocation();
   const [editedClassList, setEditedClassList] = useState([]);
@@ -24,12 +28,20 @@ export default function ClassList() {
   // x 버튼 클릭 핸들러
   const handleDeleteClass = (index) => {
     const updatedClassList = [...editedClassList];
-    updatedClassList.splice(index, 1); // 해당 인덱스의 요소 제거
-    // 인덱스 대신 no
-    // deleteClass(index);
-    console.log(index);
-    console.log(updatedClassList);
-    setEditedClassList(updatedClassList); // 업데이트된 목록으로 상태 업데이트
+    const deletedClass = editedClassList[index];
+    if (deletedClass.main) {
+      alert('메인 학급은 삭제할 수 없습니다.');
+    } else {
+      const deleteAlert = window.confirm(
+        '삭제하신 학급은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?'
+      );
+      if (deleteAlert) {
+        updatedClassList.splice(index, 1); // 해당 인덱스의 요소 제거
+        // 인덱스 대신 no
+        deleteClass(deletedClass.no);
+        setEditedClassList(updatedClassList); // 업데이트된 목록으로 상태 업데이트
+      }
+    }
   };
 
   // 메인 학급의 no만 던져줌

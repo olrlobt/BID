@@ -98,11 +98,11 @@ export default function MakeClass() {
         .then(() => {
           // 추가된 클래스 리덕스에 저장
           alert('추가 되었습니다.');
-          navigate('/classist/:teacherId/modify');
+          navigate('/classlist/:teacherId/modify');
         })
         .catch(() => {
           alert('추가가 되지 않았습니다.');
-          navigate('/classist/:teacherId/modify');
+          navigate('/classlist/:teacherId/modify');
         }),
   });
 
