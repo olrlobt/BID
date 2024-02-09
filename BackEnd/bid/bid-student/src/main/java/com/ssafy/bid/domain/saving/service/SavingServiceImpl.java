@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.saving.Saving;
 import com.ssafy.bid.domain.saving.UserSaving;
 import com.ssafy.bid.domain.saving.dto.SavingSaveRequest;
-import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.saving.dto.UserSavingListGetResponse;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
@@ -52,11 +51,6 @@ public class SavingServiceImpl implements SavingService {
 			throw new ResourceNotFoundException("삭제하려는 UserSaving 엔티티가 없음.", userNo);
 		}
 		userSavingRepository.deleteByUserNoAndSavingNo(userNo, savingNo);
-	}
-
-	@Override
-	public List<SavingTransferAlertRequest> findAllSavingTransferInfos() {
-		return userSavingRepository.findAllSavingTransferInfos();
 	}
 
 	@Override
