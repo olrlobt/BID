@@ -1,6 +1,5 @@
 package com.ssafy.bid.global.error.exception;
 
-
 public class DataIntegrityViolationException extends RuntimeException {
 
 	/**

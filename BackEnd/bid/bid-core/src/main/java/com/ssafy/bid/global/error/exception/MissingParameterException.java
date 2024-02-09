@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 import lombok.Getter;
 
-
-
 @Getter
 public class MissingParameterException extends RuntimeException {
 

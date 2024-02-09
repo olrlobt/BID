@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import lombok.Getter;
 
-
 @Getter
 public class InvalidParameterException extends RuntimeException {
 
