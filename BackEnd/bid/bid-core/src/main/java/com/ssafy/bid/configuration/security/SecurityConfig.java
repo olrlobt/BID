@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -18,7 +19,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.ssafy.bid.domain.user.repository.CoreTokenBlacklistRepository;
 import com.ssafy.bid.domain.user.security.JwtAuthenticationFilter;
 import com.ssafy.bid.domain.user.security.JwtTokenProvider;
 import com.ssafy.bid.domain.user.service.CustomUserDetailsService;
@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
-	private final CoreTokenBlacklistRepository coreTokenBlacklistRepository;
+	private final RedisTemplate redisTemplate;
 	private final CustomUserDetailsService customUserDetailsService;
 
 	@Bean
@@ -45,11 +45,13 @@ public class SecurityConfig {
 			.authorizeHttpRequests(authorize ->
 				authorize
 					// .requestMatchers("/savings/**").authenticated()
-					.requestMatchers("/**").permitAll()
+					// .requestMatchers("/**").permitAll()
+					// .anyRequest().authenticated()
+					.requestMatchers("/login", "/signout").permitAll()
 					.anyRequest().authenticated()
 			)
 			.addFilterBefore(
-				new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService, coreTokenBlacklistRepository),
+				new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService, redisTemplate),
 				UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
