@@ -45,10 +45,10 @@ public class SecurityConfig {
 			.authorizeHttpRequests(authorize ->
 				authorize
 					// .requestMatchers("/savings/**").authenticated()
-					// .requestMatchers("/**").permitAll()
+					.requestMatchers("/**").permitAll()
 					// .anyRequest().authenticated()
-					.requestMatchers("/login", "/signout").permitAll()
-					.anyRequest().authenticated()
+					// .requestMatchers("/login", "/signout").permitAll()
+					.anyRequest().permitAll()
 			)
 			.addFilterBefore(
 				new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService, redisTemplate),
