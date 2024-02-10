@@ -19,4 +19,6 @@ public interface CoreUserService {
 	StudentFindResponse findStudent(int userNo, StudentFindRequest studentFindRequest);
 
 	List<AccountFindResponse> findAccount(int userNo, AccountFindRequest accountFindRequest);
+
+	void resetAttendance();
 }

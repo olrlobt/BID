@@ -106,4 +106,11 @@ public class CoreUserServiceImpl implements CoreUserService {
 	public List<AccountFindResponse> findAccount(int userNo, AccountFindRequest accountFindRequest) {
 		return coreUserRepository.findAccountByUserNo(userNo, accountFindRequest);
 	}
+
+	@Override
+	@Transactional
+	public void resetAttendance() {
+		coreUserRepository.findAllStudentsAndSalaries()
+			.forEach(response -> response.calculateSalary(response.getSalary()));
+	}
 }

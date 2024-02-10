@@ -2,6 +2,7 @@ package com.ssafy.bid.domain.user.repository;
 
 import static com.ssafy.bid.domain.coupon.QCoupon.*;
 import static com.ssafy.bid.domain.coupon.QUserCoupon.*;
+import static com.ssafy.bid.domain.grade.QGrade.*;
 import static com.ssafy.bid.domain.saving.QSaving.*;
 import static com.ssafy.bid.domain.saving.QUserSaving.*;
 import static com.ssafy.bid.domain.user.QAccount.*;
@@ -24,6 +25,7 @@ import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentSalaryResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -176,6 +178,19 @@ public class CoreUserRepositoryCustomImpl implements CoreUserRepositoryCustom {
 			.innerJoin(userSaving).on(userSaving.userNo.eq(student.no))
 			.innerJoin(saving).on(saving.no.eq(userSaving.savingNo))
 			.where(student.no.in(userNos))
+			.fetch();
+	}
+
+	@Override
+	public List<StudentSalaryResponse> findAllStudentsAndSalaries() {
+		return queryFactory
+			.select(Projections.constructor(StudentSalaryResponse.class,
+					student,
+					grade.salary
+				)
+			)
+			.from(student)
+			.innerJoin(grade).on(grade.no.eq(student.gradeNo))
 			.fetch();
 	}
 }
