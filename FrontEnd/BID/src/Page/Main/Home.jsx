@@ -9,15 +9,17 @@ import useModal from '../../hooks/useModal';
 import TimeTable from '../../Component/Common/TimeTable';
 import { useSelector } from 'react-redux';
 import { bidSelector } from '../../Store/bidSlice';
+import { bidCountSelector } from '../../Store/bidCountSlice';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { viewDashboard } from '../../Apis/TeacherManageApis';
+import { stopTimeSelector } from '../../Store/stopTimeSlice';
 import { getCouponList } from '../../Apis/CouponApis';
 import useBid from '../../hooks/useBid';
 import useMoney from '../../hooks/useMoney';
 import useBidCount from '../../hooks/useBidCount';
+import useStopTime from '../../hooks/useStopTime';
 import { moneySeletor } from '../../Store/moneySlice';
-import { bidCountSelector } from '../../Store/bidCountSlice';
 import PieChart from '../../Component/Common/PieChart';
 import LineChart from '../../Component/Common/LineChart';
 
@@ -26,9 +28,11 @@ export default function Home() {
   const { changeBid } = useBid();
   const { initMoney } = useMoney();
   const { initCount } = useBidCount();
+  const { initTime } = useStopTime();
   const currentBid = useSelector(bidSelector);
   const classMoney = useSelector(moneySeletor);
   const bidCount = useSelector(bidCountSelector);
+  const stopTime = useSelector(stopTimeSelector);
   const [lineData, setLineData] = useState([]);
 
   const gradeNo = 1;
@@ -37,9 +41,11 @@ export default function Home() {
     queryFn: () =>
       viewDashboard(gradeNo).then((res) => {
         if (res.data !== undefined) {
+          console.log(res.data);
           changeBid(res.data.salary);
           initMoney(res.data.asset);
           initCount(res.data.biddingStatisticsFindResponses[13].count);
+          initTime(res.data.gradePeriodsGetResponses);
           setLineData(
             res.data.biddingStatisticsFindResponses.map((item) => {
               return {
@@ -64,7 +70,7 @@ export default function Home() {
   useEffect(() => {}, [currentBid, couponList]);
   return (
     <>
-      {dashboardInfo && (
+      {dashboardInfo && couponList && (
         <main className={styled.home}>
           <button className={styled.holdBtn}>
             <span className={styled.hold}>HOLD</span>
@@ -173,11 +179,11 @@ export default function Home() {
             </section>
             <section className={styled.schedule}>
               <TimeTable
-                gradePeriods={dashboardInfo.gradePeriodsGetResponses}
+                gradePeriods={stopTime}
                 modalClick={() =>
                   openModal({
                     type: 'timeModal',
-                    props: ['수업 시간 변경', {}],
+                    props: ['수업 시간 변경', stopTime],
                   })
                 }
               />

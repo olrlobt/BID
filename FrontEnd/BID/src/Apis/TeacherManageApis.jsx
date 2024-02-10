@@ -45,6 +45,18 @@ export const updateSavingList = async (gradeNo, savingList) => {
 };
 
 /**
+ * 경매 중단 수업시간
+ * @param gradeNo 학급 넘버
+ * @param parseUpdatedTime 업데이트 되는 시간
+ * @returns 200OK
+ */
+export const changeStopTime = async (gradeNo, parseUpdatedTime) => {
+  return await TeacherManageApis.patch(`/${gradeNo}/grade-periods`, {
+    gradePeriodsRequests: parseUpdatedTime,
+  });
+};
+
+/**
  * 학급 자리 공 개수 확인
  * @param gradeNo 학급 넘버
  * @returns 학급 학생 공 개수
