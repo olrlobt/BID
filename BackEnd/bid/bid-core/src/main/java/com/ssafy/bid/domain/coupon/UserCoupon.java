@@ -44,4 +44,8 @@ public class UserCoupon {
 	public void reject() {
 		this.useStatus = UsageStatus.BEFORE_USE;
 	}
+
+	public void request() {
+		this.useStatus = UsageStatus.REQUEST_PROGRESS;
+	}
 }
