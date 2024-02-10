@@ -30,7 +30,6 @@ public class AttendanceResetBatchScheduler {
 		JobExecutionAlreadyRunningException,
 		JobParametersInvalidException,
 		JobRestartException {
-		System.out.println();
 		jobLauncher.run(
 			attendanceResetBatchJob.attendanceResetJob(jobRepository, attendanceResetStep),
 			new JobParameters()
