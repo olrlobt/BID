@@ -27,7 +27,7 @@ public class CoreReplyCustomRepositoryImpl implements CoreReplyCustomRepository 
 			.from(reply)
 			.innerJoin(student)
 			.on(reply.boardNo.eq(boardNo).and(reply.userNo.eq(student.no)))
-			.orderBy(reply.createdAt.desc())
+			.orderBy(reply.createdAt.asc())
 			.fetch();
 	}
 }

@@ -109,4 +109,7 @@ public class Board extends BaseEntity {
 		return this.no;
 	}
 
+	public void complete() {
+		this.boardStatus = BoardStatus.COMPLETED;
+	}
 }
