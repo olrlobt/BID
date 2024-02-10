@@ -5,7 +5,6 @@ import static org.springframework.http.HttpStatus.*;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,7 +22,6 @@ import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
-import com.ssafy.bid.domain.user.service.CustomUserDetails;
 import com.ssafy.bid.domain.user.service.UserService;
 
 import jakarta.servlet.http.Cookie;
@@ -40,10 +38,10 @@ public class UserApi {
 
 	@PatchMapping("/users/attendance/check")
 	public ResponseEntity<?> checkAttendance(
-		@AuthenticationPrincipal CustomUserDetails userDetails
+		// @AuthenticationPrincipal CustomUserDetails userDetails
 	) {
-		int userNo = userDetails.getUserInfo().getNo();
-		userService.checkAttendance(userNo);
+		// int userNo = userDetails.getUserInfo().getNo();
+		userService.checkAttendance(2);
 		return ResponseEntity.status(OK).build();
 	}
 
