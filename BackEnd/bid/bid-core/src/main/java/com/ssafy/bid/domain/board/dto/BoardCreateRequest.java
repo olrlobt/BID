@@ -4,6 +4,7 @@ import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.BoardStatus;
 import com.ssafy.bid.domain.board.Category;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -16,6 +17,7 @@ public class BoardCreateRequest {
 	private int startPrice;
 	private int gradePeriodNo;
 
+	@Builder
 	public BoardCreateRequest(String title, String description, Category category, String goodsImgUrl, int startPrice,
 		int gradePeriodNo) {
 		this.title = title;
