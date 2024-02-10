@@ -4,13 +4,13 @@ import Modal from "../Common/Modal";
 import RoundedInfoButton from "../Common/RoundedInfoButton";
 import { SvgIcon } from "@material-ui/core";
 import { ArrowForward, Eject, Edit, Delete } from "@material-ui/icons";
-import SubmitButton from "../Common/SubmitButton";
+// import SubmitButton from "../Common/SubmitButton";
 import Comment from "./Comment";
 import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getProductDetailApi, deleteProductApi } from "../../Apis/TeacherBidApis";
-import { addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
+import { addCommentApi, /*biddingApi*/ } from "../../Apis/StudentBidApis";
 
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
@@ -55,12 +55,12 @@ export default function ViewProductModal({ onClose, ...props }) {
   })
 
   /** 첫 입찰 쿼리 */
-  const biddingQuery = useMutation({
-    mutationKey: ['bidding'],
-    mutationFn: (params) => { biddingApi(params.boardNo, params.biddingInfo); },
-    onSuccess: (res) => { console.log(res); },
-    onError: (error) => { console.log(error); }
-  });
+  // const biddingQuery = useMutation({
+  //   mutationKey: ['bidding'],
+  //   mutationFn: (params) => { biddingApi(params.boardNo, params.biddingInfo); },
+  //   onSuccess: (res) => { console.log(res); },
+  //   onError: (error) => { console.log(error); }
+  // });
 
   /** 경매 삭제 함수 */
   const deleteProduct = () => {
@@ -69,24 +69,24 @@ export default function ViewProductModal({ onClose, ...props }) {
   }
 
   /** 입찰 신청 함수 */
-  const bidSubmit = (e) => {
-    e.preventDefault();
-    const biddingPrice = e.target.price.value;
-    if(biddingPrice==='' || biddingPrice===null || biddingPrice<1) {
-      console.log('금액을 입력해주세요');
-    } else{
-      const biddingInfo = {
-        price: e.target.price.value
-      }
-      const params = {
-        boardNo: boardNo,
-        biddingInfo:biddingInfo
-      }
-      biddingQuery.mutate(params);
-      console.log(biddingPrice+'비드 입찰되었습니다');
+  // const bidSubmit = (e) => {
+  //   e.preventDefault();
+  //   const biddingPrice = e.target.price.value;
+  //   if(biddingPrice==='' || biddingPrice===null || biddingPrice<1) {
+  //     console.log('금액을 입력해주세요');
+  //   } else{
+  //     const biddingInfo = {
+  //       price: e.target.price.value
+  //     }
+  //     const params = {
+  //       boardNo: boardNo,
+  //       biddingInfo:biddingInfo
+  //     }
+  //     biddingQuery.mutate(params);
+  //     console.log(biddingPrice+'비드 입찰되었습니다');
 
-    }
-  };
+  //   }
+  // };
 
   /** 댓글 생성 함수 */
   const addNewComment = (e) => {
