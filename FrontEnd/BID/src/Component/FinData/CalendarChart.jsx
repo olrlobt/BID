@@ -1,5 +1,6 @@
 // CalendarChart.js
-import { React, useState } from 'react';
+// 참고 https://github.com/jquense/react-big-calendar/blob/master/stories/demos/exampleCode/customView.js
+import React from 'react';
 import styled from './CalendarChart.module.css';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -8,7 +9,6 @@ import Toolbar from './ToolBar';
 import CustomEvent from './CustomEvent';
 import monthDate from './monthDate';
 import monthHeader from './monthHeader';
-import smallEvent from './SmallEvent';
 
 function CalendarChart() {
   moment.locale('ko-KR');
@@ -67,22 +67,19 @@ function CalendarChart() {
     // Add more events as needed
   ];
 
-  // const calculateTotalAmount = (events, type) => {
-  //   return events.reduce((total, event) => {
-  //     if (type === '지출') {
-  //       return event.amount < 0 ? total + event.amount : total;
-  //     } else if (type === '수입') {
-  //       return event.amount > 0 ? total + event.amount : total;
-  //     }
-  //     return total;
-  //   }, 0);
-  // };
+  const calculateTotalAmount = (events, type) => {
+    return events.reduce((total, event) => {
+      if (type === '지출') {
+        return event.amount < 0 ? total + event.amount : total;
+      } else if (type === '수입') {
+        return event.amount > 0 ? total + event.amount : total;
+      }
+      return total;
+    }, 0);
+  };
 
-  // const totalExpense = calculateTotalAmount(events, '지출');
-  // const totalIncome = calculateTotalAmount(events, '수입');
-
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  // const [selectedEvent, setSelectedEvent] = useState(null);
+  // const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
@@ -98,19 +95,25 @@ function CalendarChart() {
 
     const content = (
       <div>
-        <div onClick={() => handleEventClick(event)}>{event.amount}</div>
+        <div>{event.amount}</div>
       </div>
     );
+
     return {
       style,
-      content, // Set the selected event on click
+      content,
+      onClick: () => handleEventClick(event), // Set the selected event on click
     };
   };
 
   const handleEventClick = (event) => {
-    setSelectedEvent(event);
-    setModalIsOpen(true);
+    // setSelectedEvent(event);
+    // setModalIsOpen(true);
   };
+
+  // const handleCloseModal = () => {
+  //   setModalIsOpen(false);
+  // };
 
   return (
     <div className={styled.chartContainer}>
@@ -131,28 +134,10 @@ function CalendarChart() {
                 dateHeader: monthDate,
               },
             }}
-            onSelectEvent={(eventInfo) => {
-              smallEvent(eventInfo);
-            }}
             eventPropGetter={eventStyleGetter}
           />
         </div>
       </div>
-      {modalIsOpen && (
-        <div className={styled.modal}>
-          <div className={styled.modalContent}>
-            <span
-              onClick={() => setModalIsOpen(false)}
-              className={styled.close}
-            >
-              &times;
-            </span>
-            <h2>{selectedEvent.title}</h2>
-            <p>Amount: {selectedEvent.amount}</p>
-            {/* Add more event details as needed */}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

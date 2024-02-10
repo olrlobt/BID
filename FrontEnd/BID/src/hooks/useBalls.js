@@ -1,5 +1,5 @@
-import { useDispatch } from "react-redux";
-import { initBalls, removeBalls } from "../Store/ballSlice";
+import { useDispatch } from 'react-redux';
+import { initBalls, removeBalls } from '../Store/ballSlice';
 
 export default function useBalls() {
   const dispatch = useDispatch();
