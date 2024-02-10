@@ -10,6 +10,7 @@ import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentSalaryResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
 
 public interface CoreUserRepositoryCustom {
@@ -24,4 +25,6 @@ public interface CoreUserRepositoryCustom {
 	List<AccountFindResponse> findAccountByUserNo(int userNo, AccountFindRequest accountFindRequest);
 
 	List<SavingTransferRequest> findAllByIds(List<Integer> userNos);
+
+	List<StudentSalaryResponse> findAllStudentsAndSalaries();
 }
