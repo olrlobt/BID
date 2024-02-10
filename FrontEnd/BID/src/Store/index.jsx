@@ -10,6 +10,7 @@ import { bidCountSlice } from './bidCountSlice';
 import { savingSlice } from './savingSlice';
 import { modelSlice } from './modelSlice';
 import { stopTimeSlice } from './stopTimeSlice';
+import { requestCouponSlice } from './requestCouponSlice';
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   savingInfo: savingSlice.reducer,
   model: modelSlice.reducer,
   stopTime: stopTimeSlice.reducer,
+  requestCoupon: requestCouponSlice.reducer,
 });
 
 const store = configureStore({
