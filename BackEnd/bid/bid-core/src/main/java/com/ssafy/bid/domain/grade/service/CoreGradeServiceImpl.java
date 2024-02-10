@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.dto.GradePeriodsGetResponse;
 import com.ssafy.bid.domain.grade.dto.GradeStatisticsGetResponse;
-import com.ssafy.bid.domain.grade.repository.CoreGradePeriodRepository;
 import com.ssafy.bid.domain.grade.repository.CoreGradeRepository;
+import com.ssafy.bid.domain.gradeperiod.repository.CoreGradePeriodRepository;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;

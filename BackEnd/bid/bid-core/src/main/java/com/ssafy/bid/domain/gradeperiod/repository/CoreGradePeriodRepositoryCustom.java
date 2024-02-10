@@ -1,4 +1,4 @@
-package com.ssafy.bid.domain.grade.repository;
+package com.ssafy.bid.domain.gradeperiod.repository;
 
 import java.util.List;
 

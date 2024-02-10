@@ -1,6 +1,14 @@
 package com.ssafy.bid.domain.board.service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.repository.CoreBiddingRepository;
@@ -9,14 +17,19 @@ import com.ssafy.bid.domain.board.repository.CoreReplyRepository;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CoreBoardService {
 
 	private final CoreBoardRepository coreBoardRepository;
 	private final CoreReplyRepository coreReplyRepository;
 	private final CoreBiddingRepository coreBiddingRepository;
+	private final TaskScheduler taskScheduler;
+	private final CoreBoardScheduleService coreBoardScheduleService;
 
 	public BoardResponse getBoardDetail(int userNo, long boardNo, int gradeNo) {
 
@@ -31,4 +44,16 @@ public class CoreBoardService {
 		boardResponse.setComments(coreReplyRepository.findReplies(boardResponse.getNo()));
 		return boardResponse;
 	}
+
+	@Transactional
+	public void registerBoardTask(LocalTime time, long boardNo) {
+
+		LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), time);
+		Instant instant = dateTime.atZone(ZoneId.systemDefault()).toInstant();
+
+		taskScheduler.schedule(() -> {
+			coreBoardScheduleService.job(boardNo);
+		}, instant);
+	}
+
 }
