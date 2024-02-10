@@ -40,7 +40,7 @@ export const patchProductApi = async (boardNo, productInfo) => {
  * 경매 삭제하기
  * @param boardNo 경매글 넘버
  */
-export const deleteProductApi = async (productInfo) => {
+export const deleteProductApi = async (boardNo) => {
   return await STUBidApis.delete(`boards/${boardNo}`);
 }
 
@@ -49,7 +49,7 @@ export const deleteProductApi = async (productInfo) => {
  * @param boardNo 경매글 넘버
  * @param commentInfo 새 댓글 정보
  */
-export const addCommentApi = async (boardNo, ) => {
+export const addCommentApi = async (boardNo, commentInfo) => {
   return await STUBidApis.post(`boards/${boardNo}/reply`, commentInfo);
 }
 
