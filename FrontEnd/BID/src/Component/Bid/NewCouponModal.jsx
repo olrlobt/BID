@@ -6,12 +6,13 @@ import { addNewCouponApi } from '../../Apis/CouponApis';
 import { useMutation } from '@tanstack/react-query';
 
 export default function NewCouponModal({ onClose, ...props }){
+  const parentQueryClient = props[1];
 
   /** 쿠폰 추가 쿼리 */
   const addNewCouponQuery  = useMutation({
     mutationKey: ['addNewCoupon'],
     mutationFn: (form) => addNewCouponApi(1, form),
-    onSuccess: () => { props[1].invalidateQueries('couponList') },
+    onSuccess: () => { parentQueryClient.invalidateQueries('couponList') },
     onError: (error) => { console.log(error); }
   })
 
