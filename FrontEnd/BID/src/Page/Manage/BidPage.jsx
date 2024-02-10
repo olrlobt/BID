@@ -15,7 +15,7 @@ import { productSelector } from "../../Store/productSlice";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
-import { getProductListApi } from "../../Apis/BidApis";
+import { getProductListApi } from "../../Apis/TeacherBidApis";
 
 export default function BidPage(){
 
@@ -167,7 +167,6 @@ export default function BidPage(){
   const { openModal } = useModal();
   const { initCoupons } = useCoupons();
   const { initProducts } = useProducts();
-  let filteredProducts = [];
 
   /** 게시자 종류를 toggle하는 함수 */
   const changeWriter = (writer) => {
@@ -259,21 +258,27 @@ export default function BidPage(){
     setKeyword(value);
   };
 
+
+  const filteredProducts = useMemo(() => {
+    let filteredProducts = [];
+    if(products) {
+      if(productFilter === '전체'){
+        if(keyword === ''){ filteredProducts = [...products]; }
+        else{
+          filteredProducts = products.filter((product) => product.title.includes(keyword));
+        }
+      }
+      else{
+        if(keyword === ''){ filteredProducts = products.filter((product) => product.category === productFilter); }
+        else{
+          filteredProducts = products.filter((product) => product.category === productFilter && product.title.includes(keyword));
+        }
+      }
+    }
+    return filteredProducts;
+  }, [products, productFilter, keyword]);
   /** 경매 카테고리 초기 설정 */
-  if(products !== null) {
-    if(productFilter === '전체'){
-      if(keyword === ''){ filteredProducts = [...products]; }
-      else{
-        filteredProducts = products.filter((product) => product.title.includes(keyword));
-      }
-    }
-    else{
-      if(keyword === ''){ filteredProducts = products.filter((product) => product.category === productFilter); }
-      else{
-        filteredProducts = products.filter((product) => product.category === productFilter && product.title.includes(keyword));
-      }
-    }
-  }
+  
 
 
   return (
