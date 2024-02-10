@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import Modal from '../Common/Modal';
 import styled from './CouponModal.module.css';
+import useRequestedCoupons from '../../hooks/useRequestedCoupons';
 import { approveCoupon, denyCoupon } from '../../Apis/CouponApis';
 
 export default function CouponModal({ onClose, ...props }) {
   const [editCoupon, setEditCoupon] = useState(props[1]);
+  const { changeRequestList } = useRequestedCoupons();
 
   const groupNo = 1;
   const handleCoupon = (index, which) => {
@@ -16,6 +18,7 @@ export default function CouponModal({ onClose, ...props }) {
       if (accept) {
         updatedCouponList.splice(index, 1);
         approveCoupon(groupNo, deletedCoupon.no);
+        changeRequestList(updatedCouponList);
         setEditCoupon(updatedCouponList);
       }
     } else if (which === 'deny') {
@@ -23,6 +26,7 @@ export default function CouponModal({ onClose, ...props }) {
       if (deny) {
         updatedCouponList.splice(index, 1);
         denyCoupon(groupNo, deletedCoupon.no);
+        changeRequestList(updatedCouponList);
         setEditCoupon(updatedCouponList);
       }
     }

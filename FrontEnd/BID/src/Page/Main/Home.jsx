@@ -15,10 +15,12 @@ import { useQuery } from '@tanstack/react-query';
 import { viewDashboard } from '../../Apis/TeacherManageApis';
 import { stopTimeSelector } from '../../Store/stopTimeSlice';
 import { getCouponList } from '../../Apis/CouponApis';
+import { requestCouponSelector } from '../../Store/requestCouponSlice';
 import useBid from '../../hooks/useBid';
 import useMoney from '../../hooks/useMoney';
 import useBidCount from '../../hooks/useBidCount';
 import useStopTime from '../../hooks/useStopTime';
+import useRequestedCoupons from '../../hooks/useRequestedCoupons';
 import { moneySeletor } from '../../Store/moneySlice';
 import PieChart from '../../Component/Common/PieChart';
 import LineChart from '../../Component/Common/LineChart';
@@ -29,10 +31,12 @@ export default function Home() {
   const { initMoney } = useMoney();
   const { initCount } = useBidCount();
   const { initTime } = useStopTime();
+  const { changeRequestList } = useRequestedCoupons();
   const currentBid = useSelector(bidSelector);
   const classMoney = useSelector(moneySeletor);
   const bidCount = useSelector(bidCountSelector);
   const stopTime = useSelector(stopTimeSelector);
+  const requestedCoupons = useSelector(requestCouponSelector);
   const [lineData, setLineData] = useState([]);
 
   const gradeNo = 1;
@@ -63,6 +67,7 @@ export default function Home() {
     queryKey: ['CouponList'],
     queryFn: () =>
       getCouponList(gradeNo).then((res) => {
+        changeRequestList(res.data);
         return res.data;
       }),
   });
@@ -87,11 +92,11 @@ export default function Home() {
               },
             ]}
             icons={[{ src: Card, alt: '카드', css: 'card' }]}
-            text={`${couponList.length}건`}
+            text={`${requestedCoupons.length}건`}
             modalClick={() =>
               openModal({
                 type: 'coupon',
-                props: ['쿠폰 신청 목록', couponList],
+                props: ['쿠폰 신청 목록', requestedCoupons],
               })
             }
           />
