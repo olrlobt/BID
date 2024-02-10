@@ -28,14 +28,14 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void checkAttendance(int userNo) {
 		User user = userRepository.findById(userNo)
-			.orElseThrow(() -> new ResourceNotFoundException("출석등록-회원PK", userNo));
+			.orElseThrow(() -> new ResourceNotFoundException("출석을 등록한 User 엔티티가 없음.", userNo));
 
-		if (user instanceof Student) {
-			((Student)user).checkAttendance();
+		if (user instanceof Student student) {
+			student.checkAttendance();
 			return;
 		}
 
-		throw new InvalidParameterException("출석등록-회원PK", userNo);
+		throw new InvalidParameterException("출석등록 대상 회원타입이 아님.", userNo);
 	}
 
 	@Override
