@@ -62,6 +62,11 @@ public class Student extends User {
 		this.attendance.checkAttendance();
 	}
 
+	public void calculateSalary(int salary) {
+		this.asset += this.attendance.calculateSalary(salary);
+		System.out.println();
+	}
+
 	public void resetPassword(PasswordEncoder passwordEncoder) {
 		super.changePassword(passwordEncoder.encode(this.birthDate));
 	}
