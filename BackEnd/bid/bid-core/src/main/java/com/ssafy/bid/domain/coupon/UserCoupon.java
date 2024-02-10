@@ -44,4 +44,12 @@ public class UserCoupon {
 	public void reject() {
 		this.useStatus = UsageStatus.BEFORE_USE;
 	}
+
+	public UserCoupon(Long no, UsageStatus useStatus, Integer couponNo, Integer userNo, Integer gradeNo) {
+		this.no = no;
+		this.useStatus = useStatus;
+		this.couponNo = couponNo;
+		this.userNo = userNo;
+		this.gradeNo = gradeNo;
+	}
 }
