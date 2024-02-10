@@ -1,40 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "./ViewProductModal.module.css";
 import Modal from "../Common/Modal";
 import RoundedInfoButton from "../Common/RoundedInfoButton";
 import { SvgIcon } from "@material-ui/core";
-import {
-  ArrowForward,
-  // Edit, Delete,
-  Eject,
-} from "@material-ui/icons";
+import { ArrowForward, Eject, Edit, Delete } from "@material-ui/icons";
 import SubmitButton from "../Common/SubmitButton";
 import Comment from "./Comment";
-// import SettingButton from "../Common/SettingButton"
+import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { getProductDetailApi,
-          // deleteProductApi,
-          addCommentApi,
-          // deleteCommentApi,
-          firstBiddingApi
-        } from "../../Apis/BidApis";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getProductDetailApi, deleteProductApi } from "../../Apis/TeacherBidApis";
+import { addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
 
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
-  // 0 no,
-  // 1 title,
-  // 2 description,
-  // 3 startPrice,
-  // 4 boardStatus,
-  // 5 averagePrice,
-  // 6 resultPrice,
-  // 7 category,
-  // 8 goodsImgUrl,
-  // 9 userName,
-  // 10 gradePeriodNo,
-  // 11 createdAt
-  // 12 comments
+  const parentQueryClient = props[1];
+  const queryClient = useQueryClient();
+
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
+  const [comments, setComments] = useState([]);
 
   /** 경매 상세 쿼리 */
   const { data: productDetailIinfo } = useQuery({
@@ -43,48 +29,44 @@ export default function ViewProductModal({ onClose, ...props }) {
       getProductDetailApi(1, boardNo).then((res) => {
         if(res.data !== undefined){
           console.log(res.data);
-          return res.data;
+          setTitle(res.data.title);
+          setCategory(res.data.category);
+          setDescription(res.data.description);
+          setComments(res.data.comments);
         }
+        return res.data;
       })
   });
 
   /** 경매 삭제 쿼리 */
-  // const deleteProductQuery = useMutation({
-  //   mutationKey: ['delete'],
-  //   mutationFn: (boardNo) => { deleteProductApi(1, boardNo) },
-  //   onSuccess: () => { props[1].invalidateQueries('productList') },
-  //   onError: (error) => { console.log("error;")}
-  // });
+  const deleteProductQuery = useMutation({
+    mutationKey: ['delete'],
+    mutationFn: (boardNo) => { deleteProductApi(1, boardNo) },
+    onSuccess: () => { parentQueryClient.invalidateQueries('productList') },
+    onError: (error) => { console.log("error;")}
+  });
 
   /** 댓글 작성 쿼리 */
   const addCommentQuery = useMutation({
     mutationKey: ['addComment'],
-    mutationFn: (params) => { addCommentApi(params.boardNo, params.commentInfo) },
-    onSuccess:(res) => { props[1].invalidateQueries('getProductDetail') },
+    mutationFn: (params) => addCommentApi(params.boardNo, params.commentInfo),
+    onSuccess:() => { queryClient.invalidateQueries('getProductDetail'); },
     onError: (error) => { console.log(error); }
   })
 
-  /** 댓글 삭제 쿼리 */
-  // const deleteCommentQuery = useMutation({
-  //   mutationKey: ['delete'],
-  //   mutationFn: (boardNo, replyNo) => { deleteCommentApi(1, boardNo, replyNo) },
-  //   onSuccess: () => { console.log("success!!") },
-  //   onError: (error) => { console.log("error;")}
-  // });
-
   /** 첫 입찰 쿼리 */
-  const firstBiddingQuery = useMutation({
-    mutationKey: ['firstBidding'],
-    mutationFn: (params) => { firstBiddingApi(params.boardNo, params.biddingInfo); },
+  const biddingQuery = useMutation({
+    mutationKey: ['bidding'],
+    mutationFn: (params) => { biddingApi(params.boardNo, params.biddingInfo); },
     onSuccess: (res) => { console.log(res); },
     onError: (error) => { console.log(error); }
   });
 
   /** 경매 삭제 함수 */
-  // const deleteProduct = () => {
-  //   deleteProductQuery.mutate(boardNo);
-  //   onClose();
-  // }
+  const deleteProduct = () => {
+    deleteProductQuery.mutate(boardNo);
+    onClose();
+  }
 
   /** 입찰 신청 함수 */
   const bidSubmit = (e) => {
@@ -100,7 +82,7 @@ export default function ViewProductModal({ onClose, ...props }) {
         boardNo: boardNo,
         biddingInfo:biddingInfo
       }
-      firstBiddingQuery.mutate(params);
+      biddingQuery.mutate(params);
       console.log(biddingPrice+'비드 입찰되었습니다');
 
     }
@@ -128,14 +110,14 @@ export default function ViewProductModal({ onClose, ...props }) {
     <Modal onClose={onClose} {...props}>
       <div className={styled.header}>
         <div className={styled.top}>
-          <h1>{ productDetailIinfo && productDetailIinfo.title }</h1>
+          <h1>{ title }</h1>
           <span>{ productDetailIinfo && productDetailIinfo.userName }</span>
         </div>
         <div className={styled.info}>
           <div className={styled.commonArea}>
             <div className={styled.infoButton}>
               <RoundedInfoButton
-                value = { productDetailIinfo && productDetailIinfo.category }
+                value = { category }
                 unit = ''
                 textColor = 'white'
                 borderColor = '#BBBD32'
@@ -178,7 +160,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
           </div>
           <div className={styled.isWriterArea}>
-            <div className={styled.notWriterArea}>
+            {/* <div className={styled.notWriterArea}>
               <form id="newProductForm" onSubmit={bidSubmit}>
                 <input
                   type="number"
@@ -193,8 +175,8 @@ export default function ViewProductModal({ onClose, ...props }) {
                   fontSize="1.7vw"
                 />
               </form>
-            </div>
-            {/* <div className={styled.writerArea}>
+            </div> */}
+            <div className={styled.writerArea}>
               <SettingButton
                 onClick={ () => console.log('modify') }
                 svg={ Edit }
@@ -209,7 +191,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                 height='1vw'
                 backgroundColor='#F23F3F'
               />
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
@@ -220,23 +202,26 @@ export default function ViewProductModal({ onClose, ...props }) {
             <img src={ productDetailIinfo && productDetailIinfo.goodsImgUrl } alt="제품 이미지" />
           </div>
           <div className={styled.content}>
-            <textarea name='bidContent' defaultValue={ productDetailIinfo && productDetailIinfo.description } disabled/>
+            <textarea name='bidContent' defaultValue={ description } disabled/>
           </div>
         </div>
         <div className={styled.right}>
           <div className={styled.commentArea}>
             <div className={styled.comments}>
             {
-              productDetailIinfo && productDetailIinfo.comments.length===0?
+              comments.length===0?
               <NoContent text='아직 작성된 댓글이 없어요! 제일 먼저 달아볼까요? : )'/>
               :
-              productDetailIinfo && productDetailIinfo.comments.map((c) =>
+              comments.map((c) =>
                 <Comment
-                  key = {c.createdAt}
-                  userNo = {c.userNo}
-                  name = {c.name}
+                  key = {c.replyNo}
+                  boardNo = {boardNo}
+                  replyNo = {c.replyNo}
+                  userName = {c.userName}
                   content = {c.content}
-                  createdAt = {c.createdAt}
+                  createAt = {c.createAt}
+                  userImgUrl = {c.userImgUrl}
+                  queryClient = {queryClient}
                 />
               )
             }
