@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   ballList: null,
@@ -7,7 +7,7 @@ const initialState = {
 export const ballSelector = (state) => state.seatBall.ballList;
 
 export const ballSlice = createSlice({
-  name: "seatBall",
+  name: 'seatBall',
   initialState,
   reducers: {
     initBalls: (state, action) => {
