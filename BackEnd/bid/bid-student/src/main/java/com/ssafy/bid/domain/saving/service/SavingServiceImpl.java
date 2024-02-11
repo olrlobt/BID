@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.saving.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.saving.Saving;
 import com.ssafy.bid.domain.saving.UserSaving;
 import com.ssafy.bid.domain.saving.dto.SavingSaveRequest;
+import com.ssafy.bid.domain.saving.dto.TaxRateListGetResponse;
+import com.ssafy.bid.domain.saving.dto.TaxRateResponse;
 import com.ssafy.bid.domain.saving.dto.UserSavingListGetResponse;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
 import com.ssafy.bid.domain.saving.repository.UserSavingRepository;
@@ -28,7 +31,29 @@ public class SavingServiceImpl implements SavingService {
 
 	@Override
 	public List<UserSavingListGetResponse> getAllSavings(int gradeNo, int userNo) {
-		return userSavingRepository.findAllByUserNoAndGradeNo(userNo, gradeNo);
+		List<UserSavingListGetResponse> responses = userSavingRepository.findAllByUserNoAndGradeNo(userNo, gradeNo);
+
+		TaxRateResponse taxRateResponse = userSavingRepository.findAllBiddingIncomes(gradeNo, userNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당하는 User 엔티티가 없음.", userNo));
+		List<TaxRateListGetResponse> taxRateListGetResponses = createTaxRateListGetResponses(taxRateResponse);
+		responses.forEach(response -> {
+			response.setIncomeLevel(taxRateResponse.getIncomeLevel());
+			response.setTaxRateListGetResponses(taxRateListGetResponses);
+		});
+
+		return responses;
+	}
+
+	public List<TaxRateListGetResponse> createTaxRateListGetResponses(TaxRateResponse taxRateResponse) {
+		List<TaxRateListGetResponse> taxRateListGetResponses = new ArrayList<>();
+		taxRateListGetResponses.add(taxRateResponse.createZero());
+		taxRateListGetResponses.add(taxRateResponse.createOne());
+		taxRateListGetResponses.add(taxRateResponse.createTwo());
+		taxRateListGetResponses.add(taxRateResponse.createThree());
+		taxRateListGetResponses.add(taxRateResponse.createFour());
+		taxRateListGetResponses.add(taxRateResponse.createFive());
+		taxRateListGetResponses.add(taxRateResponse.createSix());
+		return taxRateListGetResponses;
 	}
 
 	@Override
