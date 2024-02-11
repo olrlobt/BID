@@ -62,6 +62,9 @@ public class Grade extends BaseEntity {
 	@Embedded
 	private BiddingStatistics biddingStatistics;
 
+	@NotNull
+	private boolean hold;
+
 	public void updateSalary(int salary) {
 		this.salary = salary;
 	}
@@ -72,5 +75,17 @@ public class Grade extends BaseEntity {
 	) {
 		this.transferAlertPeriod = transferAlertPeriod;
 		this.transferPeriod = transferPeriod;
+	}
+
+	public void holdBid() {
+		this.hold = true;
+	}
+
+	public void unHoldBid() {
+		this.hold = false;
+	}
+
+	public boolean holdBidToggle() {
+		return this.hold = !hold;
 	}
 }

@@ -20,12 +20,20 @@ public class CoreBoardScheduleService {
 	private final CoreBiddingRepository coreBiddingRepository;
 
 	@Transactional
-	protected void job(long boardNo) {
+	protected void bidProgress(long boardNo) {
 		Board board = coreBoardRepository.findById(boardNo)
 			.orElseThrow(() -> new ResourceNotFoundException("게시물이 없습니다.", boardNo));
 
 		board.complete();
 
+		// 낙찰자가 없을 경우 선행 처리
+
+
+		// 쿠폰
+
+		// 대포
+
+		// 경매 게시글
 		coreBiddingRepository.findAllByBoardNo(board.getNo())
 			.forEach(bidding -> {
 				if (bidding.getNo().equals(board.getBiddingNo())) {
@@ -37,7 +45,6 @@ public class CoreBoardScheduleService {
 				}
 			});
 
-		// 낙찰자가 없을 경우?
 	}
 
 }
