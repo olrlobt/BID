@@ -25,6 +25,12 @@ export const getStudentSavingInfo = async () => {
   return await StudentApis.get('/savings');
 };
 
+/**
+ * 적금 가입
+ * @param savingInfo 가입할 적금 정보
+ * @returns 201 OK
+ */
+
 export const applyStudentSaving = async (savingInfo) => {
   return await StudentApis.post('/savings', savingInfo);
 };
