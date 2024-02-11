@@ -8,6 +8,7 @@ import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
+import com.ssafy.bid.domain.user.dto.CalculateIncomeLevelResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSalaryResponse;
@@ -27,4 +28,6 @@ public interface CoreUserRepositoryCustom {
 	List<SavingTransferRequest> findAllByIds(List<Integer> userNos);
 
 	List<StudentSalaryResponse> findAllStudentsAndSalaries();
+
+	List<CalculateIncomeLevelResponse> findAllIncomes();
 }

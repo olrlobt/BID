@@ -23,6 +23,7 @@ import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
+import com.ssafy.bid.domain.user.dto.CalculateIncomeLevelResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSalaryResponse;
@@ -187,6 +188,39 @@ public class CoreUserRepositoryCustomImpl implements CoreUserRepositoryCustom {
 			.select(Projections.constructor(StudentSalaryResponse.class,
 					student,
 					grade.salary
+				)
+			)
+			.from(student)
+			.innerJoin(grade).on(grade.no.eq(student.gradeNo))
+			.fetch();
+	}
+
+	@Override
+	public List<CalculateIncomeLevelResponse> findAllIncomes() {
+		return queryFactory
+			.select(Projections.constructor(CalculateIncomeLevelResponse.class,
+					student,
+					grade.salary,
+					ExpressionUtils.as(
+						JPAExpressions
+							.select(account.price.avg())
+							.from(account)
+							.where(
+								account.gradeNo.eq(grade.no),
+								account.accountType.eq(AccountType.INCOME)
+							)
+						, "avgGradeIncome"
+					),
+					ExpressionUtils.as(
+						JPAExpressions
+							.select(account.price.sum())
+							.from(account)
+							.where(
+								account.userNo.eq(student.no),
+								account.accountType.eq(AccountType.INCOME)
+							)
+						, "sumMyIncome"
+					)
 				)
 			)
 			.from(student)
