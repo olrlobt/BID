@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "./ViewProductModal.module.css";
 import Modal from "../Common/Modal";
 import RoundedInfoButton from "../Common/RoundedInfoButton";
 import { SvgIcon } from "@material-ui/core";
-import { ArrowForward, Eject, Edit, Delete } from "@material-ui/icons";
+import { Eject, Edit, Delete } from "@material-ui/icons";
 import SubmitButton from "../Common/SubmitButton";
 import Comment from "./Comment";
 import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getProductDetailApi, deleteProductApi } from "../../Apis/TeacherBidApis";
-import { addCommentApi, /*biddingApi*/ } from "../../Apis/StudentBidApis";
+// import { addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
 
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
@@ -23,8 +23,8 @@ export default function ViewProductModal({ onClose, ...props }) {
   const [averagePrice, setAveragePrice] = useState(0);
   const [description, setDescription] = useState('');
   const [comments, setComments] = useState([]);
-  const [userType, setUserType] = useState('teacher');
-  const [isSetting, setIsSetting] = useState(false);
+  const [userType, /*setUserType*/] = useState('teacher');
+  // const [isSetting, setIsSetting] = useState(false);
 
   /** 경매 상세 쿼리 */
   const { data: productDetailIinfo } = useQuery({

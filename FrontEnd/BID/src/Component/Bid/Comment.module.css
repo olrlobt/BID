@@ -28,7 +28,7 @@
   .commentHeader {
     display: flex;
     margin-bottom: 0.5vw;
-    align-items: end;
+    align-items: flex-end;
 
     h3 {
       font-size: 1.8vw;
