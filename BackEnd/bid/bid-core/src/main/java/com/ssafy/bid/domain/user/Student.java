@@ -65,7 +65,7 @@ public class Student extends User {
 	}
 
 	public void calculateSalary(int salary) {
-		this.asset += this.attendance.calculateSalary(salary);
+		this.asset += this.attendance.calculateSalary(salary) - this.attendance.calculateSalary(salary) / taxRate;
 	}
 
 	public void resetPassword(PasswordEncoder passwordEncoder) {
