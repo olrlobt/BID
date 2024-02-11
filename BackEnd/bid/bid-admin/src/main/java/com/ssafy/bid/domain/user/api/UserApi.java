@@ -23,6 +23,7 @@ import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
+import com.ssafy.bid.domain.user.dto.LoginResponse;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
@@ -117,7 +118,8 @@ public class UserApi {
 
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpServletResponse httpResponse) {
-		TokenResponse tokenResponse = coreUserService.login(request);
+		LoginResponse loginResponse = coreUserService.login(request);
+		TokenResponse tokenResponse = loginResponse.getTokenResponse();
 		Cookie cookie = createCookie(tokenResponse.getRefreshToken());
 		httpResponse.addCookie(cookie);
 		return ResponseEntity.status(HttpStatus.OK).body(tokenResponse.getAccessToken());
