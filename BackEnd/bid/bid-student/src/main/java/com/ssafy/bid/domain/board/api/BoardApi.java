@@ -61,7 +61,7 @@ public class BoardApi {
 
 	@PostMapping("/boards")
 	public ResponseEntity<?> addBoard(@RequestBody BoardCreateRequest boardCreateRequest) {
-		long boardNo = boardService.addBoard(1, 1, boardCreateRequest);
+		long boardNo = coreBoardService.addBoard(1, 1, boardCreateRequest);
 
 		LocalTime startTime = coreGradePeriodService.findStartTime(1,
 			boardCreateRequest.getGradePeriodNo());

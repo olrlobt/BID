@@ -9,5 +9,6 @@ import com.ssafy.bid.domain.coupon.UserCoupon;
 
 public interface UserCouponRepository extends JpaRepository<UserCoupon, Long>, UserCouponCustomRepository {
 
-	Optional<UserCoupon> findFirstByUserNoAndCouponNoAndUseStatus(Integer userNo, Integer couponNo, UsageStatus useStatus);
+	Optional<UserCoupon> findFirstByUserNoAndCouponNoAndUseStatus(Integer userNo, Integer couponNo,
+		UsageStatus useStatus);
 }
