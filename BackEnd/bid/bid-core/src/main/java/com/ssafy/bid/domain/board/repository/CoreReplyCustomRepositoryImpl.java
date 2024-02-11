@@ -20,6 +20,7 @@ public class CoreReplyCustomRepositoryImpl implements CoreReplyCustomRepository 
 		return queryFactory.select(Projections.constructor(ReplyResponse.class,
 				reply.no,
 				reply.content,
+				student.no,
 				student.name,
 				student.profileImgUrl,
 				reply.createdAt
