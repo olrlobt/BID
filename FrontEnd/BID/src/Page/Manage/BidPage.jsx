@@ -179,7 +179,6 @@ export default function BidPage(){
   /** redux에 저장된 값 변경될 때마다 쿠폰 목록 세팅 */
   useEffect(() => {
     setCoupons(reduxCoupons);
-    console.log(reduxCoupons);
   }, [reduxCoupons]);
 
   /** 쿠폰 목록 쿼리 */
@@ -232,7 +231,6 @@ export default function BidPage(){
   /** redux에 저장된 값 변경될 때마다 경매 목록 세팅 */
   useEffect(() => {
     setProducts(reduxProducts);
-    console.log(reduxProducts);
   }, [reduxProducts]);
 
   /** 경매 목록 쿼리 */
