@@ -24,6 +24,8 @@ public class GradeStatisticsGetResponse {
 	private String transferAlertPeriod;
 	private String transferPeriod;
 	private int salaryRecommendation;
+	private boolean isDangerInInflation;
+	private boolean isDangerInDeflation;
 	private List<BiddingStatisticsFindResponses> biddingStatisticsFindResponses;
 	private List<GradePeriodsGetResponse> gradePeriodsGetResponses;
 
@@ -52,7 +54,9 @@ public class GradeStatisticsGetResponse {
 		int countThreeDaysAgo,
 		int countTwoDaysAgo,
 		int countOneDaysAgo,
-		int salaryRecommendation
+		int salaryRecommendation,
+		boolean isDangerInInflation,
+		boolean isDangerInDeflation
 	) {
 		this.unapprovedCouponCount = (int)unapprovedCouponCount;
 		this.salary = salary;
@@ -98,6 +102,8 @@ public class GradeStatisticsGetResponse {
 			.count(countOneDaysAgo).build());
 		this.biddingStatisticsFindResponses = template;
 		this.salaryRecommendation = salaryRecommendation;
+		this.isDangerInInflation = isDangerInInflation();
+		this.isDangerInDeflation = isDangerInDeflation;
 	}
 
 	public void setGradePeriodsGetResponses(List<GradePeriodsGetResponse> gradePeriodsGetRespons) {
