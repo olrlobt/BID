@@ -158,7 +158,7 @@ export default function BidPage(){
   const reduxCoupons = useSelector(couponSelector);
   const reduxProducts = useSelector(productSelector);
 
-  const [isTeacher, setIsTeacher] = useState(true);
+  const [isTeacher, setIsTeacher] = useState(false);
   const [coupons, setCoupons] = useState(reduxCoupons);
   const [products, setProducts] = useState(reduxProducts);
   const [productFilter, setProductFilter] = useState('전체');
@@ -179,6 +179,7 @@ export default function BidPage(){
   /** redux에 저장된 값 변경될 때마다 쿠폰 목록 세팅 */
   useEffect(() => {
     setCoupons(reduxCoupons);
+    console.log(reduxCoupons);
   }, [reduxCoupons]);
 
   /** 쿠폰 목록 쿼리 */
@@ -231,6 +232,7 @@ export default function BidPage(){
   /** redux에 저장된 값 변경될 때마다 경매 목록 세팅 */
   useEffect(() => {
     setProducts(reduxProducts);
+    console.log(reduxProducts);
   }, [reduxProducts]);
 
   /** 경매 목록 쿼리 */
@@ -258,29 +260,19 @@ export default function BidPage(){
     setKeyword(value);
   };
 
-
+  /** 필터/검색 조건에 따른 결과 */
   const filteredProducts = useMemo(() => {
-    let filteredProducts = [];
-    if(products) {
-      if(productFilter === '전체'){
-        if(keyword === ''){ filteredProducts = [...products]; }
-        else{
-          filteredProducts = products.filter((product) => product.title.includes(keyword));
-        }
-      }
-      else{
-        if(keyword === ''){ filteredProducts = products.filter((product) => product.category === productFilter); }
-        else{
-          filteredProducts = products.filter((product) => product.category === productFilter && product.title.includes(keyword));
-        }
-      }
+    let filteredProducts = products && [...products];
+    if(productFilter !== '전체'){
+      filteredProducts = filteredProducts.filter((p) => p.category === productFilter);
+    }
+    if(keyword !== ''){
+      filteredProducts = filteredProducts.filter((p) => p.title.includes(keyword));
     }
     return filteredProducts;
   }, [products, productFilter, keyword]);
   /** 경매 카테고리 초기 설정 */
   
-
-
   return (
     <>
     <div className = {styled.bidSection}>
@@ -345,11 +337,6 @@ export default function BidPage(){
                 active = { productFilter==='학습' }
               />
               <WriterButton
-                onClick = { () => changeFilter('쿠폰') }
-                text = '쿠폰'
-                active = { productFilter==='쿠폰' }
-              />
-              <WriterButton
                 onClick = { () => changeFilter('오락') }
                 text = '오락'
                 active = { productFilter==='오락' }
@@ -397,18 +384,15 @@ export default function BidPage(){
           :
           (<div className = {styled.productsWrapper}>
             {
-              filteredProducts.length === 0?
+              filteredProducts && filteredProducts.length === 0?
               <NoContent text='현재 진행 중인 경매가 없어요'/>
               :
-              filteredProducts.map((product) => 
+              filteredProducts && filteredProducts.map((product) => 
                 <Product
                   onClick = {() => {
                     openModal({
                       type: 'viewProduct',
-                      props: [
-                        product.no,
-                        queryClient
-                      ] })
+                      props: [product.no, queryClient] })
                   }}
                   key = {product.no}
                   title = {product.title}
