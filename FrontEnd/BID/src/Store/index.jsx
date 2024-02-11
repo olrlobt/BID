@@ -11,6 +11,7 @@ import { savingSlice } from './savingSlice';
 import { modelSlice } from './modelSlice';
 import { stopTimeSlice } from './stopTimeSlice';
 import { requestCouponSlice } from './requestCouponSlice';
+import { studentSavingSlice } from './studentSavingSlice';
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   model: modelSlice.reducer,
   stopTime: stopTimeSlice.reducer,
   requestCoupon: requestCouponSlice.reducer,
+  studentSaving: studentSavingSlice.reducer,
 });
 
 const store = configureStore({

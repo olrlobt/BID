@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { socket } from '../../Component/Models/SocketManager';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getStudentSavingInfo } from '../../Apis/StudentApis';
 import { viewSavingList } from '../../Apis/TeacherManageApis';
 import useSaving from '../../hooks/useSaving';
 
@@ -21,8 +20,10 @@ function StudentMain() {
 
   // 선생님 적금 가입정보 가져와 저장
   const { initSavingList } = useSaving();
-  const { data } = useQuery({
-    queryKey: ['savingInfo'],
+  const {
+    data, // eslint-disable-line no-unused-vars
+  } = useQuery({
+    queryKey: ['SavingInfo'],
     queryFn: () =>
       viewSavingList(gradeNo).then((res) => {
         initSavingList(res.data);

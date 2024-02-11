@@ -9,36 +9,49 @@ import {
 } from '../../Apis/StudentApis';
 import Back from '../../Asset/Image/SeatGame/back_btn.png';
 import { useNavigate } from 'react-router-dom';
+import { studentSavingSelector } from '../../Store/studentSavingSlice';
+import useStudentSaving from '../../hooks/useStudentSaving';
 
 export default function StudentSaving() {
   const navigate = useNavigate();
   const savingList = useSelector(savingSelector);
+  const studentSaving = useSelector(studentSavingSelector);
+  const { initStudentSavingList, changeStudentSavingList } = useStudentSaving();
   // 학생 가입 정보 가져오기
-  const { data: savingInfo } = useQuery({
+  const {
+    data, // eslint-disable-line no-unused-vars
+  } = useQuery({
     queryKey: ['studentSavingInfo'],
     queryFn: () =>
       getStudentSavingInfo().then((res) => {
+        initStudentSavingList(res.data);
         return res.data;
       }),
   });
 
-  // {
-  //     "no": 1,
-  //     "depositPeriod": 15,
-  //     "depositCycle": 8,
-  //     "depositPrice": 40,
-  //     "interestRate": 7
-  // }
-  // 은행 가입하기
-
-  // 가입할 떄 가입내역 없다면 위 형식으로 가입
+  const handleSubmit = (wantedSaving) => {
+    const alreadyApplied = studentSaving.filter((saving) => saving.mySaving);
+    const applySavingData = {
+      no: wantedSaving.savingNo,
+      depositPeriod: wantedSaving.savingDepositPeriod,
+      depositCycle: wantedSaving.savingDepositCycle,
+      depositPrice: wantedSaving.savingDepositPrice,
+      interestRate: wantedSaving.savingInterestRate,
+    };
+    if (alreadyApplied.length === 0) {
+      changeStudentSavingList(applySavingData.no);
+      applySaving.mutate(applySavingData);
+    } else {
+      alert('이미 가입된 적금이 있어 가입이 어렵습니다.');
+    }
+  };
 
   const applySaving = useMutation({
     mutationKey: ['studenApplySaving'],
-    mutationFn: () =>
-      applyStudentSaving()
+    mutationFn: (wantedSaving) =>
+      applyStudentSaving(wantedSaving)
         .then(() => {
-          alert('가입하시겠습니까?');
+          alert('가입되었습니다.');
         })
         .catch(() => {
           alert('가입이 되지 않았습니다.');
@@ -47,9 +60,8 @@ export default function StudentSaving() {
 
   return (
     <>
-      {savingList && (
+      {savingList && studentSaving && (
         <section className={styled.studentBank}>
-          {console.log(savingInfo)}
           <img
             className={styled.back}
             src={Back}
@@ -76,7 +88,7 @@ export default function StudentSaving() {
                 <div className={styled.savingAImage}></div>
                 <span className={styled.savingTitle}>적금</span>
                 <span className={styled.kind}>A</span>
-                {savingInfo[0].mySaving ? (
+                {studentSaving[0].mySaving ? (
                   <button
                     className={`${styled.applyBtn} ${styled.already}`}
                     disabled
@@ -84,7 +96,12 @@ export default function StudentSaving() {
                     가입
                   </button>
                 ) : (
-                  <button className={styled.applyBtn}>가입</button>
+                  <button
+                    className={styled.applyBtn}
+                    onClick={() => handleSubmit(studentSaving[0])}
+                  >
+                    가입
+                  </button>
                 )}
                 <section className={styled.inputArea}>
                   <div>
@@ -111,7 +128,7 @@ export default function StudentSaving() {
                   적금
                 </span>
                 <span className={`${styled.kind} ${styled.version2}`}>B</span>
-                {savingInfo[1].mySaving ? (
+                {studentSaving[1].mySaving ? (
                   <button
                     className={`${styled.applyBtn} ${styled.already}`}
                     disabled
@@ -119,7 +136,12 @@ export default function StudentSaving() {
                     가입
                   </button>
                 ) : (
-                  <button className={styled.applyBtn}>가입</button>
+                  <button
+                    className={styled.applyBtn}
+                    onClick={() => handleSubmit(studentSaving[1])}
+                  >
+                    가입
+                  </button>
                 )}
                 <section className={styled.inputArea}>
                   <div>
