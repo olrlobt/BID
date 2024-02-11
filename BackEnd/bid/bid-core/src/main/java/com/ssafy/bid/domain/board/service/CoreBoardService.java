@@ -25,8 +25,6 @@ import com.ssafy.bid.domain.coupon.CouponStatus;
 import com.ssafy.bid.domain.coupon.repository.CoreCouponRepository;
 import com.ssafy.bid.domain.grade.dto.GradeProjection;
 import com.ssafy.bid.domain.grade.repository.CoreGradeRepository;
-import com.ssafy.bid.domain.gradeperiod.GradePeriod;
-import com.ssafy.bid.domain.gradeperiod.repository.CoreGradePeriodRepository;
 import com.ssafy.bid.domain.gradeperiod.service.CoreGradePeriodService;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
@@ -36,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CoreBoardService {
 
 	private final CoreBoardRepository coreBoardRepository;
@@ -47,14 +44,15 @@ public class CoreBoardService {
 
 	private final CoreGradeRepository coreGradeRepository;
 	private final CoreCouponRepository coreCouponRepository;
-	private final CoreGradePeriodRepository coreGradePeriodRepository;
 	private final CoreGradePeriodService coreGradePeriodService;
+
+	@Transactional(readOnly = true)
 
 	public BoardResponse getBoardDetail(int userNo, long boardNo, int gradeNo) {
 
 		// user의 gradeNo이 넘겨받은 gradeNo이 아닐경우 예외 처리
 
-		BoardResponse boardResponse = coreBoardRepository.getStudentBoard(boardNo)
+		BoardResponse boardResponse = coreBoardRepository.getStudentBoard(boardNo, gradeNo)
 			.orElseThrow(() -> new ResourceNotFoundException("해당 글이 없습니다.", boardNo));
 
 		coreBiddingRepository.findByUserNoAndBoardNo(userNo, boardNo)
@@ -65,8 +63,12 @@ public class CoreBoardService {
 	}
 
 	@Transactional
-	public void registerBoardTask(LocalTime time, long boardNo) {
+	public long addBoard(int userNo, int gradeNo, BoardCreateRequest boardCreateRequest) {
+		Board board = boardCreateRequest.toEntity(userNo, gradeNo);
+		return coreBoardRepository.save(board).getNo();
+	}
 
+	public void registerBoardTask(LocalTime time, long boardNo) {
 		LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), time);
 		Instant instant = dateTime.atZone(ZoneId.systemDefault()).toInstant();
 
@@ -75,9 +77,8 @@ public class CoreBoardService {
 		}, instant);
 	}
 
-	@Scheduled(cron = "0 0 9 * * *")
-	@Transactional
-	public void addWeeklyCoupon(){
+	@Scheduled(cron = "0 9 * * * *")
+	public void addWeeklyCoupon() {
 		// 모든 학급의 쿠폰
 		List<GradeProjection> allGradeNo = coreGradeRepository.findBy();
 
@@ -88,6 +89,8 @@ public class CoreBoardService {
 			// 해당 학급의 모든 쿠폰
 			List<Coupon> allCoupons = coreCouponRepository.findAllByGradeNoAndCouponStatus(gradeNo,
 				CouponStatus.REGISTERED);
+
+			LocalTime startTime = coreGradePeriodService.findStartTime(gradeNo, 6);
 
 			if (!allCoupons.isEmpty()) {
 				Coupon coupon = allCoupons.get(ThreadLocalRandom.current().nextInt(allCoupons.size()));
@@ -101,12 +104,15 @@ public class CoreBoardService {
 					.gradePeriodNo(6)
 					.build();
 
-				Board board = boardCreateRequest.toEntity(userNo, gradeNo);
-				Board save = coreBoardRepository.save(board);
+				long boardNo = addBoard(userNo, gradeNo, boardCreateRequest);
+				registerBoardTask(startTime, boardNo);
 
-				LocalTime startTime = coreGradePeriodService.findStartTime(gradeNo, 6);
-				registerBoardTask(startTime, save.getNo());
 			}
+			// 대포 등록
+			BoardCreateRequest cannonDto = BoardCreateRequest.createCannon();
+			long cannonNo = addBoard(userNo, gradeNo, cannonDto);
+			registerBoardTask(startTime, cannonNo);
 		}
+
 	}
 }

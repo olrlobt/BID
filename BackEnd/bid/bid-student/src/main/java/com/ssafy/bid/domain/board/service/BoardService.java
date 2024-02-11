@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Reply;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
-import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardModifyRequest;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
@@ -45,14 +44,6 @@ public class BoardService {
 		List<BoardListResponse> myBiddingBoards = boardRepository.findMyBiddingBoards(userNo);
 
 		return new MyBoardsResponse(myBoards, myBiddingBoards);
-	}
-
-	@Transactional
-	public long addBoard(int userNo, int gradeNo, BoardCreateRequest boardCreateRequest) {
-		// 현재시간보다 일찍이면 에러
-
-		Board board = boardCreateRequest.toEntity(1, 1);
-		return boardRepository.save(board).getNo();
 	}
 
 	@Transactional

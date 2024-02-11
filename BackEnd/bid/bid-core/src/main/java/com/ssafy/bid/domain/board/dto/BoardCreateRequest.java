@@ -28,6 +28,17 @@ public class BoardCreateRequest {
 		this.gradePeriodNo = gradePeriodNo;
 	}
 
+	public static BoardCreateRequest createCannon() {
+		return BoardCreateRequest.builder()
+			.title("대포 알")
+			.description("자리 뽑기에 사용하는 대포 알")
+			.category(Category.CANNON)
+			.goodsImgUrl("CANNON_IMG_URL")
+			.startPrice(200)
+			.gradePeriodNo(6)
+			.build();
+	}
+
 	public Board toEntity(int userNo, int gradeNo) {
 		return Board.builder()
 			.title(this.title)
