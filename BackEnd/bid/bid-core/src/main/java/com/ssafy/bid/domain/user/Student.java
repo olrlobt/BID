@@ -33,6 +33,8 @@ public class Student extends User {
 	@Embedded
 	private ExpenditureStatistics expenditureStatistics;
 
+	private Integer taxRate;
+
 	/**
 	 * grade : users(me) = 1 : N
 	 */
@@ -68,5 +70,9 @@ public class Student extends User {
 
 	public void resetPassword(PasswordEncoder passwordEncoder) {
 		super.changePassword(passwordEncoder.encode(this.birthDate));
+	}
+
+	public void calculateTaxRate(int taxRate) {
+		this.taxRate = taxRate;
 	}
 }
