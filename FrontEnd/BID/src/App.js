@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import MainPage from './Page/Main/MainPage';
 import RegisterPage from './Page/User/RegisterPage';
-import ManageLoginPage from './Page/User/ManageLoginPage'
+import ManageLoginPage from './Page/User/ManageLoginPage';
 import LoginPage from './Page/User/LoginPage';
 import FindIdPage from './Page/User/FindIdPage';
 import ChangePwdPage from './Page/User/ChangePwdPage';
@@ -21,6 +21,7 @@ import MyPage from './Page/Student/MyPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import NoClass from './Page/ClassManage/NoClass';
+import StudentSaving from './Page/Student/StudentSaving';
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ function App() {
         <Route path="/game/seat" element={<SeatGame />} />
         <Route path="/studentmain/" element={<StudentMain />} />
         <Route path="/studentmain/:studentId/" element={<MyPage />} />
+        <Route path="/student/saving" element={<StudentSaving />} />
       </Routes>
     </QueryClientProvider>
   );

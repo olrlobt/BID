@@ -1,7 +1,7 @@
 .couponContainer {
-  background-color: #F7F7F7;
+  background-color: #f7f7f7;
   padding: 20px;
-  box-shadow: 0px 3px 3px #4D4D4D;
+  box-shadow: 0px 3px 3px #4d4d4d;
   width: 15vw;
   border-radius: 1vw;
   display: flex;
@@ -10,8 +10,8 @@
 
 .couponName {
   font-size: 0.95rem;
-  color: #FFFFFF;
-  background-color: #FFD43A;
+  color: #ffffff;
+  background-color: #ffd43a;
   border-radius: 0.3vw;
   padding: 0.5vh;
   width: 100%; /* 변경된 부분 */
@@ -31,6 +31,6 @@
 
 .couponIcon {
   font-size: 0.8rem;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-right: 0.5vw; /* 변경된 부분 */
 }
