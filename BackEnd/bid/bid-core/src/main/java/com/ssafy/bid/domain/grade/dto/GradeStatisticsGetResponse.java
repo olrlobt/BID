@@ -23,6 +23,7 @@ public class GradeStatisticsGetResponse {
 	private int asset;
 	private String transferAlertPeriod;
 	private String transferPeriod;
+	private int salaryRecommendation;
 	private List<BiddingStatisticsFindResponses> biddingStatisticsFindResponses;
 	private List<GradePeriodsGetResponse> gradePeriodsGetResponses;
 
@@ -50,7 +51,8 @@ public class GradeStatisticsGetResponse {
 		int countFourDaysAgo,
 		int countThreeDaysAgo,
 		int countTwoDaysAgo,
-		int countOneDaysAgo
+		int countOneDaysAgo,
+		int salaryRecommendation
 	) {
 		this.unapprovedCouponCount = (int)unapprovedCouponCount;
 		this.salary = salary;
@@ -95,6 +97,7 @@ public class GradeStatisticsGetResponse {
 		template.add(BiddingStatisticsFindResponses.builder().date(LocalDate.now().minusDays(1))
 			.count(countOneDaysAgo).build());
 		this.biddingStatisticsFindResponses = template;
+		this.salaryRecommendation = salaryRecommendation;
 	}
 
 	public void setGradePeriodsGetResponses(List<GradePeriodsGetResponse> gradePeriodsGetRespons) {
