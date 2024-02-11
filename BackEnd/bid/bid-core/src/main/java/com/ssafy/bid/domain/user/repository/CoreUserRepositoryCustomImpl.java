@@ -25,6 +25,7 @@ import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentInfo;
 import com.ssafy.bid.domain.user.dto.StudentSalaryResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
 
@@ -191,6 +192,19 @@ public class CoreUserRepositoryCustomImpl implements CoreUserRepositoryCustom {
 			)
 			.from(student)
 			.innerJoin(grade).on(grade.no.eq(student.gradeNo))
+			.fetch();
+	}
+
+	@Override
+	public List<StudentInfo> findByGradeNo(int gradeNo) {
+		return queryFactory
+			.select(Projections.constructor(StudentInfo.class,
+				student.no,
+				student.gradeNo,
+				student.name,
+				student.profileImgUrl))
+			.from(student)
+			.where(student.gradeNo.eq(gradeNo))
 			.fetch();
 	}
 }
