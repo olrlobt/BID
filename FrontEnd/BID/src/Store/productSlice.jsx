@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  productList: null,
+  productList: [],
 };
 
 export const productSelector = (state) => {
@@ -17,16 +17,7 @@ export const productSlice = createSlice({
       const productList = action.payload;
       state.productList = productList;
     },
-    addProduct: (state, action) => {
-      const newProduct = action.payload;
-      state.productList = [...state.productList, newProduct];
-    },
-    removeProduct: (state, action) => {
-      const productNo = action.payload;
-      const newList = state.productList.filter((c) => c.no !== productNo);
-      state.productList = [...newList];
-    },
   },
 });
 
-export const { initProducts, addProduct, removeProduct } = productSlice.actions;
+export const { initProducts } = productSlice.actions;
