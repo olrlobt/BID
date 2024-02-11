@@ -75,7 +75,7 @@ public class CoreBoardService {
 		}, instant);
 	}
 
-	@Scheduled(cron = "0 * * * * *")
+	@Scheduled(cron = "0 0 9 * * *")
 	@Transactional
 	public void addWeeklyCoupon(){
 		// 모든 학급의 쿠폰
