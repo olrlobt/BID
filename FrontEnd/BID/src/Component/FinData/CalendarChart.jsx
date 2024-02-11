@@ -1,19 +1,92 @@
 // CalendarChart.js
-// 참고 https://github.com/jquense/react-big-calendar/blob/master/stories/demos/exampleCode/customView.js
-import React from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import * as dates from 'date-arithmetic';
 import styled from './CalendarChart.module.css';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import {
+  Calendar,
+  Views,
+  onView,
+  Navigate,
+  momentLocalizer,
+} from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import Toolbar from './ToolBar';
 import CustomEvent from './CustomEvent';
 import monthDate from './monthDate';
 import monthHeader from './monthHeader';
+import SmallEvent from './SmallEvent';
 
 function CalendarChart() {
   moment.locale('ko-KR');
   const localizer = momentLocalizer(moment);
 
+  function MyDay({
+    date,
+    localizer,
+    onDayClick,
+    scrollToTime = localizer.startOf(new Date(), 'day'),
+    ...props
+  }) {
+    return (
+      <SmallEvent
+        date={date}
+        handleClick={() => onDayClick(Views.MONTH)}
+        localizer={localizer}
+        scrollToTime={scrollToTime}
+        {...props}
+      />
+    );
+  }
+
+  MyDay.propTypes = {
+    date: PropTypes.instanceOf(Date).isRequired,
+    localizer: PropTypes.object,
+  };
+
+  MyDay.range = (date, { localizer }) => {
+    const start = date;
+    const end = dates.add(start, 2, 'day');
+
+    let current = start;
+    const range = [];
+
+    while (localizer.lte(current, end, 'day')) {
+      range.push(current);
+      current = localizer.add(current, 1, 'day');
+    }
+
+    return range;
+  };
+
+  MyDay.navigate = (date, action, { localizer }) => {
+    switch (action) {
+      case Navigate.PREVIOUS:
+        return localizer.add(date, -3, 'day');
+
+      case Navigate.NEXT:
+        return localizer.add(date, 3, 'day');
+
+      default:
+        return date;
+    }
+  };
+
+  MyDay.title = (date) => {
+    return `My awesome week: ${date.toLocaleDateString()}`;
+  };
+  const { views } = useMemo(
+    () => ({
+      views: {
+        month: true,
+        day: MyDay,
+      },
+    }),
+    []
+  );
+  const [view, setView] = useState(Views.MONTH);
+  const onDayClick = useCallback((newView) => setView(newView), [setView]);
   const events = [
     {
       id: 0,
@@ -102,19 +175,8 @@ function CalendarChart() {
     return {
       style,
       content,
-      onClick: () => handleEventClick(event), // Set the selected event on click
     };
   };
-
-  const handleEventClick = (event) => {
-    // setSelectedEvent(event);
-    // setModalIsOpen(true);
-  };
-
-  // const handleCloseModal = () => {
-  //   setModalIsOpen(false);
-  // };
-
   return (
     <div className={styled.chartContainer}>
       <div className={styled.detailsContainer}>
@@ -122,17 +184,19 @@ function CalendarChart() {
           <Calendar
             localizer={localizer}
             events={events}
+            defaultDate={moment().toDate()}
             startAccessor="start"
             endAccessor="end"
-            defaultDate={moment().toDate()}
             style={{ height: 350 }}
+            views={views}
+            onView={onDayClick}
             components={{
               toolbar: Toolbar,
               event: CustomEvent,
-              month: {
-                header: monthHeader,
-                dateHeader: monthDate,
-              },
+              // month: {
+              //   header: monthHeader,
+              //   dateHeader: monthDate,
+              // },
             }}
             eventPropGetter={eventStyleGetter}
           />
