@@ -73,7 +73,7 @@ public class CoreBoardService {
 		Instant instant = dateTime.atZone(ZoneId.systemDefault()).toInstant();
 
 		taskScheduler.schedule(() -> {
-			coreBoardScheduleService.job(boardNo);
+			coreBoardScheduleService.bidProgress(boardNo);
 		}, instant);
 	}
 
