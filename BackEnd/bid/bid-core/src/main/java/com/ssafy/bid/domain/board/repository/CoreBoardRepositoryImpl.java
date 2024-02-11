@@ -30,7 +30,9 @@ public class CoreBoardRepositoryImpl implements CoreBoardCustomRepository {
 					board.resultPrice,
 					board.category,
 					board.goodsImgUrl,
+					student.no,
 					student.name,
+					student.profileImgUrl,
 					board.gradePeriodNo,
 					board.createdAt
 				))
