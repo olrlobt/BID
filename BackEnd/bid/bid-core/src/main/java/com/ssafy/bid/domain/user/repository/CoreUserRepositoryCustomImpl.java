@@ -207,7 +207,8 @@ public class CoreUserRepositoryCustomImpl implements CoreUserRepositoryCustom {
 							.from(account)
 							.where(
 								account.gradeNo.eq(grade.no),
-								account.accountType.eq(AccountType.INCOME)
+								account.accountType.eq(AccountType.INCOME),
+								account.createdAt.between(LocalDateTime.now().minusDays(7), LocalDateTime.now())
 							)
 						, "avgGradeIncome"
 					),
@@ -217,7 +218,8 @@ public class CoreUserRepositoryCustomImpl implements CoreUserRepositoryCustom {
 							.from(account)
 							.where(
 								account.userNo.eq(student.no),
-								account.accountType.eq(AccountType.INCOME)
+								account.accountType.eq(AccountType.INCOME),
+								account.createdAt.between(LocalDateTime.now().minusDays(7), LocalDateTime.now())
 							)
 						, "sumMyIncome"
 					)
