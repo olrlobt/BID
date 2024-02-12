@@ -41,7 +41,7 @@ public class CoreSavingServiceImpl implements CoreSavingService {
 			.forEach(savingExpireRequest -> {
 				userSavings.add(savingExpireRequest.getUserSavingNo());
 				savingExpireAlertRequests.add(createSavingTransferAlertRequest(savingExpireRequest));
-				savingExpireRequest.getStudent().addSavingPrice(savingExpireRequest.getCurrentPrice());
+				savingExpireRequest.getStudent().addPrice(savingExpireRequest.getCurrentPrice());
 			});
 
 		coreUserSavingRepository.deleteAllById(userSavings);
