@@ -39,7 +39,7 @@ public class BoardService {
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo ) {
+		if (gradeProjection.getUserNo() != userNo) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 		return boardRepository.findAllStudentBoards(gradeNo);
@@ -103,5 +103,21 @@ public class BoardService {
 			.content("경매가 " + content + " 되었어요")
 			.notificationType(NotificationType.ETC)
 			.build();
+	}
+
+	@Transactional
+	public void holdBid(int gradeNo) {
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
+
+		grade.holdBid();
+	}
+
+	@Transactional
+	public void unHoldBid(int gradeNo) {
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
+
+		grade.unHoldBid();
 	}
 }

@@ -17,6 +17,7 @@ import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.domain.grade.repository.StudentRepository;
 import com.ssafy.bid.domain.gradeperiod.GradePeriod;
 import com.ssafy.bid.domain.gradeperiod.repository.GradePeriodRepository;
+import com.ssafy.bid.domain.gradeperiod.service.GradePeriodScheduler;
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.UserType;
@@ -35,6 +36,7 @@ public class GradeServiceImpl implements GradeService {
 	private final StudentRepository studentRepository;
 	private final GradePeriodRepository gradePeriodRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final GradePeriodScheduler gradePeriodScheduler;
 
 	@Override
 	@Transactional
@@ -50,6 +52,7 @@ public class GradeServiceImpl implements GradeService {
 
 		GradePeriodRequest gradePeriodRequest = new GradePeriodRequest(grade.getNo());
 		List<GradePeriod> gradePeriods = gradePeriodRequest.toEntity();
+		gradePeriods.forEach(gradePeriodScheduler::scheduleClassLessonTask);
 		gradePeriodRepository.saveAll(gradePeriods);
 
 		Admin admin = gradeRepository.findAdminByUserNo(userNo)
@@ -119,21 +122,5 @@ public class GradeServiceImpl implements GradeService {
 			savingPeriodUpdateRequest.getTransferAlertPeriod(),
 			savingPeriodUpdateRequest.getTransferPeriod()
 		);
-	}
-
-	@Transactional
-	public void holdBid(int gradeNo) {
-		Grade grade = gradeRepository.findById(gradeNo)
-			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
-
-		grade.holdBid();
-	}
-
-	@Transactional
-	public void unHoldBid(int gradeNo) {
-		Grade grade = gradeRepository.findById(gradeNo)
-			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
-
-		grade.unHoldBid();
 	}
 }
