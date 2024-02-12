@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.board.Bidding;
 import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Reply;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
@@ -17,7 +18,9 @@ import com.ssafy.bid.domain.board.repository.BiddingRepository;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
 import com.ssafy.bid.domain.grade.Grade;
+import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.repository.GradeRepository;
+import com.ssafy.bid.domain.user.repository.StudentRepository;
 import com.ssafy.bid.global.error.exception.InvalidParameterException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
@@ -34,6 +37,7 @@ public class BoardService {
 	private final ReplyRepository replyRepository;
 	private final BiddingRepository biddingRepository;
 	private final GradeRepository gradeRepository;
+	private final StudentRepository studentRepository;
 
 	public List<BoardListResponse> findBoards(int gradeNo) {
 		//학생 gradeNO과 gradeNo이 맞는지 확인
@@ -66,6 +70,17 @@ public class BoardService {
 		if (!boardRepository.existsById(boardNo)) {
 			throw new ResourceNotFoundException("해당 게시물이 없습니다.", boardNo);
 		}
+
+		List<Bidding> allBidding = biddingRepository.findAllByBoardNo(boardNo);
+		if (!allBidding.isEmpty()) {
+			allBidding.forEach(bidding -> {
+				Student student = studentRepository.findById(bidding.getUserNo())
+					.orElseThrow(() -> new ResourceNotFoundException("해당 유저가 없습니다.", bidding.getUserNo()));
+
+				student.addPrice(bidding.getPrice());
+			});
+		}
+
 		boardRepository.deleteById(boardNo);
 	}
 
@@ -111,12 +126,26 @@ public class BoardService {
 			return HttpStatus.UNAUTHORIZED;
 		}
 
+		Student student = studentRepository.findById(userNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 학생이 없습니다.", userNo));
+		Board board = boardRepository.findById(boardNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 게시글이 없습니다.", boardNo));
+
 		return biddingRepository.findByUserNoAndBoardNo(userNo, boardNo).map(myBidding -> {
 				if (myBidding.getPrice() >= biddingCreateRequest.getPrice()) {
 					throw new InvalidParameterException("새로운 입찰가가 현재 입찰가보다 낮거나 같습니다.", myBidding.getPrice(),
 						biddingCreateRequest.getPrice());
 				}
+
+				int price = biddingCreateRequest.getPrice() - myBidding.getPrice();
+
+				if (student.getAsset() < price) {
+					throw new InvalidParameterException("현재 보유 자산으로는 입찰할 수 없습니다.", price);
+				}
+
 				myBidding.rebidding(biddingCreateRequest.getPrice());
+				board.addTotalPrice(price);
+				student.subtractPrice(price);
 				return HttpStatus.NO_CONTENT;
 			}
 		).orElseGet(() -> {
@@ -124,6 +153,13 @@ public class BoardService {
 			biddingCreateRequest.setUserNo(userNo);
 			biddingCreateRequest.setGradeNo(gradeNo);
 			biddingRepository.save(biddingCreateRequest.toEntity());
+
+			if (student.getAsset() < biddingCreateRequest.getPrice()) {
+				throw new InvalidParameterException("현재 보유 자산으로는 입찰할 수 없습니다.", biddingCreateRequest.getPrice());
+			}
+			student.subtractPrice(biddingCreateRequest.getPrice());
+			board.addTotalPrice(biddingCreateRequest.getPrice());
+			board.addAttendeeCount();
 			return HttpStatus.CREATED;
 		});
 	}
