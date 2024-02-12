@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +24,7 @@ import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
+import com.ssafy.bid.domain.user.service.CustomUserDetails;
 import com.ssafy.bid.domain.user.service.UserService;
 
 import jakarta.servlet.http.Cookie;
@@ -39,15 +41,15 @@ public class UserApi {
 
 	@PatchMapping("/users/attendance/check")
 	public ResponseEntity<?> checkAttendance(
-		// @AuthenticationPrincipal CustomUserDetails userDetails
+		@AuthenticationPrincipal CustomUserDetails userDetails
 	) {
-		// int userNo = userDetails.getUserInfo().getNo();
-		userService.checkAttendance(2);
+		int userNo = userDetails.getUserInfo().getNo();
+		userService.checkAttendance(userNo);
 		return ResponseEntity.status(OK).build();
 	}
 
 	@GetMapping("/users/{userNo}/attendance")
-	public ResponseEntity<AttendanceResponse> getStudentAttendance(@PathVariable Integer userNo) {
+	public ResponseEntity<AttendanceResponse> getStudentAttendance(@PathVariable int userNo) {
 		AttendanceResponse response = userService.getStudentAttendance(userNo);
 		return ResponseEntity.ok(response);
 	}
@@ -63,17 +65,17 @@ public class UserApi {
 
 	@GetMapping("/users/accounts")
 	public ResponseEntity<List<AccountFindResponse>> findAccount(
-		// @AuthenticationPrincipal CustomUserDetails userDetails,
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@ModelAttribute AccountFindRequest accountFindRequest
 	) {
-		// int userNo = userDetails.getUserInfo().getNo();
-		List<AccountFindResponse> responses = coreUserService.findAccount(2, accountFindRequest);
+		int userNo = userDetails.getUserInfo().getNo();
+		List<AccountFindResponse> responses = coreUserService.findAccount(userNo, accountFindRequest);
 		return ResponseEntity.status(OK).body(responses);
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
-		LoginResponse loginResponse = coreUserService.login(request);
+		LoginResponse loginResponse = coreUserService.login(request, false);
 		TokenResponse tokenResponse = loginResponse.getTokenResponse();
 		Cookie cookie = createCookie(tokenResponse.getRefreshToken());
 		response.addCookie(cookie);
@@ -91,11 +93,11 @@ public class UserApi {
 
 	@GetMapping("/signout")
 	public ResponseEntity<?> logout(
-		// @AuthenticationPrincipal CustomUserDetails userDetails,
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		HttpServletRequest request
 	) {
-		// int userNo = userDetails.getUserInfo().getNo();
-		coreUserService.logout(102, request);
+		int userNo = userDetails.getUserInfo().getNo();
+		coreUserService.logout(userNo, request);
 		return ResponseEntity.ok().build();
 	}
 }
