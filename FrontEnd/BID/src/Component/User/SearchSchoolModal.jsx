@@ -2,31 +2,43 @@ import React, { useState } from 'react';
 import Modal from '../Common/Modal';
 import SubmitButton from '../Common/SubmitButton';
 import styled from './SearchSchoolModal.module.css';
+import { searchSchoolApi } from '../../Apis/UserApis';
+import { useMutation } from "@tanstack/react-query";
 
 export default function SearchSchoolModal({ onClose, ...props }) {
+  console.log(props[1])
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Dummy data
-  const dummyData = [
-    { name: '해오름초등학교', region: '대구광역시' },
-    { name: '해오름초등학교', region: '경기도' },
-    { name: '해오름초등학교', region: '경상북도' },
-    { name: '해오름초등학교', region: '전라북도' },
-    { name: '신백현초등학교', region: '경기도' },
-  ];
+  
+  /** 학교 검색 */
+  const searchSchoolQuery = useMutation({
+    mutationKey: ["searchSchool"],
+    mutationFn: (searchQuery) => searchSchoolApi(searchQuery),
+    onSuccess: (res) => {
+      console.log("Data received:", res);
+      setSearchResults(res.data); // Extracting the array from the response object
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   // Function to handle the search action
   const handleSearch = () => {
-    const filteredData = dummyData.filter(school =>
-      school.name.includes(searchQuery)
-    );
-    setSearchResults(filteredData);
+    searchSchoolQuery.mutate(searchQuery);
   };
+
 
   // Function to handle input change
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  // Function to handle clicking on search result
+  const handleClickSearchResult = (schoolCode) => {
+    console.log("Selected school code:", schoolCode);
+    props[1](schoolCode)
+    onClose(schoolCode); // Close the modal
   };
 
   return (
@@ -49,9 +61,9 @@ export default function SearchSchoolModal({ onClose, ...props }) {
               <th>지역</th>
             </tr>
           </thead>
-          <tbody className={styled.tableBody}>
-            {(searchQuery.trim() === '' ? dummyData : searchResults).map((school, index) => (
-              <tr key={index}>
+          <tbody>
+            {searchResults.map((school, index) => (
+              <tr key={index} onClick={() => handleClickSearchResult(school.no)}> {/* Call handleClickSearchResult onClick */}
                 <td>{school.name}</td>
                 <td>{school.region}</td>
               </tr>
