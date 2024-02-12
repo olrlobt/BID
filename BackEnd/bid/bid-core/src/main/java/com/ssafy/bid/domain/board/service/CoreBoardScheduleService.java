@@ -65,6 +65,7 @@ public class CoreBoardScheduleService {
 					.category(Category.COUPON)
 					.goodsImgUrl("urltest")
 					.gradePeriodNo(6)
+					.subNo(coupon.getNo())
 					.build();
 
 				Board board = coreBoardService.addBoard(userNo, gradeNo, boardCreateRequest);

@@ -8,12 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.dto.GradeListGetResponse;
+import com.ssafy.bid.domain.grade.dto.GradePeriodRequest;
 import com.ssafy.bid.domain.grade.dto.GradeSaveRequest;
 import com.ssafy.bid.domain.grade.dto.GradeUpdateRequest;
 import com.ssafy.bid.domain.grade.dto.SalaryUpdateRequest;
 import com.ssafy.bid.domain.grade.dto.SavingPeriodUpdateRequest;
 import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.domain.grade.repository.StudentRepository;
+import com.ssafy.bid.domain.gradeperiod.GradePeriod;
+import com.ssafy.bid.domain.gradeperiod.repository.GradePeriodRepository;
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.UserType;
@@ -30,6 +33,7 @@ public class GradeServiceImpl implements GradeService {
 
 	private final GradeRepository gradeRepository;
 	private final StudentRepository studentRepository;
+	private final GradePeriodRepository gradePeriodRepository;
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
@@ -43,6 +47,10 @@ public class GradeServiceImpl implements GradeService {
 			.map(studentListSaveRequest -> studentListSaveRequest.toEntity(passwordEncoder, schoolNo, grade.getNo()))
 			.toList();
 		studentRepository.saveAll(students);
+
+		GradePeriodRequest gradePeriodRequest = new GradePeriodRequest(grade.getNo());
+		List<GradePeriod> gradePeriods = gradePeriodRequest.toEntity();
+		gradePeriodRepository.saveAll(gradePeriods);
 
 		Admin admin = gradeRepository.findAdminByUserNo(userNo)
 			.orElseThrow(() -> new ResourceNotFoundException("학급등록: Admin 엔티티가 없음.", userNo));

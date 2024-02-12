@@ -44,16 +44,16 @@ public class Student extends User {
 		this.asset += price - price / taxRate;
 	}
 
+	public void addPrice(int price) {
+		this.asset += price;
+	}
+
 	public void updateAvatar(String url) {
 		this.profileImgUrl = url;
 	}
 
-	public void subtractSavingPrice(int price) {
+	public void subtractPrice(int price) {
 		this.asset -= price;
-	}
-
-	public void addSavingPrice(int price) {
-		this.asset += price;
 	}
 
 	public void resetBalls() {
@@ -80,5 +80,9 @@ public class Student extends User {
 		super.updateInfo(newId, newName);
 		super.changePassword(passwordEncoder.encode(newBirthDate));
 		this.birthDate = newBirthDate;
+	}
+
+	public void addBall() {
+		this.ballCount += 1;
 	}
 }
