@@ -102,7 +102,7 @@ public class GradeStatisticsGetResponse {
 			.count(countOneDaysAgo).build());
 		this.biddingStatisticsFindResponses = template;
 		this.salaryRecommendation = salaryRecommendation;
-		this.isDangerInInflation = isDangerInInflation();
+		this.isDangerInInflation = isDangerInInflation;
 		this.isDangerInDeflation = isDangerInDeflation;
 	}
 
