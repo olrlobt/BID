@@ -5,6 +5,7 @@ import static com.ssafy.bid.domain.coupon.QUserCoupon.*;
 import static com.ssafy.bid.domain.grade.QGrade.*;
 import static com.ssafy.bid.domain.user.QAccount.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.board.BiddingStatus;
 import com.ssafy.bid.domain.coupon.UsageStatus;
 import com.ssafy.bid.domain.grade.dto.ExpenditureStatisticsGetResponse;
+import com.ssafy.bid.domain.grade.dto.GradeBiddingAvgPriceResponse;
 import com.ssafy.bid.domain.grade.dto.GradeStatisticsGetResponse;
 import com.ssafy.bid.domain.grade.dto.WinningBiddingStatisticsGetResponse;
 import com.ssafy.bid.domain.user.AccountType;
@@ -66,7 +68,10 @@ public class CoreGradeRepositoryCustomImpl implements CoreGradeRepositoryCustom 
 						grade.biddingStatistics.countFourDaysAgo,
 						grade.biddingStatistics.countThreeDaysAgo,
 						grade.biddingStatistics.countTwoDaysAgo,
-						grade.biddingStatistics.countOneDaysAgo
+						grade.biddingStatistics.countOneDaysAgo,
+						grade.salaryRecommendation,
+						grade.isDangerInInflation,
+						grade.isDangerInDeflation
 					)
 				)
 				.from(grade)
@@ -114,6 +119,40 @@ public class CoreGradeRepositoryCustomImpl implements CoreGradeRepositoryCustom 
 			.from(bidding)
 			.where(bidding.biddingStatus.eq(BiddingStatus.WINNING_BID))
 			.groupBy(bidding.gradeNo, formattedDate)
+			.fetch();
+	}
+
+	@Override
+	public List<GradeBiddingAvgPriceResponse> findAllGradeBiddingPrice() {
+		return queryFactory
+			.select(Projections.constructor(GradeBiddingAvgPriceResponse.class,
+					grade,
+					ExpressionUtils.as(
+						JPAExpressions
+							.select(bidding.price.avg())
+							.from(bidding)
+							.where(
+								bidding.biddingStatus.eq(BiddingStatus.WINNING_BID),
+								bidding.gradeNo.eq(grade.no),
+								bidding.createdAt.between(LocalDateTime.now().minusWeeks(4),
+									LocalDateTime.now().minusWeeks(2))
+							)
+						, "avgBeforeFourWeeks"
+					),
+					ExpressionUtils.as(
+						JPAExpressions
+							.select(bidding.price.avg())
+							.from(bidding)
+							.where(
+								bidding.biddingStatus.eq(BiddingStatus.WINNING_BID),
+								bidding.gradeNo.eq(grade.no),
+								bidding.createdAt.between(LocalDateTime.now().minusWeeks(2), LocalDateTime.now())
+							)
+						, "avgBeforeTwoWeeks"
+					)
+				)
+			)
+			.from(grade)
 			.fetch();
 	}
 }
