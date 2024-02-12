@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import com.ssafy.bid.domain.saving.dto.SavingSaveRequest;
 import com.ssafy.bid.domain.saving.dto.UserSavingListGetResponse;
 import com.ssafy.bid.domain.saving.service.SavingService;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
+import com.ssafy.bid.domain.user.service.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,31 +31,30 @@ public class SavingApi {
 
 	@GetMapping("/savings")
 	public ResponseEntity<List<UserSavingListGetResponse>> findSavings(
-		// @AuthenticationPrincipal CustomUserDetails userDetails
+		@AuthenticationPrincipal CustomUserDetails userDetails
 	) {
-		// int gradeNo = userDetails.getUserInfo().getGradeNo();
-		List<UserSavingListGetResponse> responses = savingService.getAllSavings(1, 2);
+		CustomUserInfo userInfo = userDetails.getUserInfo();
+		List<UserSavingListGetResponse> responses = savingService.getAllSavings(userInfo);
 		return ResponseEntity.status(OK).body(responses);
 	}
 
 	@PostMapping("/savings")
 	public ResponseEntity<?> saveSaving(
-		// @AuthenticationPrincipal CustomUserDetails userDetails,
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@RequestBody SavingSaveRequest savingSaveRequest
 	) {
-		// CustomUserInfo userInfo = userDetails.getUserInfo();
-		CustomUserInfo userInfo = new CustomUserInfo(2, "ABC", "ABC", "ABC", 1, 2, null, null);
+		CustomUserInfo userInfo = userDetails.getUserInfo();
 		savingService.saveSavings(userInfo, savingSaveRequest);
 		return ResponseEntity.status(CREATED).build();
 	}
 
 	@DeleteMapping("/savings/{savingNo}")
 	public ResponseEntity<?> deleteSaving(
-		// @AuthenticationPrincipal CustomUserDetails userDetails,
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable int savingNo
 	) {
-		// int userNo = userDetails.getUserInfo().getNo();
-		savingService.deleteSavings(2, savingNo);
+		CustomUserInfo userInfo = userDetails.getUserInfo();
+		savingService.deleteSavings(userInfo, savingNo);
 		return ResponseEntity.status(NO_CONTENT).build();
 	}
 }
