@@ -19,9 +19,10 @@ export const addUserApi = async (userData) => {
  * @param id 작성 아이디
  * @returns
  */
-export const duplicateIdApi = async (id) => {
-    return await UserApis.get(`/check-id`,id);
-  };
+export const duplicateIdApi = async (userData) => {
+  console.log(userData);
+  return await UserApis.get(`/check-id`, { params: { id: userData } });
+};
   
 
 /**
@@ -53,18 +54,18 @@ export const findIdApi = async (userData) => {
 
 export const sendCodeApi = async (userData) => {
   console.log(userData)
-  return await UserApis.post(`/password/code/send`, userData);
+  return await UserApis.post(`/password/send-code`, userData);
 };
 
 
 /**
-* 비밀번호 재설정 휴대폰 코드 인증
+* 휴대폰 코드 인증
 * @param userData 해당 id, 전화번호, verifyCode
 * @returns 해당 관리자 pk, isAuthenticated(true/false)
 */
 
 export const authenticateApi = async (userData) => {
-  return await UserApis.post(`/password/code/authenticate`, userData);
+  return await UserApis.post(`/check-code`, userData);
 };
 
 
@@ -74,7 +75,31 @@ export const authenticateApi = async (userData) => {
 * @returns 해당 관리자 pk, isAuthenticated(true/false)
 */
 
-export const changePwdApi = async (userNo, userData) => {
-  return await UserApis.patch(`/password/`+userNo, userData);
+export const changePwdApi = async (userData) => {
+  return await UserApis.patch(`/password`, userData);
 };
 
+
+
+
+/**
+* 학교 검색
+* @param schoolName 새 비밀번호, 새 비밀번호 확인
+* @returns 해당 관리자 pk, isAuthenticated(true/false)
+*/
+
+export const searchSchoolApi = async (schoolName) => {
+  return await UserApis.get(`/schools`,{ params: { name: schoolName } });
+};
+
+
+/**
+* 회원가입 전 휴대폰 코드 전송
+* @param tel 전화번호
+* @returns  
+*/
+
+export const registerCodeApi = async (tel) => {
+  console.log(tel)
+  return await UserApis.post(`/send-code`, tel);
+};
