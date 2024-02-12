@@ -22,4 +22,6 @@ public interface CoreUserService {
 	List<AccountFindResponse> findAccount(int userNo, AccountFindRequest accountFindRequest);
 
 	void resetAttendance();
+
+	void calculateIncomeLevel();
 }
