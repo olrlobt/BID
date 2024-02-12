@@ -8,7 +8,8 @@ public enum NotificationType {
 	BIDDING_UPLOADER("자기 등록 경매 낙찰"),
 	SAVING_TRANSFER("적금 이체"),
 	SAVING_LACK("적금 이체 금액 부족"),
-	SAVING_EXPIRE("적금 만기");
+	SAVING_EXPIRE("적금 만기"),
+	ETC("기타");
 
 	private final String notificationType;
 
