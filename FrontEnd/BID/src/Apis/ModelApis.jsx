@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const StudentPageApis = axios.create({
+export const ModelApis = axios.create({
   baseURL: process.env.REACT_APP_STU_API,
 });
 
@@ -10,7 +10,6 @@ export const StudentPageApis = axios.create({
  * @returns 선생님 이름, 학교 이름
  */
 export const studentLoginApi = async (studentData) => {
-    return await StudentPageApis.post(`/login`, studentData);
+    return await ModelApis.post(`/login`, studentData);
   };
-  
   
