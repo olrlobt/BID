@@ -175,5 +175,4 @@ public class BoardService {
 			return HttpStatus.CREATED;
 		});
 	}
-
 }
