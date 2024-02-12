@@ -6,5 +6,5 @@ public interface UserService {
 
 	void checkAttendance(int userNo);
 
-	AttendanceResponse getStudentAttendance(Integer userNo);
+	AttendanceResponse getStudentAttendance(int userNo);
 }
