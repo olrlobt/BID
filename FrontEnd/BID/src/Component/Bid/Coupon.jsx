@@ -5,11 +5,13 @@ import { SvgIcon } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import { deleteCouponApi } from "../../Apis/CouponApis";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useCoupons from "../../hooks/useCoupons";
 
 export default function Coupon(props){
-
 	const {no, name, description, startPrice} = props;
 	const queryClient = useQueryClient();
+
+	const { deleteCoupon } = useCoupons();
 
 	/** 쿠폰 삭제 쿼리 */
 	const deleteCouponQuery = useMutation({
@@ -20,9 +22,10 @@ export default function Coupon(props){
 	})
 
 	/** X 버튼 클릭 -> 쿠폰 삭제 함수 */
-	const deleteCoupon = (e) => {
+	const onClickDeleteCoupon = (e) => {
 		e.preventDefault();
 		deleteCouponQuery.mutate(no);
+		deleteCoupon({couponNo: no});
 	}
 
 	return(
@@ -30,7 +33,7 @@ export default function Coupon(props){
 			<div className = {styled.left}>
 				<button
 					className = {styled.removeButton}
-					onClick = {deleteCoupon}
+					onClick = {onClickDeleteCoupon}
 				>
 					<SvgIcon
 						component = {Close}
