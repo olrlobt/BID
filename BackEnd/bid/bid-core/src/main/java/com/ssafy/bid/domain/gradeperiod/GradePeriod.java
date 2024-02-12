@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,5 +46,18 @@ public class GradePeriod {
 	) {
 		this.startPeriod = startPeriod;
 		this.endPeriod = endPeriod;
+	}
+
+	@Builder
+	public GradePeriod(
+		Integer sequence,
+		LocalTime startPeriod,
+		LocalTime endPeriod,
+		Integer gradeNo
+	) {
+		this.sequence = sequence;
+		this.startPeriod = startPeriod;
+		this.endPeriod = endPeriod;
+		this.gradeNo = gradeNo;
 	}
 }

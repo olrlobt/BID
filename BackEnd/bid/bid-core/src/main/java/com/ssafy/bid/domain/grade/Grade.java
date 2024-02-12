@@ -104,6 +104,7 @@ public class Grade extends BaseEntity {
 
 	public boolean holdBidToggle() {
 		return this.hold = !hold;
+	}
 
 	public void updateSalaryRecommendation(int diff) {
 		int count = diff / 20;
