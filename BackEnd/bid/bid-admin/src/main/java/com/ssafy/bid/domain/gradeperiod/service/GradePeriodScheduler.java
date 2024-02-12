@@ -28,7 +28,8 @@ public class GradePeriodScheduler {
 		String cronExpressionOfStart = CronExpression.of(gradePeriod.getStartPeriod());
 		String cronExpressionOfEnd = CronExpression.of(gradePeriod.getEndPeriod());
 
-		Map<Integer, ScheduledFuture<?>> gradePeriodScheduled = gradeScheduledTasks.getOrDefault(gradePeriod.getGradeNo(),
+		Map<Integer, ScheduledFuture<?>> gradePeriodScheduled = gradeScheduledTasks.getOrDefault(
+			gradePeriod.getGradeNo(),
 			new ConcurrentHashMap<>());
 
 		cancelScheduledTask(gradePeriod.getGradeNo(), gradePeriod.getSequence() * 2 - 1);
@@ -43,7 +44,6 @@ public class GradePeriodScheduler {
 		}, new CronTrigger(cronExpressionOfEnd)));
 		gradeScheduledTasks.put(gradePeriod.getGradeNo(), gradePeriodScheduled);
 	}
-
 
 	private void cancelScheduledTask(int gradeNo, int sequence) {
 		Map<Integer, ScheduledFuture<?>> sequenceScheduledTasks = gradeScheduledTasks.get(gradeNo);
