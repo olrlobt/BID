@@ -28,20 +28,21 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void checkAttendance(int userNo) {
 		User user = userRepository.findById(userNo)
-			.orElseThrow(() -> new ResourceNotFoundException("출석을 등록한 User 엔티티가 없음.", userNo));
+			.orElseThrow(() -> new ResourceNotFoundException("출석체크: 출석을 등록한 Student 엔티티가 없음.", userNo));
 
 		if (user instanceof Student student) {
 			student.checkAttendance();
 			return;
 		}
 
-		throw new InvalidParameterException("출석등록 대상 회원타입이 아님.", userNo);
+		throw new InvalidParameterException("출석체크: 출석등록 대상 회원타입이 아님.", userNo);
 	}
 
 	@Override
-	public AttendanceResponse getStudentAttendance(Integer userNo) {
+	public AttendanceResponse getStudentAttendance(int userNo) {
 		Student student = studentRepository.findById(userNo)
-			.orElseThrow(() -> new IllegalArgumentException("학생 정보를 찾을 수 없습니다."));
+			.orElseThrow(() -> new ResourceNotFoundException("출석목록조회: Student 엔티티가 없음.", userNo));
+
 		Attendance attendance = student.getAttendance();
 		return new AttendanceResponse(
 			attendance.isMonday(),

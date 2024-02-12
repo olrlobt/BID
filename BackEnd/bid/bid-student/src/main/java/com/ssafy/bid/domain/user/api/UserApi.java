@@ -41,15 +41,15 @@ public class UserApi {
 
 	@PatchMapping("/users/attendance/check")
 	public ResponseEntity<?> checkAttendance(
-		// @AuthenticationPrincipal CustomUserDetails userDetails
+		@AuthenticationPrincipal CustomUserDetails userDetails
 	) {
-		// int userNo = userDetails.getUserInfo().getNo();
-		userService.checkAttendance(2);
+		int userNo = userDetails.getUserInfo().getNo();
+		userService.checkAttendance(userNo);
 		return ResponseEntity.status(OK).build();
 	}
 
 	@GetMapping("/users/{userNo}/attendance")
-	public ResponseEntity<AttendanceResponse> getStudentAttendance(@PathVariable Integer userNo) {
+	public ResponseEntity<AttendanceResponse> getStudentAttendance(@PathVariable int userNo) {
 		AttendanceResponse response = userService.getStudentAttendance(userNo);
 		return ResponseEntity.ok(response);
 	}
@@ -65,11 +65,11 @@ public class UserApi {
 
 	@GetMapping("/users/accounts")
 	public ResponseEntity<List<AccountFindResponse>> findAccount(
-		// @AuthenticationPrincipal CustomUserDetails userDetails,
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@ModelAttribute AccountFindRequest accountFindRequest
 	) {
-		// int userNo = userDetails.getUserInfo().getNo();
-		List<AccountFindResponse> responses = coreUserService.findAccount(2, accountFindRequest);
+		int userNo = userDetails.getUserInfo().getNo();
+		List<AccountFindResponse> responses = coreUserService.findAccount(userNo, accountFindRequest);
 		return ResponseEntity.status(OK).body(responses);
 	}
 
