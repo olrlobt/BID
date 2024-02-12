@@ -22,4 +22,10 @@ public interface GradeService {
 	void updateSalary(UserType userType, int gradeNo, SalaryUpdateRequest salaryUpdateRequest);
 
 	void updateSavingPeriod(UserType userType, int gradeNo, SavingPeriodUpdateRequest savingPeriodUpdateRequest);
+
+	void updateSavingPeriod(int gradeNo, SavingPeriodUpdateRequest savingPeriodUpdateRequest);
+
+	void holdBid(int gradeNo);
+
+	void unHoldBid(int gradeNo);
 }

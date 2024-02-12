@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,5 +53,11 @@ public class BoardApi {
 		int userNo = 21; // security
 		boardService.deleteReply(replyNo, gradeNo, userNo);
 		return ResponseEntity.noContent().build();
+	}
+
+	@PatchMapping("/{gradeNo}/boards/hold")
+	public ResponseEntity<?> holdBoards(@PathVariable int gradeNo) {
+		boolean isHold = boardService.holdBoards(gradeNo);
+		return ResponseEntity.ok(isHold);
 	}
 }
