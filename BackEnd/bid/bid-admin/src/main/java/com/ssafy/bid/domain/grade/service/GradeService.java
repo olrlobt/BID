@@ -20,4 +20,9 @@ public interface GradeService {
 	void updateSalary(int gradeNo, SalaryUpdateRequest salaryUpdateRequest);
 
 	void updateSavingPeriod(int gradeNo, SavingPeriodUpdateRequest savingPeriodUpdateRequest);
+
+	void holdBid(int gradeNo);
+
+	void unHoldBid(int gradeNo);
+
 }
