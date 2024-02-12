@@ -40,22 +40,31 @@
 
 .contentInput input:focus {
     outline: none; /* 클릭할 때 검정색 테두리 제거 */
-    border: 1px solid #A6A6A6; /* 클릭 시 보여질 테두리 스타일 */
+    border: 1px solid #ECECEC; /* 클릭 시 보여질 테두리 스타일 */
 }
 
 .contentInput input {
     height: 40px;
     width: 250px;
     justify-content: center;
-    font-size: 1rem;
-    padding: 0 1rem;
+    font-size: 0.75rem;
+    padding: 0 2.4rem;
     border-radius: .3rem;
-    border: 1px solid #A6A6A6;
+    border: 1px solid #ECECEC;
     box-sizing: border-box;
 }
 
 
+.inputWithIcon {
+  display: flex;
+  align-items: center;
+}
 
+.icon {
+    position: absolute;
+    left:10px;
+    
+}
 
 
 .findIdLink {
