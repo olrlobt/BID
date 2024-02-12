@@ -20,6 +20,7 @@ import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.domain.notification.NotificationType;
 import com.ssafy.bid.domain.notification.dto.NotificationRequest;
 import com.ssafy.bid.domain.notification.service.NotificationService;
+import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
@@ -61,11 +62,11 @@ public class CouponService {
 		return userCouponRepository.findUserCoupons(gradeNo);
 	}
 
-	public void addCoupon(int gradeNo, CouponCreateRequest couponCreateRequest, int userNo) {
+	public void addCoupon(int gradeNo, CouponCreateRequest couponCreateRequest, int userNo, UserType userType) {
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 
@@ -73,11 +74,11 @@ public class CouponService {
 		couponRepository.save(couponCreateRequest.toEntity());
 	}
 
-	public void deleteCoupon(int couponNo, int gradeNo, int userNo) {
+	public void deleteCoupon(int couponNo, int gradeNo, int userNo, UserType userType) {
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		} else if (!couponRepository.existsById(couponNo)) {
 			throw new ResourceNotFoundException("쿠폰이 없습니다.", couponNo);
@@ -85,11 +86,11 @@ public class CouponService {
 		couponRepository.deleteById(couponNo);
 	}
 
-	public void acceptUserCoupon(long userCouponNo, int gradeNo, int userNo) {
+	public void acceptUserCoupon(long userCouponNo, int gradeNo, int userNo, UserType userType) {
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 
@@ -107,11 +108,11 @@ public class CouponService {
 		userCouponRepository.deleteByNoAndUseStatus(userCouponNo, UsageStatus.REQUEST_PROGRESS);
 	}
 
-	public void rejectUserCoupon(long userCouponNo, int gradeNo, int userNo) {
+	public void rejectUserCoupon(long userCouponNo, int gradeNo, int userNo, UserType userType) {
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 
@@ -129,11 +130,11 @@ public class CouponService {
 		userCoupon.reject();
 	}
 
-	public void registerCoupon(int couponNo, int gradeNo, int userNo) {
+	public void registerCoupon(int couponNo, int gradeNo, int userNo, UserType userType) {
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 
@@ -144,11 +145,11 @@ public class CouponService {
 		coupon.register();
 	}
 
-	public void unRegisterCoupon(int couponNo, int gradeNo, int userNo) {
+	public void unRegisterCoupon(int couponNo, int gradeNo, int userNo, UserType userType) {
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 

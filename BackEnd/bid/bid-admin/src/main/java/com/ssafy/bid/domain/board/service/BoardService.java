@@ -15,6 +15,7 @@ import com.ssafy.bid.domain.grade.repository.StudentRepository;
 import com.ssafy.bid.domain.notification.NotificationType;
 import com.ssafy.bid.domain.notification.dto.NotificationRequest;
 import com.ssafy.bid.domain.notification.service.NotificationService;
+import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
@@ -38,19 +39,19 @@ public class BoardService {
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo ) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 		return boardRepository.findAllStudentBoards(gradeNo);
 	}
 
 	@Transactional
-	public void deleteBoard(long boardNo, int gradeNo, int userNo) {
+	public void deleteBoard(long boardNo, int gradeNo, int userNo, UserType userType) {
 
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		} else if (!boardRepository.existsById(boardNo)) {
 			throw new ResourceNotFoundException("해당 게시글이 없습니다.", boardNo);
@@ -59,12 +60,12 @@ public class BoardService {
 	}
 
 	@Transactional
-	public void deleteReply(long replyNo, int gradeNo, int userNo) {
+	public void deleteReply(long replyNo, int gradeNo, int userNo, UserType userType) {
 
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		} else if (!replyRepository.existsById(replyNo)) {
 			throw new ResourceNotFoundException("해당 댓글이 없습니다.", replyNo);
@@ -73,12 +74,12 @@ public class BoardService {
 	}
 
 	@Transactional
-	public boolean holdBoards(int gradeNo, int userNo) {
+	public boolean holdBoards(int gradeNo, int userNo, UserType userType) {
 
 		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 
