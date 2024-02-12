@@ -11,6 +11,8 @@ import { savingSlice } from './savingSlice';
 import { modelSlice } from './modelSlice';
 import { stopTimeSlice } from './stopTimeSlice';
 import { requestCouponSlice } from './requestCouponSlice';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -27,8 +29,17 @@ const rootReducer = combineReducers({
   requestCoupon: requestCouponSlice.reducer,
 });
 
+const persistConfig = {
+  key: 'test',
+  storage: storage
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
 });
 
-export default store;
+const persistor = persistStore(store);
+
+export { store, persistor };
