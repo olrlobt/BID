@@ -15,6 +15,7 @@ import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.service.BoardService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
+import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.service.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
@@ -49,8 +50,8 @@ public class BoardApi {
 	public ResponseEntity<?> deleteBoard(@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable int gradeNo, @PathVariable long boardNo) {
 		int userNo = userDetails.getUserInfo().getNo();
-
-		boardService.deleteBoard(boardNo, gradeNo, userNo);
+		UserType userType = userDetails.getUserInfo().getUserType();
+		boardService.deleteBoard(boardNo, gradeNo, userNo, userType);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -60,7 +61,8 @@ public class BoardApi {
 		@PathVariable long boardNo,
 		@PathVariable long replyNo) {
 		int userNo = userDetails.getUserInfo().getNo();
-		boardService.deleteReply(replyNo, gradeNo, userNo);
+		UserType userType = userDetails.getUserInfo().getUserType();
+		boardService.deleteReply(replyNo, gradeNo, userNo, userType);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -68,7 +70,8 @@ public class BoardApi {
 	public ResponseEntity<?> holdBoards(@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable int gradeNo) {
 		int userNo = userDetails.getUserInfo().getNo();
-		boolean isHold = boardService.holdBoards(gradeNo, userNo);
+		UserType userType = userDetails.getUserInfo().getUserType();
+		boolean isHold = boardService.holdBoards(gradeNo, userNo, userType);
 		return ResponseEntity.ok(isHold);
 	}
 }

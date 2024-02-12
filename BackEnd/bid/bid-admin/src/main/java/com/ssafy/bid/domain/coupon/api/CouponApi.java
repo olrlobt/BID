@@ -18,6 +18,7 @@ import com.ssafy.bid.domain.coupon.dto.CouponCreateRequest;
 import com.ssafy.bid.domain.coupon.dto.CouponListResponse;
 import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 import com.ssafy.bid.domain.coupon.service.CouponService;
+import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.service.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,8 @@ public class CouponApi {
 		@PathVariable int gradeNo,
 		@RequestBody CouponCreateRequest couponCreateRequest) {
 		int userNo = userDetails.getUserInfo().getNo();
-		couponService.addCoupon(gradeNo, couponCreateRequest, userNo);
+		UserType userType = userDetails.getUserInfo().getUserType();
+		couponService.addCoupon(gradeNo, couponCreateRequest, userNo, userType);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
@@ -52,7 +54,8 @@ public class CouponApi {
 		@PathVariable int gradeNo,
 		@PathVariable int couponNo) {
 		int userNo = userDetails.getUserInfo().getNo();
-		couponService.deleteCoupon(couponNo, gradeNo, userNo);
+		UserType userType = userDetails.getUserInfo().getUserType();
+		couponService.deleteCoupon(couponNo, gradeNo, userNo, userType);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -67,7 +70,8 @@ public class CouponApi {
 	public ResponseEntity<?> acceptUserCoupon(@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable int gradeNo, @PathVariable int userCouponNo) {
 		int userNo = userDetails.getUserInfo().getNo();
-		couponService.acceptUserCoupon(userCouponNo, gradeNo, userNo);
+		UserType userType = userDetails.getUserInfo().getUserType();
+		couponService.acceptUserCoupon(userCouponNo, gradeNo, userNo, userType);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -75,7 +79,8 @@ public class CouponApi {
 	public ResponseEntity<?> rejectUserCoupon(@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable int gradeNo, @PathVariable int userCouponNo) {
 		int userNo = userDetails.getUserInfo().getNo();
-		couponService.rejectUserCoupon(userCouponNo, gradeNo, userNo);
+		UserType userType = userDetails.getUserInfo().getUserType();
+		couponService.rejectUserCoupon(userCouponNo, gradeNo, userNo, userType);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -83,7 +88,8 @@ public class CouponApi {
 	public ResponseEntity<?> registerCoupon(@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable int gradeNo, @PathVariable int couponNo) {
 		int userNo = userDetails.getUserInfo().getNo();
-		couponService.registerCoupon(couponNo, gradeNo, userNo);
+		UserType userType = userDetails.getUserInfo().getUserType();
+		couponService.registerCoupon(couponNo, gradeNo, userNo, userType);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -91,7 +97,8 @@ public class CouponApi {
 	public ResponseEntity<?> unRegisterCoupon(@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable int gradeNo, @PathVariable int couponNo) {
 		int userNo = userDetails.getUserInfo().getNo();
-		couponService.unRegisterCoupon(couponNo, gradeNo, userNo);
+		UserType userType = userDetails.getUserInfo().getUserType();
+		couponService.unRegisterCoupon(couponNo, gradeNo, userNo, userType);
 		return ResponseEntity.noContent().build();
 	}
 }
