@@ -10,31 +10,43 @@ import com.ssafy.bid.domain.saving.dto.SavingListGetResponse;
 import com.ssafy.bid.domain.saving.dto.SavingListUpdateRequest;
 import com.ssafy.bid.domain.saving.dto.SavingUpdateRequest;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
+import com.ssafy.bid.domain.user.UserType;
+import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class SavingServiceImpl implements SavingService {
 
 	private final SavingRepository savingRepository;
 
 	@Override
-	public List<SavingListGetResponse> getAllSaving(int gradeNo) {
+	public List<SavingListGetResponse> getAllSaving(UserType userType, int gradeNo) {
+		if (!userType.equals(UserType.ADMIN)) {
+			throw new AuthorizationFailedException("적금목록조회: Admin 권한 사용자가 아님.");
+		}
+
 		List<SavingListGetResponse> responses = savingRepository.findAllSavingsByGradeNo(gradeNo);
 		if (responses.isEmpty()) {
-			throw new ResourceNotFoundException("적금목록을 조회하려는 Grade 가 없음.", gradeNo);
+			throw new ResourceNotFoundException("적금목록조회: 적금목록을 조회하려는 Grade 가 없음.", gradeNo);
 		}
+
 		return responses;
 	}
 
 	@Override
-	public void updateSaving(int gradeNo, SavingListUpdateRequest savingListUpdateRequest) {
+	@Transactional
+	public void updateSaving(UserType userType, int gradeNo, SavingListUpdateRequest savingListUpdateRequest) {
+		if (!userType.equals(UserType.ADMIN)) {
+			throw new AuthorizationFailedException("적금수정: Admin 권한 사용자가 아님.");
+		}
+
 		List<Saving> savings = savingRepository.findAllByGradeNo(gradeNo);
 		if (savings.isEmpty()) {
-			throw new ResourceNotFoundException("수정하려는 Saving 엔티티 없음.", gradeNo);
+			throw new ResourceNotFoundException("적금수정: 수정하려는 Saving 엔티티 없음.", gradeNo);
 		}
 
 		List<SavingUpdateRequest> savingUpdateRequests = savingListUpdateRequest.getSavingUpdateRequests();
