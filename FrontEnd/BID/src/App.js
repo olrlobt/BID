@@ -32,7 +32,7 @@ function App() {
         <Route path="/" element={<MainPage />}>
           <Route path="/" element={<Home />} />
           <Route path="/class" element={<ClassPage />} />
-          <Route path="/bid" element={<BidPage />} />
+          <Route path="/bid" element={<BidPage userType='TCH'/>} />
           <Route path="/reward" element={<RewardPage />} />
           <Route path="/bank" element={<BankPage />} />
           <Route path="/game" element={<GamePage />} />
@@ -52,6 +52,7 @@ function App() {
         <Route path="/game/seat" element={<SeatGame />} />
         <Route path="/studentmain/" element={<StudentMain />} />
         <Route path="/studentmain/:studentId/" element={<MyPage />} />
+        <Route path="/auctionHouse" element={<BidPage userType='STU'/>} />
       </Routes>
     </QueryClientProvider>
   );

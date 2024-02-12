@@ -14,11 +14,11 @@ import { couponSelector } from "../../Store/couponSlice";
 import { productSelector } from "../../Store/productSlice";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getProductListApi } from "../../Apis/StudentBidApis";
 import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
-import { getProductListApi } from "../../Apis/TeacherBidApis";
+// import { getProductListApi } from "../../Apis/TeacherBidApis";
 
-export default function BidPage(){
-
+export default function BidPage({ userType }){
   // const dummyProducts = [
   //   {
   //     no: 1,
@@ -237,7 +237,7 @@ export default function BidPage(){
   useQuery({
     queryKey: ['productList'],
     queryFn: () => 
-      getProductListApi(1).then((res) => {
+      getProductListApi().then((res) => {
         if(res.data !== undefined){
           initProducts({ productList: res.data });
         }
@@ -273,36 +273,40 @@ export default function BidPage(){
   
   return (
     <>
-    <div className = {styled.bidSection}>
-      <div className = {styled.bidHeader}>
-        <div className={styled.headerTeacher}>
-          <div>
-            <WriterButton
-              onClick = {() => changeWriter('teacher')}
-              text = {'선생님'}
-              active = { isTeacher }
+    <div className={styled.bidSection} style={userType==='STU'?{ width: '100%' } : {}}>
+      <div className={styled.bidHeader}>
+        {
+          userType==='TCH'?
+          <>
+            <div>
+              <WriterButton
+                onClick = {() => changeWriter('teacher')}
+                text = {'선생님'}
+                active = { isTeacher }
+              />
+              <WriterButton
+                onClick = {() => changeWriter('student')}
+                text = {'학생'}
+                active = { !isTeacher }
+              />
+            </div>
+          </>
+          :
+          <>
+            <SettingButton
+              onClick = {() =>
+                openModal({
+                  type: 'makeNewPost',
+                  props: ['경매 올리기', queryClient] })
+                }
+              svg = {AddIcon}
+              text = '경매 올리기' 
+              height = '3vw'
+              backgroundColor = '#5FA1C4'
             />
-            <WriterButton
-              onClick = {() => changeWriter('student')}
-              text = {'학생'}
-              active = { !isTeacher }
-            />
-          </div>
-        </div>
+          </>
+        }
         
-        {/* <div className={styled.headerStudent}>
-          <SettingButton
-            onClick = {() =>
-              openModal({
-                type: 'makeNewPost',
-                props: ['경매 올리기', queryClient] })
-              }
-            svg = {AddIcon}
-            text = '경매 올리기' 
-            height = '3vw'
-            backgroundColor = '#5FA1C4'
-          />
-        </div> */}
         <div>
         {
           isTeacher ?
@@ -358,7 +362,7 @@ export default function BidPage(){
         </div>
       </div>
 
-      <div>
+      <div className={styled.bidBody}>
         {
           isTeacher?
           (<div className = {styled.couponListWrapper}>
