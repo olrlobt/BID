@@ -64,7 +64,7 @@ public class RewardServiceImpl implements RewardService {
 				Reward reward = rewardRepository.findById(rewardSendRequest.getNo())
 					.orElseThrow(
 						() -> new ResourceNotFoundException("전송하려는 Reward 엔티티 없음.", rewardSendRequest.getNo()));
-				student.addPrice(reward.getPrice());
+				student.addRewardPrice(reward.getPrice());
 				NotificationRequest notificationRequest = createNotificationRequest(student, reward, rewardSendRequest);
 				notificationService.send(notificationRequest);
 			}
