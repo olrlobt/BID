@@ -33,6 +33,7 @@ public class BoardService {
 	private final GradeRepository gradeRepository;
 	private final NotificationService notificationService;
 	private final StudentRepository studentRepository;
+	private final CoreBoardScheduleService coreBoardScheduleService;
 
 	public List<BoardListResponse> findAllStudentBoards(int gradeNo, int userNo) {
 
@@ -56,6 +57,7 @@ public class BoardService {
 		} else if (!boardRepository.existsById(boardNo)) {
 			throw new ResourceNotFoundException("해당 게시글이 없습니다.", boardNo);
 		}
+		coreBoardScheduleService.cancelScheduledTask(boardNo);
 		boardRepository.deleteById(boardNo);
 	}
 
