@@ -90,4 +90,20 @@ public class GradeServiceImpl implements GradeService {
 			savingPeriodUpdateRequest.getTransferPeriod()
 		);
 	}
+
+	@Transactional
+	public void holdBid(int gradeNo){
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
+
+		grade.holdBid();
+	}
+
+	@Transactional
+	public void unHoldBid(int gradeNo){
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
+
+		grade.unHoldBid();
+	}
 }

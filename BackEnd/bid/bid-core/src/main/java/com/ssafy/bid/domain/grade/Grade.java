@@ -16,7 +16,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
@@ -78,10 +80,12 @@ public class Grade extends BaseEntity {
 	}
 
 	public void holdBid() {
+		log.info("hold");
 		this.hold = true;
 	}
 
 	public void unHoldBid() {
+		log.info("unhold");
 		this.hold = false;
 	}
 
