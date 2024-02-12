@@ -18,7 +18,7 @@ import { /*getCouponListApi,*/ registerCouponApi, unregisterCouponApi } from "..
 import { getProductListApi } from "../../Apis/TeacherBidApis";
 
 export default function BidPage(){
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const reduxCoupons = useSelector(couponSelector);
   const reduxProducts = useSelector(productSelector);
 
@@ -69,16 +69,16 @@ export default function BidPage(){
   const registerCouponQuery = useMutation({
     mutationKey: ['includeCoupon'],
     mutationFn: (couponNo) => registerCouponApi(1, couponNo),
-    onSuccess: () => { queryClient.invalidateQueries('couponList'); },
-    onError: (error) => { console.log(error); }
+    onSuccess: (data, variables) => { registCoupon({couponNo: variables}); },
+    onError: (error, variables) => { console.log(variables, error); }
   });
 
   /** 쿠폰 경매 제외 쿼리 */
   const unregisterCouponQuery = useMutation({
     mutationKey: ['excludeCoupon'],
     mutationFn: (couponNo) => unregisterCouponApi(1, couponNo),
-    onSuccess: () => { queryClient.invalidateQueries('couponList'); },
-    onError: (error) => { console.log(error); }
+    onSuccess: (data, variables) => { unregistCoupon({couponNo: variables}); },
+    onError: (error, variables) => { console.log(variables, error); }
   }); 
 
   /** 쿠폰을 드래그 해서 옮길 때 실행되는 함수 */
@@ -86,11 +86,9 @@ export default function BidPage(){
     if(!destination || source.droppableId===destination.droppableId){ return; }
     if(JSON.parse(destination.droppableId)){
       registerCouponQuery.mutate(source.index);
-      registCoupon({couponNo: source.index});
     }
     else{
       unregisterCouponQuery.mutate(source.index);
-      unregistCoupon({couponNo: source.index});
     }
   }
 
@@ -101,16 +99,16 @@ export default function BidPage(){
   }, [reduxProducts]);
 
   /** 경매 목록 쿼리 */
-  useQuery({
-    queryKey: ['productList'],
-    queryFn: () => 
-      getProductListApi(1).then((res) => {
-        if(res.data !== undefined){
-          initProducts({ productList: res.data });
-        }
-        return res.data;
-      }),
-  });
+  // useQuery({
+  //   queryKey: ['productList'],
+  //   queryFn: () => 
+  //     getProductListApi(1).then((res) => {
+  //       if(res.data !== undefined){
+  //         initProducts({ productList: res.data });
+  //       }
+  //       return res.data;
+  //     }),
+  // });
   
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
@@ -162,7 +160,7 @@ export default function BidPage(){
             onClick = {() =>
               openModal({
                 type: 'newCoupon',
-                props: ['새 쿠폰 등록', queryClient] })
+                props: ['새 쿠폰 등록'] })
               }
             svg = {AddIcon}
             text = '새 쿠폰 등록' 
@@ -242,7 +240,7 @@ export default function BidPage(){
                   onClick = {() => {
                     openModal({
                       type: 'manageProduct',
-                      props: [product.no, queryClient] })
+                      props: [product.no] })
                   }}
                   key = {product.no}
                   title = {product.title}

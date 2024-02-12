@@ -4,12 +4,11 @@ import Price from "../Common/Price";
 import { SvgIcon } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import { deleteCouponApi } from "../../Apis/CouponApis";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import useCoupons from "../../hooks/useCoupons";
 
 export default function Coupon(props){
 	const {no, name, description, startPrice} = props;
-	const queryClient = useQueryClient();
 
 	const { deleteCoupon } = useCoupons();
 
@@ -17,7 +16,7 @@ export default function Coupon(props){
 	const deleteCouponQuery = useMutation({
 		mutationKey: ['deleteCoupon'],
 		mutationFn: (no) => deleteCouponApi(1, no),
-		onSuccess: () => { queryClient.invalidateQueries('couponList') },
+		onSuccess: () => { deleteCoupon({couponNo: no}); },
 		onError: (error) => { console.log(error) }
 	})
 
@@ -25,7 +24,6 @@ export default function Coupon(props){
 	const onClickDeleteCoupon = (e) => {
 		e.preventDefault();
 		deleteCouponQuery.mutate(no);
-		deleteCoupon({couponNo: no});
 	}
 
 	return(
