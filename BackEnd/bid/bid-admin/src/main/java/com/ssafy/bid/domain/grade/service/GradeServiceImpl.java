@@ -92,7 +92,7 @@ public class GradeServiceImpl implements GradeService {
 	}
 
 	@Transactional
-	public void holdBid(int gradeNo){
+	public void holdBid(int gradeNo) {
 		Grade grade = gradeRepository.findById(gradeNo)
 			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
 
@@ -100,7 +100,7 @@ public class GradeServiceImpl implements GradeService {
 	}
 
 	@Transactional
-	public void unHoldBid(int gradeNo){
+	public void unHoldBid(int gradeNo) {
 		Grade grade = gradeRepository.findById(gradeNo)
 			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
 

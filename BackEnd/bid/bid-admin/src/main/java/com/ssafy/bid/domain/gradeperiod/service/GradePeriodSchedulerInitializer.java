@@ -20,5 +20,6 @@ public class GradePeriodSchedulerInitializer implements ApplicationListener<Appl
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 		gradePeriodRepository.findAll().forEach(gradePeriodScheduler::scheduleClassLessonTask);
+		log.info("=========== GradePeriodSchedulerInitializer =============");
 	}
 }

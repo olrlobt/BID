@@ -39,9 +39,9 @@ public class CoreBoardService {
 	}
 
 	@Transactional
-	public long addBoard(int userNo, int gradeNo, BoardCreateRequest boardCreateRequest) {
+	public Board addBoard(int userNo, int gradeNo, BoardCreateRequest boardCreateRequest) {
 		Board board = boardCreateRequest.toEntity(userNo, gradeNo);
-		return coreBoardRepository.save(board).getNo();
+		return coreBoardRepository.save(board);
 	}
 
 	@Transactional
@@ -52,7 +52,6 @@ public class CoreBoardService {
 		board.complete();
 
 		// 낙찰자가 없을 경우 선행 처리
-
 
 		// 쿠폰
 

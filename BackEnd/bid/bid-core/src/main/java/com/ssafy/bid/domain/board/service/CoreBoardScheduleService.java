@@ -6,25 +6,24 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Category;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
-import com.ssafy.bid.domain.board.repository.CoreBiddingRepository;
-import com.ssafy.bid.domain.board.repository.CoreBoardRepository;
 import com.ssafy.bid.domain.coupon.Coupon;
 import com.ssafy.bid.domain.coupon.CouponStatus;
 import com.ssafy.bid.domain.coupon.repository.CoreCouponRepository;
 import com.ssafy.bid.domain.grade.dto.GradeProjection;
 import com.ssafy.bid.domain.grade.repository.CoreGradeRepository;
 import com.ssafy.bid.domain.gradeperiod.service.CoreGradePeriodService;
-import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +40,7 @@ public class CoreBoardScheduleService {
 	private final CoreGradePeriodService coreGradePeriodService;
 
 	private final CoreBoardService coreBoardService;
-
+	private final Map<Long, ScheduledFuture<?>> boardScheduledTasks = new ConcurrentHashMap<>();
 
 	@Scheduled(cron = "0 9 * * * *")
 	public void addWeeklyCoupon() {
@@ -56,8 +55,6 @@ public class CoreBoardScheduleService {
 			List<Coupon> allCoupons = coreCouponRepository.findAllByGradeNoAndCouponStatus(gradeNo,
 				CouponStatus.REGISTERED);
 
-			LocalTime startTime = coreGradePeriodService.findStartTime(gradeNo, 6);
-
 			if (!allCoupons.isEmpty()) {
 				Coupon coupon = allCoupons.get(ThreadLocalRandom.current().nextInt(allCoupons.size()));
 
@@ -70,23 +67,31 @@ public class CoreBoardScheduleService {
 					.gradePeriodNo(6)
 					.build();
 
-				long boardNo = coreBoardService.addBoard(userNo, gradeNo, boardCreateRequest);
-				registerBoardTask(startTime, boardNo);
+				Board board = coreBoardService.addBoard(userNo, gradeNo, boardCreateRequest);
+				registerBoardTask(board);
 
 			}
 			// 대포 등록
 			BoardCreateRequest cannonDto = BoardCreateRequest.createCannon();
-			long cannonNo = coreBoardService.addBoard(userNo, gradeNo, cannonDto);
-			registerBoardTask(startTime, cannonNo);
+			Board board = coreBoardService.addBoard(userNo, gradeNo, cannonDto);
+			registerBoardTask(board);
 		}
 	}
 
-	public void registerBoardTask(LocalTime time, long boardNo) {
-		LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), time);
+	public void registerBoardTask(Board board) {
+		LocalTime startTime = coreGradePeriodService.findStartTime(board.getGradeNo(), board.getGradePeriodNo());
+		LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), startTime);
 		Instant instant = dateTime.atZone(ZoneId.systemDefault()).toInstant();
 
-		taskScheduler.schedule(() -> {
-			coreBoardService.bidProgress(boardNo);
-		}, instant);
+		boardScheduledTasks.put(board.getNo(), taskScheduler.schedule(() -> {
+			coreBoardService.bidProgress(board.getNo());
+		}, instant));
+	}
+
+	private void cancelScheduledTask(Board board) {
+		ScheduledFuture<?> scheduledFuture = boardScheduledTasks.get(board.getNo());
+		if (scheduledFuture != null) {
+			scheduledFuture.cancel(false);
+		}
 	}
 }

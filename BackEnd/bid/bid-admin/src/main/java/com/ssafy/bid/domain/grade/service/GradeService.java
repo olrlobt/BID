@@ -22,6 +22,7 @@ public interface GradeService {
 	void updateSavingPeriod(int gradeNo, SavingPeriodUpdateRequest savingPeriodUpdateRequest);
 
 	void holdBid(int gradeNo);
+
 	void unHoldBid(int gradeNo);
 
 }

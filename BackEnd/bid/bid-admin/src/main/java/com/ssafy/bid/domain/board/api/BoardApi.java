@@ -56,7 +56,7 @@ public class BoardApi {
 	}
 
 	@PatchMapping("/{gradeNo}/boards/hold")
-	public ResponseEntity<?> holdBoards(@PathVariable int gradeNo){
+	public ResponseEntity<?> holdBoards(@PathVariable int gradeNo) {
 		boolean isHold = boardService.holdBoards(gradeNo);
 		return ResponseEntity.ok(isHold);
 	}

@@ -107,7 +107,7 @@ public class BoardService {
 		Grade grade = gradeRepository.findById(gradeNo)
 			.orElseThrow(() -> new ResourceNotFoundException("학급이 없습니다.", gradeNo));
 
-		if(grade.isHold()){
+		if (grade.isHold()) {
 			return HttpStatus.UNAUTHORIZED;
 		}
 
