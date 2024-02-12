@@ -75,7 +75,7 @@ public class CoreSavingServiceImpl implements CoreSavingService {
 
 		coreUserRepository.findAllByIds(targetUserNos).stream()
 			.filter(this::isStudentAssetEnough)
-			.forEach(request -> request.getStudent().subtractSavingPrice(request.getPrice()));
+			.forEach(request -> request.getStudent().subtractPrice(request.getPrice()));
 	}
 
 	private boolean isTransferTarget(UserSaving userSaving) {

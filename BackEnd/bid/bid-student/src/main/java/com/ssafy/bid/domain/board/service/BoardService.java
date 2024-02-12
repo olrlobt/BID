@@ -126,12 +126,23 @@ public class BoardService {
 			return HttpStatus.UNAUTHORIZED;
 		}
 
+		Student student = studentRepository.findById(userNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 학생이 없습니다.", userNo));
+
 		return biddingRepository.findByUserNoAndBoardNo(userNo, boardNo).map(myBidding -> {
 				if (myBidding.getPrice() >= biddingCreateRequest.getPrice()) {
 					throw new InvalidParameterException("새로운 입찰가가 현재 입찰가보다 낮거나 같습니다.", myBidding.getPrice(),
 						biddingCreateRequest.getPrice());
 				}
+
+				int price = biddingCreateRequest.getPrice() - myBidding.getPrice();
+
+				if (student.getAsset() < price) {
+					throw new InvalidParameterException("현재 보유 자산으로는 입찰할 수 없습니다.", price);
+				}
+
 				myBidding.rebidding(biddingCreateRequest.getPrice());
+				student.subtractPrice(price);
 				return HttpStatus.NO_CONTENT;
 			}
 		).orElseGet(() -> {
@@ -139,6 +150,11 @@ public class BoardService {
 			biddingCreateRequest.setUserNo(userNo);
 			biddingCreateRequest.setGradeNo(gradeNo);
 			biddingRepository.save(biddingCreateRequest.toEntity());
+
+			if (student.getAsset() < biddingCreateRequest.getPrice()) {
+				throw new InvalidParameterException("현재 보유 자산으로는 입찰할 수 없습니다.", biddingCreateRequest.getPrice());
+			}
+			student.subtractPrice(biddingCreateRequest.getPrice());
 			return HttpStatus.CREATED;
 		});
 	}
