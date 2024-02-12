@@ -53,8 +53,9 @@
 }
 
 .productsWrapper {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(16vw, auto));
-	justify-content: space-between;
-	row-gap: 3vw;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.8vw;
+	padding: 2vw;
+	box-sizing: border-box;
 }

@@ -384,7 +384,7 @@ export default function BidPage({ userType }){
               </DragDropContext>
           </div>)
           :
-          (<div className = {styled.productsWrapper}>
+          (<div className = {styled.productsWrapper} style={userType==='STU'?{ gap: '2.4vw' } : {}} >
             {
               filteredProducts && filteredProducts.length === 0?
               <NoContent text='현재 진행 중인 경매가 없어요'/>
