@@ -30,6 +30,7 @@ public class GradePeriodServiceImpl implements GradePeriodService {
 				.filter(request -> gradePeriod.getNo().equals(request.getNo()))
 				.forEach(request -> {
 					gradePeriod.update(request.getStartPeriod(), request.getEndPeriod());
+					gradePeriodScheduler.cancelScheduledTask(gradeNo, gradePeriod.getNo());
 					gradePeriodScheduler.scheduleClassLessonTask(gradePeriod);
 				})
 		);
