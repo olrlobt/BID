@@ -16,6 +16,8 @@ import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.repository.BiddingRepository;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
+import com.ssafy.bid.domain.grade.Grade;
+import com.ssafy.bid.domain.user.repository.GradeRepository;
 import com.ssafy.bid.global.error.exception.InvalidParameterException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
@@ -31,6 +33,7 @@ public class BoardService {
 	private final BoardRepository boardRepository;
 	private final ReplyRepository replyRepository;
 	private final BiddingRepository biddingRepository;
+	private final GradeRepository gradeRepository;
 
 	public List<BoardListResponse> findBoards(int gradeNo) {
 		//학생 gradeNO과 gradeNo이 맞는지 확인
@@ -100,6 +103,13 @@ public class BoardService {
 
 		// board가 gradeNo이 user와 gradeNo이 맞나 확인
 		// user의 자산이 입찰가보다 낮은 경우 확인
+
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new ResourceNotFoundException("학급이 없습니다.", gradeNo));
+
+		if(grade.isHold()){
+			return HttpStatus.UNAUTHORIZED;
+		}
 
 		return biddingRepository.findByUserNoAndBoardNo(userNo, boardNo).map(myBidding -> {
 				if (myBidding.getPrice() >= biddingCreateRequest.getPrice()) {
