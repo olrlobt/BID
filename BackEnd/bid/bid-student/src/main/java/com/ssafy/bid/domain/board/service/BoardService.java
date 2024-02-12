@@ -128,6 +128,8 @@ public class BoardService {
 
 		Student student = studentRepository.findById(userNo)
 			.orElseThrow(() -> new ResourceNotFoundException("해당 학생이 없습니다.", userNo));
+		Board board = boardRepository.findById(boardNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 게시글이 없습니다.", boardNo));
 
 		return biddingRepository.findByUserNoAndBoardNo(userNo, boardNo).map(myBidding -> {
 				if (myBidding.getPrice() >= biddingCreateRequest.getPrice()) {
@@ -142,6 +144,7 @@ public class BoardService {
 				}
 
 				myBidding.rebidding(biddingCreateRequest.getPrice());
+				board.addTotalPrice(price);
 				student.subtractPrice(price);
 				return HttpStatus.NO_CONTENT;
 			}
@@ -155,6 +158,8 @@ public class BoardService {
 				throw new InvalidParameterException("현재 보유 자산으로는 입찰할 수 없습니다.", biddingCreateRequest.getPrice());
 			}
 			student.subtractPrice(biddingCreateRequest.getPrice());
+			board.addTotalPrice(biddingCreateRequest.getPrice());
+			board.addAttendeeCount();
 			return HttpStatus.CREATED;
 		});
 	}

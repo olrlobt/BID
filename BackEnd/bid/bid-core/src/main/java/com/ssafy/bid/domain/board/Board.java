@@ -118,4 +118,12 @@ public class Board extends BaseEntity {
 	public void complete() {
 		this.boardStatus = BoardStatus.COMPLETED;
 	}
+
+	public void addTotalPrice(int price) {
+		this.totalPrice += price;
+	}
+
+	public void addAttendeeCount(){
+		this.attendeeCount++;
+	}
 }
