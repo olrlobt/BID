@@ -22,6 +22,7 @@ import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.service.BoardService;
+import com.ssafy.bid.domain.board.service.CoreBoardScheduleService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
 import com.ssafy.bid.domain.gradeperiod.service.CoreGradePeriodService;
 
@@ -37,6 +38,8 @@ public class BoardApi {
 	private final BoardService boardService;
 	private final CoreBoardService coreBoardService;
 	private final CoreGradePeriodService coreGradePeriodService;
+
+	private final CoreBoardScheduleService coreBoardScheduleService;
 
 	@GetMapping("/boards")
 	public ResponseEntity<?> findBoards() {
@@ -66,7 +69,7 @@ public class BoardApi {
 		LocalTime startTime = coreGradePeriodService.findStartTime(1,
 			boardCreateRequest.getGradePeriodNo());
 
-		coreBoardService.registerBoardTask(startTime, boardNo);
+		coreBoardScheduleService.registerBoardTask(startTime, boardNo);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
