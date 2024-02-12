@@ -4,6 +4,7 @@
 	width: calc(100% - 20vw);
   height: 100vh;
 	padding: 5vh;
+	margin: 0 auto;
 	box-sizing: border-box;
 }
 
@@ -35,6 +36,10 @@
 	}
 }
 
+.bidBody{
+	overflow-x: scroll;
+}
+
 .couponListWrapper{
 	display: flex;
 	justify-content: space-around;
@@ -48,7 +53,8 @@
 }
 
 .productsWrapper {
-	display: flex;
-	justify-content: flex-start;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(16vw, auto));
+	justify-content: space-between;
+	row-gap: 3vw;
 }
