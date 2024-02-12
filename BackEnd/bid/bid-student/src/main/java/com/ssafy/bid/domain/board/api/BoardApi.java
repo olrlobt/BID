@@ -1,6 +1,5 @@
 package com.ssafy.bid.domain.board.api;
 
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardListResponse;
@@ -22,6 +22,7 @@ import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.service.BoardService;
+import com.ssafy.bid.domain.board.service.CoreBoardScheduleService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
 import com.ssafy.bid.domain.gradeperiod.service.CoreGradePeriodService;
 
@@ -37,6 +38,7 @@ public class BoardApi {
 	private final BoardService boardService;
 	private final CoreBoardService coreBoardService;
 	private final CoreGradePeriodService coreGradePeriodService;
+	private final CoreBoardScheduleService coreBoardScheduleService;
 
 	@GetMapping("/boards")
 	public ResponseEntity<?> findBoards() {
@@ -61,12 +63,8 @@ public class BoardApi {
 
 	@PostMapping("/boards")
 	public ResponseEntity<?> addBoard(@RequestBody BoardCreateRequest boardCreateRequest) {
-		long boardNo = boardService.addBoard(1, 1, boardCreateRequest);
-
-		LocalTime startTime = coreGradePeriodService.findStartTime(1,
-			boardCreateRequest.getGradePeriodNo());
-
-		coreBoardService.registerBoardTask(startTime, boardNo);
+		Board board = coreBoardService.addBoard(1, 1, boardCreateRequest);
+		coreBoardScheduleService.registerBoardTask(board);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 

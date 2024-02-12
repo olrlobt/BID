@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
+import com.ssafy.bid.domain.grade.Grade;
+import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class BoardService {
 
 	private final BoardRepository boardRepository;
 	private final ReplyRepository replyRepository;
+	private final GradeRepository gradeRepository;
 
 	public List<BoardListResponse> findAllStudentBoards(int gradeNo) {
 		// user와 gradeNo이 다를 경우 error
@@ -47,5 +50,16 @@ public class BoardService {
 			throw new ResourceNotFoundException("해당 댓글이 없습니다.", replyNo);
 		}
 		replyRepository.deleteById(replyNo);
+	}
+
+	@Transactional
+	public boolean holdBoards(int gradeNo) {
+
+		// 본인 학급인지 검증 필요
+
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
+
+		return grade.holdBidToggle();
 	}
 }

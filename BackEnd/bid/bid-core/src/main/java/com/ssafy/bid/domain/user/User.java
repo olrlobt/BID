@@ -46,6 +46,8 @@ public class User extends BaseEntity {
 	@NotNull
 	private Integer schoolNo;
 
+	private String profileImgUrl;
+
 	public User(
 		String id,
 		String password,

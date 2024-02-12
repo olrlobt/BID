@@ -19,7 +19,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
@@ -66,6 +68,9 @@ public class Grade extends BaseEntity {
 	@Embedded
 	private BiddingStatistics biddingStatistics;
 
+	@NotNull
+	private boolean hold;
+
 	private Integer salaryRecommendation;
 
 	@ColumnDefault("false")
@@ -73,6 +78,7 @@ public class Grade extends BaseEntity {
 
 	@ColumnDefault("false")
 	private Boolean isDangerInDeflation;
+
 
 	public void updateSalary(int salary) {
 		this.salary = salary;
@@ -86,6 +92,19 @@ public class Grade extends BaseEntity {
 		this.transferPeriod = transferPeriod;
 	}
 
+	public void holdBid() {
+		log.info("hold");
+		this.hold = true;
+	}
+
+	public void unHoldBid() {
+		log.info("unhold");
+		this.hold = false;
+	}
+
+	public boolean holdBidToggle() {
+		return this.hold = !hold;
+
 	public void updateSalaryRecommendation(int diff) {
 		int count = diff / 20;
 		this.salaryRecommendation = count == 0 ? this.salary : this.salary - this.salary / (10 * count);
@@ -94,5 +113,6 @@ public class Grade extends BaseEntity {
 		} else if (count <= -4) {
 			isDangerInDeflation = true;
 		}
+
 	}
 }
