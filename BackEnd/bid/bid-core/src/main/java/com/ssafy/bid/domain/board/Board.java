@@ -123,7 +123,7 @@ public class Board extends BaseEntity {
 		this.totalPrice += price;
 	}
 
-	public void addAttendeeCount(){
+	public void addAttendeeCount() {
 		this.attendeeCount++;
 	}
 }

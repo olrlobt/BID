@@ -79,7 +79,6 @@ public class Grade extends BaseEntity {
 	@ColumnDefault("false")
 	private Boolean isDangerInDeflation;
 
-
 	public void updateSalary(int salary) {
 		this.salary = salary;
 	}

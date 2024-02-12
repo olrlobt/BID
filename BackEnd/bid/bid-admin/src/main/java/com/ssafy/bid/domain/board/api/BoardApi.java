@@ -3,6 +3,7 @@ package com.ssafy.bid.domain.board.api;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,8 @@ import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.service.BoardService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
+import com.ssafy.bid.domain.user.UserType;
+import com.ssafy.bid.domain.user.service.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,36 +31,47 @@ public class BoardApi {
 	private final CoreBoardService coreBoardService;
 
 	@GetMapping("/{gradeNo}/boards")
-	public List<BoardListResponse> findAllStudentBoards(@PathVariable int gradeNo) {
-		return boardService.findAllStudentBoards(gradeNo);
+	public List<BoardListResponse> findAllStudentBoards(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int gradeNo) {
+		int userNo = userDetails.getUserInfo().getNo();
+		return boardService.findAllStudentBoards(gradeNo, userNo);
 	}
 
 	@GetMapping("/{gradeNo}/boards/{boardNo}")
-	public ResponseEntity<BoardResponse> getBoardDetail(@PathVariable int gradeNo, @PathVariable long boardNo) {
-		int userNo = 21; // security
+	public ResponseEntity<BoardResponse> getBoardDetail(@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int gradeNo, @PathVariable long boardNo) {
+		int userNo = userDetails.getUserInfo().getNo();
 		BoardResponse boardResponse = coreBoardService.getBoardDetail(userNo, boardNo, gradeNo);
 		return ResponseEntity.ok(boardResponse);
 	}
 
 	@DeleteMapping("/{gradeNo}/boards/{boardNo}")
-	public ResponseEntity<?> deleteBoard(@PathVariable int gradeNo, @PathVariable long boardNo) {
-		int userNo = 21; // security
-		boardService.deleteBoard(boardNo, gradeNo, userNo);
+	public ResponseEntity<?> deleteBoard(@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int gradeNo, @PathVariable long boardNo) {
+		int userNo = userDetails.getUserInfo().getNo();
+		UserType userType = userDetails.getUserInfo().getUserType();
+		boardService.deleteBoard(boardNo, gradeNo, userNo, userType);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{gradeNo}/boards/{boardNo}/{replyNo}")
-	public ResponseEntity<?> deleteReply(@PathVariable int gradeNo,
+	public ResponseEntity<?> deleteReply(@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int gradeNo,
 		@PathVariable long boardNo,
 		@PathVariable long replyNo) {
-		int userNo = 21; // security
-		boardService.deleteReply(replyNo, gradeNo, userNo);
+		int userNo = userDetails.getUserInfo().getNo();
+		UserType userType = userDetails.getUserInfo().getUserType();
+		boardService.deleteReply(replyNo, gradeNo, userNo, userType);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PatchMapping("/{gradeNo}/boards/hold")
-	public ResponseEntity<?> holdBoards(@PathVariable int gradeNo) {
-		boolean isHold = boardService.holdBoards(gradeNo);
+	public ResponseEntity<?> holdBoards(@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int gradeNo) {
+		int userNo = userDetails.getUserInfo().getNo();
+		UserType userType = userDetails.getUserInfo().getUserType();
+		boolean isHold = boardService.holdBoards(gradeNo, userNo, userType);
 		return ResponseEntity.ok(isHold);
 	}
 }
