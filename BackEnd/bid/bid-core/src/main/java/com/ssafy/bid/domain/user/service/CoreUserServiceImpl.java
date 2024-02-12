@@ -113,4 +113,13 @@ public class CoreUserServiceImpl implements CoreUserService {
 		coreUserRepository.findAllStudentsAndSalaries()
 			.forEach(response -> response.calculateSalary(response.getSalary()));
 	}
+
+	@Override
+	@Transactional
+	public void calculateIncomeLevel() {
+		coreUserRepository.findAllIncomes().forEach(response -> {
+			response.calculateIncomeLevel();
+			response.getStudent().calculateTaxRate(response.getTaxRate());
+		});
+	}
 }

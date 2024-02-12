@@ -6,4 +6,6 @@ public interface CoreGradeService {
 	GradeStatisticsGetResponse getGradeStatistics(int gradeNo);
 
 	void updateGradeStatistics();
+
+	void recommendSalary();
 }
