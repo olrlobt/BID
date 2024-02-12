@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.board.Bidding;
 import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Reply;
 import com.ssafy.bid.domain.board.dto.BiddingCreateRequest;
@@ -17,7 +18,9 @@ import com.ssafy.bid.domain.board.repository.BiddingRepository;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
 import com.ssafy.bid.domain.grade.Grade;
+import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.repository.GradeRepository;
+import com.ssafy.bid.domain.user.repository.StudentRepository;
 import com.ssafy.bid.global.error.exception.InvalidParameterException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
@@ -34,6 +37,7 @@ public class BoardService {
 	private final ReplyRepository replyRepository;
 	private final BiddingRepository biddingRepository;
 	private final GradeRepository gradeRepository;
+	private final StudentRepository studentRepository;
 
 	public List<BoardListResponse> findBoards(int gradeNo) {
 		//학생 gradeNO과 gradeNo이 맞는지 확인
@@ -66,6 +70,17 @@ public class BoardService {
 		if (!boardRepository.existsById(boardNo)) {
 			throw new ResourceNotFoundException("해당 게시물이 없습니다.", boardNo);
 		}
+
+		List<Bidding> allBidding = biddingRepository.findAllByBoardNo(boardNo);
+		if (!allBidding.isEmpty()) {
+			allBidding.forEach(bidding -> {
+				Student student = studentRepository.findById(bidding.getUserNo())
+					.orElseThrow(() -> new ResourceNotFoundException("해당 유저가 없습니다.", bidding.getUserNo()));
+
+				student.addPrice(bidding.getPrice());
+			});
+		}
+
 		boardRepository.deleteById(boardNo);
 	}
 
