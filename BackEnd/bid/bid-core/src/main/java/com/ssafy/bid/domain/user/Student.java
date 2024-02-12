@@ -33,13 +33,15 @@ public class Student extends User {
 	@Embedded
 	private ExpenditureStatistics expenditureStatistics;
 
+	private Integer taxRate;
+
 	/**
 	 * grade : users(me) = 1 : N
 	 */
 	private Integer gradeNo;
 
 	public void addRewardPrice(int price) {
-		this.asset += price;
+		this.asset += price - price / taxRate;
 	}
 
 	public void updateAvatar(String url) {
@@ -62,7 +64,15 @@ public class Student extends User {
 		this.attendance.checkAttendance();
 	}
 
+	public void calculateSalary(int salary) {
+		this.asset += this.attendance.calculateSalary(salary) - this.attendance.calculateSalary(salary) / taxRate;
+	}
+
 	public void resetPassword(PasswordEncoder passwordEncoder) {
 		super.changePassword(passwordEncoder.encode(this.birthDate));
+	}
+
+	public void calculateTaxRate(int taxRate) {
+		this.taxRate = taxRate + 7; // 소득세 + VAT
 	}
 }

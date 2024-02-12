@@ -16,8 +16,10 @@ import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
+import com.ssafy.bid.domain.user.dto.LoginResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentInfo;
 import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
 import com.ssafy.bid.domain.user.repository.CoreUserRepository;
@@ -39,26 +41,27 @@ public class CoreUserServiceImpl implements CoreUserService {
 	private final PasswordEncoder passwordEncoder;
 	private final RedisTemplate redisTemplate;
 
+	private User authenticateUser(String id, String password) {
+		return coreUserRepository.findById(id)
+			.filter(user -> passwordEncoder.matches(password, user.getPassword()))
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 아이디의 유저 없음 또는 비밀번호 불일치"));
+	}
+
 	@Override
-	@Transactional
-	public TokenResponse login(LoginRequest loginRequest) {
-		String id = loginRequest.getId();
-		String password = loginRequest.getPassword();
-
-		User user = coreUserRepository.findById(id)
-			.orElseThrow(() -> new ResourceNotFoundException("해당하는 아이디의 유저 없음.", id));
-
-		if (!passwordEncoder.matches(password, user.getPassword())) {
-			throw new AuthenticationFailedException("비밀번호 불일치");
-		}
-
+	public LoginResponse login(LoginRequest loginRequest) {
+		User user = authenticateUser(loginRequest.getId(), loginRequest.getPassword());
 		CustomUserInfo userInfo = createCustomUserInfo(user);
 
 		TokenResponse tokenResponse = jwtTokenProvider.createToken(userInfo);
-		redisTemplate.opsForValue()
-			.set("RT:" + user.getNo(), tokenResponse.getRefreshToken(), 7, TimeUnit.DAYS);
 
-		return tokenResponse;
+		redisTemplate.opsForValue().set("RT:" + user.getNo(), tokenResponse.getRefreshToken(), 7, TimeUnit.DAYS);
+
+		if (user instanceof Student) {
+			List<StudentInfo> studentList = coreUserRepository.findByGradeNo(((Student)user).getGradeNo());
+			return new LoginResponse(tokenResponse, studentList);
+		} else {
+			return new LoginResponse(tokenResponse, null);
+		}
 	}
 
 	private CustomUserInfo createCustomUserInfo(User user) {
@@ -105,5 +108,21 @@ public class CoreUserServiceImpl implements CoreUserService {
 	@Override
 	public List<AccountFindResponse> findAccount(int userNo, AccountFindRequest accountFindRequest) {
 		return coreUserRepository.findAccountByUserNo(userNo, accountFindRequest);
+	}
+
+	@Override
+	@Transactional
+	public void resetAttendance() {
+		coreUserRepository.findAllStudentsAndSalaries()
+			.forEach(response -> response.calculateSalary(response.getSalary()));
+	}
+
+	@Override
+	@Transactional
+	public void calculateIncomeLevel() {
+		coreUserRepository.findAllIncomes().forEach(response -> {
+			response.calculateIncomeLevel();
+			response.getStudent().calculateTaxRate(response.getTaxRate());
+		});
 	}
 }

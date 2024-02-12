@@ -46,4 +46,11 @@ public class CoreGradeServiceImpl implements CoreGradeService {
 			.filter(grade -> grade.getNo() == response.getGradeNo())
 			.forEach(grade -> grade.getBiddingStatistics().updateBiddingStatistics(response)));
 	}
+
+	@Override
+	@Transactional
+	public void recommendSalary() {
+		coreGradeRepository.findAllGradeBiddingPrice()
+			.forEach(response -> response.getGrade().updateSalaryRecommendation(response.getDiff()));
+	}
 }
