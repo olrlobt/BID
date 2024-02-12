@@ -8,6 +8,7 @@ import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
+import com.ssafy.bid.domain.user.dto.StudentUpdateRequest;
 import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationCheckRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
@@ -45,4 +46,8 @@ public interface UserService {
 	List<BallsFindResponse> getAllBalls(UserType userType, int gradeNo);
 
 	void resetAllBalls(UserType userType, int gradeNo);
+
+	void updateStudent(UserType userType, int userNo, StudentUpdateRequest request);
+
+	void deleteStudent(UserType userType, int userNo);
 }

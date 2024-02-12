@@ -79,7 +79,6 @@ public class Grade extends BaseEntity {
 	@ColumnDefault("false")
 	private Boolean isDangerInDeflation;
 
-
 	public void updateSalary(int salary) {
 		this.salary = salary;
 	}
@@ -104,6 +103,7 @@ public class Grade extends BaseEntity {
 
 	public boolean holdBidToggle() {
 		return this.hold = !hold;
+	}
 
 	public void updateSalaryRecommendation(int diff) {
 		int count = diff / 20;
@@ -113,6 +113,5 @@ public class Grade extends BaseEntity {
 		} else if (count <= -4) {
 			isDangerInDeflation = true;
 		}
-
 	}
 }

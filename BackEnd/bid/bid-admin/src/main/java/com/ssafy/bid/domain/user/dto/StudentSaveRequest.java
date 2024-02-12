@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudentSaveRequest {
 	private int schoolNo;
-	private String id;
+	private int number;
 	private String password;
 	private String name;
 	private int gradeNo;
 
-	public Student toEntity(PasswordEncoder passwordEncoder) {
+	public Student toEntity(PasswordEncoder passwordEncoder, String studentId) {
 		return Student.builder()
-			.id(id)
+			.id(studentId)
 			.password(passwordEncoder.encode(password))
 			.name(name)
 			.schoolNo(schoolNo)
