@@ -17,11 +17,13 @@ export const couponSlice = createSlice({
       const couponList = action.payload;
       state.couponList = couponList;
     },
+
     deleteCoupon: (state, action) => {
       const couponNo = action.payload;
       const newList = state.couponList.filter((c) => c.no !== couponNo);
       state.couponList = [...newList];
     },
+
     registCoupon: (state, action) => {
       const couponNo = action.payload;
       state.couponList.forEach((c) => {
@@ -31,6 +33,7 @@ export const couponSlice = createSlice({
         }
       });
     },
+    
     unregistCoupon: (state, action) => {
       const couponNo = action.payload;
       state.couponList.forEach((c) => {
