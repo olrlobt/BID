@@ -40,14 +40,6 @@ public class GradePeriod {
 	@NotNull
 	private Integer gradeNo;
 
-	public void update(
-		LocalTime startPeriod,
-		LocalTime endPeriod
-	) {
-		this.startPeriod = startPeriod;
-		this.endPeriod = endPeriod;
-	}
-
 	@Builder
 	public GradePeriod(
 		Integer sequence,
@@ -59,5 +51,13 @@ public class GradePeriod {
 		this.startPeriod = startPeriod;
 		this.endPeriod = endPeriod;
 		this.gradeNo = gradeNo;
+	}
+
+	public void update(
+		LocalTime startPeriod,
+		LocalTime endPeriod
+	) {
+		this.startPeriod = startPeriod;
+		this.endPeriod = endPeriod;
 	}
 }

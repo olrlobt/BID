@@ -40,8 +40,6 @@ public class CoreBoardService {
 	@Transactional(readOnly = true)
 	public BoardResponse getBoardDetail(int userNo, long boardNo, int gradeNo) {
 
-		// user의 gradeNo이 넘겨받은 gradeNo이 아닐경우 예외 처리
-
 		BoardResponse boardResponse = coreBoardRepository.getStudentBoard(boardNo, gradeNo)
 			.orElseThrow(() -> new ResourceNotFoundException("해당 글이 없습니다.", boardNo));
 
