@@ -71,7 +71,8 @@ public class CoreGradeRepositoryCustomImpl implements CoreGradeRepositoryCustom 
 						grade.biddingStatistics.countOneDaysAgo,
 						grade.salaryRecommendation,
 						grade.isDangerInInflation,
-						grade.isDangerInDeflation
+						grade.isDangerInDeflation,
+						grade.hold
 					)
 				)
 				.from(grade)
