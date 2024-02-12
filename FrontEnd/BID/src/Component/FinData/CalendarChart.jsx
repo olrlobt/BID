@@ -1,15 +1,8 @@
 // CalendarChart.js
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import * as dates from 'date-arithmetic';
 import styled from './CalendarChart.module.css';
-import {
-  Calendar,
-  Views,
-  onView,
-  Navigate,
-  momentLocalizer,
-} from 'react-big-calendar';
+import { Calendar, Navigate, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import Toolbar from './ToolBar';
@@ -32,7 +25,6 @@ function CalendarChart() {
     return (
       <SmallEvent
         date={date}
-        handleClick={() => onDayClick(Views.MONTH)}
         localizer={localizer}
         scrollToTime={scrollToTime}
         {...props}
@@ -43,21 +35,6 @@ function CalendarChart() {
   MyDay.propTypes = {
     date: PropTypes.instanceOf(Date).isRequired,
     localizer: PropTypes.object,
-  };
-
-  MyDay.range = (date, { localizer }) => {
-    const start = date;
-    const end = dates.add(start, 2, 'day');
-
-    let current = start;
-    const range = [];
-
-    while (localizer.lte(current, end, 'day')) {
-      range.push(current);
-      current = localizer.add(current, 1, 'day');
-    }
-
-    return range;
   };
 
   MyDay.navigate = (date, action, { localizer }) => {
@@ -85,8 +62,7 @@ function CalendarChart() {
     }),
     []
   );
-  const [view, setView] = useState(Views.MONTH);
-  const onDayClick = useCallback((newView) => setView(newView), [setView]);
+
   const events = [
     {
       id: 0,
@@ -179,29 +155,24 @@ function CalendarChart() {
   };
   return (
     <div className={styled.chartContainer}>
-      <div className={styled.detailsContainer}>
-        <div className={styled.calendarContainer}>
-          <Calendar
-            localizer={localizer}
-            events={events}
-            defaultDate={moment().toDate()}
-            startAccessor="start"
-            endAccessor="end"
-            style={{ height: 350 }}
-            views={views}
-            onView={onDayClick}
-            components={{
-              toolbar: Toolbar,
-              event: CustomEvent,
-              // month: {
-              //   header: monthHeader,
-              //   dateHeader: monthDate,
-              // },
-            }}
-            eventPropGetter={eventStyleGetter}
-          />
-        </div>
-      </div>
+      <Calendar
+        localizer={localizer}
+        events={events}
+        defaultDate={moment().toDate()}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 350 }}
+        views={views}
+        components={{
+          toolbar: Toolbar,
+          event: CustomEvent,
+          // month: {
+          //   header: monthHeader,
+          //   dateHeader: monthDate,
+          // },
+        }}
+        eventPropGetter={eventStyleGetter}
+      />
     </div>
   );
 }
