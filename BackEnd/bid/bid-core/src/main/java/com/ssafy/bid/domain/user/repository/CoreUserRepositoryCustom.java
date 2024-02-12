@@ -8,6 +8,7 @@ import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
+import com.ssafy.bid.domain.user.dto.CalculateIncomeLevelResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentInfo;
@@ -30,4 +31,6 @@ public interface CoreUserRepositoryCustom {
 	List<StudentSalaryResponse> findAllStudentsAndSalaries();
 
 	List<StudentInfo> findByGradeNo(int gradeNo);
+
+	List<CalculateIncomeLevelResponse> findAllIncomes();
 }
