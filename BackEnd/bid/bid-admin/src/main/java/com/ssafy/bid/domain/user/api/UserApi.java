@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
@@ -36,6 +38,7 @@ import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
 import com.ssafy.bid.domain.user.dto.UserIdFindRequest;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
 import com.ssafy.bid.domain.user.service.CoreUserService;
+import com.ssafy.bid.domain.user.service.CustomUserDetails;
 import com.ssafy.bid.domain.user.service.UserService;
 
 import jakarta.servlet.http.Cookie;
@@ -98,27 +101,34 @@ public class UserApi {
 	}
 
 	@PostMapping("/students")
-	public ResponseEntity<Void> saveStudent(@RequestBody StudentSaveRequest request) {
-		userService.saveStudent(request);
+	public ResponseEntity<Void> saveStudent(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@RequestBody StudentSaveRequest request
+	) {
+		UserType userType = userDetails.getUserInfo().getUserType();
+		userService.saveStudent(userType, request);
 		return ResponseEntity.status(CREATED).build();
 	}
 
 	@PatchMapping("/password/{userNo}")
-	public ResponseEntity<?> resetStudentPassword(@PathVariable int userNo) {
-		userService.resetStudentPassword(userNo);
+	public ResponseEntity<?> resetStudentPassword(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int userNo
+	) {
+		UserType userType = userDetails.getUserInfo().getUserType();
+		userService.resetStudentPassword(userType, userNo);
 		return ResponseEntity.status(OK).build();
 	}
 
 	@PatchMapping("/password")
 	public ResponseEntity<?> updateAdminPassword(@RequestBody AdminPasswordUpdateRequest adminPasswordUpdateRequest) {
-		// TODO: CustomUserDetails
 		userService.updateAdminPassword(adminPasswordUpdateRequest);
 		return ResponseEntity.status(OK).build();
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpServletResponse httpResponse) {
-		LoginResponse loginResponse = coreUserService.login(request);
+		LoginResponse loginResponse = coreUserService.login(request, true);
 		TokenResponse tokenResponse = loginResponse.getTokenResponse();
 		Cookie cookie = createCookie(tokenResponse.getRefreshToken());
 		httpResponse.addCookie(cookie);
@@ -136,17 +146,21 @@ public class UserApi {
 
 	@GetMapping("/signout")
 	public ResponseEntity<?> logout(
-		// @AuthenticationPrincipal CustomUserDetails userDetails,
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		HttpServletRequest request
 	) {
-		// int userNo = userDetails.getUserInfo().getNo();
-		coreUserService.logout(99, request);
+		int userNo = userDetails.getUserInfo().getNo();
+		coreUserService.logout(userNo, request);
 		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/{gradeNo}/users")
-	public ResponseEntity<List<StudentsGetResponse>> findStudents(@PathVariable int gradeNo) {
-		List<StudentsGetResponse> responses = userService.getStudents(gradeNo);
+	public ResponseEntity<List<StudentsGetResponse>> findStudents(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int gradeNo
+	) {
+		UserType userType = userDetails.getUserInfo().getUserType();
+		List<StudentsGetResponse> responses = userService.getStudents(userType, gradeNo);
 		return ResponseEntity.status(OK).body(responses);
 	}
 
@@ -175,26 +189,44 @@ public class UserApi {
 	}
 
 	@PatchMapping("/{gradeNo}/users/{userNo}")
-	public ResponseEntity<?> updateUser(@PathVariable Integer userNo, @RequestBody UserUpdateRequest request) {
-		userService.updateUser(userNo, request);
+	public ResponseEntity<?> updateUser(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable Integer userNo,
+		@RequestBody UserUpdateRequest request
+	) {
+		UserType userType = userDetails.getUserInfo().getUserType();
+		userService.updateUser(userType, userNo, request);
 		return ResponseEntity.status(OK).build();
 	}
 
 	@DeleteMapping("/{gradeNo}/users/{userNo}")
-	public ResponseEntity<?> deleteUser(@PathVariable Integer userNo, @RequestBody UserDeleteRequest request) {
-		userService.deleteUser(userNo, request);
+	public ResponseEntity<?> deleteUser(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable Integer userNo,
+		@RequestBody UserDeleteRequest request
+	) {
+		UserType userType = userDetails.getUserInfo().getUserType();
+		userService.deleteUser(userType, userNo, request);
 		return ResponseEntity.status(NO_CONTENT).build();
 	}
 
 	@GetMapping("/{gradeNo}/balls")
-	public ResponseEntity<List<BallsFindResponse>> findAllBalls(@PathVariable int gradeNo) {
-		List<BallsFindResponse> responses = userService.getAllBalls(gradeNo);
+	public ResponseEntity<List<BallsFindResponse>> findAllBalls(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int gradeNo
+	) {
+		UserType userType = userDetails.getUserInfo().getUserType();
+		List<BallsFindResponse> responses = userService.getAllBalls(userType, gradeNo);
 		return ResponseEntity.status(OK).body(responses);
 	}
 
 	@PatchMapping("/{gradeNo}/balls")
-	public ResponseEntity<?> resetAllBalls(@PathVariable int gradeNo) {
-		userService.resetAllBalls(gradeNo);
+	public ResponseEntity<?> resetAllBalls(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int gradeNo
+	) {
+		UserType userType = userDetails.getUserInfo().getUserType();
+		userService.resetAllBalls(userType, gradeNo);
 		return ResponseEntity.status(OK).build();
 	}
 }
