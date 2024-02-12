@@ -30,7 +30,7 @@ export default function MakeNewPostModal({ onClose, ...props }) {
       startPrice: e.target.startPrice.value,
       gradePeriodNo: e.target.gradePeriodNo.value,
     }
-    console.log(newProductData);
+    // console.log(newProductData);
     addNewProductQuery.mutate(newProductData);
   }
 
@@ -54,10 +54,10 @@ export default function MakeNewPostModal({ onClose, ...props }) {
               selectName='category'
               selectTitle='상품 유형'
               options={[
-                {'value': '간식', 'text': '간식'},
-                {'value': '학습', 'text': '학습'},
-                {'value': '오락', 'text': '오락'},
-                {'value': '기타', 'text': '기타'},
+                {'value': 'SNACK', 'text': '간식'},
+                {'value': 'LEARNING', 'text': '학습'},
+                {'value': 'GAME', 'text': '오락'},
+                {'value': 'ETC', 'text': '기타'},
               ]}
             />
             <DropDownSelect

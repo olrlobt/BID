@@ -17,6 +17,7 @@ import MainClass from './Page/Main/MainClass';
 import AddClass from './Page/ClassManage/MakeClass';
 import SeatGame from './Page/Manage/SeatGame';
 import StudentMain from './Page/Student/StudentMain';
+import StudentBidPage from "./Page/Student/StudentBidPage";
 import MyPage from './Page/Student/MyPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -32,7 +33,7 @@ function App() {
         <Route path="/" element={<MainPage />}>
           <Route path="/" element={<Home />} />
           <Route path="/class" element={<ClassPage />} />
-          <Route path="/bid" element={<BidPage userType='TCH'/>} />
+          <Route path="/bid" element={<BidPage />} />
           <Route path="/reward" element={<RewardPage />} />
           <Route path="/bank" element={<BankPage />} />
           <Route path="/game" element={<GamePage />} />
@@ -52,7 +53,7 @@ function App() {
         <Route path="/game/seat" element={<SeatGame />} />
         <Route path="/studentmain/" element={<StudentMain />} />
         <Route path="/studentmain/:studentId/" element={<MyPage />} />
-        <Route path="/auctionHouse" element={<BidPage userType='STU'/>} />
+        <Route path="/auctionHouse" element={<StudentBidPage />} />
       </Routes>
     </QueryClientProvider>
   );
