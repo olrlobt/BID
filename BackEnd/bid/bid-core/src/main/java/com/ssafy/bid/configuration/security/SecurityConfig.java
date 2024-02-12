@@ -44,11 +44,11 @@ public class SecurityConfig {
 			.sessionManagement(configuerer -> configuerer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize ->
 				authorize
-					// .requestMatchers("/savings/**").authenticated()
-					.requestMatchers("/**").permitAll()
-					// .anyRequest().authenticated()
-					// .requestMatchers("/login", "/signout").permitAll()
-					.anyRequest().permitAll()
+					.requestMatchers(
+						"/password/send-code", "/password/check-code", "/send-code", "/check-code",
+						"/check-id", "/schools", "/register", "/password", "/login", "/find-id"
+					).permitAll()
+					.anyRequest().authenticated()
 			)
 			.addFilterBefore(
 				new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService, redisTemplate),

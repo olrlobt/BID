@@ -14,8 +14,9 @@ import com.ssafy.bid.domain.saving.dto.TaxRateResponse;
 import com.ssafy.bid.domain.saving.dto.UserSavingListGetResponse;
 import com.ssafy.bid.domain.saving.repository.SavingRepository;
 import com.ssafy.bid.domain.saving.repository.UserSavingRepository;
+import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
-import com.ssafy.bid.domain.user.repository.UserRepository;
+import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -27,14 +28,20 @@ public class SavingServiceImpl implements SavingService {
 
 	private final SavingRepository savingRepository;
 	private final UserSavingRepository userSavingRepository;
-	private final UserRepository userRepository;
 
 	@Override
-	public List<UserSavingListGetResponse> getAllSavings(int gradeNo, int userNo) {
-		List<UserSavingListGetResponse> responses = userSavingRepository.findAllByUserNoAndGradeNo(userNo, gradeNo);
+	public List<UserSavingListGetResponse> getAllSavings(CustomUserInfo userInfo) {
+		if (!userInfo.getUserType().equals(UserType.STUDENT)) {
+			throw new AuthorizationFailedException("적금목록조회: Student 권한 사용자가 아님.");
+		}
 
-		TaxRateResponse taxRateResponse = userSavingRepository.findAllBiddingIncomes(gradeNo, userNo)
-			.orElseThrow(() -> new ResourceNotFoundException("해당하는 User 엔티티가 없음.", userNo));
+		List<UserSavingListGetResponse> responses = userSavingRepository.findAllByUserNoAndGradeNo(userInfo.getNo(),
+			userInfo.getGradeNo());
+
+		TaxRateResponse taxRateResponse = userSavingRepository.findAllBiddingIncomes(userInfo.getGradeNo(),
+				userInfo.getNo())
+			.orElseThrow(() -> new ResourceNotFoundException("적금목록조회: Student 엔티티가 없음.", userInfo.getNo()));
+
 		List<TaxRateListGetResponse> taxRateListGetResponses = createTaxRateListGetResponses(taxRateResponse);
 		responses.forEach(response -> {
 			response.setIncomeLevel(taxRateResponse.getIncomeLevel());
@@ -59,19 +66,29 @@ public class SavingServiceImpl implements SavingService {
 	@Override
 	@Transactional
 	public void saveSavings(CustomUserInfo userInfo, SavingSaveRequest savingSaveRequest) {
+		if (!userInfo.getUserType().equals(UserType.STUDENT)) {
+			throw new AuthorizationFailedException("적금가입: Student 권한 사용자가 아님.");
+		}
+
 		Saving saving = savingRepository.findById(savingSaveRequest.getNo())
-			.orElseThrow(() -> new ResourceNotFoundException("등록하려는 Saving 엔티티가 없음.", savingSaveRequest.getNo()));
+			.orElseThrow(() -> new ResourceNotFoundException("적금가입: Saving 엔티티가 없음.", savingSaveRequest.getNo()));
+
 		UserSaving userSaving = savingSaveRequest.toEntity(saving, userInfo);
 		userSavingRepository.save(userSaving);
 	}
 
 	@Override
 	@Transactional
-	public void deleteSavings(int userNo, int savingNo) {
-		boolean exists = userSavingRepository.existsByUserNoAndSavingNo(userNo, savingNo);
-		if (!exists) {
-			throw new ResourceNotFoundException("삭제하려는 UserSaving 엔티티가 없음.", userNo);
+	public void deleteSavings(CustomUserInfo userInfo, int savingNo) {
+		if (!userInfo.getUserType().equals(UserType.STUDENT)) {
+			throw new AuthorizationFailedException("적금해지: Student 권한 사용자가 아님.");
 		}
-		userSavingRepository.deleteByUserNoAndSavingNo(userNo, savingNo);
+
+		boolean exists = userSavingRepository.existsByUserNoAndSavingNo(userInfo.getNo(), savingNo);
+		if (!exists) {
+			throw new ResourceNotFoundException("적금해지: UserSaving 엔티티가 없음.", userInfo.getNo());
+		}
+
+		userSavingRepository.deleteByUserNoAndSavingNo(userInfo.getNo(), savingNo);
 	}
 }

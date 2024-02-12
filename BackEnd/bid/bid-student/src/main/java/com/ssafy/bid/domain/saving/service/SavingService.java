@@ -7,9 +7,9 @@ import com.ssafy.bid.domain.saving.dto.UserSavingListGetResponse;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 
 public interface SavingService {
-	List<UserSavingListGetResponse> getAllSavings(int gradeNo, int userNo);
+	List<UserSavingListGetResponse> getAllSavings(CustomUserInfo userInfo);
 
 	void saveSavings(CustomUserInfo userInfo, SavingSaveRequest savingSaveRequest);
 
-	void deleteSavings(int userNo, int savingNo);
+	void deleteSavings(CustomUserInfo userInfo, int savingNo);
 }
