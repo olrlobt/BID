@@ -74,13 +74,13 @@ public class BoardService {
 		return grade.holdBidToggle();
 	}
 
-	private NotificationRequest makeNotificationRequest(int userNo , boolean isHold){
-		String content = !isHold ? "시작" : "정지" ;
+	private NotificationRequest makeNotificationRequest(int userNo, boolean isHold) {
+		String content = !isHold ? "시작" : "정지";
 
 		return NotificationRequest.builder()
 			.receiverNo(userNo)
 			.title("경매 " + content)
-			.content("경매가 "+ content +" 되었어요")
+			.content("경매가 " + content + " 되었어요")
 			.notificationType(NotificationType.ETC)
 			.build();
 	}

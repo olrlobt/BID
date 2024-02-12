@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,6 +41,13 @@ public class UserCoupon {
 	 * grade : userCoupon(me) = 1 : N
 	 */
 	private Integer gradeNo;
+
+	@Builder
+	private UserCoupon(Integer couponNo, Integer userNo, Integer gradeNo) {
+		this.couponNo = couponNo;
+		this.userNo = userNo;
+		this.gradeNo = gradeNo;
+	}
 
 	public void reject() {
 		this.useStatus = UsageStatus.BEFORE_USE;

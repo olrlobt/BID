@@ -5,6 +5,7 @@ import org.hibernate.annotations.ColumnDefault;
 import com.ssafy.bid.domain.board.dto.BoardModifyRequest;
 import com.ssafy.bid.domain.common.BaseEntity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -83,12 +84,16 @@ public class Board extends BaseEntity {
 	/**
 	 * bidding : board(me) = 1 : N
 	 */
+	@Nullable
 	private Long biddingNo;
+
+	@Nullable
+	private Integer subNo;
 
 	@Builder
 	private Board(String title, String description, Integer startPrice, BoardStatus boardStatus, Integer totalPrice,
 		Integer attendeeCount, Category category, String goodsImgUrl, Integer userNo, Integer gradeNo,
-		Integer gradePeriodNo) {
+		Integer gradePeriodNo, @org.jetbrains.annotations.Nullable Integer subNo) {
 		this.title = title;
 		this.description = description;
 		this.startPrice = startPrice;
@@ -100,6 +105,7 @@ public class Board extends BaseEntity {
 		this.userNo = userNo;
 		this.gradeNo = gradeNo;
 		this.gradePeriodNo = gradePeriodNo;
+		this.subNo = subNo;
 	}
 
 	public Long modify(BoardModifyRequest boardModifyRequest) {
