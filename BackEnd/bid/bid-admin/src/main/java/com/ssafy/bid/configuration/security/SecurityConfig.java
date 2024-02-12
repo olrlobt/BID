@@ -3,10 +3,8 @@ package com.ssafy.bid.configuration.security;
 import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,8 +25,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @CrossOrigin
-@EnableWebSecurity
-@Configuration
+// @EnableWebSecurity
+// @Configuration
 public class SecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
@@ -46,7 +44,7 @@ public class SecurityConfig {
 				authorize
 					.requestMatchers(
 						"/password/send-code", "/password/check-code", "/send-code", "/check-code",
-						"/check-id", "/schools", "/register", "/password", "/login", "/find-id"
+						"/check-id", "/schools", "/register", "/password", "/login/**", "/find-id"
 					).permitAll()
 					.anyRequest().authenticated()
 			)
