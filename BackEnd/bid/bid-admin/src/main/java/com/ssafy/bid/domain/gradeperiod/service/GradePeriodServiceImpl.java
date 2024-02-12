@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class GradePeriodServiceImpl implements GradePeriodService {
 
 	private final GradePeriodRepository gradePeriodRepository;
+	private final GradePeriodScheduler gradePeriodScheduler;
 
 	@Override
 	public void updateGradePeriod(UserType userType, int gradeNo,
@@ -27,7 +28,10 @@ public class GradePeriodServiceImpl implements GradePeriodService {
 		gradePeriodRepository.findAllByGradeNo(gradeNo).forEach(gradePeriod ->
 			gradePeriodListUpdateRequest.getGradePeriodUpdateRequests().stream()
 				.filter(request -> gradePeriod.getNo().equals(request.getNo()))
-				.forEach(request -> gradePeriod.update(request.getStartPeriod(), request.getEndPeriod()))
+				.forEach(request -> {
+					gradePeriod.update(request.getStartPeriod(), request.getEndPeriod());
+					gradePeriodScheduler.scheduleClassLessonTask(gradePeriod);
+				})
 		);
 	}
 }
