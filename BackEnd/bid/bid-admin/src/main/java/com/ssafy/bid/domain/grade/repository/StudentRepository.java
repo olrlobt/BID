@@ -8,5 +8,6 @@ import com.ssafy.bid.domain.user.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 	void deleteAllByGradeNo(int gradeNo);
+
 	List<Student> findAllByGradeNo(Integer gradeNo);
 }

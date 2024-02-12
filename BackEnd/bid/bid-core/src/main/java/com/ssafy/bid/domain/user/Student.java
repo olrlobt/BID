@@ -79,4 +79,8 @@ public class Student extends User {
 	public void calculateTaxRate(int taxRate) {
 		this.taxRate = taxRate + 7; // 소득세 + VAT
 	}
+
+	public void addBall() {
+		this.ballCount += 1;
+	}
 }
