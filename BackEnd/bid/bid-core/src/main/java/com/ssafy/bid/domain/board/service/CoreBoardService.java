@@ -25,7 +25,6 @@ import com.ssafy.bid.domain.coupon.CouponStatus;
 import com.ssafy.bid.domain.coupon.repository.CoreCouponRepository;
 import com.ssafy.bid.domain.grade.dto.GradeProjection;
 import com.ssafy.bid.domain.grade.repository.CoreGradeRepository;
-import com.ssafy.bid.domain.gradeperiod.GradePeriod;
 import com.ssafy.bid.domain.gradeperiod.repository.CoreGradePeriodRepository;
 import com.ssafy.bid.domain.gradeperiod.service.CoreGradePeriodService;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
@@ -77,7 +76,7 @@ public class CoreBoardService {
 
 	@Scheduled(cron = "0 0 9 * * *")
 	@Transactional
-	public void addWeeklyCoupon(){
+	public void addWeeklyCoupon() {
 		// 모든 학급의 쿠폰
 		List<GradeProjection> allGradeNo = coreGradeRepository.findBy();
 
