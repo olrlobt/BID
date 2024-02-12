@@ -1,11 +1,13 @@
 import styled from './SmallEvent.module.css';
+import { Views } from 'react-big-calendar';
 
-export default function SmallEvent({ handleClick, income, outcome }) {
-  console.log(handleClick);
+export default function SmallEvent({ date }) {
+  console.log(date);
+
   return (
     <section className={styled.container}>
       <div>hi</div>
-      <button onClick={handleClick}>뒤로가자</button>
+      <button>뒤로가자</button>
     </section>
   );
 }
