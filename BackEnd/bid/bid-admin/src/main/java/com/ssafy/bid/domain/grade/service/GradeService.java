@@ -23,7 +23,7 @@ public interface GradeService {
 
 	void updateSavingPeriod(UserType userType, int gradeNo, SavingPeriodUpdateRequest savingPeriodUpdateRequest);
 
-	void updateSavingPeriod(int gradeNo, SavingPeriodUpdateRequest savingPeriodUpdateRequest);
+	// void updateSavingPeriod(int gradeNo, SavingPeriodUpdateRequest savingPeriodUpdateRequest);
 
 	void holdBid(int gradeNo);
 

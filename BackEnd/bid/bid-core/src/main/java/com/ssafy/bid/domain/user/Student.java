@@ -75,4 +75,10 @@ public class Student extends User {
 	public void calculateTaxRate(int taxRate) {
 		this.taxRate = taxRate + 7; // 소득세 + VAT
 	}
+
+	public void updateStudentInfo(String newId, String newName, String newBirthDate, PasswordEncoder passwordEncoder) {
+		super.updateInfo(newId, newName);
+		super.changePassword(passwordEncoder.encode(newBirthDate));
+		this.birthDate = newBirthDate;
+	}
 }
