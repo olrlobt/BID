@@ -29,7 +29,8 @@ public class CouponService {
 
 	public void useUserCoupon(int userNo, int couponNo) {
 		UserCoupon coupon = userCouponRepository.findFirstByUserNoAndCouponNoAndUseStatus(
-			userNo, couponNo, UsageStatus.BEFORE_USE).orElseThrow(() -> new ResourceNotFoundException("사용할 쿠폰이 없습니다.", couponNo));
+				userNo, couponNo, UsageStatus.BEFORE_USE)
+			.orElseThrow(() -> new ResourceNotFoundException("사용할 쿠폰이 없습니다.", couponNo));
 
 		coupon.request();
 	}
