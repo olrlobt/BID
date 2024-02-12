@@ -42,7 +42,7 @@ public class SavingApi {
 		@RequestBody SavingSaveRequest savingSaveRequest
 	) {
 		// CustomUserInfo userInfo = userDetails.getUserInfo();
-		CustomUserInfo userInfo = new CustomUserInfo(2, "ABC", "ABC", "ABC", 1, 2, null);
+		CustomUserInfo userInfo = new CustomUserInfo(2, "ABC", "ABC", "ABC", 1, 2, null, null);
 		savingService.saveSavings(userInfo, savingSaveRequest);
 		return ResponseEntity.status(CREATED).build();
 	}
