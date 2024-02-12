@@ -28,6 +28,7 @@ public class GradeStatisticsGetResponse {
 	private boolean isDangerInDeflation;
 	private List<BiddingStatisticsFindResponses> biddingStatisticsFindResponses;
 	private List<GradePeriodsGetResponse> gradePeriodsGetResponses;
+	private boolean isHold;
 
 	public GradeStatisticsGetResponse(
 		long unapprovedCouponCount,
@@ -56,7 +57,8 @@ public class GradeStatisticsGetResponse {
 		int countOneDaysAgo,
 		int salaryRecommendation,
 		boolean isDangerInInflation,
-		boolean isDangerInDeflation
+		boolean isDangerInDeflation,
+		boolean isHold
 	) {
 		this.unapprovedCouponCount = (int)unapprovedCouponCount;
 		this.salary = salary;
@@ -104,6 +106,7 @@ public class GradeStatisticsGetResponse {
 		this.salaryRecommendation = salaryRecommendation;
 		this.isDangerInInflation = isDangerInInflation;
 		this.isDangerInDeflation = isDangerInDeflation;
+		this.isHold = isHold;
 	}
 
 	public void setGradePeriodsGetResponses(List<GradePeriodsGetResponse> gradePeriodsGetRespons) {
