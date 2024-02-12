@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "./DropDownSelect.module.css";
 
-export default function RoundedInfoButton(props){
+export default function DropDownSelect(props){
 	const { selectName, selectTitle, options } = props;
 
 	return(
@@ -9,7 +9,7 @@ export default function RoundedInfoButton(props){
       <option defaultValue='none' selected disabled>{selectTitle}</option>
       {
         options.map((op) =>
-          <option key={op.value}>{op.value}</option>
+          <option key={op.value} value={op.value}>{op.text}</option>
         )
       }
     </select>
