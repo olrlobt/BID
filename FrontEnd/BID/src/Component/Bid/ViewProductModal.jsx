@@ -8,6 +8,7 @@ import SubmitButton from "../Common/SubmitButton";
 import Comment from "./Comment";
 import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
+import DropDownSelect from '../Common/DropDownSelect';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getProductDetailApi, deleteProductApi } from "../../Apis/TeacherBidApis";
 // import { addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
@@ -23,8 +24,8 @@ export default function ViewProductModal({ onClose, ...props }) {
   const [averagePrice, setAveragePrice] = useState(0);
   const [description, setDescription] = useState('');
   const [comments, setComments] = useState([]);
-  const [userType, /*setUserType*/] = useState('teacher');
-  // const [isSetting, setIsSetting] = useState(false);
+  const [userType, /*setUserType*/] = useState('writer');
+  const [isSetting, setIsSetting] = useState(false);
 
   /** 경매 상세 쿼리 */
   const { data: productDetailIinfo } = useQuery({
@@ -126,7 +127,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                 userType==='writer'?
                 <>
                 <SettingButton
-                  onClick={ () => console.log('modify') }
+                  onClick={ () => setIsSetting(!isSetting) }
                   svg={ Edit }
                   text='수정'
                   height='1vw'
@@ -136,13 +137,19 @@ export default function ViewProductModal({ onClose, ...props }) {
                 :
                 null
               }
-              <SettingButton
-                onClick={ deleteProduct }
-                svg={ Delete }
-                text='삭제'
-                height='1vw'
-                backgroundColor='#F23F3F'
-              />
+              {
+                !isSetting?
+                  <SettingButton
+                    onClick={ deleteProduct }
+                    svg={ Delete }
+                    text='삭제'
+                    height='1vw'
+                    backgroundColor='#F23F3F'
+                  />
+                  :
+                  null
+              }
+              
             </div>
           }
           <div className={styled.content}>
@@ -152,38 +159,62 @@ export default function ViewProductModal({ onClose, ...props }) {
             <div className={styled.infoArea}>
               <input 
                 type='text'
-                defaultValue={ title }
+                defaultValue={title}
+                disabled={!isSetting}
               />
-              <RoundedInfoButton
-                value = {category}
-                unit = ''
-                textColor = '#ff3f3f'
-                borderColor = '#ff3f3f'
-                backgroundColor = 'white'
-                padding = '0.5vw 1vw'
-              />
-              <RoundedInfoButton
-                value = {productDetailIinfo.gradePeriodNo}
-                unit = '교시'
-                textColor = '#ff3f3f'
-                borderColor = '#ff3f3f'
-                backgroundColor = 'white'
-                padding = '0.5vw 1vw'
-              />
+              {
+                isSetting?
+                <DropDownSelect
+                  selectName='category'
+                  selectTitle='상품 유형'
+                  options={[
+                    {'value': '간식', 'text': '간식'},
+                    {'value': '학습', 'text': '학습'},
+                    {'value': '오락', 'text': '오락'},
+                    {'value': '기타', 'text': '기타'},
+                  ]}
+                />
+                :
+                <>
+                <RoundedInfoButton
+                  value = {category}
+                  unit = ''
+                  textColor = '#ff3f3f'
+                  borderColor = '#ff3f3f'
+                  backgroundColor = 'white'
+                  padding = '0.5vw 1vw'
+                />
+                <RoundedInfoButton
+                  value = {productDetailIinfo.gradePeriodNo}
+                  unit = '교시'
+                  textColor = '#ff3f3f'
+                  borderColor = '#ff3f3f'
+                  backgroundColor = 'white'
+                  padding = '0.5vw 1vw'
+                />
+                </>
+              }
             </div>
-            <div className={styled.priceArea}>
-              <div className={styled.verticalLine}></div>
-              <div className={styled.startPrice}>
-                <div className={styled.priceCategory}>시작가</div>
-                <div className={styled.price}>{productDetailIinfo.startPrice}비드</div>
+            {
+              isSetting?
+              null
+              :
+              <div className={styled.priceArea}>
+                <div className={styled.verticalLine}></div>
+                <div className={styled.startPrice}>
+                  <div className={styled.priceCategory}>시작가</div>
+                  <div className={styled.price}>{productDetailIinfo.startPrice}비드</div>
+                </div>
+                <div className={styled.verticalLine}></div>
+                <div className={styled.averagePrice}>
+                  <div className={styled.priceCategory}>평균가</div>
+                  <div className={`${styled.price} ${styled.average}`}>{averagePrice}비드</div>
+                </div>
+                <div className={styled.verticalLine}></div>
               </div>
-              <div className={styled.verticalLine}></div>
-              <div className={styled.averagePrice}>
-                <div className={styled.priceCategory}>평균가</div>
-                <div className={`${styled.price} ${styled.average}`}>{averagePrice}비드</div>
-              </div>
-              <div className={styled.verticalLine}></div>
-            </div>
+            }
+            
+
           </div>
           {
             userType==='reader'?
@@ -247,7 +278,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             </div>
           </div>
           {
-            userType==='teacher'?
+            userType==='teacher' || isSetting?
             null:
             <div className={styled.newCommentArea}>
               <form /*onSubmit={addNewComment}*/>
