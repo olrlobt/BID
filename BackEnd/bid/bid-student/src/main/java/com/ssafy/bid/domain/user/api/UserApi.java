@@ -5,7 +5,6 @@ import static org.springframework.http.HttpStatus.*;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,11 +18,11 @@ import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AttendanceResponse;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
+import com.ssafy.bid.domain.user.dto.LoginResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
-import com.ssafy.bid.domain.user.service.CustomUserDetails;
 import com.ssafy.bid.domain.user.service.UserService;
 
 import jakarta.servlet.http.Cookie;
@@ -40,10 +39,10 @@ public class UserApi {
 
 	@PatchMapping("/users/attendance/check")
 	public ResponseEntity<?> checkAttendance(
-		@AuthenticationPrincipal CustomUserDetails userDetails
+		// @AuthenticationPrincipal CustomUserDetails userDetails
 	) {
-		int userNo = userDetails.getUserInfo().getNo();
-		userService.checkAttendance(userNo);
+		// int userNo = userDetails.getUserInfo().getNo();
+		userService.checkAttendance(2);
 		return ResponseEntity.status(OK).build();
 	}
 
@@ -73,11 +72,12 @@ public class UserApi {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpServletResponse response) {
-		TokenResponse tokenResponse = coreUserService.login(request);
+	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+		LoginResponse loginResponse = coreUserService.login(request);
+		TokenResponse tokenResponse = loginResponse.getTokenResponse();
 		Cookie cookie = createCookie(tokenResponse.getRefreshToken());
 		response.addCookie(cookie);
-		return ResponseEntity.status(OK).body(tokenResponse.getAccessToken());
+		return ResponseEntity.ok(loginResponse);
 	}
 
 	private Cookie createCookie(String refreshToken) {
