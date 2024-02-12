@@ -15,6 +15,9 @@ import com.ssafy.bid.domain.coupon.dto.CouponResponse;
 import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 import com.ssafy.bid.domain.coupon.repository.CouponRepository;
 import com.ssafy.bid.domain.coupon.repository.UserCouponRepository;
+import com.ssafy.bid.domain.notification.NotificationType;
+import com.ssafy.bid.domain.notification.dto.NotificationRequest;
+import com.ssafy.bid.domain.notification.service.NotificationService;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class CouponService {
 
 	private final CouponRepository couponRepository;
 	private final UserCouponRepository userCouponRepository;
+	private final NotificationService notificationService;
 
 	@Transactional(readOnly = true)
 	public CouponListResponse findCoupons(int gradeNo) {
@@ -64,10 +68,18 @@ public class CouponService {
 	public void acceptUserCoupon(long userCouponNo) {
 		// admin의 gradeNO 이 gradeNo과 다르면 error
 
-		if (!userCouponRepository.existsById(userCouponNo)) {
-			throw new ResourceNotFoundException("사용할 쿠폰이 없습니다.", userCouponNo);
-		}
 		// Todo. 해당 학생 알림 주기
+		UserCoupon userCoupon = userCouponRepository.findById(userCouponNo)
+			.orElseThrow(() -> new ResourceNotFoundException("사용할 쿠폰이 없습니다.", userCouponNo));
+
+		NotificationRequest notificationRequest = NotificationRequest.builder()
+			.title("쿠폰 사용")
+			.content("쿠폰 사용이 승인되었어요")
+			.receiverNo(userCoupon.getUserNo())
+			.notificationType(NotificationType.COUPON_APPROVE)
+			.build();
+		notificationService.send(notificationRequest);
+
 		userCouponRepository.deleteByNoAndUseStatus(userCouponNo, UsageStatus.REQUEST_PROGRESS);
 	}
 
@@ -77,7 +89,14 @@ public class CouponService {
 		UserCoupon userCoupon = userCouponRepository.findByNoAndUseStatus(userCouponNo, UsageStatus.REQUEST_PROGRESS)
 			.orElseThrow(() -> new ResourceNotFoundException("사용할 쿠폰이 없습니다.", userCouponNo));
 
-		// Todo. 해당 학생 알림 주기
+		NotificationRequest notificationRequest = NotificationRequest.builder()
+			.title("쿠폰 거절")
+			.content("쿠폰 사용이 거절되었어요")
+			.receiverNo(userCoupon.getUserNo())
+			.notificationType(NotificationType.COUPON_APPROVE)
+			.build();
+		notificationService.send(notificationRequest);
+
 		userCoupon.reject();
 	}
 

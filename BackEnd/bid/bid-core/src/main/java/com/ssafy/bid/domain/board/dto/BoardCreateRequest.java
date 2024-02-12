@@ -16,6 +16,19 @@ public class BoardCreateRequest {
 	private String goodsImgUrl;
 	private int startPrice;
 	private int gradePeriodNo;
+	private int subNo;
+
+	@Builder
+	public BoardCreateRequest(String title, String description, Category category, String goodsImgUrl, int startPrice,
+		int gradePeriodNo, int subNo) {
+		this.title = title;
+		this.description = description;
+		this.category = category;
+		this.goodsImgUrl = goodsImgUrl;
+		this.startPrice = startPrice;
+		this.gradePeriodNo = gradePeriodNo;
+		this.subNo = subNo;
+	}
 
 	@Builder
 	public BoardCreateRequest(String title, String description, Category category, String goodsImgUrl, int startPrice,
@@ -51,6 +64,7 @@ public class BoardCreateRequest {
 			.gradeNo(gradeNo)
 			.totalPrice(0)
 			.attendeeCount(0)
+			.subNo(this.subNo)
 			.boardStatus(BoardStatus.PROGRESS)
 			.build();
 	}
