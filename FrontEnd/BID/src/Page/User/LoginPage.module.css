@@ -102,6 +102,14 @@
     margin-right: 1.2rem;
 }
 
+
+.managelogin { 
+    text-decoration: none;
+    color: #A6A6A6;
+    cursor: pointer;
+    margin-bottom: 5vh;
+}
+
 .registerLink {
     text-decoration: none;
     color: #A6A6A6;
@@ -148,15 +156,40 @@
 }
 
 
-
 .inputWithIcon {
     display: flex;
     align-items: center;
 }
 
-.icon {
-  position: absolute;
-  right:10px;
-      
-}
   
+.searchSchool {
+    position: absolute;
+    display: flex;
+    height: 18px;
+    width: 110px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Changed to column layout */
+    box-sizing: border-box;
+    top: -25px; 
+    border-radius: .3rem;
+    border: 1px solid #ECECEC;
+    font-size: 0.65rem;
+
+}
+
+.searchSchool input:focus {
+  border: none; 
+  outline: none; 
+}
+
+.searchSchoolIcon {
+    position: absolute;
+    right: 48px;
+    top: -25px; /* 로고 아래로 조정 */
+}
+
+.info {
+    font-size: 0.8rem;
+    margin-top: 1vh;
+}
