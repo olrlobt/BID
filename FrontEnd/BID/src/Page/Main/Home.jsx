@@ -24,6 +24,7 @@ import useRequestedCoupons from "../../hooks/useRequestedCoupons";
 import { moneySeletor } from "../../Store/moneySlice";
 import PieChart from "../../Component/Common/PieChart";
 import LineChart from "../../Component/Common/LineChart";
+import { useLocation } from "react-router-dom";
 
 export default function Home() {
   const { openModal } = useModal();
@@ -39,13 +40,13 @@ export default function Home() {
   const requestedCoupons = useSelector(requestCouponSelector);
   const [lineData, setLineData] = useState([]);
 
-  const gradeNo = 1;
+  const location = useLocation();
+  const gradeNo = 3;
   const { data: dashboardInfo } = useQuery({
     queryKey: ["HomeDashboard"],
     queryFn: () =>
       viewDashboard(gradeNo).then((res) => {
         if (res.data !== undefined) {
-          console.log(res.data);
           changeBid(res.data.salary);
           initMoney(res.data.asset);
           initCount(res.data.biddingStatisticsFindResponses[13].count);
