@@ -44,12 +44,12 @@ export default function BankPage() {
     changeSavings.mutate();
   };
 
-  const groupNo = 1;
+  const gradeNo = 1;
 
   const changeSavings = useMutation({
     mutationKey: ['changeSaving'],
     mutationFn: () =>
-      updateSavingList(groupNo, savingBasket)
+      updateSavingList(gradeNo, savingBasket)
         .then(() => {
           changeSavingList(savingBasket);
           setIsEdit(!isEdit);
@@ -63,7 +63,7 @@ export default function BankPage() {
   const { data: savingInfo } = useQuery({
     queryKey: ['savingInfo'],
     queryFn: () =>
-      viewSavingList(groupNo).then((res) => {
+      viewSavingList(gradeNo).then((res) => {
         initSavingList(res.data);
         setSavingBasket((prev) => [
           {

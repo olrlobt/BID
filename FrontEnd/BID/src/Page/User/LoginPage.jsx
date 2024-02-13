@@ -3,7 +3,7 @@ import styled from "./LoginPage.module.css";
 import { Link , useNavigate } from "react-router-dom";
 import Logo from '../../Asset/Image/LoginLogo.png';
 import useModels from "../../hooks/useModels";
-import { studentLoginApi } from "../../Apis/StudentPageApis";
+import { studentLoginApi } from "../../Apis/ModelApis";
 import { useMutation } from "@tanstack/react-query";
 
 function LoginPage() {
@@ -18,10 +18,12 @@ function LoginPage() {
   const studentLoginQuery = useMutation({
     mutationKey: ['studentLogin'],
     mutationFn: (userCredentials) => studentLoginApi( userCredentials),
-    onSuccess: (data) => {
-      loginStudent(data);
+    onSuccess: (res) => {
+      loginStudent(res);
+      localStorage.setItem('accessToken', res.data.tokenResponse.accessToken);
+      localStorage.setItem('refreshToken', res.data.tokenResponse.refreshToken);
       navigate('/studentmain');
-      console.log(data)
+      console.log(res.data)
     },
     onError: (error) => {
       console.log(error);
