@@ -22,7 +22,7 @@ services:
       TZ: Asia/Seoul
 
   bid-core:
-    image: olrlobt/bid-core
+    image: olrlobt/bid-core:latest
     container_name: bid-core
     ports:
       - "8083:8083"
@@ -30,7 +30,7 @@ services:
       - TZ=Asia/Seoul
 
   bid-admin:
-    image: olrlobt/bid-admin
+    image: olrlobt/bid-admin:latest
     container_name: bid-admin
     depends_on:
       - bid-core
@@ -40,7 +40,7 @@ services:
       - TZ=Asia/Seoul
 
   bid-student:
-    image: olrlobt/bid-student
+    image: olrlobt/bid-student:latest
     container_name: bid-student
     depends_on:
       - bid-core
