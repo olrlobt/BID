@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const TeacherManageApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
@@ -52,7 +52,7 @@ export const updateSavingList = async (gradeNo, savingList) => {
  */
 export const changeStopTime = async (gradeNo, parseUpdatedTime) => {
   return await TeacherManageApis.patch(`/${gradeNo}/grade-periods`, {
-    gradePeriodsRequests: parseUpdatedTime,
+    gradePeriodUpdateRequests: parseUpdatedTime,
   });
 };
 
@@ -74,4 +74,19 @@ export const viewStudentBalls = async (gradeNo) => {
 
 export const resetStudentBalls = async (gradeNo) => {
   return await TeacherManageApis.patch(`/${gradeNo}/balls`);
+};
+
+/**
+ * 학생 정보 가져오기
+ * @param gradeNo 학급 넘버
+ * @param userNo 학생 번호
+ * @param startDate 시작 일자
+ * @param endDate 마지막 일자
+ * @returns
+ */
+
+export const viewStudentDetail = (gradeNo, userNo, startDate, endDate) => {
+  return TeacherManageApis.get(
+    `/${gradeNo}/users/${userNo}?startDate=${startDate}&endDate=${endDate}`
+  );
 };

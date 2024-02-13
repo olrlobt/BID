@@ -3,9 +3,8 @@
   width: calc(100% - 260px);
   /* float: right; */
   margin-left: 2vw;
-  background-color: #FFFEF0;
-  height: auto; 
-
+  background-color: #fffef0;
+  height: auto;
 }
 
 .topRightButtons {
@@ -19,14 +18,13 @@
 }
 
 .studentFinDataContainer {
-position: relative; /* sticky가 아니라 relative나 absolute 사용 */
-width: 54vw; /* 더 넓은 너비로 설정 */
-margin-left: 20px; /* 여백 조정 */
-height: auto; /* 내용에 따라 높이 자동 조정 */
+  position: relative; /* sticky가 아니라 relative나 absolute 사용 */
+  width: 54vw; /* 더 넓은 너비로 설정 */
+  margin-left: 20px; /* 여백 조정 */
+  height: auto; /* 내용에 따라 높이 자동 조정 */
 }
 
-
-.orderlist{
+.orderlist {
   margin-top: 6vh;
   font-size: 14px;
   position: relative;
@@ -35,73 +33,69 @@ height: auto; /* 내용에 따라 높이 자동 조정 */
 }
 
 .orderlist > p {
-margin-top: 6vh;
-font-size: 14px;
-position: relative;
+  margin-top: 6vh;
+  font-size: 14px;
+  position: relative;
 }
 
 .orderTableContainer {
-display: flex;
-justify-content: flex-start; /* 테이블을 왼쪽 정렬 */
-align-items: flex-start; /* 상단 정렬 */
-width: 100%; /* 컨테이너의 전체 너비를 사용 */
-
+  max-height: 80vh;
+  overflow: scroll;
 }
 
 .buttonSpacing {
-margin-right: 10px; /* 원하는 간격 값으로 조절 */
+  margin-right: 10px; /* 원하는 간격 값으로 조절 */
 }
 .orderTable {
-width: 20vw;
-background-color: #FFFEF4;
-line-height: 1.5;
-font-size: 14px;
-border-collapse: collapse;
-table-layout: fixed;
+  width: 20vw;
+  background-color: #fffef4;
+  line-height: 1.5;
+  font-size: 14px;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
-
 
 .orderTable th {
-width: 4vw;
-
+  width: 3vw;
 }
 
-.orderTable th:nth-child(2), .orderTable td:nth-child(2) {
-width: 8vw;
+.orderTable th:nth-child(2),
+.orderTable td:nth-child(2) {
+  width: 6vw;
 }
 
-.orderTable th:nth-child(3), .orderTable td:nth-child(3) {
-width: 8vw;
+.orderTable th:nth-child(3),
+.orderTable td:nth-child(3) {
+  width: 6vw;
 }
 .orderTable thead {
-background-color: #E6E5DB;
+  background-color: #e6e5db;
 }
 
-
-.orderTable th{
+.orderTable th {
   height: 8vh;
   font-size: 16px;
   vertical-align: middle;
 }
 
-.orderTable td{
-height: 7vh;
-padding: 10px;
-box-sizing: border-box;
-text-align: center;
-vertical-align: middle;
+.orderTable td {
+  height: 7vh;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+  vertical-align: middle;
 }
 
 /* ClassPage.module.css */
 
 .ModalContent {
-position: fixed;
-top: 50%;
-left: 50%;
-right: auto;
-bottom: auto;
-transform: translate(-50%, -50%);
-max-width: 300px; /* 원하는 최대 너비로 설정 */
-width: 80%; /* 원하는 너비로 설정 */
-z-index: 1000; /* 다른 컴포넌트 위에 나타나도록 설정 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  max-width: 300px; /* 원하는 최대 너비로 설정 */
+  width: 80%; /* 원하는 너비로 설정 */
+  z-index: 1000; /* 다른 컴포넌트 위에 나타나도록 설정 */
 }
