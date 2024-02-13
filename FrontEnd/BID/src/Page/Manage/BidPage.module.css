@@ -4,6 +4,7 @@
 	width: calc(100% - 20vw);
   height: 100vh;
 	padding: 5vh;
+	margin: 0 auto;
 	box-sizing: border-box;
 }
 
@@ -14,6 +15,10 @@
 }
 
 .bidBody {
+}
+
+.bidBody{
+	overflow-x: scroll;
 }
 
 .couponListWrapper{
@@ -30,6 +35,8 @@
 
 .productsWrapper {
 	display: flex;
-	justify-content: flex-start;
 	flex-wrap: wrap;
+	gap: 1.8vw;
+	padding: 2vw;
+	box-sizing: border-box;
 }

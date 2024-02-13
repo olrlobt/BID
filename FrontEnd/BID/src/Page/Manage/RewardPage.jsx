@@ -48,7 +48,7 @@ export default function RewardPage() {
   /** 리워드 지급 쿼리 */
   const sendRewardQuery = useMutation({
     mutationKey: ['sendReward'],
-    mutationFn: (postData) => sendRewardApi(postData),
+    mutationFn: (postData) => { sendRewardApi(1, postData) },
     onSuccess: (res) => { console.log(res); },
     onError: (error) => { console.log(error); },
   })

@@ -5,10 +5,9 @@
   width: 16vw;
   height: 21.2vw;
   padding: 1vw;
-  margin: 0 1.2vw 2.4vw 1.2vw;
 	display: flex;
   flex-direction: column;
-	box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
+	box-shadow: 0 1vw 2vw rgba(0,0,0,0.1);
   text-align: center;
 }
 

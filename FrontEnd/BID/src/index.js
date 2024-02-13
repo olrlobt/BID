@@ -6,16 +6,21 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "./Store";
+import { store, persistor } from "./Store";
 import ModalContainer from "./Component/Common/ModalContainer";
+import { PersistGate } from "redux-persist/integration/react";
+
+const LoadingView = <div>Loading...</div>;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
-      <ModalContainer />
-    </BrowserRouter>
+    <PersistGate loading={LoadingView} persistor={persistor} >
+      <BrowserRouter>
+        <App />
+        <ModalContainer />
+      </BrowserRouter>
+    </PersistGate>
   </Provider>
 );
 
