@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import styled from './ClassList.module.css';
-import { useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faStar } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import React, { useEffect, useState } from "react";
+import styled from "./ClassList.module.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark, faStar } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import {
   deleteClass,
   editMainClass,
   getGrades,
-} from '../../Apis/ClassManageApis';
+} from "../../Apis/ClassManageApis";
 export default function ClassList() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [editedClassList, setEditedClassList] = useState([]);
 
   const { data: classList } = useQuery({
-    qureyKey: ['classList'],
+    queryKey: ["ClassList"],
     queryFn: () =>
       getGrades().then((res) => {
         setEditedClassList(res.data);
@@ -23,17 +24,15 @@ export default function ClassList() {
       }),
   });
 
-  // x 버튼 클릭 시 상태를 업데이트하기 위한 useState 훅
-
   // x 버튼 클릭 핸들러
   const handleDeleteClass = (index) => {
     const updatedClassList = [...editedClassList];
     const deletedClass = editedClassList[index];
     if (deletedClass.main) {
-      alert('메인 학급은 삭제할 수 없습니다.');
+      alert("메인 학급은 삭제할 수 없습니다.");
     } else {
       const deleteAlert = window.confirm(
-        '삭제하신 학급은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?'
+        "삭제하신 학급은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?"
       );
       if (deleteAlert) {
         updatedClassList.splice(index, 1); // 해당 인덱스의 요소 제거
@@ -71,8 +70,8 @@ export default function ClassList() {
     <main className={styled.classList}>
       <section>
         <div className={styled.classTitle}>학급 목록</div>
-        {location.pathname === '/classlist/:teacherId/' ? (
-          ''
+        {location.pathname === "/classlist/:teacherId/" ? (
+          ""
         ) : (
           <Link to="/classlist/:teacherId/make/">
             <button className={styled.addClass}>학급 생성</button>
@@ -80,7 +79,7 @@ export default function ClassList() {
         )}
       </section>
       {/* 편집버전 아닐 때 */}
-      {location.pathname === '/classlist/:teacherId/' ? (
+      {location.pathname === "/classlist/:teacherId/" ? (
         <ul className={styled.classes}>
           {editedClassList &&
             editedClassList.map((value) => (
@@ -89,6 +88,9 @@ export default function ClassList() {
                   value.main
                     ? `${styled.eachClass} ${styled.classMain}`
                     : `${styled.eachClass}`
+                }
+                onClick={() =>
+                  navigate("/", { state: { gradeNo: editedClassList.no } })
                 }
               >
                 <span>{value.createdAt}년도 </span>
