@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.grade.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,8 @@ import com.ssafy.bid.domain.grade.repository.StudentRepository;
 import com.ssafy.bid.domain.gradeperiod.GradePeriod;
 import com.ssafy.bid.domain.gradeperiod.repository.GradePeriodRepository;
 import com.ssafy.bid.domain.gradeperiod.service.GradePeriodScheduler;
+import com.ssafy.bid.domain.saving.Saving;
+import com.ssafy.bid.domain.saving.repository.SavingRepository;
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.UserType;
@@ -40,28 +43,55 @@ public class GradeServiceImpl implements GradeService {
 	private final PasswordEncoder passwordEncoder;
 	private final GradePeriodScheduler gradePeriodScheduler;
 	private final UserAvatarRepository userAvatarRepository;
+	private final SavingRepository savingRepository;
 
 	@Override
 	@Transactional
 	public void saveGrade(int userNo, GradeSaveRequest request) {
+		// 학급등록
 		Grade grade = request.toEntity();
 		Grade savedGrade = gradeRepository.save(grade);
 
+		// 학생등록
 		int schoolNo = request.getSchoolNo();
 		List<Student> students = request.getStudentListSaveRequests().stream()
 			.map(studentListSaveRequest -> studentListSaveRequest.toEntity(passwordEncoder, schoolNo, grade.getNo()))
 			.toList();
 		List<Student> savedStudents = studentRepository.saveAll(students);
 
+		// 학생 아바타 등록
 		List<UserAvatar> userAvatars = savedStudents.stream()
 			.map(student -> new UserAvatar(student.getNo(), 1))
 			.toList();
 		userAvatarRepository.saveAll(userAvatars);
 
+		// 교시 등록
 		GradePeriodRequest gradePeriodRequest = new GradePeriodRequest(grade.getNo());
 		List<GradePeriod> gradePeriods = gradePeriodRequest.toEntity();
-		gradePeriods.forEach(gradePeriodScheduler::scheduleClassLessonTask);
-		gradePeriodRepository.saveAll(gradePeriods);
+		List<GradePeriod> savedGradePeriods = gradePeriodRepository.saveAll(gradePeriods);
+		savedGradePeriods.forEach(gradePeriodScheduler::scheduleClassLessonTask);
+
+		// 적금 등록
+		Saving a = Saving.builder()
+			.name("A")
+			.depositPeriod(14)
+			.depositCycle(1)
+			.depositPrice(30)
+			.interestRate(5)
+			.gradeNo(savedGrade.getNo())
+			.build();
+		Saving b = Saving.builder()
+			.name("B")
+			.depositPeriod(28)
+			.depositCycle(7)
+			.depositPrice(150)
+			.interestRate(10)
+			.gradeNo(savedGrade.getNo())
+			.build();
+		List<Saving> savings = new ArrayList<>();
+		savings.add(a);
+		savings.add(b);
+		savingRepository.saveAll(savings);
 
 		Admin admin = gradeRepository.findAdminByUserNo(userNo)
 			.orElseThrow(() -> new ResourceNotFoundException("학급등록: Admin 엔티티가 없음.", userNo));
