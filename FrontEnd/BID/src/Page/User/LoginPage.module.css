@@ -148,3 +148,15 @@
 }
 
 
+
+.inputWithIcon {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+  position: absolute;
+  right:10px;
+      
+}
+  
