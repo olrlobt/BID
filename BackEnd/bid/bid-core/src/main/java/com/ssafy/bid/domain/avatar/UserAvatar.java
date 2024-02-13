@@ -29,4 +29,12 @@ public class UserAvatar {
 	 * avatar : userAvatar(me) = 1 : N
 	 */
 	private Integer avatarNo;
+
+	public UserAvatar(
+		Integer userNo,
+		Integer avatarNo
+	) {
+		this.userNo = userNo;
+		this.avatarNo = avatarNo;
+	}
 }
