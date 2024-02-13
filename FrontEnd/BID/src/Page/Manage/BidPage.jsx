@@ -8,14 +8,14 @@ import Product from "../../Component/Bid/Product";
 import NoContent from "../../Component/Bid/NoContent";
 import useModal from '../../hooks/useModal';
 import useCoupons from "../../hooks/useCoupons";
-import useProducts from "../../hooks/useProducts";
+// import useProducts from "../../hooks/useProducts";
 import { useSelector } from "react-redux";
 import { couponSelector } from "../../Store/couponSlice";
 import { productSelector } from "../../Store/productSlice";
 import { DragDropContext } from "react-beautiful-dnd";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
-import { getProductListApi } from "../../Apis/TeacherBidApis";
+import { /*useQuery, */useMutation } from "@tanstack/react-query";
+import { /*getCouponListApi, */registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
+// import { getProductListApi } from "../../Apis/TeacherBidApis";
 
 export default function BidPage(){
 
@@ -31,8 +31,8 @@ export default function BidPage(){
   const [keyword, setKeyword] = useState('');
 
   const { openModal } = useModal();
-  const { initCoupons, registCoupon, unregistCoupon } = useCoupons();
-  const { initProducts } = useProducts();
+  const { /*initCoupons, */registCoupon, unregistCoupon } = useCoupons();
+  // const { initProducts } = useProducts();
 
   /** 게시자 종류를 toggle하는 함수 */
   const changeWriter = (writer) => {
