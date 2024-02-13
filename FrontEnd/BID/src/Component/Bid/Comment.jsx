@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { deleteCommentApi } from "../../Apis/TeacherBidApis";
 
 export default function Comment(props){
-  const { boardNo, replyNo, userName, content, createAt, userImgUrl, queryClient, isWriter, isDelete } = props;
+  const { boardNo, replyNo, userName, content, createAt, userImgUrl, queryClient, isWriter, isDelete, isSetting } = props;
   
   /** 날짜 형식 변환 */
   let trimmedCreateAt = new Date(createAt);
@@ -63,7 +63,10 @@ export default function Comment(props){
           }
         </div>
         <div className={styled.commentBody}>
-          <div>{ content }</div>
+          <textarea
+            defaultValue={content}
+            disabled={!isSetting}
+            />
         </div>
       </div>
     </div>

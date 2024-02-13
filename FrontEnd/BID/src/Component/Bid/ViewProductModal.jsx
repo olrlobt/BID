@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "./ViewProductModal.module.css";
+import styled from "./ManageProductModal.module.css";
 import Modal from "../Common/Modal";
 import RoundedInfoButton from "../Common/RoundedInfoButton";
 import { SvgIcon } from "@material-ui/core";
@@ -8,9 +8,9 @@ import SubmitButton from "../Common/SubmitButton";
 import Comment from "./Comment";
 import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
+import DropDownSelect from '../Common/DropDownSelect';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProductDetailApi, deleteProductApi } from "../../Apis/TeacherBidApis";
-// import { addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
+import { getProductDetailApi, deleteProductApi, addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
 
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
@@ -23,14 +23,15 @@ export default function ViewProductModal({ onClose, ...props }) {
   const [averagePrice, setAveragePrice] = useState(0);
   const [description, setDescription] = useState('');
   const [comments, setComments] = useState([]);
-  const [userType, /*setUserType*/] = useState('teacher');
-  // const [isSetting, setIsSetting] = useState(false);
+  const [isSetting, setIsSetting] = useState(false);
+
+  const userId = 89;
 
   /** 경매 상세 쿼리 */
   const { data: productDetailIinfo } = useQuery({
-    queryKey: ['getProductDetail'],
+    queryKey: ['getProductDetailSTU'],
     queryFn: () =>
-      getProductDetailApi(1, boardNo).then((res) => {
+      getProductDetailApi(boardNo).then((res) => {
         if(res.data !== undefined){
           console.log(res.data);
           setTitle(res.data.title);
@@ -46,26 +47,26 @@ export default function ViewProductModal({ onClose, ...props }) {
   /** 경매 삭제 쿼리 */
   const deleteProductQuery = useMutation({
     mutationKey: ['deleteProduct'],
-    mutationFn: (boardNo) => deleteProductApi(1, boardNo),
+    mutationFn: (boardNo) => deleteProductApi(boardNo),
     onSuccess: () => { parentQueryClient.invalidateQueries('productList') },
     onError: (error) => { console.log(error);}
   });
 
   /** 댓글 작성 쿼리 */
-  // const addCommentQuery = useMutation({
-  //   mutationKey: ['addComment'],
-  //   mutationFn: (params) => addCommentApi(params.boardNo, params.commentInfo),
-  //   onSuccess:() => { queryClient.invalidateQueries('getProductDetail'); },
-  //   onError: (error) => { console.log(error); }
-  // })
+  const addCommentQuery = useMutation({
+    mutationKey: ['addComment'],
+    mutationFn: (params) => addCommentApi(params.boardNo, params.commentInfo),
+    onSuccess:() => { queryClient.invalidateQueries('getProductDetail'); },
+    onError: (error) => { console.log(error); }
+  })
 
   /** 첫 입찰 쿼리 */
-  // const biddingQuery = useMutation({
-  //   mutationKey: ['bidding'],
-  //   mutationFn: (params) => { biddingApi(params.boardNo, params.biddingInfo); },
-  //   onSuccess: (res) => { console.log(res); },
-  //   onError: (error) => { console.log(error); }
-  // });
+  const biddingQuery = useMutation({
+    mutationKey: ['bidding'],
+    mutationFn: (params) => biddingApi(params.boardNo, params.biddingInfo),
+    onSuccess: (res) => { console.log(res); },
+    onError: (error) => { console.log(error); }
+  });
 
   /** 경매 삭제 함수 */
   const deleteProduct = (e) => {
@@ -74,42 +75,43 @@ export default function ViewProductModal({ onClose, ...props }) {
   }
 
   /** 입찰 신청 함수 */
-  // const bidSubmit = (e) => {
-  //   e.preventDefault();
-  //   const biddingPrice = e.target.price.value;
-  //   if(biddingPrice==='' || biddingPrice===null || biddingPrice<1) {
-  //     console.log('금액을 입력해주세요');
-  //   } else{
-  //     const biddingInfo = {
-  //       price: e.target.price.value
-  //     }
-  //     const params = {
-  //       boardNo: boardNo,
-  //       biddingInfo:biddingInfo
-  //     }
-  //     biddingQuery.mutate(params);
-  //     console.log(biddingPrice+'비드 입찰되었습니다');
+  const bidSubmit = (e) => {
+    e.preventDefault();
+    const biddingPrice = e.target.price.value;
+    if(biddingPrice==='' || biddingPrice===null || biddingPrice<1) {
+      console.log('금액을 입력해주세요');
+    } else{
+      const biddingInfo = {
+        price: e.target.price.value
+      }
+      const params = {
+        boardNo: boardNo,
+        biddingInfo:biddingInfo
+      }
+      biddingQuery.mutate(params);
+      console.log(biddingPrice+'비드 입찰되었습니다');
 
-  //   }
-  // };
+    }
+  };
 
   /** 댓글 생성 함수 */
-  // const addNewComment = (e) => {
-  //   e.preventDefault();
-  //   const comment = e.target.newComment.value;
-  //   if(comment === ''){
-  //     console.log('댓글을 입력해주세요');
-  //   }else{
-  //     const commentInfo = {
-  //       content: comment
-  //     }
-  //     const params = {
-  //       boardNo: boardNo,
-  //       commentInfo: commentInfo
-  //     }
-  //     addCommentQuery.mutate(params);
-  //   }
-  // }
+  const addNewComment = (e) => {
+    e.preventDefault();
+    const comment = e.target.newComment.value;
+    if(comment === ''){
+      console.log('댓글을 입력해주세요');
+    }else{
+      const commentInfo = {
+        content: comment
+      }
+      const params = {
+        boardNo: boardNo,
+        commentInfo: commentInfo
+      }
+      addCommentQuery.mutate(params);
+      e.target.newComment.value = '';
+    }
+  }
 
   return (
     <>
@@ -119,23 +121,15 @@ export default function ViewProductModal({ onClose, ...props }) {
       <div className={styled.wrapper}>
         <div className={styled.left}>
           {
-            userType==='reader'?
-            null:
+            userId===89?
             <div className={styled.header}>
-              {
-                userType==='writer'?
-                <>
-                <SettingButton
-                  onClick={ () => console.log('modify') }
-                  svg={ Edit }
-                  text='수정'
-                  height='1vw'
-                  backgroundColor='#A6A6A6'
-                />
-                </>
-                :
-                null
-              }
+              <SettingButton
+                onClick={ () => setIsSetting(!isSetting) }
+                svg={ Edit }
+                text='수정'
+                height='1vw'
+                backgroundColor='#A6A6A6'
+              />
               <SettingButton
                 onClick={ deleteProduct }
                 svg={ Delete }
@@ -144,6 +138,8 @@ export default function ViewProductModal({ onClose, ...props }) {
                 backgroundColor='#F23F3F'
               />
             </div>
+            :
+            null
           }
           <div className={styled.content}>
             <div className={styled.imgArea}>
@@ -152,44 +148,69 @@ export default function ViewProductModal({ onClose, ...props }) {
             <div className={styled.infoArea}>
               <input 
                 type='text'
-                defaultValue={ title }
+                defaultValue={title}
+                disabled={!isSetting}
               />
-              <RoundedInfoButton
-                value = {category}
-                unit = ''
-                textColor = '#ff3f3f'
-                borderColor = '#ff3f3f'
-                backgroundColor = 'white'
-                padding = '0.5vw 1vw'
-              />
-              <RoundedInfoButton
-                value = {productDetailIinfo.gradePeriodNo}
-                unit = '교시'
-                textColor = '#ff3f3f'
-                borderColor = '#ff3f3f'
-                backgroundColor = 'white'
-                padding = '0.5vw 1vw'
-              />
+              {
+                isSetting?
+                <DropDownSelect
+                  selectName='category'
+                  selectTitle='상품 유형'
+                  options={[
+                    {'value': 'SNACK', 'text': '간식'},
+                    {'value': 'LEARNING', 'text': '학습'},
+                    {'value': 'GAME', 'text': '오락'},
+                    {'value': 'ETC', 'text': '기타'},
+                  ]}
+                />
+                :
+                <>
+                <RoundedInfoButton
+                  value = {category}
+                  unit = ''
+                  textColor = '#ff3f3f'
+                  borderColor = '#ff3f3f'
+                  backgroundColor = 'white'
+                  padding = '0.5vw 1vw'
+                />
+                <RoundedInfoButton
+                  value = {productDetailIinfo.gradePeriodNo}
+                  unit = '교시'
+                  textColor = '#ff3f3f'
+                  borderColor = '#ff3f3f'
+                  backgroundColor = 'white'
+                  padding = '0.5vw 1vw'
+                />
+                </>
+              }
             </div>
-            <div className={styled.priceArea}>
-              <div className={styled.verticalLine}></div>
-              <div className={styled.startPrice}>
-                <div className={styled.priceCategory}>시작가</div>
-                <div className={styled.price}>{productDetailIinfo.startPrice}비드</div>
+            {
+              isSetting?
+              null
+              :
+              <div className={styled.priceArea}>
+                <div className={styled.verticalLine}></div>
+                <div className={styled.startPrice}>
+                  <div className={styled.priceCategory}>시작가</div>
+                  <div className={styled.price}>{productDetailIinfo.startPrice}비드</div>
+                </div>
+                <div className={styled.verticalLine}></div>
+                <div className={styled.averagePrice}>
+                  <div className={styled.priceCategory}>평균가</div>
+                  <div className={`${styled.price} ${styled.average}`}>{averagePrice}비드</div>
+                </div>
+                <div className={styled.verticalLine}></div>
               </div>
-              <div className={styled.verticalLine}></div>
-              <div className={styled.averagePrice}>
-                <div className={styled.priceCategory}>평균가</div>
-                <div className={`${styled.price} ${styled.average}`}>{averagePrice}비드</div>
-              </div>
-              <div className={styled.verticalLine}></div>
-            </div>
+            }
+            
           </div>
           {
-            userType==='reader'?
+            userId===89?
+            null
+            :
             <div className={styled.footer}>
               <div className={styled.notWriterArea}>
-                <form id="newProductForm">
+                <form onSubmit={bidSubmit}>
                   <input
                     type="number"
                     name="price"
@@ -205,8 +226,6 @@ export default function ViewProductModal({ onClose, ...props }) {
                 </form>
               </div>
             </div>
-            :
-            null
           }
         </div>
 
@@ -222,35 +241,42 @@ export default function ViewProductModal({ onClose, ...props }) {
                 createAt = {productDetailIinfo.createdAt}
                 userImgUrl = {productDetailIinfo.userProfileImgUrl}
                 isWriter = {true}
+                isSetting = {isSetting}
               />
             </div>
-            <div className={styled.othersArea}>
             {
-              comments.length===0?
-              <NoContent text='아직 작성된 댓글이 없어요'/>
+              isSetting?
+              null
               :
-              comments.map((c) =>
-                <Comment
-                  key = {c.replyNo}
-                  boardNo = {boardNo}
-                  replyNo = {c.replyNo}
-                  userName = {c.userName}
-                  content = {c.content}
-                  createAt = {c.createAt}
-                  userImgUrl = {c.userImgUrl}
-                  queryClient = {queryClient}
-                  isWriter = {false}
-                  isDelete = {userType==='teacher'/* || productDetailIinfo.userNo===c.userNo*/}
-                />
-              )
+              <div className={styled.othersArea}>
+              {
+                comments.length===0?
+                <NoContent text='아직 작성된 댓글이 없어요'/>
+                :
+                comments.map((c) =>
+                  <Comment
+                    key = {c.replyNo}
+                    boardNo = {boardNo}
+                    replyNo = {c.replyNo}
+                    userName = {c.userName}
+                    content = {c.content}
+                    createAt = {c.createAt}
+                    userImgUrl = {c.userImgUrl}
+                    queryClient = {queryClient}
+                    isWriter = {false}
+                    isDelete = {c.userNo===userId}
+                  />
+                )
+              }
+              </div>
             }
-            </div>
+            
           </div>
           {
-            userType==='teacher'?
+            isSetting?
             null:
             <div className={styled.newCommentArea}>
-              <form /*onSubmit={addNewComment}*/>
+              <form onSubmit={addNewComment}>
                 <textarea
                   name="newComment"
                   placeholder="댓글은 상냥하게 작성해주세요 : D"
