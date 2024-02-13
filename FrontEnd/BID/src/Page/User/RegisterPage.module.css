@@ -117,6 +117,18 @@
     cursor: pointer;
 }
 
+.verifyBtn { 
+    position: absolute;
+    width: 60px;
+    height: 22px;
+    color: white;
+    background-color: #A6A6A6;
+    font-size: 0.65rem;
+    right:10px;
+    top: 208px;
+    border-radius: 10px;
+    cursor: pointer;
+}
 .searchSchool
   {
     position: absolute;
