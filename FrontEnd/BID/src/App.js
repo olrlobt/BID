@@ -17,7 +17,7 @@ import MainClass from './Page/Main/MainClass';
 import AddClass from './Page/ClassManage/MakeClass';
 import SeatGame from './Page/Manage/SeatGame';
 import StudentMain from './Page/Student/StudentMain';
-import StudentBidPage from "./Page/Student/StudentBidPage";
+import StudentBidPage from './Page/Student/StudentBidPage';
 import MyPage from './Page/Student/MyPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
