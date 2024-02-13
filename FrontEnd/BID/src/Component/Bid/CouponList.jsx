@@ -4,7 +4,7 @@ import Coupon from "./Coupon";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 export default function CouponList(props){
-	const { title, coupons } = props;
+	const { title, coupons, gradeNo } = props;
 	
 	return(
 		<Droppable droppableId = {title}>
@@ -36,6 +36,7 @@ export default function CouponList(props){
 									name = {coupon.name}
 									description = {coupon.description}
 									startPrice = {coupon.startPrice}
+									gradeNo = {gradeNo}
 									
 								/>
 								</div>
