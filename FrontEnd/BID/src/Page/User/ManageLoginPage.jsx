@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from './LoginPage.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../Asset/Image/LoginLogo.png';
 import useUser from '../../hooks/useUser';
 import { loginUserApi } from '../../Apis/UserApis';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { setCookie } from '../../cookie';
 import { getGrades } from '../../Apis/ClassManageApis';
 
@@ -12,6 +17,8 @@ function ManageLoginPage() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const { loginUser } = useUser();
+  const [mainClass, setMainClass] = useState(null);
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -23,14 +30,9 @@ function ManageLoginPage() {
       loginUser(data);
       setCookie('accessToken', data.data.tokenResponse.accessToken);
 
-      // 학급 리스트 추가
-      queryClient.setQueryData([
-        'classList',
-        `classList_${data.data.adminInfo.userNo}`,
-      ]);
-
-      const mainClass = classList?.find((item) => item.main);
-      if (mainClass !== undefined) {
+      queryClient.setQueryData('ClassList');
+      // console.log(classList);
+      if (classList.find((item) => item.main === true)) {
         // main학급 정보 넣어서 보여줄 것
         navigate('/', { state: mainClass });
       } else {
@@ -45,12 +47,12 @@ function ManageLoginPage() {
       console.log(error);
     },
   });
-
   const { data: classList } = useQuery({
     queryKey: ['ClassList'],
     queryFn: () =>
       getGrades().then((res) => {
-        console.log(res.data);
+        const foundMainClass = res.data.find((item) => item.main === true);
+        setMainClass(foundMainClass);
         return res.data;
       }),
   });

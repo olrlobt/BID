@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from './GamePage.module.css';
 import { useSelector } from 'react-redux';
 import useBalls from '../../hooks/useBalls';
@@ -9,8 +9,8 @@ import { viewStudentBalls } from '../../Apis/TeacherManageApis';
 export default function GamePage() {
   const { initBalls } = useBalls();
   const ballList = useSelector(ballSelector);
-
-  const groupNo = 1;
+  const location = useLocation();
+  const groupNo = location.state.schoolInfo.no;
   const { data: stuBalls } = useQuery({
     queryKefinishGamey: ['studentBall'],
     queryFn: () =>

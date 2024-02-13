@@ -1,5 +1,5 @@
-import axios from "axios";
-import { getCookie } from "../cookie";
+import axios from 'axios';
+import { getCookie } from '../cookie';
 
 export const TeacherManageApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
@@ -7,8 +7,8 @@ export const TeacherManageApis = axios.create({
 
 TeacherManageApis.interceptors.request.use(
   (config) => {
-    config.headers["Content-Type"] = "application/json";
-    config.headers["Authorization"] = `Bearer ${getCookie("accessToken")}`;
+    config.headers['Content-Type'] = 'application/json';
+    config.headers['Authorization'] = `Bearer ${getCookie('accessToken')}`;
 
     return config;
   },

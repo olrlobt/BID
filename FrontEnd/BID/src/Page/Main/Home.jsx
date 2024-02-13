@@ -25,6 +25,7 @@ import { moneySeletor } from '../../Store/moneySlice';
 import PieChart from '../../Component/Common/PieChart';
 import LineChart from '../../Component/Common/LineChart';
 import { useLocation } from 'react-router-dom';
+import { userSelector } from '../../Store/userSlice';
 
 export default function Home() {
   const { openModal } = useModal();
@@ -79,7 +80,6 @@ export default function Home() {
     <>
       {dashboardInfo && couponList && (
         <main className={styled.home}>
-          {console.log(dashboardInfo)}
           <button className={styled.holdBtn}>
             <span className={styled.hold}>HOLD</span>
             <span className={styled.holdInfo}>

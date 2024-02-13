@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "./NavBar.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from 'react';
+import styled from './NavBar.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHouse,
   faPerson,
@@ -10,16 +10,18 @@ import {
   faDice,
   faSchool,
   faBars,
-} from "@fortawesome/free-solid-svg-icons";
-import Logo from "../../Asset/Image/logo.png";
-import { Link, useLocation } from "react-router-dom/dist";
-import { useSelector } from "react-redux";
-import { userSelector } from "../../Store/userSlice";
+} from '@fortawesome/free-solid-svg-icons';
+import Logo from '../../Asset/Image/logo.png';
+import { Link, useLocation, useNavigate } from 'react-router-dom/dist';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../Store/userSlice';
 
-export default function NavBar() {
+export default function NavBar({ state }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const teacherInfo = useSelector(userSelector);
-  console.log(teacherInfo);
+  console.log(state);
+
   return (
     <nav>
       <section className={styled.logoArea}>
@@ -27,116 +29,116 @@ export default function NavBar() {
         <div>
           <div>{teacherInfo.data.adminInfo.schoolName}</div>
           <div className={styled.classInfo}>
-            {/* {teacherInfo.data.adminInfo.}학년 {userInfo.classRoom}반 */}
+            {state.schoolInfo.year}학년 {state.schoolInfo.classRoom}반
           </div>
         </div>
       </section>
       <ul>
-        <Link to="/">
+        <div onClick={() => navigate('/', { state })}>
           <li
             className={`${styled.navLi} ${
-              location.pathname === "/" ? styled.active : ""
+              location.pathname === '/' ? styled.active : ''
             }`}
           >
             <FontAwesomeIcon
               icon={faHouse}
               className={`${styled.navImage} ${
-                location.pathname === "/" ? styled.clicked : ""
+                location.pathname === '/' ? styled.clicked : ''
               }`}
             />
             <span>HOME</span>
           </li>
-        </Link>
-        <Link to="/bid">
+        </div>
+        <div onClick={() => navigate('/bid', { state })}>
           <li
             className={`${styled.navLi} ${
-              location.pathname === "/bid" ? styled.active : ""
+              location.pathname === '/bid' ? styled.active : ''
             }`}
           >
             <FontAwesomeIcon
               icon={faPeopleArrows}
               className={`${styled.navImage} ${
-                location.pathname === "/bid" ? styled.clicked : ""
+                location.pathname === '/bid' ? styled.clicked : ''
               }`}
             />
             <span>경매</span>
           </li>
-        </Link>
-        <Link to="/class">
+        </div>
+        <div onClick={() => navigate('/class', { state })}>
           <li
             className={`${styled.navLi} ${
-              location.pathname === "/class" ? styled.active : ""
+              location.pathname === '/class' ? styled.active : ''
             }`}
           >
             <FontAwesomeIcon
               icon={faPerson}
               className={`${styled.navImage} ${
-                location.pathname === "/class" ? styled.clicked : ""
+                location.pathname === '/class' ? styled.clicked : ''
               }`}
             />
             <span>학생</span>
           </li>
-        </Link>
-        <Link to="/reward">
+        </div>
+        <div onClick={() => navigate('/reward', { state })}>
           <li
             className={`${styled.navLi} ${
-              location.pathname === "/reward" ? styled.active : ""
+              location.pathname === '/reward' ? styled.active : ''
             }`}
           >
             <FontAwesomeIcon
               icon={faCoins}
               className={`${styled.navImage} ${
-                location.pathname === "/reward" ? styled.clicked : ""
+                location.pathname === '/reward' ? styled.clicked : ''
               }`}
             />
             <span>리워드</span>
           </li>
-        </Link>
-        <Link to="/bank">
+        </div>
+        <div onClick={() => navigate('/bank', { state })}>
           <li
             className={`${styled.navLi} ${
-              location.pathname === "/bank" ? styled.active : ""
+              location.pathname === '/bank' ? styled.active : ''
             }`}
           >
             <FontAwesomeIcon
               icon={faPiggyBank}
               className={`${styled.navImage} ${
-                location.pathname === "/bank" ? styled.clicked : ""
+                location.pathname === '/bank' ? styled.clicked : ''
               }`}
             />
             <span>은행</span>
           </li>
-        </Link>
-        <Link to="/game">
+        </div>
+        <div onClick={() => navigate('/game', { state })}>
           <li
             className={`${styled.navLi} ${
-              location.pathname === "/game" ? styled.active : ""
+              location.pathname === '/game' ? styled.active : ''
             }`}
           >
             <FontAwesomeIcon
               icon={faDice}
               className={`${styled.navImage} ${
-                location.pathname === "/game" ? styled.clicked : ""
+                location.pathname === '/game' ? styled.clicked : ''
               }`}
             />
             <span>자리 뽑기</span>
           </li>
-        </Link>
-        <Link to="/for-student">
+        </div>
+        <div onClick={() => navigate('/for-student', { state })}>
           <li
             className={`${styled.navLi} ${
-              location.pathname === "/student-version" ? styled.active : ""
+              location.pathname === '/student-version' ? styled.active : ''
             }`}
           >
             <FontAwesomeIcon
               icon={faSchool}
               className={`${styled.navImage} ${
-                location.pathname === "/student-version" ? styled.clicked : ""
+                location.pathname === '/student-version' ? styled.clicked : ''
               }`}
             />
             <span>학생 버전</span>
           </li>
-        </Link>
+        </div>
       </ul>
       <Link
         to={`/classlist/${teacherInfo.data.adminInfo.userNo}`}
