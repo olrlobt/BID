@@ -4,14 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../Asset/Image/LoginLogo.png";
 import useUser from "../../hooks/useUser";
 import { loginUserApi } from "../../Apis/UserApis";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { setCookie } from "../../cookie";
+import { getGrades } from "../../Apis/ClassManageApis";
 
 function ManageLoginPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const { loginUser } = useUser();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   /** 로그인 쿼리 */
   const loginUserQuery = useMutation({
@@ -20,11 +22,31 @@ function ManageLoginPage() {
     onSuccess: (data) => {
       loginUser(data);
       setCookie("accessToken", data.data.tokenResponse.accessToken);
-      navigate("/");
+
+      // 학급 리스트 추가
+      queryClient.setQueryData(["classList"]);
+
+      const mainClass = classList.filter((item) => item.main);
+      console.log(mainClass);
+      if (mainClass.length > 0) {
+        // main학급 정보 넣어서 보여줄 것
+        navigate("/", { state: mainClass });
+      } else {
+        navigate(`/classlist/${data.data.adminInfo.userNo}/make/`);
+      }
     },
     onError: (error) => {
       console.log(error);
     },
+  });
+
+  const { data: classList } = useQuery({
+    queryKey: ["ClassList"],
+    queryFn: () =>
+      getGrades().then((res) => {
+        console.log(res.data);
+        return res.data;
+      }),
   });
 
   /** 로그인 버튼 */

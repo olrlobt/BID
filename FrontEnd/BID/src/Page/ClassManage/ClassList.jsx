@@ -65,7 +65,9 @@ export default function ClassList() {
     setEditedClassList(updatedClassList);
   };
 
-  useEffect(() => {}, [classList, editedClassList]);
+  useEffect(() => {
+    console.log(editedClassList);
+  }, [classList, editedClassList]);
   return (
     <main className={styled.classList}>
       <section>
@@ -89,9 +91,7 @@ export default function ClassList() {
                     ? `${styled.eachClass} ${styled.classMain}`
                     : `${styled.eachClass}`
                 }
-                onClick={() =>
-                  navigate("/", { state: { gradeNo: editedClassList.no } })
-                }
+                onClick={() => navigate("/", { state: { schoolInfo: value } })}
               >
                 <span>{value.createdAt}년도 </span>
                 <span>{value.schoolName} </span>

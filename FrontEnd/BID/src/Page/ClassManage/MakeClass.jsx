@@ -31,6 +31,7 @@ export default function MakeClass() {
   const classSelector = useSelector(userSelector);
 
   const handleDrop = useCallback(async (acceptedFiles) => {
+    console.log(classSelector);
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
 
@@ -66,6 +67,7 @@ export default function MakeClass() {
   };
 
   const handleSubmit = () => {
+    console.log(classSelector.data.adminInfo.schoolCode);
     setClassInfo({
       schoolCode: classSelector.data.adminInfo.schoolCode,
       year: year,
