@@ -8,9 +8,9 @@ import { useMutation } from "@tanstack/react-query";
 import { SvgIcon } from "@material-ui/core";
 import SearchIcon from '@mui/icons-material/Search';
 import useModal from "../../hooks/useModal";
+import { setCookie } from "../../cookie";
 
 function LoginPage() {
-
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
   const { loginStudent } = useModels();
@@ -26,6 +26,7 @@ function LoginPage() {
     onSuccess: (res) => {
       loginStudent({ model: res.data});
       initModels({ models: res.data.studentList });
+      setCookie('accessToken', res.data.tokenResponse.accessToken);
       navigate('/studentmain');
       console.log(res)
     },
