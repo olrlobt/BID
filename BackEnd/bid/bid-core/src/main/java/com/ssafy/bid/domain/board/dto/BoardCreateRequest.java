@@ -6,8 +6,10 @@ import com.ssafy.bid.domain.board.Category;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class BoardCreateRequest {
 
 	private String title;
