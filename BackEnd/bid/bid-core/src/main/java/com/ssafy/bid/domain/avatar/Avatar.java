@@ -28,8 +28,7 @@ public class Avatar {
 
 	private Integer price;
 
-
-	public AvatarResponse toDto(){
+	public AvatarResponse toDto() {
 
 		return AvatarResponse.builder()
 			.no(this.no)
