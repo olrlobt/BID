@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import styled from "./ManageProductModal.module.css";
 import Modal from "../Common/Modal";
 import RoundedInfoButton from "../Common/RoundedInfoButton";
-import { SvgIcon } from "@material-ui/core";
-import { Eject, Edit, Delete } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import Comment from "./Comment";
 import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
@@ -13,7 +12,6 @@ import useProducts from "../../hooks/useProducts";
 
 export default function ManageProductModal({ onClose, ...props }) {
   const boardNo = props[0];
-  const parentQueryClient = props[1];
 
   const { deleteProduct } = useProducts();
 
@@ -128,6 +126,7 @@ export default function ManageProductModal({ onClose, ...props }) {
                 userImgUrl = {productDetailIinfo.userProfileImgUrl}
                 isWriter = {true}
                 isSetting = {false}
+                isTeacher = {false}
               />
             </div>
               <div className={styled.othersArea}>
@@ -147,6 +146,7 @@ export default function ManageProductModal({ onClose, ...props }) {
                     queryClient = {queryClient}
                     isWriter = {false}
                     isDelete = {true}
+                    isTeacher = {true}
                   />
                 )
               }
