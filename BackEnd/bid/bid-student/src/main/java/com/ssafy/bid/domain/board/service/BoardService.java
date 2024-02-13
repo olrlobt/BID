@@ -192,7 +192,6 @@ public class BoardService {
 		Student receiver = studentRepository.findById(board.getUserNo())
 			.orElseThrow(() -> new ResourceNotFoundException("찾는 유저가 없습니다", userInfo.getNo()));
 
-		sender.subtractPrice(board.getResultPrice());
 		receiver.addRewardPrice(board.getResultPrice());
 	}
 }
