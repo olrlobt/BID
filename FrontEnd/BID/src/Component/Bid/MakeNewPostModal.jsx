@@ -34,10 +34,10 @@ export default function MakeNewPostModal({ onClose, ...props }) {
             name='category'
             selectTitle='상품 유형'
             options={[
-              {'value': 'snack', 'text': '간식'},
-              {'value': 'study', 'text': '학습'},
-              {'value': 'play', 'text': '오락'},
-              {'value': 'etc', 'text': '기타'},
+              {'value': '간식', 'text': '간식'},
+              {'value': '학습', 'text': '학습'},
+              {'value': '오락', 'text': '오락'},
+              {'value': '기타', 'text': '기타'},
             ]}
           />
           <DropDownSelect
@@ -70,7 +70,7 @@ export default function MakeNewPostModal({ onClose, ...props }) {
           </div>
           <div class={styled.fileSelect}>
             <input id='uploadName' class={styled.uploadName} value='첨부파일' placeholder='첨부파일'/>
-            <label for='fileUpload'>파일찾기</label> 
+            <label htmlFor='fileUpload'>파일찾기</label> 
             <input 
               type='file'
               id ='fileUpload'
