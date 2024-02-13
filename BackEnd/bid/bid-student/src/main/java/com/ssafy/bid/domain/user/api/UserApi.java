@@ -2,9 +2,7 @@ package com.ssafy.bid.domain.user.api;
 
 import static org.springframework.http.HttpStatus.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

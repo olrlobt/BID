@@ -18,6 +18,10 @@ import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.saving.repository.CoreUserSavingRepository;
+import com.ssafy.bid.domain.user.Account;
+import com.ssafy.bid.domain.user.AccountType;
+import com.ssafy.bid.domain.user.DealType;
+import com.ssafy.bid.domain.user.repository.AccountRepository;
 import com.ssafy.bid.domain.user.repository.CoreUserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,21 +33,33 @@ public class CoreSavingServiceImpl implements CoreSavingService {
 	private final CoreUserSavingRepository coreUserSavingRepository;
 	private final CoreUserRepository coreUserRepository;
 	private final NotificationService notificationService;
+	private final AccountRepository accountRepository;
 
 	@Override
 	@Transactional
 	public List<SavingExpireAlertRequest> expire() {
 		List<Integer> userSavings = new ArrayList<>();
 		List<SavingExpireAlertRequest> savingExpireAlertRequests = new ArrayList<>();
+		List<Account> accounts = new ArrayList<>();
 
 		coreUserSavingRepository.findAllSavingExpireInfos().stream()
 			.filter(savingExpireRequest -> isExpireTarget(savingExpireRequest.getUserSavingEndPeriod()))
 			.forEach(savingExpireRequest -> {
 				userSavings.add(savingExpireRequest.getUserSavingNo());
 				savingExpireAlertRequests.add(createSavingTransferAlertRequest(savingExpireRequest));
-				savingExpireRequest.getStudent().addPrice(savingExpireRequest.getCurrentPrice());
+				int price = savingExpireRequest.getStudent().addPrice(savingExpireRequest.getCurrentPrice());
+				Account account = Account.builder()
+					.accountType(AccountType.INCOME)
+					.price(price)
+					.content("적금 만기 입금.")
+					.dealType(DealType.SAVING)
+					.userNo(savingExpireRequest.getStudent().getNo())
+					.gradeNo(savingExpireRequest.getStudent().getGradeNo())
+					.build();
+				accounts.add(account);
 			});
 
+		accountRepository.saveAll(accounts);
 		coreUserSavingRepository.deleteAllById(userSavings);
 		return savingExpireAlertRequests;
 	}
@@ -73,9 +89,22 @@ public class CoreSavingServiceImpl implements CoreSavingService {
 			.map(UserSaving::getUserNo)
 			.toList();
 
+		List<Account> accounts = new ArrayList<>();
 		coreUserRepository.findAllByIds(targetUserNos).stream()
 			.filter(this::isStudentAssetEnough)
-			.forEach(request -> request.getStudent().subtractPrice(request.getPrice()));
+			.forEach(request -> {
+				request.getStudent().subtractPrice(request.getPrice());
+				Account account = Account.builder()
+					.accountType(AccountType.EXPENDITURE)
+					.price(request.getPrice())
+					.content("적금 이체.")
+					.dealType(DealType.SAVING)
+					.userNo(request.getStudent().getNo())
+					.gradeNo(request.getStudent().getGradeNo())
+					.build();
+				accounts.add(account);
+			});
+		accountRepository.saveAll(accounts);
 	}
 
 	private boolean isTransferTarget(UserSaving userSaving) {
