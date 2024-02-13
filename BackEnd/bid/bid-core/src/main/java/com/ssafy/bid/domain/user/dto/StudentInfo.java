@@ -12,4 +12,5 @@ public class StudentInfo {
 	private int gradeNo;
 	private String name;
 	private String profileImgUrl;
+	private String schoolName;
 }
