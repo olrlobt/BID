@@ -44,8 +44,9 @@ public class Student extends User {
 		this.asset += price - price / taxRate;
 	}
 
-	public void addPrice(int price) {
-		this.asset += price;
+	public int addPrice(int price) {
+		this.asset += price - price / taxRate;
+		return price - price / taxRate;
 	}
 
 	public void updateAvatar(String url) {
