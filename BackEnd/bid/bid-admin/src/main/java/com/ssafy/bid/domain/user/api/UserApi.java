@@ -147,12 +147,12 @@ public class UserApi {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpServletResponse httpResponse) {
+	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpServletResponse httpResponse) {
 		LoginResponse loginResponse = coreUserService.login(request, true);
 		TokenResponse tokenResponse = loginResponse.getTokenResponse();
 		Cookie cookie = createCookie(tokenResponse.getRefreshToken());
 		httpResponse.addCookie(cookie);
-		return ResponseEntity.status(HttpStatus.OK).body(tokenResponse.getAccessToken());
+		return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
 	}
 
 	private Cookie createCookie(String refreshToken) {

@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.bid.domain.user.Admin;
+import com.ssafy.bid.domain.user.School;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
+import com.ssafy.bid.domain.user.dto.AdminInfo;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.LoginResponse;
@@ -23,6 +25,7 @@ import com.ssafy.bid.domain.user.dto.StudentInfo;
 import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
 import com.ssafy.bid.domain.user.repository.CoreUserRepository;
+import com.ssafy.bid.domain.user.repository.SchoolRepository;
 import com.ssafy.bid.domain.user.security.JwtTokenProvider;
 import com.ssafy.bid.global.error.exception.AuthenticationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
@@ -40,6 +43,7 @@ public class CoreUserServiceImpl implements CoreUserService {
 	private final CoreUserRepository coreUserRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final RedisTemplate redisTemplate;
+	private final SchoolRepository schoolRepository;
 
 	private User authenticateUser(String id, String password) {
 		return coreUserRepository.findById(id)
@@ -70,13 +74,17 @@ public class CoreUserServiceImpl implements CoreUserService {
 						info.getProfileImgUrl());
 				}
 			}
-			return new LoginResponse(tokenResponse, studentList, studentInfo);
+			return new LoginResponse(tokenResponse, studentList, studentInfo, null);
 		} else {
 			if (!isAdmin) {
 				throw new AuthenticationFailedException("로그인: 알맞은 권한이 아님.");
 			}
 
-			return new LoginResponse(tokenResponse, null, null);
+			School school = schoolRepository.findById(user.getSchoolNo())
+				.orElseThrow(() -> new ResourceNotFoundException("학교 없음.", user.getSchoolNo()));
+			AdminInfo adminInfo = new AdminInfo(user.getNo(), school.getNo(), school.getCode());
+
+			return new LoginResponse(tokenResponse, null, null, adminInfo);
 		}
 	}
 
