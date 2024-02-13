@@ -17,7 +17,6 @@ import com.ssafy.bid.domain.avatar.repository.UserAvatarRepository;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
-import com.ssafy.bid.domain.user.repository.StudentRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
