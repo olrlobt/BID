@@ -1,8 +1,22 @@
 import axios from "axios";
+import { getCookie } from "../cookie";
 
 export const StudentApis = axios.create({
   baseURL: process.env.REACT_APP_STU_API,
 });
+
+StudentApis.interceptors.request.use(
+  (config) => {
+    config.headers["Content-Type"] = "application/json";
+    config.headers["Authorization"] = `Bearer ${getCookie("accessToken")}`;
+
+    return config;
+  },
+  (error) => {
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
 
 export const StudentRewardsApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,

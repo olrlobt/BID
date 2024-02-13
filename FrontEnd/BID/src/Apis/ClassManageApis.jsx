@@ -1,15 +1,30 @@
-import axios from 'axios';
+import axios from "axios";
+import { getCookie } from "../cookie";
 
+// axios 인스턴스 생성
 export const ClassManageApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
 });
+
+ClassManageApis.interceptors.request.use(
+  (config) => {
+    config.headers["Content-Type"] = "application/json";
+    config.headers["Authorization"] = `Bearer ${getCookie("accessToken")}`;
+
+    return config;
+  },
+  (error) => {
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
 
 /**
  * 선생님 개인 학급 조회
  * @returns 학급 조회
  */
 export const getGrades = async () => {
-  return await ClassManageApis.get('/grades');
+  return await ClassManageApis.get("/grades");
 };
 
 /**
@@ -18,7 +33,7 @@ export const getGrades = async () => {
  * @returns created 201
  */
 export const AddClass = ({ classInfo }) => {
-  return ClassManageApis.post('/grades', classInfo);
+  return ClassManageApis.post("/grades", classInfo);
 };
 
 /**
@@ -39,6 +54,6 @@ export const deleteClass = (gradeNo) => {
  */
 
 export const editMainClass = (gradeNo) => {
-  console.log('gradeNo ' + gradeNo);
-  return ClassManageApis.patch('/grades', { no: gradeNo });
+  console.log("gradeNo " + gradeNo);
+  return ClassManageApis.patch("/grades", { no: gradeNo });
 };
