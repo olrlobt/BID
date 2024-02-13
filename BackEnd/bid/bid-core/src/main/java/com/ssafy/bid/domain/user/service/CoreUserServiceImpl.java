@@ -72,6 +72,7 @@ public class CoreUserServiceImpl implements CoreUserService {
 			List<StudentInfo> studentList = coreUserRepository.findByGradeNo(student.getGradeNo());
 			StudentInfo studentInfo = null;
 			for (StudentInfo info : studentList) {
+				info.setSchoolName(school.getName());
 				if (info.getNo() == user.getNo()) {
 					studentInfo = new StudentInfo(info.getNo(), info.getGradeNo(), info.getName(),
 						info.getProfileImgUrl(), school.getName());
