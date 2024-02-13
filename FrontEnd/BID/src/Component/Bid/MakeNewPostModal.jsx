@@ -21,7 +21,6 @@ export default function MakeNewPostModal({ onClose, ...props }) {
   /** 경매 등록 함수 */
   const addNewProduct = (e) => {
     e.preventDefault();
-    console.log(e.target.gradePeriodNo.value)
     const newProductData = {
       title: e.target.title.value,
       description: e.target.description.value,
@@ -30,7 +29,7 @@ export default function MakeNewPostModal({ onClose, ...props }) {
       startPrice: e.target.startPrice.value,
       gradePeriodNo: e.target.gradePeriodNo.value,
     }
-    // console.log(newProductData);
+    console.log(newProductData);
     addNewProductQuery.mutate(newProductData);
   }
 
