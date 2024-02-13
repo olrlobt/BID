@@ -31,9 +31,10 @@ public class UserAvatar {
 	 */
 	private Integer avatarNo;
 
-	@Builder
-	private UserAvatar(Integer no, Integer userNo, Integer avatarNo) {
-		this.no = no;
+	public UserAvatar(
+		Integer userNo,
+		Integer avatarNo
+	) {
 		this.userNo = userNo;
 		this.avatarNo = avatarNo;
 	}
