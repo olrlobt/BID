@@ -72,7 +72,7 @@ public class UserApi {
 	public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse httpResponse) {
 		LoginResponse loginResponse = coreUserService.login(request, false);
 		TokenResponse tokenResponse = loginResponse.getTokenResponse();
-		Cookie cookie = createCookie(tokenResponse.getRefreshToken());
+		Cookie cookie = createCookie(tokenResponse.getAccessToken());
 		httpResponse.addCookie(cookie);
 		Map<String, Object> responseBody = new HashMap<>();
 		responseBody.put("accessToken", tokenResponse.getAccessToken());
@@ -80,8 +80,8 @@ public class UserApi {
 		return ResponseEntity.ok(responseBody);
 	}
 
-	private Cookie createCookie(String refreshToken) {
-		Cookie cookie = new Cookie("refreshToken", refreshToken);
+	private Cookie createCookie(String accessToken) {
+		Cookie cookie = new Cookie("accessToken", accessToken);
 		cookie.setHttpOnly(true);
 		// cookie.setSecure(true);
 		cookie.setPath("/");
