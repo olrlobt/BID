@@ -31,6 +31,7 @@ public class UserAvatar {
 	 */
 	private Integer avatarNo;
 
+	@Builder
 	public UserAvatar(
 		Integer userNo,
 		Integer avatarNo
