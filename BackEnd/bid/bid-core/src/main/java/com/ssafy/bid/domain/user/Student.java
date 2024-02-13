@@ -40,10 +40,6 @@ public class Student extends User {
 	 */
 	private Integer gradeNo;
 
-	public void addRewardPrice(int price) {
-		this.asset += price - price / taxRate;
-	}
-
 	public int addPrice(int price) {
 		this.asset += price - price / taxRate;
 		return price - price / taxRate;
