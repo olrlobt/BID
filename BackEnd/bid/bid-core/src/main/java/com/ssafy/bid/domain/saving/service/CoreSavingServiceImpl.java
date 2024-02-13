@@ -40,15 +40,26 @@ public class CoreSavingServiceImpl implements CoreSavingService {
 	public List<SavingExpireAlertRequest> expire() {
 		List<Integer> userSavings = new ArrayList<>();
 		List<SavingExpireAlertRequest> savingExpireAlertRequests = new ArrayList<>();
+		List<Account> accounts = new ArrayList<>();
 
 		coreUserSavingRepository.findAllSavingExpireInfos().stream()
 			.filter(savingExpireRequest -> isExpireTarget(savingExpireRequest.getUserSavingEndPeriod()))
 			.forEach(savingExpireRequest -> {
 				userSavings.add(savingExpireRequest.getUserSavingNo());
 				savingExpireAlertRequests.add(createSavingTransferAlertRequest(savingExpireRequest));
-				savingExpireRequest.getStudent().addPrice(savingExpireRequest.getCurrentPrice());
+				int price = savingExpireRequest.getStudent().addPrice(savingExpireRequest.getCurrentPrice());
+				Account account = Account.builder()
+					.accountType(AccountType.INCOME)
+					.price(price)
+					.content("적금 만기 입금.")
+					.dealType(DealType.SAVING)
+					.userNo(savingExpireRequest.getStudent().getNo())
+					.gradeNo(savingExpireRequest.getStudent().getGradeNo())
+					.build();
+				accounts.add(account);
 			});
 
+		accountRepository.saveAll(accounts);
 		coreUserSavingRepository.deleteAllById(userSavings);
 		return savingExpireAlertRequests;
 	}
