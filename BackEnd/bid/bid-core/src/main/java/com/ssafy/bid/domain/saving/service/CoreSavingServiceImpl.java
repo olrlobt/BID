@@ -18,6 +18,10 @@ import com.ssafy.bid.domain.saving.dto.SavingExpireRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferAlertRequest;
 import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.saving.repository.CoreUserSavingRepository;
+import com.ssafy.bid.domain.user.Account;
+import com.ssafy.bid.domain.user.AccountType;
+import com.ssafy.bid.domain.user.DealType;
+import com.ssafy.bid.domain.user.repository.AccountRepository;
 import com.ssafy.bid.domain.user.repository.CoreUserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +33,7 @@ public class CoreSavingServiceImpl implements CoreSavingService {
 	private final CoreUserSavingRepository coreUserSavingRepository;
 	private final CoreUserRepository coreUserRepository;
 	private final NotificationService notificationService;
+	private final AccountRepository accountRepository;
 
 	@Override
 	@Transactional
@@ -73,9 +78,22 @@ public class CoreSavingServiceImpl implements CoreSavingService {
 			.map(UserSaving::getUserNo)
 			.toList();
 
+		List<Account> accounts = new ArrayList<>();
 		coreUserRepository.findAllByIds(targetUserNos).stream()
 			.filter(this::isStudentAssetEnough)
-			.forEach(request -> request.getStudent().subtractPrice(request.getPrice()));
+			.forEach(request -> {
+				request.getStudent().subtractPrice(request.getPrice());
+				Account account = Account.builder()
+					.accountType(AccountType.EXPENDITURE)
+					.price(request.getPrice())
+					.content("적금 이체.")
+					.dealType(DealType.SAVING)
+					.userNo(request.getStudent().getNo())
+					.gradeNo(request.getStudent().getGradeNo())
+					.build();
+				accounts.add(account);
+			});
+		accountRepository.saveAll(accounts);
 	}
 
 	private boolean isTransferTarget(UserSaving userSaving) {
