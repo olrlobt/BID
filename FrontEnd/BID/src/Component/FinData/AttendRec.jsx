@@ -1,19 +1,11 @@
 // AttendRec.jsx
-import React from "react";
-import Beads from '../FinData/Beads';
+import React from 'react';
 import styled from './AttendRec.module.css';
 
-function AttendRec() {
+function AttendRec({ attandance, ball }) {
   const daysOfWeek = ['월', '화', '수', '목', '금'];
-
-  const attendanceData = [
-    { status: 'O' },
-    { status: 'X' },
-    { status: 'O' },
-    { status: 'O' },
-    // Add other days as needed
-  ];
-
+  console.log(attandance);
+  console.log(ball);
   return (
     <div className={styled.attendanceContainer}>
       <div className={styled.attendance}>
@@ -27,9 +19,12 @@ function AttendRec() {
           </thead>
           <tbody>
             <tr className={styled.attendanceRow}>
-              {attendanceData.map((entry, index) => (
-                <td key={index} className={entry.status === 'O' ? styled.present : styled.absent}>
-                  {entry.status}
+              {attandance.map((value, index) => (
+                <td
+                  key={index}
+                  className={value ? styled.present : styled.absent}
+                >
+                  {value ? '⭕️' : '❌'}
                 </td>
               ))}
             </tr>
@@ -37,8 +32,8 @@ function AttendRec() {
         </table>
       </div>
       <div className={styled.beadsContainer}>
-        자리 구슬
-        <Beads className={styled.beads} />
+        <div>자리 구슬</div>
+        <div className={styled.bead}>{ball}개</div>
       </div>
     </div>
   );
