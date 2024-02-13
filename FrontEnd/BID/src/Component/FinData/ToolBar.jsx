@@ -1,15 +1,19 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import styled from "./ToolBar.module.css";
+} from '@fortawesome/free-solid-svg-icons';
+import styled from './ToolBar.module.css';
 
 export default function Toolbar(props) {
   const { date } = props;
 
   const navigate = (action) => {
     props.onNavigate(action);
+  };
+
+  const onViews = (action) => {
+    props.onView(action);
   };
 
   return (
@@ -26,7 +30,7 @@ export default function Toolbar(props) {
         <span
           className={styled.button}
           type="button"
-          onClick={navigate.bind(null, "PREV")}
+          onClick={navigate.bind(null, 'PREV')}
         >
           <FontAwesomeIcon icon={faChevronLeft} className={styled.buttonPrev} />
         </span>
@@ -36,13 +40,16 @@ export default function Toolbar(props) {
         <span
           className={styled.button}
           type="button"
-          onClick={navigate.bind(null, "NEXT")}
+          onClick={navigate.bind(null, 'NEXT')}
         >
           <FontAwesomeIcon
             icon={faChevronRight}
             className={styled.buttonNext}
           />
         </span>
+      </span>
+      <span className="rbc-btn-group">
+        <button onClick={onViews.bind(null, 'month')}>월</button>
       </span>
     </div>
   );

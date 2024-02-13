@@ -12,6 +12,7 @@ import { modelSlice } from './modelSlice';
 import { stopTimeSlice } from './stopTimeSlice';
 import { requestCouponSlice } from './requestCouponSlice';
 import { persistStore, persistReducer } from 'redux-persist';
+import { studentSavingSlice } from './studentSavingSlice';
 import storage from 'redux-persist/lib/storage';
 
 const rootReducer = combineReducers({
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   model: modelSlice.reducer,
   stopTime: stopTimeSlice.reducer,
   requestCoupon: requestCouponSlice.reducer,
+  studentSaving: studentSavingSlice.reducer,
 });
 
 const persistConfig = {
