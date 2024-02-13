@@ -33,4 +33,8 @@ public class GradeSaveRequest {
 			.userNo(userNo)
 			.build();
 	}
+
+	public String createId() {
+		return this.schoolCode + String.valueOf(this.year) + String.format("%02d", this.classRoom);
+	}
 }
