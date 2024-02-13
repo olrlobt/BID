@@ -89,8 +89,8 @@ public class CoreBoardScheduleService {
 		}, instant));
 	}
 
-	private void cancelScheduledTask(Board board) {
-		ScheduledFuture<?> scheduledFuture = boardScheduledTasks.get(board.getNo());
+	public void cancelScheduledTask(long boardNo) {
+		ScheduledFuture<?> scheduledFuture = boardScheduledTasks.get(boardNo);
 		if (scheduledFuture != null) {
 			scheduledFuture.cancel(false);
 		}
