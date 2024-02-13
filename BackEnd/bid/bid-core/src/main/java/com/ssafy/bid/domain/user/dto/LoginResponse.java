@@ -9,14 +9,17 @@ public class LoginResponse {
 	private TokenResponse tokenResponse;
 	private List<StudentInfo> studentList;
 	private StudentInfo myInfo;
+	private AdminInfo adminInfo;
 
 	public LoginResponse(
 		TokenResponse tokenResponse,
 		List<StudentInfo> studentList,
-		StudentInfo myInfo
+		StudentInfo myInfo,
+		AdminInfo adminInfo
 	) {
 		this.tokenResponse = tokenResponse;
 		this.studentList = studentList;
 		this.myInfo = myInfo;
+		this.adminInfo = adminInfo;
 	}
 }
