@@ -1,10 +1,24 @@
 import React from "react";
 import styled from "./Comment.module.css";
 import { useMutation } from "@tanstack/react-query";
-import { deleteCommentApi } from "../../Apis/TeacherBidApis";
+import { deleteCommentApi as TCHdeleteCommentApi } from "../../Apis/TeacherBidApis";
+import { deleteCommentApi as STUdeleteCommentApi } from "../../Apis/StudentBidApis";
 
 export default function Comment(props){
-  const { boardNo, replyNo, userName, content, createAt, userImgUrl, queryClient, isWriter, isDelete, isSetting } = props;
+  const {
+    boardNo,
+    replyNo,
+    userName,
+    content,
+    createAt,
+    userImgUrl,
+    queryClient,
+    isWriter,
+    isDelete,
+    isSetting,
+    isTeacher,
+    handleDescription
+  } = props;
   
   /** 날짜 형식 변환 */
   let trimmedCreateAt = new Date(createAt);
@@ -25,10 +39,18 @@ export default function Comment(props){
     backgroundColor: 'white'
   }
 
-  /** 댓글 삭제 쿼리 */
-  const deleteCommentQuery = useMutation({
-    mutationKey: ['deleteComment'],
-    mutationFn: () => deleteCommentApi(1, boardNo, replyNo),
+  /** [선생님] 댓글 삭제 쿼리 */
+  const TCHdeleteCommentQuery = useMutation({
+    mutationKey: ['TCHdeleteComment'],
+    mutationFn: () => TCHdeleteCommentApi(1, boardNo, replyNo),
+    onSuccess: () => { queryClient.invalidateQueries('getProductDetail'); },
+    onError: (error) => { console.log(error); },
+  });
+
+  /** [학생] 댓글 삭제 쿼리 */
+  const STUdeleteCommentQuery = useMutation({
+    mutationKey: ['STUdeleteComment'],
+    mutationFn: () => STUdeleteCommentApi(boardNo, replyNo),
     onSuccess: () => { queryClient.invalidateQueries('getProductDetail'); },
     onError: (error) => { console.log(error); },
   });
@@ -36,15 +58,15 @@ export default function Comment(props){
   /** 댓글 삭제 함수 */
   const deleteComment = (e) => {
     e.preventDefault();
-    deleteCommentQuery.mutate();
+    isTeacher?
+    TCHdeleteCommentQuery.mutate():
+    STUdeleteCommentQuery.mutate();
   }
 
   return(
     <div className={styled.commentWrapper} style={isWriter? writerLayout: null}>
       <div className={styled.left}>
-        <div className={styled.profile}>
-          <img src={ userImgUrl } alt="" />
-        </div>
+        <img src={ userImgUrl } alt='프로필 이미지' />
       </div>
       <div className={styled.right} style={isWriter? writerBox: null}>
         <div className={styled.commentHeader}>
@@ -66,6 +88,7 @@ export default function Comment(props){
           <textarea
             defaultValue={content}
             disabled={!isSetting}
+            onChange={handleDescription}
             />
         </div>
       </div>
