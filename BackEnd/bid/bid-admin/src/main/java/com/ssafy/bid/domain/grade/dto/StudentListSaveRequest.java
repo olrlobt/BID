@@ -14,10 +14,11 @@ public class StudentListSaveRequest {
 	private String password;
 	private String name;
 	private String birthDate;
+	private int number;
 
-	public Student toEntity(PasswordEncoder passwordEncoder, int schoolNo, int gradeNo) {
+	public Student toEntity(PasswordEncoder passwordEncoder, int schoolNo, int gradeNo, String id) {
 		return Student.builder()
-			.id(id)
+			.id(id + String.format("%02d", this.number))
 			.password(passwordEncoder.encode(password))
 			.name(name)
 			.schoolNo(schoolNo)
