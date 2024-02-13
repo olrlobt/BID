@@ -48,7 +48,8 @@ public class CoreUserServiceImpl implements CoreUserService {
 	}
 
 	@Override
-	public LoginResponse login(LoginRequest loginRequest) {
+	@Transactional
+	public LoginResponse login(LoginRequest loginRequest, boolean isAdmin) {
 		User user = authenticateUser(loginRequest.getId(), loginRequest.getPassword());
 		CustomUserInfo userInfo = createCustomUserInfo(user);
 
@@ -56,11 +57,26 @@ public class CoreUserServiceImpl implements CoreUserService {
 
 		redisTemplate.opsForValue().set("RT:" + user.getNo(), tokenResponse.getRefreshToken(), 7, TimeUnit.DAYS);
 
-		if (user instanceof Student) {
-			List<StudentInfo> studentList = coreUserRepository.findByGradeNo(((Student)user).getGradeNo());
-			return new LoginResponse(tokenResponse, studentList);
+		if (user instanceof Student student) {
+			if (isAdmin) {
+				throw new AuthenticationFailedException("로그인: 알맞은 권한이 아님.");
+			}
+
+			List<StudentInfo> studentList = coreUserRepository.findByGradeNo(student.getGradeNo());
+			StudentInfo studentInfo = null;
+			for (StudentInfo info : studentList) {
+				if (info.getNo() == user.getNo()) {
+					studentInfo = new StudentInfo(info.getNo(), info.getGradeNo(), info.getName(),
+						info.getProfileImgUrl());
+				}
+			}
+			return new LoginResponse(tokenResponse, studentList, studentInfo);
 		} else {
-			return new LoginResponse(tokenResponse, null);
+			if (!isAdmin) {
+				throw new AuthenticationFailedException("로그인: 알맞은 권한이 아님.");
+			}
+
+			return new LoginResponse(tokenResponse, null, null);
 		}
 	}
 

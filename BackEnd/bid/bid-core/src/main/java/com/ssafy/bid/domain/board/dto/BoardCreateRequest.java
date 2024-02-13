@@ -16,6 +16,19 @@ public class BoardCreateRequest {
 	private String goodsImgUrl;
 	private int startPrice;
 	private int gradePeriodNo;
+	private int subNo;
+
+	@Builder
+	public BoardCreateRequest(String title, String description, Category category, String goodsImgUrl, int startPrice,
+		int gradePeriodNo, int subNo) {
+		this.title = title;
+		this.description = description;
+		this.category = category;
+		this.goodsImgUrl = goodsImgUrl;
+		this.startPrice = startPrice;
+		this.gradePeriodNo = gradePeriodNo;
+		this.subNo = subNo;
+	}
 
 	@Builder
 	public BoardCreateRequest(String title, String description, Category category, String goodsImgUrl, int startPrice,
@@ -26,6 +39,17 @@ public class BoardCreateRequest {
 		this.goodsImgUrl = goodsImgUrl;
 		this.startPrice = startPrice;
 		this.gradePeriodNo = gradePeriodNo;
+	}
+
+	public static BoardCreateRequest createCannon() {
+		return BoardCreateRequest.builder()
+			.title("대포 알")
+			.description("자리 뽑기에 사용하는 대포 알")
+			.category(Category.CANNON)
+			.goodsImgUrl("CANNON_IMG_URL")
+			.startPrice(200)
+			.gradePeriodNo(6)
+			.build();
 	}
 
 	public Board toEntity(int userNo, int gradeNo) {
@@ -40,6 +64,7 @@ public class BoardCreateRequest {
 			.gradeNo(gradeNo)
 			.totalPrice(0)
 			.attendeeCount(0)
+			.subNo(this.subNo)
 			.boardStatus(BoardStatus.PROGRESS)
 			.build();
 	}
