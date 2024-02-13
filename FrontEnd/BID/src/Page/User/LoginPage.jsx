@@ -67,7 +67,7 @@ function LoginPage() {
           <div className={styled.inputWithIcon}>
           <input 
             type="id" 
-            value={id} 
+            value={schoolCode} 
             onChange={(e)=> setId(e.target.value)}
             placeholder="아이디" 
           />

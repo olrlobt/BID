@@ -10,6 +10,7 @@ export const UserApis = axios.create({
  * @returns
  */
 export const addUserApi = async (userData) => {
+  console.log(userData)
   return await UserApis.post(`/register`, userData);
 };
 
