@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import styled from "./FindIdPage.module.css";
 import Logo from "../../Component/Common/Logo";
 import { useMutation } from "@tanstack/react-query";
+import { SvgIcon } from "@material-ui/core";
+import PersonIcon from '@mui/icons-material/Person';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { findIdApi } from "../../Apis/UserApis";
 import { Link } from "react-router-dom"; // Import Link from React Router
 
@@ -44,18 +47,32 @@ function FindIdPage() {
       </div>
       <div className={styled.content}>
         <div className={styled.contentInput}>
-          <input
+        <div className={styled.inputWithIcon}>
+            <SvgIcon 
+            component={PersonIcon} 
+            style={{ fill: "#4D4D4D", height: "2.5vh" }}
+            className={styled.icon}
+            />
+            <input
             type="name"
             placeholder="이름"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <input
+            </div>
+          <div className={styled.inputWithIcon}>
+            <SvgIcon 
+            component={PhoneIphoneIcon} 
+            style={{ fill: "#4D4D4D", height: "2.5vh" }}
+            className={styled.icon}
+            />
+            <input
             type="tel"
             placeholder="휴대전화번호"
             value={tel}
             onChange={(e) => setTel(e.target.value)}
           />
+            </div>
           {error && <p className={styled.error}>{error}</p>}
           {id ? (
             <Link to="/managelogin">

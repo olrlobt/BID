@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  couponList: null,
+  couponList: [],
 };
 
 export const couponSelector = (state) => {

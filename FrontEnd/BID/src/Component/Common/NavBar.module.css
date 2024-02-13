@@ -4,6 +4,7 @@ nav {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  background-color: var(--color-important);
 }
 
 .logoArea {
@@ -12,6 +13,7 @@ nav {
   align-items: center;
   height: 20vh;
   div {
+    color: var(--color-bg);
     display: flex;
     flex-direction: column;
     margin-left: 0.5vw;
@@ -32,13 +34,18 @@ nav {
   height: 8vh;
   margin-top: 1vh;
   line-height: 8vh;
+  span{
+    color: var(--color-bg);
+  }
 }
 
 .navImage {
-  /* color: var(--color-important); */
   width: 2vw;
   height: 3vh;
   margin-left: 2vw;
+  path{
+    color: var(--color-bg);
+  }
 }
 
 .navImage + span {
@@ -50,21 +57,23 @@ nav {
 .view {
   margin-top: 6vh;
   margin-left: 2vw;
+  path{
+    color: var(--color-bg);
+  }
   span {
     margin-left: 1vw;
-  }
-}
-
-.active {
-  background-color: var(--color-important);
-  border-radius: 0 10px 10px 0;
-  color: var(--color-bg);
-
-  span {
     color: var(--color-bg);
   }
 }
 
+.active {
+  background-color: #fffef0b2;
+  span {
+    color: var(--color-important);
+    font-weight: 900;
+  }
+}
+
 .clicked > path {
-  color: var(--color-bg);
+  color: var(--color-important);
 }
