@@ -8,14 +8,14 @@ import { useMutation } from "@tanstack/react-query";
 import useCoupons from "../../hooks/useCoupons";
 
 export default function Coupon(props){
-	const {no, name, description, startPrice} = props;
+	const {no, name, description, startPrice, gradeNo} = props;
 
 	const { deleteCoupon } = useCoupons();
 
 	/** 쿠폰 삭제 쿼리 */
 	const deleteCouponQuery = useMutation({
 		mutationKey: ['deleteCoupon'],
-		mutationFn: (no) => deleteCouponApi(1, no),
+		mutationFn: (no) => deleteCouponApi(gradeNo, no),
 		onSuccess: () => { deleteCoupon({couponNo: no}); },
 		onError: (error) => { console.log(error) }
 	})
@@ -24,6 +24,7 @@ export default function Coupon(props){
 	const onClickDeleteCoupon = (e) => {
 		e.preventDefault();
 		deleteCouponQuery.mutate(no);
+		
 	}
 
 	return(

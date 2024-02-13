@@ -18,7 +18,9 @@ import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../
 import { getProductListApi } from "../../Apis/TeacherBidApis";
 
 export default function BidPage(){
-  // const queryClient = useQueryClient();
+
+  const gradeNo = 3;
+
   const reduxCoupons = useSelector(couponSelector);
   const reduxProducts = useSelector(productSelector);
 
@@ -49,7 +51,7 @@ export default function BidPage(){
   // useQuery({
   //   queryKey: ['couponList'],
   //   queryFn: () => 
-  //     getCouponListApi(1).then((res) => {
+  //     getCouponListApi(greadeNo).then((res) => {
   //       if(res.data !== undefined){
   //         initCoupons({ couponList: res.data.coupons });
   //         console.log(res.data);
@@ -68,7 +70,7 @@ export default function BidPage(){
   /** 쿠폰 경매 포함 쿼리 */
   const registerCouponQuery = useMutation({
     mutationKey: ['includeCoupon'],
-    mutationFn: (couponNo) => registerCouponApi(1, couponNo),
+    mutationFn: (couponNo) => registerCouponApi(gradeNo, couponNo),
     onSuccess: (data, variables) => { registCoupon({couponNo: variables}); },
     onError: (error, variables) => { console.log(variables, error); }
   });
@@ -76,7 +78,7 @@ export default function BidPage(){
   /** 쿠폰 경매 제외 쿼리 */
   const unregisterCouponQuery = useMutation({
     mutationKey: ['excludeCoupon'],
-    mutationFn: (couponNo) => unregisterCouponApi(1, couponNo),
+    mutationFn: (couponNo) => unregisterCouponApi(gradeNo, couponNo),
     onSuccess: (data, variables) => { unregistCoupon({couponNo: variables}); },
     onError: (error, variables) => { console.log(variables, error); }
   }); 
@@ -102,7 +104,7 @@ export default function BidPage(){
   // useQuery({
   //   queryKey: ['productList'],
   //   queryFn: () => 
-  //     getProductListApi(1).then((res) => {
+  //     getProductListApi(gradeNo).then((res) => {
   //       if(res.data !== undefined){
   //         initProducts({ productList: res.data });
   //       }
@@ -218,6 +220,7 @@ export default function BidPage(){
                   <CouponList
                     title = 'false'
                     coupons = {unregisteredCoupons? unregisteredCoupons: []}
+                    gradeNo = {gradeNo}
                   />
                 </div>
                 <div>
@@ -225,6 +228,7 @@ export default function BidPage(){
                   <CouponList
                     title= 'true'
                     coupons = {registeredCoupons? registeredCoupons: []}
+                    gradeNo = {gradeNo}
                   />
                 </div>
               </DragDropContext>
