@@ -43,7 +43,8 @@ export const loginUserApi = async (userData) => {
 */
 
 export const findIdApi = async (userData) => {
-    return await UserApis.post(`/find-id`, userData);
+  console.log(userData)  
+  return await UserApis.post(`/find-id`, userData);
   };
   
 

@@ -72,6 +72,7 @@ function ChangePwdPage() {
         newPassword,
         newPasswordCheck,
       };
+      console.log(newPwd)
       changePwdQuery.mutate(newPwd);
   };
     }
@@ -178,7 +179,7 @@ function ChangePwdPage() {
                value={newPasswordCheck}
                onChange={(e) => setNewPasswordCheck(e.target.value)}
              />
-                </div>
+            </div>
            </div>
            {error && <p className={styled.error}>{error}</p>}
            <button className={styled.changePwdBtn} type="submit">
