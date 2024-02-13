@@ -13,6 +13,7 @@ import ViewProductModal from '../Bid/ViewProductModal';
 import TimeModal from '../DashboardModals/TimeModal';
 import SearchSchoolModal from '../User/SearchSchoolModal';
 import MakeNewPostModal from "../Bid/MakeNewPostModal";
+import StudentSchoolModal from '../User/StudentSchoolModal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -27,7 +28,8 @@ const MODAL_COMPONENTS = {
   editStudent: StudentEditModal,
   viewProduct: ViewProductModal,
   makeNewPost: MakeNewPostModal,
-  searchSchool: SearchSchoolModal
+  searchSchool: SearchSchoolModal,
+  studentSchool: StudentSchoolModal
 };
 
 function ModalContainer() {
