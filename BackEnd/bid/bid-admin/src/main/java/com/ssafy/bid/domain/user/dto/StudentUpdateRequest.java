@@ -1,11 +1,5 @@
 package com.ssafy.bid.domain.user.dto;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.ssafy.bid.domain.grade.ExpenditureStatistics;
-import com.ssafy.bid.domain.user.Attendance;
-import com.ssafy.bid.domain.user.Student;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

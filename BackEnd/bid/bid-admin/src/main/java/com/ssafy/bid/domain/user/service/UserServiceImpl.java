@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.avatar.UserAvatar;
 import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.domain.grade.repository.StudentRepository;
@@ -28,6 +29,7 @@ import com.ssafy.bid.domain.user.dto.UserDeleteRequest;
 import com.ssafy.bid.domain.user.dto.UserIdFindRequest;
 import com.ssafy.bid.domain.user.dto.UserUpdateRequest;
 import com.ssafy.bid.domain.user.repository.TelAuthenticationRepository;
+import com.ssafy.bid.domain.user.repository.UserAvatarRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import com.ssafy.bid.global.error.exception.AuthenticationFailedException;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
 	private final TelAuthenticationRepository telAuthenticationRepository;
 	private final GradeRepository gradeRepository;
 	private final StudentRepository studentRepository;
+	private final UserAvatarRepository userAvatarRepository;
 
 	@Override
 	@Transactional
@@ -141,11 +144,14 @@ public class UserServiceImpl implements UserService {
 		String studentId = generateStudentId(grade, request.getNumber());
 
 		if (userRepository.existsById(studentId)) {
-				throw new ResourceAlreadyExistsException("학생등록: 회원가입하려는 아이디가 중복됨.", studentId);
+			throw new ResourceAlreadyExistsException("학생등록: 회원가입하려는 아이디가 중복됨.", studentId);
 		}
 
 		Student student = request.toEntity(passwordEncoder, studentId);
-		userRepository.save(student);
+		Student savedStudent = userRepository.save(student);
+
+		UserAvatar userAvatar = new UserAvatar(savedStudent.getNo(), 1);
+		userAvatarRepository.save(userAvatar);
 	}
 
 	private String generateStudentId(Grade grade, int number) {
