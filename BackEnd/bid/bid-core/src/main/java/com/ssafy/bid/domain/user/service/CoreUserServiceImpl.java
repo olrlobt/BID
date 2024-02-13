@@ -66,12 +66,16 @@ public class CoreUserServiceImpl implements CoreUserService {
 				throw new AuthenticationFailedException("로그인: 알맞은 권한이 아님.");
 			}
 
+			School school = schoolRepository.findById(user.getSchoolNo())
+				.orElseThrow(() -> new ResourceNotFoundException("학교 없음.", user.getSchoolNo()));
+
 			List<StudentInfo> studentList = coreUserRepository.findByGradeNo(student.getGradeNo());
 			StudentInfo studentInfo = null;
 			for (StudentInfo info : studentList) {
+				info.setSchoolName(school.getName());
 				if (info.getNo() == user.getNo()) {
 					studentInfo = new StudentInfo(info.getNo(), info.getGradeNo(), info.getName(),
-						info.getProfileImgUrl());
+						info.getProfileImgUrl(), school.getName());
 				}
 			}
 			return new LoginResponse(tokenResponse, studentList, studentInfo, null);
@@ -82,7 +86,8 @@ public class CoreUserServiceImpl implements CoreUserService {
 
 			School school = schoolRepository.findById(user.getSchoolNo())
 				.orElseThrow(() -> new ResourceNotFoundException("학교 없음.", user.getSchoolNo()));
-			AdminInfo adminInfo = new AdminInfo(user.getNo(), school.getNo(), school.getCode());
+			AdminInfo adminInfo = new AdminInfo(user.getNo(), school.getNo(), school.getCode(), school.getName(),
+				user.getName());
 
 			return new LoginResponse(tokenResponse, null, null, adminInfo);
 		}

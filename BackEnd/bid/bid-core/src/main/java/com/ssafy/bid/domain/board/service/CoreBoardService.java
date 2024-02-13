@@ -74,14 +74,19 @@ public class CoreBoardService {
 			Student student = coreStudentRepository.findById(bidding.getUserNo())
 				.orElseThrow(() -> new ResourceNotFoundException("해당 회원이 없습니다.", bidding.getUserNo()));
 
-			String bidStatus;
-
 			if (bidding.getNo().equals(board.getBiddingNo())) {
-				bidStatus = "낙찰";
+
 				bidding.bidSuccess();
 
 				if (board.getCategory() == Category.COUPON) {
 
+					notificationService.send(NotificationRequest.builder()
+						.title(board.getTitle() + " 경매 낙찰")
+						.content(board.getTitle() + " 경매에 낙찰 되었어요.")
+						.receiverNo(bidding.getUserNo())
+						.notificationType(NotificationType.BIDDING_WINNING)
+						.subNo(board.getNo())
+						.build());
 					coreUserCouponRepository.save(UserCoupon.builder()
 						.couponNo(board.getSubNo())
 						.gradeNo(board.getGradeNo())
@@ -93,17 +98,16 @@ public class CoreBoardService {
 				}
 
 			} else {
-				bidStatus = "유찰";
+				notificationService.send(NotificationRequest.builder()
+					.title(board.getTitle() + " 경매 유찰")
+					.content(board.getTitle() + " 경매에 실패했어요.")
+					.receiverNo(bidding.getUserNo())
+					.notificationType(NotificationType.BIDDING_FAILED)
+					.build());
+
 				bidding.bidFail();
 				student.addPrice(bidding.getPrice());
 			}
-
-			notificationService.send(NotificationRequest.builder()
-				.title(board.getTitle() + " " + bidStatus)
-				.content(board.getTitle() + " 경매에 " + bidStatus + " 되었어요.")
-				.receiverNo(bidding.getUserNo())
-				.notificationType(NotificationType.BIDDING_END)
-				.build());
 		});
 
 	}
