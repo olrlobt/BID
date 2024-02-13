@@ -10,8 +10,7 @@ import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
 import DropDownSelect from '../Common/DropDownSelect';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProductDetailApi, deleteProductApi } from "../../Apis/TeacherBidApis";
-import { addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
+import { getProductDetailApi, deleteProductApi, addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
 
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
@@ -24,14 +23,15 @@ export default function ViewProductModal({ onClose, ...props }) {
   const [averagePrice, setAveragePrice] = useState(0);
   const [description, setDescription] = useState('');
   const [comments, setComments] = useState([]);
-  const [userType, /*setUserType*/] = useState('reader');
   const [isSetting, setIsSetting] = useState(false);
+
+  const userId = 89;
 
   /** 경매 상세 쿼리 */
   const { data: productDetailIinfo } = useQuery({
     queryKey: ['getProductDetailSTU'],
     queryFn: () =>
-      getProductDetailApi(1, boardNo).then((res) => {
+      getProductDetailApi(boardNo).then((res) => {
         if(res.data !== undefined){
           console.log(res.data);
           setTitle(res.data.title);
@@ -47,7 +47,7 @@ export default function ViewProductModal({ onClose, ...props }) {
   /** 경매 삭제 쿼리 */
   const deleteProductQuery = useMutation({
     mutationKey: ['deleteProduct'],
-    mutationFn: (boardNo) => deleteProductApi(1, boardNo),
+    mutationFn: (boardNo) => deleteProductApi(boardNo),
     onSuccess: () => { parentQueryClient.invalidateQueries('productList') },
     onError: (error) => { console.log(error);}
   });
@@ -121,37 +121,25 @@ export default function ViewProductModal({ onClose, ...props }) {
       <div className={styled.wrapper}>
         <div className={styled.left}>
           {
-            userType==='reader'?
-            null:
+            userId===89?
             <div className={styled.header}>
-              {
-                userType==='writer'?
-                <>
-                <SettingButton
-                  onClick={ () => setIsSetting(!isSetting) }
-                  svg={ Edit }
-                  text='수정'
-                  height='1vw'
-                  backgroundColor='#A6A6A6'
-                />
-                </>
-                :
-                null
-              }
-              {
-                !isSetting?
-                  <SettingButton
-                    onClick={ deleteProduct }
-                    svg={ Delete }
-                    text='삭제'
-                    height='1vw'
-                    backgroundColor='#F23F3F'
-                  />
-                  :
-                  null
-              }
-              
+              <SettingButton
+                onClick={ () => setIsSetting(!isSetting) }
+                svg={ Edit }
+                text='수정'
+                height='1vw'
+                backgroundColor='#A6A6A6'
+              />
+              <SettingButton
+                onClick={ deleteProduct }
+                svg={ Delete }
+                text='삭제'
+                height='1vw'
+                backgroundColor='#F23F3F'
+              />
             </div>
+            :
+            null
           }
           <div className={styled.content}>
             <div className={styled.imgArea}>
@@ -217,7 +205,9 @@ export default function ViewProductModal({ onClose, ...props }) {
             
           </div>
           {
-            userType==='reader'?
+            userId===89?
+            null
+            :
             <div className={styled.footer}>
               <div className={styled.notWriterArea}>
                 <form onSubmit={bidSubmit}>
@@ -236,8 +226,6 @@ export default function ViewProductModal({ onClose, ...props }) {
                 </form>
               </div>
             </div>
-            :
-            null
           }
         </div>
 
@@ -276,7 +264,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                     userImgUrl = {c.userImgUrl}
                     queryClient = {queryClient}
                     isWriter = {false}
-                    isDelete = {userType==='teacher' || productDetailIinfo.userNo===c.userNo}
+                    isDelete = {c.userNo===userId}
                   />
                 )
               }
@@ -285,7 +273,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             
           </div>
           {
-            userType==='teacher' || isSetting?
+            isSetting?
             null:
             <div className={styled.newCommentArea}>
               <form onSubmit={addNewComment}>
