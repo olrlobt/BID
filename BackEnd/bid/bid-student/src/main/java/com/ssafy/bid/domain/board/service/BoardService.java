@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.board.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,13 @@ import com.ssafy.bid.domain.board.repository.BiddingRepository;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
 import com.ssafy.bid.domain.grade.Grade;
+import com.ssafy.bid.domain.user.Account;
+import com.ssafy.bid.domain.user.AccountType;
+import com.ssafy.bid.domain.user.DealType;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
+import com.ssafy.bid.domain.user.repository.AccountRepository;
 import com.ssafy.bid.domain.user.repository.GradeRepository;
 import com.ssafy.bid.domain.user.repository.StudentRepository;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
@@ -41,6 +46,7 @@ public class BoardService {
 	private final BiddingRepository biddingRepository;
 	private final GradeRepository gradeRepository;
 	private final StudentRepository studentRepository;
+	private final AccountRepository accountRepository;
 
 	public List<BoardListResponse> findBoards(int gradeNo) {
 		return boardRepository.findBoards(gradeNo);
@@ -187,11 +193,36 @@ public class BoardService {
 		Board board = boardRepository.findById(boardNo)
 			.orElseThrow(() -> new ResourceNotFoundException("찾는 유저가 없습니다", userInfo.getNo()));
 
+		List<Account> accounts = new ArrayList<>();
+
 		Student sender = studentRepository.findById(userInfo.getNo())
 			.orElseThrow(() -> new ResourceNotFoundException("찾는 유저가 없습니다", userInfo.getNo()));
+		sender.subtractPrice(board.getResultPrice());
+
+		Account accountSender = Account.builder()
+			.accountType(AccountType.EXPENDITURE)
+			.price(board.getResultPrice())
+			.content("경매 낙찰 송금.")
+			.dealType(DealType.valueOf(board.getCategory().toString()))
+			.userNo(userInfo.getNo())
+			.gradeNo(userInfo.getGradeNo())
+			.build();
+		accounts.add(accountSender);
+
 		Student receiver = studentRepository.findById(board.getUserNo())
 			.orElseThrow(() -> new ResourceNotFoundException("찾는 유저가 없습니다", userInfo.getNo()));
+		int price = receiver.addPrice(board.getResultPrice());
 
-		receiver.addRewardPrice(board.getResultPrice());
+		Account accountReceiver = Account.builder()
+			.accountType(AccountType.INCOME)
+			.price(price)
+			.content("경매 낙찰 입금.")
+			.dealType(DealType.valueOf(board.getCategory().toString()))
+			.userNo(receiver.getNo())
+			.gradeNo(receiver.getGradeNo())
+			.build();
+		accounts.add(accountReceiver);
+
+		accountRepository.saveAll(accounts);
 	}
 }

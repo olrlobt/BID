@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.reward.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -13,8 +14,12 @@ import com.ssafy.bid.domain.reward.dto.RewardListGetResponse;
 import com.ssafy.bid.domain.reward.dto.RewardSaveRequest;
 import com.ssafy.bid.domain.reward.dto.RewardSendRequest;
 import com.ssafy.bid.domain.reward.repository.RewardRepository;
+import com.ssafy.bid.domain.user.Account;
+import com.ssafy.bid.domain.user.AccountType;
+import com.ssafy.bid.domain.user.DealType;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.UserType;
+import com.ssafy.bid.domain.user.repository.AccountRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
@@ -29,6 +34,7 @@ public class RewardServiceImpl implements RewardService {
 	private final RewardRepository rewardRepository;
 	private final UserRepository userRepository;
 	private final NotificationService notificationService;
+	private final AccountRepository accountRepository;
 
 	@Override
 	@Transactional
@@ -77,16 +83,31 @@ public class RewardServiceImpl implements RewardService {
 			throw new ResourceNotFoundException("리워드전송: 리워드 전송 대상 Student 없음.", rewardSendRequest.getUsersNos());
 		}
 
+		List<Account> accounts = new ArrayList<>();
+
 		students.forEach(
 			student -> {
 				Reward reward = rewardRepository.findById(rewardSendRequest.getNo())
 					.orElseThrow(
 						() -> new ResourceNotFoundException("리워드전송: 전송하려는 Reward 엔티티 없음.", rewardSendRequest.getNo()));
-				student.addRewardPrice(reward.getPrice());
+				int price = student.addPrice(reward.getPrice());
+
+				Account account = Account.builder()
+					.accountType(AccountType.INCOME)
+					.price(price)
+					.content("리워드 상금 입금.")
+					.dealType(DealType.REWARD)
+					.userNo(student.getNo())
+					.gradeNo(student.getGradeNo())
+					.build();
+				accounts.add(account);
+
 				NotificationRequest notificationRequest = createNotificationRequest(student, reward, rewardSendRequest);
 				notificationService.send(notificationRequest);
 			}
 		);
+
+		accountRepository.saveAll(accounts);
 	}
 
 	private NotificationRequest createNotificationRequest(Student student, Reward reward,
