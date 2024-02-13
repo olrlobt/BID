@@ -33,6 +33,7 @@ public class BoardService {
 	private final GradeRepository gradeRepository;
 	private final NotificationService notificationService;
 	private final StudentRepository studentRepository;
+	private final CoreBoardScheduleService coreBoardScheduleService;
 
 	public List<BoardListResponse> findAllStudentBoards(int gradeNo, int userNo) {
 
@@ -56,6 +57,7 @@ public class BoardService {
 		} else if (!boardRepository.existsById(boardNo)) {
 			throw new ResourceNotFoundException("해당 게시글이 없습니다.", boardNo);
 		}
+		coreBoardScheduleService.cancelScheduledTask(boardNo);
 		boardRepository.deleteById(boardNo);
 	}
 
@@ -103,5 +105,21 @@ public class BoardService {
 			.content("경매가 " + content + " 되었어요")
 			.notificationType(NotificationType.ETC)
 			.build();
+	}
+
+	@Transactional
+	public void holdBid(int gradeNo) {
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
+
+		grade.holdBid();
+	}
+
+	@Transactional
+	public void unHoldBid(int gradeNo) {
+		Grade grade = gradeRepository.findById(gradeNo)
+			.orElseThrow(() -> new ResourceNotFoundException("해당 학급이 없습니다.", gradeNo));
+
+		grade.unHoldBid();
 	}
 }
