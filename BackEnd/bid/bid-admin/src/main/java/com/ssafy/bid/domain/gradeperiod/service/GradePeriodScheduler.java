@@ -8,7 +8,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.bid.domain.grade.service.GradeService;
+import com.ssafy.bid.domain.board.service.BoardService;
 import com.ssafy.bid.domain.gradeperiod.GradePeriod;
 import com.ssafy.bid.global.util.CronExpression;
 
@@ -22,7 +22,7 @@ public class GradePeriodScheduler {
 
 	private final TaskScheduler taskScheduler;
 	private final Map<Integer, Map<Integer, ScheduledFuture<?>>> gradeScheduledTasks = new ConcurrentHashMap<>();
-	private final GradeService gradeService;
+	private final BoardService boardService;
 
 	public void scheduleClassLessonTask(GradePeriod gradePeriod) {
 		String cronExpressionOfStart = CronExpression.of(gradePeriod.getStartPeriod());
@@ -32,23 +32,23 @@ public class GradePeriodScheduler {
 			gradePeriod.getGradeNo(),
 			new ConcurrentHashMap<>());
 
-		cancelScheduledTask(gradePeriod.getGradeNo(), gradePeriod.getSequence() * 2 - 1);
-		cancelScheduledTask(gradePeriod.getGradeNo(), gradePeriod.getSequence() * 2);
+		cancelScheduledTask(gradePeriod.getGradeNo(), gradePeriod.getNo());
+		cancelScheduledTask(gradePeriod.getGradeNo(), gradePeriod.getNo());
 
-		gradePeriodScheduled.put((gradePeriod.getSequence() * 2 - 1), taskScheduler.schedule(() -> {
-			gradeService.holdBid(gradePeriod.getGradeNo());
+		gradePeriodScheduled.put(gradePeriod.getNo(), taskScheduler.schedule(() -> {
+			boardService.holdBid(gradePeriod.getGradeNo());
 		}, new CronTrigger(cronExpressionOfStart)));
 
-		gradePeriodScheduled.put(gradePeriod.getSequence() * 2, taskScheduler.schedule(() -> {
-			gradeService.unHoldBid(gradePeriod.getGradeNo());
+		gradePeriodScheduled.put(gradePeriod.getNo(), taskScheduler.schedule(() -> {
+			boardService.unHoldBid(gradePeriod.getGradeNo());
 		}, new CronTrigger(cronExpressionOfEnd)));
 		gradeScheduledTasks.put(gradePeriod.getGradeNo(), gradePeriodScheduled);
 	}
 
-	private void cancelScheduledTask(int gradeNo, int sequence) {
+	public void cancelScheduledTask(int gradeNo, int gradePeriodNo) {
 		Map<Integer, ScheduledFuture<?>> sequenceScheduledTasks = gradeScheduledTasks.get(gradeNo);
 		if (sequenceScheduledTasks != null) {
-			ScheduledFuture<?> scheduledFuture = sequenceScheduledTasks.get(sequence);
+			ScheduledFuture<?> scheduledFuture = sequenceScheduledTasks.get(gradePeriodNo);
 			if (scheduledFuture != null) {
 				scheduledFuture.cancel(false);
 			}

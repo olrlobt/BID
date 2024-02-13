@@ -1,5 +1,7 @@
 package com.ssafy.bid.domain.avatar;
 
+import com.ssafy.bid.domain.avatar.dto.AvatarResponse;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,20 @@ public class Avatar {
 	@Column(name = "avatar_no")
 	private Integer no;
 
+	private String name;
+
 	private String url;
 
 	private Integer price;
+
+
+	public AvatarResponse toDto(){
+
+		return AvatarResponse.builder()
+			.no(this.no)
+			.name(this.name)
+			.url(this.url)
+			.build();
+	}
+
 }
