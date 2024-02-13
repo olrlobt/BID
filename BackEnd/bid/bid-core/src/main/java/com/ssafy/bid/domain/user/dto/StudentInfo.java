@@ -12,4 +12,17 @@ public class StudentInfo {
 	private int gradeNo;
 	private String name;
 	private String profileImgUrl;
+	private String schoolName;
+
+	public StudentInfo(
+		int no,
+		int gradeNo,
+		String name,
+		String profileImgUrl
+	) {
+		this.no = no;
+		this.gradeNo = gradeNo;
+		this.name = name;
+		this.profileImgUrl = profileImgUrl;
+	}
 }
