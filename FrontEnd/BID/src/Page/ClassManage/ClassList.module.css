@@ -96,3 +96,11 @@
   margin-top: -1.3vh;
   left: 37vw;
 }
+
+.mainTrue path {
+  color: #ffd43a;
+}
+
+.classMain {
+  background-color: #ffd43a;
+}

@@ -1,8 +1,22 @@
 import axios from "axios";
+import { getCookie } from "../cookie";
 
 export const RewardApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
 });
+
+RewardApis.interceptors.request.use(
+  (config) => {
+    config.headers["Content-Type"] = "application/json";
+    config.headers["Authorization"] = `Bearer ${getCookie("accessToken")}`;
+
+    return config;
+  },
+  (error) => {
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
 
 /**
  * 리워드 목록 가져오기
@@ -11,7 +25,7 @@ export const RewardApis = axios.create({
  */
 export const getRewardListApi = async (gradeNo) => {
   return await RewardApis.get(`${gradeNo}/rewards`);
-}
+};
 
 /**
  * 리워드 추가
@@ -20,7 +34,7 @@ export const getRewardListApi = async (gradeNo) => {
  */
 export const addNewRewardApi = async (gradeNo, newRewardForm) => {
   return await RewardApis.post(`${gradeNo}/rewards`, newRewardForm);
-}
+};
 
 /**
  * 리워드 삭제
@@ -28,8 +42,7 @@ export const addNewRewardApi = async (gradeNo, newRewardForm) => {
  */
 export const deleteRewardApi = async (gradeNo, rNo) => {
   return await RewardApis.delete(`${gradeNo}/rewards/${rNo}`);
-
-}
+};
 
 /**
  * 리워드 지급
@@ -37,4 +50,4 @@ export const deleteRewardApi = async (gradeNo, rNo) => {
  */
 export const sendRewardApi = async (gradeNo, postData) => {
   return await RewardApis.post(`${gradeNo}/rewards/send`, postData);
-}
+};

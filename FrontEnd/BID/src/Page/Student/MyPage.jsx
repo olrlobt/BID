@@ -13,7 +13,6 @@ function MyPage() {
         { category: '교통', percentage: 20 },
         // 다른 카테고리들도 추가
       ];
-
       
     return(
         <div className={styled.section}>

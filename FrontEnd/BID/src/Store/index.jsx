@@ -1,14 +1,19 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { modalSlice } from './modalSlice';
 import { userSlice } from './userSlice';
-import { productSlice } from "./productSlice";
-import { couponSlice } from "./couponSlice";
-import { ballSlice } from "./ballSlice";
-import { bidSlice } from "./bidSlice";
-import { moneySlice } from "./moneySlice";
-import { bidCountSlice } from "./bidCountSlice";
-import { savingSlice } from "./savingSlice";
-import { modelSlice } from "./modelSlice";
+import { productSlice } from './productSlice';
+import { couponSlice } from './couponSlice';
+import { ballSlice } from './ballSlice';
+import { bidSlice } from './bidSlice';
+import { moneySlice } from './moneySlice';
+import { bidCountSlice } from './bidCountSlice';
+import { savingSlice } from './savingSlice';
+import { modelSlice } from './modelSlice';
+import { stopTimeSlice } from './stopTimeSlice';
+import { requestCouponSlice } from './requestCouponSlice';
+import { persistStore, persistReducer } from 'redux-persist';
+import { studentSavingSlice } from './studentSavingSlice';
+import storage from 'redux-persist/lib/storage';
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -20,11 +25,23 @@ const rootReducer = combineReducers({
   classMoney: moneySlice.reducer,
   bidCount: bidCountSlice.reducer,
   savingInfo: savingSlice.reducer,
-  model: modelSlice.reducer,
+  studentmodel: modelSlice.reducer,
+  stopTime: stopTimeSlice.reducer,
+  requestCoupon: requestCouponSlice.reducer,
+  studentSaving: studentSavingSlice.reducer,
 });
+
+const persistConfig = {
+  key: 'root',
+  storage: storage
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
 });
 
-export default store;
+const persistor = persistStore(store);
+
+export { store, persistor };

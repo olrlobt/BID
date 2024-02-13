@@ -2,58 +2,84 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../Common/Modal';
 import SubmitButton from '../Common/SubmitButton';
 import useStudents from "../../hooks/useStudents";
+import { editStudentApi } from "../../Apis/UserApis";
+import styled from "./StudentAdd.module.css";
+import { useMutation } from "@tanstack/react-query";
 
 const PwdRemoveModal = ({ onClose, ...props }) => {
 
   const { editStudent } = useStudents();
 
-  const [form, setForm] = useState({
-    number: '',
-    name: "",
-    asset: "",
+
+  const [number, setNumber] = useState('');
+  const [name, setName] = useState('');
+  const [birth, setBirth] = useState(''); // birth로 이름 변경
+
+  /** 학생 추가 쿼리 */
+  const editStudentQuery = useMutation({
+    mutationKey: ['editStudent'],
+    mutationFn: (userCredentials) => editStudentApi(userCredentials),
+    onSuccess: (res) => {
+      console.log(res.data);
+      editStudent({
+        newStudent: res.data // 새로운 학생 데이터 추가
+      });
+      onClose();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
   });
 
-  // Assuming you have student details as props
-  useEffect(() => {
-    setForm({
-      number: props[1].number,
-      name: props[1].name,
-      asset: props[1].asset,
-    });
-  }, [props]);
-
-
-  const editExistingStudent = (e) => {
+  /** 학생 추가 버튼 이벤트 핸들러 */
+  const addNewStudent = (e) => {
     e.preventDefault();
-
-    // Assuming you have an editStudent function in useStudents hook
-    editStudent({
-      editedStudent: form,
-    });
-
-    onClose();
+    const userCredentials = {
+      schoolNo: 1,
+      number,
+      name,
+      birth,
+      gradeNo: 1
+    };
+    console.log(userCredentials);
+    editStudentQuery.mutate(userCredentials);
   }
 
   return (
     <Modal onClose={onClose} {...props}>
-      <div style={{ fontSize: '24px', textAlign: 'center' }}>{props[0]}</div>
-      <div>
-        {props[1].name}님의 비밀번호를 초기화 하시겠습니까?
-      </div>
-      <div>
-      번호 : {props[1].number}
-      이름 : {props[1].name}
-      생년월일 : {props[1].birth}
-      </div>
-      <form onSubmit={editExistingStudent}>
-        {/* Your form input fields here */}
-        <SubmitButton
-          type="submit"
-          text="초기화"
-          width="80%"
-          height="7vh"
-        />
-      </form>
+        <div className={styled.logo}>
+          <div className={styled.title}>{props[0]}</div>
+        </div>
+        <div className={styled.content}>
+          <form className={styled.contentInput} onSubmit={addNewStudent}>
+            <div className={styled.contenttitle} >
+              번호
+            <input
+              type="text"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+            />
+            </div>
+            <div className={styled.contenttitle} >              이름
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            </div>
+            <div className={styled.contenttitle} >              생년월일
+            <input
+              type="date"
+              value={birth}
+              onChange={(e) => setBirth(e.target.value)}
+            />
+            </div>
+          </form>
+            <button type="submit"
+            className={styled.button}>
+              등록
+            </button>
+        </div>
     </Modal>
   );
 };

@@ -1,90 +1,78 @@
-import React from "react";
-import styled from "./ViewProductModal.module.css";
+import React, { useState } from "react";
+import styled from "./ManageProductModal.module.css";
 import Modal from "../Common/Modal";
 import RoundedInfoButton from "../Common/RoundedInfoButton";
 import { SvgIcon } from "@material-ui/core";
-import {
-  ArrowForward,
-  // Edit, Delete,
-  Eject,
-} from "@material-ui/icons";
+import { Eject, Edit, Delete } from "@material-ui/icons";
 import SubmitButton from "../Common/SubmitButton";
 import Comment from "./Comment";
-// import SettingButton from "../Common/SettingButton"
+import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { getProductDetailApi,
-          // deleteProductApi,
-          addCommentApi,
-          // deleteCommentApi,
-          firstBiddingApi
-        } from "../../Apis/BidApis";
+import DropDownSelect from '../Common/DropDownSelect';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getProductDetailApi, deleteProductApi, addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
 
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
-  // 0 no,
-  // 1 title,
-  // 2 description,
-  // 3 startPrice,
-  // 4 boardStatus,
-  // 5 averagePrice,
-  // 6 resultPrice,
-  // 7 category,
-  // 8 goodsImgUrl,
-  // 9 userName,
-  // 10 gradePeriodNo,
-  // 11 createdAt
-  // 12 comments
+  const parentQueryClient = props[1];
+
+  const queryClient = useQueryClient();
+
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [averagePrice, setAveragePrice] = useState(0);
+  const [description, setDescription] = useState('');
+  const [comments, setComments] = useState([]);
+  const [isSetting, setIsSetting] = useState(false);
+
+  const userId = 89;
 
   /** 경매 상세 쿼리 */
   const { data: productDetailIinfo } = useQuery({
-    queryKey: ['getProductDetail'],
+    queryKey: ['getProductDetailSTU'],
     queryFn: () =>
-      getProductDetailApi(1, boardNo).then((res) => {
+      getProductDetailApi(boardNo).then((res) => {
         if(res.data !== undefined){
           console.log(res.data);
-          return res.data;
+          setTitle(res.data.title);
+          setCategory(res.data.category);
+          setAveragePrice(res.data.averagePrice);
+          setDescription(res.data.description);
+          setComments(res.data.comments);
         }
+        return res.data;
       })
   });
 
   /** 경매 삭제 쿼리 */
-  // const deleteProductQuery = useMutation({
-  //   mutationKey: ['delete'],
-  //   mutationFn: (boardNo) => { deleteProductApi(1, boardNo) },
-  //   onSuccess: () => { props[1].invalidateQueries('productList') },
-  //   onError: (error) => { console.log("error;")}
-  // });
+  const deleteProductQuery = useMutation({
+    mutationKey: ['deleteProduct'],
+    mutationFn: (boardNo) => deleteProductApi(boardNo),
+    onSuccess: () => { parentQueryClient.invalidateQueries('productList') },
+    onError: (error) => { console.log(error);}
+  });
 
   /** 댓글 작성 쿼리 */
   const addCommentQuery = useMutation({
     mutationKey: ['addComment'],
-    mutationFn: (params) => { addCommentApi(params.boardNo, params.commentInfo) },
-    onSuccess:(res) => { props[1].invalidateQueries('getProductDetail') },
+    mutationFn: (params) => addCommentApi(params.boardNo, params.commentInfo),
+    onSuccess:() => { queryClient.invalidateQueries('getProductDetail'); },
     onError: (error) => { console.log(error); }
   })
 
-  /** 댓글 삭제 쿼리 */
-  // const deleteCommentQuery = useMutation({
-  //   mutationKey: ['delete'],
-  //   mutationFn: (boardNo, replyNo) => { deleteCommentApi(1, boardNo, replyNo) },
-  //   onSuccess: () => { console.log("success!!") },
-  //   onError: (error) => { console.log("error;")}
-  // });
-
   /** 첫 입찰 쿼리 */
-  const firstBiddingQuery = useMutation({
-    mutationKey: ['firstBidding'],
-    mutationFn: (params) => { firstBiddingApi(params.boardNo, params.biddingInfo); },
+  const biddingQuery = useMutation({
+    mutationKey: ['bidding'],
+    mutationFn: (params) => biddingApi(params.boardNo, params.biddingInfo),
     onSuccess: (res) => { console.log(res); },
     onError: (error) => { console.log(error); }
   });
 
   /** 경매 삭제 함수 */
-  // const deleteProduct = () => {
-  //   deleteProductQuery.mutate(boardNo);
-  //   onClose();
-  // }
+  const deleteProduct = (e) => {
+    deleteProductQuery.mutate(boardNo);
+    onClose();
+  }
 
   /** 입찰 신청 함수 */
   const bidSubmit = (e) => {
@@ -100,7 +88,7 @@ export default function ViewProductModal({ onClose, ...props }) {
         boardNo: boardNo,
         biddingInfo:biddingInfo
       }
-      firstBiddingQuery.mutate(params);
+      biddingQuery.mutate(params);
       console.log(biddingPrice+'비드 입찰되었습니다');
 
     }
@@ -121,82 +109,22 @@ export default function ViewProductModal({ onClose, ...props }) {
         commentInfo: commentInfo
       }
       addCommentQuery.mutate(params);
+      e.target.newComment.value = '';
     }
   }
 
   return (
-    <Modal onClose={onClose} {...props}>
-      <div className={styled.header}>
-        <div className={styled.top}>
-          <h1>{ productDetailIinfo && productDetailIinfo.title }</h1>
-          <span>{ productDetailIinfo && productDetailIinfo.userName }</span>
-        </div>
-        <div className={styled.info}>
-          <div className={styled.commonArea}>
-            <div className={styled.infoButton}>
-              <RoundedInfoButton
-                value = { productDetailIinfo && productDetailIinfo.category }
-                unit = ''
-                textColor = 'white'
-                borderColor = '#BBBD32'
-                backgroundColor = '#BBBD32'
-                padding = '0.5vw 1vw'
-              />
-            </div>
-            <div className={styled.infoButton}>
-              <RoundedInfoButton
-                value = { productDetailIinfo && productDetailIinfo.gradePeriodNo }
-                unit = '교시'
-                textColor = 'white'
-                borderColor = '#BBBD32'
-                backgroundColor = '#BBBD32'
-                padding = '0.5vw 1vw'
-              />
-            </div>
-            <div className={styled.infoButton}>
-              <RoundedInfoButton
-                value = { productDetailIinfo && productDetailIinfo.startPrice }
-                unit = '비드'
-                textColor = '#F23F3F'
-                borderColor = '#F23F3F'
-                backgroundColor = 'white'
-                padding = '0.5vw 1vw'
-              />
-            </div>
-            <div className={styled.arrowArea}>
-              <SvgIcon component={ArrowForward} fontSize="medium" />
-            </div>
-            <div className={styled.infoButton}>
-              <RoundedInfoButton
-                value = { productDetailIinfo && productDetailIinfo.averagePrice }
-                unit = '비드'
-                textColor = 'white'
-                borderColor = '#F23F3F'
-                backgroundColor = '#F23F3F'
-                padding = '0.5vw 1vw'
-              />
-            </div>
-          </div>
-          <div className={styled.isWriterArea}>
-            <div className={styled.notWriterArea}>
-              <form id="newProductForm" onSubmit={bidSubmit}>
-                <input
-                  type="number"
-                  name="price"
-                  className={styled.biddingNumber}
-                />
-                <div className={styled.biddingUnit}>비드</div>
-                <SubmitButton
-                  text="입찰"
-                  width="7vw"
-                  height="3vw"
-                  fontSize="1.7vw"
-                />
-              </form>
-            </div>
-            {/* <div className={styled.writerArea}>
+    <>
+    {
+      productDetailIinfo &&
+      <Modal onClose={onClose} {...props}>
+      <div className={styled.wrapper}>
+        <div className={styled.left}>
+          {
+            userId===89?
+            <div className={styled.header}>
               <SettingButton
-                onClick={ () => console.log('modify') }
+                onClick={ () => setIsSetting(!isSetting) }
                 svg={ Edit }
                 text='수정'
                 height='1vw'
@@ -209,39 +137,145 @@ export default function ViewProductModal({ onClose, ...props }) {
                 height='1vw'
                 backgroundColor='#F23F3F'
               />
-            </div> */}
-          </div>
-        </div>
-      </div>
-
-      <div className={styled.body}>
-        <div className={styled.left}>
-          <div className={styled.imgArea}>
-            <img src={ productDetailIinfo && productDetailIinfo.goodsImgUrl } alt="제품 이미지" />
-          </div>
-          <div className={styled.content}>
-            <textarea name='bidContent' defaultValue={ productDetailIinfo && productDetailIinfo.description } disabled/>
-          </div>
-        </div>
-        <div className={styled.right}>
-          <div className={styled.commentArea}>
-            <div className={styled.comments}>
-            {
-              productDetailIinfo && productDetailIinfo.comments.length===0?
-              <NoContent text='아직 작성된 댓글이 없어요! 제일 먼저 달아볼까요? : )'/>
-              :
-              productDetailIinfo && productDetailIinfo.comments.map((c) =>
-                <Comment
-                  key = {c.createdAt}
-                  userNo = {c.userNo}
-                  name = {c.name}
-                  content = {c.content}
-                  createdAt = {c.createdAt}
-                />
-              )
-            }
             </div>
-            <div className={styled.newComment}>
+            :
+            null
+          }
+          <div className={styled.content}>
+            <div className={styled.imgArea}>
+              <img src='https://img.freepik.com/premium-psd/chocolate-3d-render_553817-59.jpg?w=2000' alt='' />
+            </div>
+            <div className={styled.infoArea}>
+              <input 
+                type='text'
+                defaultValue={title}
+                disabled={!isSetting}
+              />
+              {
+                isSetting?
+                <DropDownSelect
+                  selectName='category'
+                  selectTitle='상품 유형'
+                  options={[
+                    {'value': 'SNACK', 'text': '간식'},
+                    {'value': 'LEARNING', 'text': '학습'},
+                    {'value': 'GAME', 'text': '오락'},
+                    {'value': 'ETC', 'text': '기타'},
+                  ]}
+                />
+                :
+                <>
+                <RoundedInfoButton
+                  value = {category}
+                  unit = ''
+                  textColor = '#ff3f3f'
+                  borderColor = '#ff3f3f'
+                  backgroundColor = 'white'
+                  padding = '0.5vw 1vw'
+                />
+                <RoundedInfoButton
+                  value = {productDetailIinfo.gradePeriodNo}
+                  unit = '교시'
+                  textColor = '#ff3f3f'
+                  borderColor = '#ff3f3f'
+                  backgroundColor = 'white'
+                  padding = '0.5vw 1vw'
+                />
+                </>
+              }
+            </div>
+            {
+              isSetting?
+              null
+              :
+              <div className={styled.priceArea}>
+                <div className={styled.verticalLine}></div>
+                <div className={styled.startPrice}>
+                  <div className={styled.priceCategory}>시작가</div>
+                  <div className={styled.price}>{productDetailIinfo.startPrice}비드</div>
+                </div>
+                <div className={styled.verticalLine}></div>
+                <div className={styled.averagePrice}>
+                  <div className={styled.priceCategory}>평균가</div>
+                  <div className={`${styled.price} ${styled.average}`}>{averagePrice}비드</div>
+                </div>
+                <div className={styled.verticalLine}></div>
+              </div>
+            }
+            
+          </div>
+          {
+            userId===89?
+            null
+            :
+            <div className={styled.footer}>
+              <div className={styled.notWriterArea}>
+                <form onSubmit={bidSubmit}>
+                  <input
+                    type="number"
+                    name="price"
+                    className={styled.biddingNumber}
+                  />
+                  <div className={styled.biddingUnit}>비드</div>
+                  <SubmitButton
+                    text="입찰"
+                    width="7vw"
+                    height="4vw"
+                    fontSize="1.7vw"
+                  />
+                </form>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div className={styled.right}>
+          <div className={styled.commentsArea}>
+            <div className={styled.writerArea}>
+              <Comment
+                key = {-1}
+                boardNo = {boardNo}
+                replyNo = {-1}
+                userName = {productDetailIinfo.userName}
+                content = {description}
+                createAt = {productDetailIinfo.createdAt}
+                userImgUrl = {productDetailIinfo.userProfileImgUrl}
+                isWriter = {true}
+                isSetting = {isSetting}
+              />
+            </div>
+            {
+              isSetting?
+              null
+              :
+              <div className={styled.othersArea}>
+              {
+                comments.length===0?
+                <NoContent text='아직 작성된 댓글이 없어요'/>
+                :
+                comments.map((c) =>
+                  <Comment
+                    key = {c.replyNo}
+                    boardNo = {boardNo}
+                    replyNo = {c.replyNo}
+                    userName = {c.userName}
+                    content = {c.content}
+                    createAt = {c.createAt}
+                    userImgUrl = {c.userImgUrl}
+                    queryClient = {queryClient}
+                    isWriter = {false}
+                    isDelete = {c.userNo===userId}
+                  />
+                )
+              }
+              </div>
+            }
+            
+          </div>
+          {
+            isSetting?
+            null:
+            <div className={styled.newCommentArea}>
               <form onSubmit={addNewComment}>
                 <textarea
                   name="newComment"
@@ -255,9 +289,12 @@ export default function ViewProductModal({ onClose, ...props }) {
                 </button>
               </form>
             </div>
-          </div>
+          }
+          
         </div>
       </div>
     </Modal>
+    }
+  </>
   );
 }
