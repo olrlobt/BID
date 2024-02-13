@@ -7,10 +7,13 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import useSaving from '../../hooks/useSaving';
 import { useSelector } from 'react-redux';
 import { moneySeletor } from '../../Store/moneySlice';
+import { useLocation } from 'react-router-dom';
 
 export default function BankPage() {
   // 이후 백엔드에서 국고 금액 받아오면 바꾸기
   const classMoney = useSelector(moneySeletor);
+  const location = useLocation();
+  const gradeNo = location.state.schoolInfo.no;
 
   const [isEdit, setIsEdit] = useState(false);
   const { initSavingList, changeSavingList } = useSaving();
@@ -43,8 +46,6 @@ export default function BankPage() {
   const handleSubmit = () => {
     changeSavings.mutate();
   };
-
-  const gradeNo = 1;
 
   const changeSavings = useMutation({
     mutationKey: ['changeSaving'],

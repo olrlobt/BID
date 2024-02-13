@@ -1,13 +1,20 @@
-import React from "react";
-import styled from "./MainPage.module.css";
-import NavBar from "../../Component/Common/NavBar";
-import { Outlet } from "react-router";
+import React from 'react';
+import styled from './MainPage.module.css';
+import NavBar from '../../Component/Common/NavBar';
+import { Outlet } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 export default function MainPage() {
+  const location = useLocation();
+
+  // const Info = {
+  //   year: location.state.year,
+  //   classRoom: location.state.classRoom,
+  // };
   return (
     <>
       <main className={styled.mainPage}>
-        <NavBar />
+        <NavBar state={location.state} />
         <Outlet />
       </main>
     </>
