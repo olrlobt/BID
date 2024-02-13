@@ -7,11 +7,11 @@ import { useQuery } from '@tanstack/react-query';
 import { viewSavingList } from '../../Apis/TeacherManageApis';
 import useSaving from '../../hooks/useSaving';
 import { useSelector } from "react-redux";
-import { modelSelector } from "../../Store/modelSlice";
+import { modelListSelector } from "../../Store/modelSlice";
 import styled from "./StudentMain.module.css";
 
 function StudentMain() {
-  const models = useSelector(modelSelector);
+  const models = useSelector(modelListSelector);
   const [chatMessage, setChatMessage] = useState('');
   const sendChatMessage = () => {
     if (chatMessage.length > 0) {
