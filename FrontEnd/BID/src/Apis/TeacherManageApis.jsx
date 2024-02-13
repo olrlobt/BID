@@ -1,16 +1,30 @@
-import axios from 'axios';
+import axios from "axios";
+import { getCookie } from "../cookie";
 
 export const TeacherManageApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
 });
+
+TeacherManageApis.interceptors.request.use(
+  (config) => {
+    config.headers["Content-Type"] = "application/json";
+    config.headers["Authorization"] = `Bearer ${getCookie("accessToken")}`;
+
+    return config;
+  },
+  (error) => {
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
 
 /**
  * 대시보드 정보 확인
  * @param gradeNo 학급 넘버
  * @returns 대시보드 정보
  */
-export const viewDashboard = async () => {
-  return await TeacherManageApis.get('/1/statistics');
+export const viewDashboard = async (gradeNo) => {
+  return await TeacherManageApis.get(`/${gradeNo}/statistics`);
 };
 
 /**
@@ -19,9 +33,10 @@ export const viewDashboard = async () => {
  * @returns 200 OK
  */
 
-export const changeSalaries = (salary) => {
-  console.log(salary);
-  return TeacherManageApis.patch(`/1/salaries`, { salary: salary });
+export const changeSalaries = async (gradeNo, salary) => {
+  return await TeacherManageApis.patch(`/${gradeNo}/salaries`, {
+    salary: salary,
+  });
 };
 
 /**
@@ -29,17 +44,30 @@ export const changeSalaries = (salary) => {
  * @param gradeNo 학급 넘버
  * @returns 은행 적금 정보
  */
-
-export const viewSavingList = async () => {
-  return await TeacherManageApis.get('/1/savings');
+export const viewSavingList = async (gradeNo) => {
+  return await TeacherManageApis.get(`/${gradeNo}/savings`);
 };
 
 /**
  * 적금 정보 편집
  * @param gradeNo 학급 넘버
  */
-export const updateSavingList = (savingList) => {
-  return TeacherManageApis.patch('/1/savings', { savingRequests: savingList });
+export const updateSavingList = async (gradeNo, savingList) => {
+  return await TeacherManageApis.patch(`/${gradeNo}/savings`, {
+    savingRequests: savingList,
+  });
+};
+
+/**
+ * 경매 중단 수업시간
+ * @param gradeNo 학급 넘버
+ * @param parseUpdatedTime 업데이트 되는 시간
+ * @returns 200OK
+ */
+export const changeStopTime = async (gradeNo, parseUpdatedTime) => {
+  return await TeacherManageApis.patch(`/${gradeNo}/grade-periods`, {
+    gradePeriodUpdateRequests: parseUpdatedTime,
+  });
 };
 
 /**
@@ -48,8 +76,8 @@ export const updateSavingList = (savingList) => {
  * @returns 학급 학생 공 개수
  */
 
-export const viewStudentBalls = async () => {
-  return await TeacherManageApis.get('/1/balls');
+export const viewStudentBalls = async (gradeNo) => {
+  return await TeacherManageApis.get(`/${gradeNo}/balls`);
 };
 
 /**
@@ -58,6 +86,21 @@ export const viewStudentBalls = async () => {
  * @returns 학급 학생 공 개수
  */
 
-export const resetStudentBalls = async () => {
-  return await TeacherManageApis.patch('/1/balls');
+export const resetStudentBalls = async (gradeNo) => {
+  return await TeacherManageApis.patch(`/${gradeNo}/balls`);
+};
+
+/**
+ * 학생 정보 가져오기
+ * @param gradeNo 학급 넘버
+ * @param userNo 학생 번호
+ * @param startDate 시작 일자
+ * @param endDate 마지막 일자
+ * @returns
+ */
+
+export const viewStudentDetail = (gradeNo, userNo, startDate, endDate) => {
+  return TeacherManageApis.get(
+    `/${gradeNo}/users/${userNo}?startDate=${startDate}&endDate=${endDate}`
+  );
 };

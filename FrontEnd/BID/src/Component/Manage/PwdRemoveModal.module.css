@@ -1,0 +1,18 @@
+.title {
+    font-size: 1.2rem;
+    margin-bottom: 2.5vw;
+    font-weight: bold;
+}
+
+
+.content {
+    font-size: 0.8rem;
+    margin-top: 0.4vw;
+    margin-bottom: 0.4vw;
+}
+
+.secondContent{
+    font-size: 0.8rem;
+    margin-top: 0.5vw;
+    margin-bottom: 3vw;
+}

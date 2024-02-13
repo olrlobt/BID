@@ -1,17 +1,18 @@
-import styled from "./SeatGame.module.css";
-import Back from "../../Asset/Image/SeatGame/back_btn.png";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
-import useBalls from "../../hooks/useBalls";
-import html2canvas from "html2canvas";
-import { resetStudentBalls } from "../../Apis/TeacherManageApis";
-import { useMutation } from "@tanstack/react-query";
+import styled from './SeatGame.module.css';
+import Back from '../../Asset/Image/SeatGame/back_btn.png';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import useBalls from '../../hooks/useBalls';
+import html2canvas from 'html2canvas';
+import { resetStudentBalls } from '../../Apis/TeacherManageApis';
+import { useMutation } from '@tanstack/react-query';
 
 export default function SeatGame() {
   const navigate = useNavigate();
   const location = useLocation();
   const ballList = location.state;
 
+  const groupNo = 1;
   // 캡쳐
   const captureRef = useRef(null);
 
@@ -19,12 +20,12 @@ export default function SeatGame() {
   const handleCapture = () => {
     if (captureRef.current) {
       html2canvas(captureRef.current).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
+        const imgData = canvas.toDataURL('image/png');
         const blob = dataURLtoBlob(imgData);
-        const file = new File([blob], "captured_image.png", {
-          type: "image/png",
+        const file = new File([blob], 'captured_image.png', {
+          type: 'image/png',
         });
-        saveAs(file, "captured_image.png");
+        saveAs(file, 'captured_image.png');
         console.log(imgData);
       });
     }
@@ -32,8 +33,8 @@ export default function SeatGame() {
 
   /** Data URL을 Blob 객체로 변환하는 함수 */
   const dataURLtoBlob = (dataURL) => {
-    const parts = dataURL.split(";base64,");
-    const contentType = parts[0].split(":")[1];
+    const parts = dataURL.split(';base64,');
+    const contentType = parts[0].split(':')[1];
     const raw = window.atob(parts[1]);
     const array = new Uint8Array(raw.length);
 
@@ -46,7 +47,7 @@ export default function SeatGame() {
 
   /** Blob을 파일로 저장하는 함수 */
   const saveAs = (blob, fileName) => {
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
     link.download = fileName;
 
@@ -66,7 +67,7 @@ export default function SeatGame() {
   const [isCaneClicked, setIsCaneClicked] = useState(false);
   const [isBallOpen, setIsBallOpen] = useState(false);
   const [pickList, setPickList] = useState(tempList);
-  const [studentName, setStudentName] = useState("");
+  const [studentName, setStudentName] = useState('');
   const [seatIndex, setSeatIndex] = useState(0);
 
   // 자리배정을 위한 배열
@@ -94,7 +95,7 @@ export default function SeatGame() {
   /** 한 좌석 뽑는 이벤트 */
   const pickSeat = () => {
     if (pickList.length === 0) {
-      alert("더 이상 뽑을 학생이 없습니다.");
+      alert('더 이상 뽑을 학생이 없습니다.');
       setIsBallOpen(false);
       finishGame.mutate();
       // redux에 상태 업데이트 해주기
@@ -124,14 +125,14 @@ export default function SeatGame() {
   };
 
   const finishGame = useMutation({
-    mutationKey: ["resetBalls"],
+    mutationKey: ['resetBalls'],
     mutationFn: () =>
-      resetStudentBalls()
+      resetStudentBalls(groupNo)
         .then(() => {
-          alert("게임이 성공적으로 끝났습니다.");
+          alert('게임이 성공적으로 끝났습니다.');
         })
         .catch(() => {
-          alert("에러가 발생했습니다.");
+          alert('에러가 발생했습니다.');
         }),
   });
 
@@ -143,11 +144,11 @@ export default function SeatGame() {
           {seatList.map((student, index) => (
             <div className={styled.mySeat}>
               <span className={styled.order}>{index + 1}</span>
-              <span>{student !== null ? student : ""}</span>
+              <span>{student !== null ? student : ''}</span>
             </div>
           ))}
         </section>
-        <button onClick={() => navigate("/game/")}>
+        <button onClick={() => navigate('/game/')}>
           <img className={styled.back} src={Back} alt="뒤로가자" />
         </button>
       </section>
