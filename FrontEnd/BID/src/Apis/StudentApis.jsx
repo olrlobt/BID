@@ -1,7 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const StudentApis = axios.create({
   baseURL: process.env.REACT_APP_STU_API,
+});
+
+export const StudentRewardsApis = axios.create({
+  baseURL: process.env.REACT_APP_TCH_API,
 });
 
 /**
@@ -18,7 +22,7 @@ export const getStudentListApi = async () => {
  * @returns 적금 가입 내역
  */
 export const getStudentSavingInfo = async () => {
-  return await StudentApis.get('/savings');
+  return await StudentApis.get("/savings");
 };
 
 /**
@@ -28,5 +32,5 @@ export const getStudentSavingInfo = async () => {
  */
 
 export const applyStudentSaving = async (savingInfo) => {
-  return await StudentApis.post('/savings', savingInfo);
+  return await StudentApis.post("/savings", savingInfo);
 };
