@@ -21,3 +21,30 @@ services:
     environment:
       TZ: Asia/Seoul
 
+  bid-core:
+    image: olrlobt/bid-core
+    container_name: bid-core
+    ports:
+      - "8083:8083"
+    environment:
+      - TZ=Asia/Seoul
+
+  bid-admin:
+    image: olrlobt/bid-admin
+    container_name: bid-admin
+    depends_on:
+      - bid-core
+    ports:
+      - "8081:8081"
+    environment:
+      - TZ=Asia/Seoul
+
+  bid-student:
+    image: olrlobt/bid-student
+    container_name: bid-student
+    depends_on:
+      - bid-core
+    ports:
+      - "8082:8082"
+    environment:
+      - TZ=Asia/Seoul
