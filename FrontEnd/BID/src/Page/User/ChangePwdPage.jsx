@@ -47,7 +47,6 @@ function ChangePwdPage() {
     mutationFn: (newPwd) => changePwdApi(newPwd), // corrected typo here
     onSuccess: (data) => {
       console.log(data);
-
     },
     onError: (error) => {
       console.log(error);
@@ -161,7 +160,7 @@ function ChangePwdPage() {
                   className={styled.icon}
                   />
                   <input
-                type="newpassword"
+                type="password"
                 placeholder="새 비밀번호"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -174,7 +173,7 @@ function ChangePwdPage() {
                   className={styled.icon}
                   />
                   <input
-               type="confirmNewPassword"
+               type="password"
                placeholder="새 비밀번호 확인"
                value={newPasswordCheck}
                onChange={(e) => setNewPasswordCheck(e.target.value)}

@@ -5,13 +5,19 @@ import Logo from '../../Asset/Image/LoginLogo.png';
 import useModels from "../../hooks/useModels";
 import { studentLoginApi } from "../../Apis/ModelApis";
 import { useMutation } from "@tanstack/react-query";
+import { SvgIcon } from "@material-ui/core";
+import SearchIcon from '@mui/icons-material/Search';
+import useModal from "../../hooks/useModal";
 
 function LoginPage() {
 
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
   const { loginStudent } = useModels();
+  const { initModels } = useModels();
   const navigate = useNavigate()
+  const { openModal } = useModal();
+  const [schoolCode, setSchoolCode] = useState("");
 
 
   /** 로그인 쿼리 */
@@ -19,7 +25,8 @@ function LoginPage() {
     mutationKey: ['studentLogin'],
     mutationFn: (userCredentials) => studentLoginApi( userCredentials),
     onSuccess: (res) => {
-      loginStudent(res);
+      loginStudent({ model: res.data});
+      initModels({ models: res.data.studentList });
       localStorage.setItem('accessToken', res.data.tokenResponse.accessToken);
       localStorage.setItem('refreshToken', res.data.tokenResponse.refreshToken);
       navigate('/studentmain');
@@ -41,6 +48,14 @@ function LoginPage() {
     studentLoginQuery.mutate(userCredentials);
   }
   
+
+  const handlerModalClose = (schoolCode) => {
+    console.log(schoolCode)
+    if (schoolCode) {
+      setSchoolCode(schoolCode)
+    }
+  }
+
   return (
     <section className={styled.back}>
       <div className={styled.logo}>
@@ -49,12 +64,26 @@ function LoginPage() {
       <div className={styled.content}>
         <form className={styled.contentInput} 
         onSubmit={handleLoginEvent}>
+          <div className={styled.inputWithIcon}>
           <input 
             type="id" 
             value={id} 
             onChange={(e)=> setId(e.target.value)}
             placeholder="아이디" 
           />
+          <SvgIcon 
+            component={SearchIcon} 
+            style={{ fill: "#4D4D4D", height: "2.5vh" }}
+            className={styled.icon}
+            onClick={(e) => {
+              e.preventDefault(); // Prevent default form submission behavior
+              openModal({
+                type: "studentSchool",
+                props: ["학교 검색", handlerModalClose]
+              });
+            }}
+          />
+          </div>
           <input 
             type="password" 
             value={password} 
