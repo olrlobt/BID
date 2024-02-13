@@ -19,18 +19,19 @@ public class StudentSaveRequest {
 	private int gradeNo;
 
 	public Student toEntity(PasswordEncoder passwordEncoder, String studentId) {
-		return Student.builder()
-			.id(studentId)
-			.password(passwordEncoder.encode(password))
-			.name(name)
-			.schoolNo(schoolNo)
-			.birthDate(password)
-			.asset(0)
-			.ballCount(1)
-			.profileImgUrl("https://ssafya306.s3.ap-northeast-2.amazonaws.com/DefaultBody.png")
-			.attendance(new Attendance())
-			.expenditureStatistics(new ExpenditureStatistics())
-			.gradeNo(gradeNo)
-			.build();
+		return new Student(
+			studentId,
+			passwordEncoder.encode(password),
+			name,
+			schoolNo,
+			password,
+			0,
+			1,
+			"https://ssafya306.s3.ap-northeast-2.amazonaws.com/DefaultBody.png",
+			new Attendance(),
+			new ExpenditureStatistics(),
+			gradeNo,
+			3
+		);
 	}
 }

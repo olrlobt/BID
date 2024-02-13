@@ -16,20 +16,6 @@ public class StudentListSaveRequest {
 	private int number;
 
 	public Student toEntity(PasswordEncoder passwordEncoder, int schoolNo, int gradeNo, String id) {
-		// return Student.builder()
-		// 	.id(id + String.format("%02d", this.number))
-		// 	.password(passwordEncoder.encode(password))
-		// 	.name(name)
-		// 	.schoolNo(schoolNo)
-		// 	.birthDate(birthDate)
-		// 	.asset(0)
-		// 	.ballCount(1)
-		// 	.profileImgUrl(imgUrl)
-		// 	.attendance(new Attendance())
-		// 	.expenditureStatistics(new ExpenditureStatistics())
-		// 	.gradeNo(gradeNo)
-		// 	.taxRate(3)
-		// 	.build();
 		return new Student(
 			id + String.format("%02d", this.number),
 			passwordEncoder.encode(password),
