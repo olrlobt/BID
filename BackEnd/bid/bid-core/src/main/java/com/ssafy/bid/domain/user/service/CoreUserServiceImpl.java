@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.user.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -8,7 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.user.Account;
+import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.Admin;
+import com.ssafy.bid.domain.user.DealType;
 import com.ssafy.bid.domain.user.School;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.User;
@@ -24,6 +28,7 @@ import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentInfo;
 import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
+import com.ssafy.bid.domain.user.repository.AccountRepository;
 import com.ssafy.bid.domain.user.repository.CoreUserRepository;
 import com.ssafy.bid.domain.user.repository.SchoolRepository;
 import com.ssafy.bid.domain.user.security.JwtTokenProvider;
@@ -44,6 +49,7 @@ public class CoreUserServiceImpl implements CoreUserService {
 	private final PasswordEncoder passwordEncoder;
 	private final RedisTemplate redisTemplate;
 	private final SchoolRepository schoolRepository;
+	private final AccountRepository accountRepository;
 
 	private User authenticateUser(String id, String password) {
 		return coreUserRepository.findById(id)
@@ -142,8 +148,21 @@ public class CoreUserServiceImpl implements CoreUserService {
 	@Override
 	@Transactional
 	public void resetAttendance() {
+		List<Account> accounts = new ArrayList<>();
 		coreUserRepository.findAllStudentsAndSalaries()
-			.forEach(response -> response.calculateSalary(response.getSalary()));
+			.forEach(response -> {
+				int price = response.calculateSalary(response.getSalary());
+				Account account = Account.builder()
+					.accountType(AccountType.INCOME)
+					.price(price)
+					.content("주급 입금.")
+					.dealType(DealType.SALARY)
+					.userNo(response.getStudent().getNo())
+					.gradeNo(response.getStudent().getGradeNo())
+					.build();
+				accounts.add(account);
+			});
+		accountRepository.saveAll(accounts);
 	}
 
 	@Override
