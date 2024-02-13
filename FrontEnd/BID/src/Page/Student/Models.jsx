@@ -38,7 +38,7 @@ export default function Models() {
     <>
       <SocketManager />
       <Canvas
-        style={{ width: '100%', height: '80vh' }}
+        style={{ width: '100%', height: '70vh' }}
         camera={{ position: [12, 10, 20], fov: 20 }}
       >
         <CameraControls minPolarAngle={2} maxPolarAngle={Math.PI / 2} />
@@ -71,7 +71,6 @@ export default function Models() {
               onClick={() => handleCharacterClick(character.id)}
             />
           ))}
-
           <BlackBoard />
           <Cactus />
           <Alarm />
@@ -86,14 +85,13 @@ export default function Models() {
           {/* <BasicBean /> */}
           {/* <CharacterModel position-x={1} /> */}
           <SnowBean />
-          <Box position={[3, 1.5, -2]} scale={0.15} />
         </group>
         <OrbitControls
           makeDefault
           minAzimuthAngle={2}
-          maxAzimuthAngle={2.6}
-          minPolarAngle={Math.PI / 2.5}
-          maxPolarAngle={Math.PI / 2.7}
+          maxAzimuthAngle={2}
+          minPolarAngle={Math.PI / 2.55}
+          maxPolarAngle={Math.PI / 2.55}
           enableZoom={true}
           enablePan={true}
           enableRotate={false} // 회전 비활성화
