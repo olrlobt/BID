@@ -41,7 +41,8 @@ export default function Home() {
   const [lineData, setLineData] = useState([]);
 
   const location = useLocation();
-  const gradeNo = 3;
+
+  const gradeNo = 4;
   const { data: dashboardInfo } = useQuery({
     queryKey: ["HomeDashboard"],
     queryFn: () =>
