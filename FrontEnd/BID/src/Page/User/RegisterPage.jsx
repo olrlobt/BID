@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "./RegisterPage.module.css";
 import { Link } from "react-router-dom";
 import useModal from "../../hooks/useModal";
-import { useSelector } from "react-redux";
 import Logo from "../../Component/Common/Logo";
 import { addUserApi, authenticateApi, duplicateIdApi, registerCodeApi } from "../../Apis/UserApis";
 import { useMutation } from "@tanstack/react-query";
