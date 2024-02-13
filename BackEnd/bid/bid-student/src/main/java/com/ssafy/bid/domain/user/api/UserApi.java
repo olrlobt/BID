@@ -2,8 +2,11 @@ package com.ssafy.bid.domain.user.api;
 
 import static org.springframework.http.HttpStatus.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
-import com.ssafy.bid.domain.user.dto.AttendanceResponse;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.LoginResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
@@ -48,12 +50,6 @@ public class UserApi {
 		return ResponseEntity.status(OK).build();
 	}
 
-	@GetMapping("/users/{userNo}/attendance")
-	public ResponseEntity<AttendanceResponse> getStudentAttendance(@PathVariable int userNo) {
-		AttendanceResponse response = userService.getStudentAttendance(userNo);
-		return ResponseEntity.ok(response);
-	}
-
 	@GetMapping("/users/{userNo}")
 	public ResponseEntity<StudentFindResponse> findStudent(
 		@PathVariable int userNo,
@@ -74,12 +70,15 @@ public class UserApi {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+	public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse httpResponse) {
 		LoginResponse loginResponse = coreUserService.login(request, false);
 		TokenResponse tokenResponse = loginResponse.getTokenResponse();
 		Cookie cookie = createCookie(tokenResponse.getRefreshToken());
-		response.addCookie(cookie);
-		return ResponseEntity.ok(loginResponse);
+		httpResponse.addCookie(cookie);
+		Map<String, Object> responseBody = new HashMap<>();
+		responseBody.put("accessToken", tokenResponse.getAccessToken());
+		responseBody.put("studentList", loginResponse.getStudentList());
+		return ResponseEntity.ok(responseBody);
 	}
 
 	private Cookie createCookie(String refreshToken) {
