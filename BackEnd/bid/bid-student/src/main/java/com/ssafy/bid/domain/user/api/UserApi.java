@@ -74,10 +74,7 @@ public class UserApi {
 		TokenResponse tokenResponse = loginResponse.getTokenResponse();
 		Cookie cookie = createCookie(tokenResponse.getAccessToken());
 		httpResponse.addCookie(cookie);
-		Map<String, Object> responseBody = new HashMap<>();
-		responseBody.put("accessToken", tokenResponse.getAccessToken());
-		responseBody.put("studentList", loginResponse.getStudentList());
-		return ResponseEntity.ok(responseBody);
+		return ResponseEntity.ok(loginResponse);
 	}
 
 	private Cookie createCookie(String accessToken) {
