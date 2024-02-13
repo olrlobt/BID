@@ -60,9 +60,27 @@ public class User extends BaseEntity {
 		this.schoolNo = schoolNo;
 	}
 
+	public User(
+		String id,
+		String password,
+		String name,
+		Integer schoolNo,
+		String profileImgUrl
+	) {
+		this.id = id;
+		this.password = password;
+		this.name = name;
+		this.schoolNo = schoolNo;
+		this.profileImgUrl = profileImgUrl;
+	}
+
 	public void updateAdmin(String name, int schoolNo) {
 		this.name = name;
 		this.schoolNo = schoolNo;
+	}
+
+	public void updateProfileImgUrl(String profileImgUrl) {
+		this.profileImgUrl = profileImgUrl;
 	}
 
 	public void changePassword(String encodedNewPassword) {
