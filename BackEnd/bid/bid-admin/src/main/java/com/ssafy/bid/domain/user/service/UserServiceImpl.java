@@ -118,11 +118,11 @@ public class UserServiceImpl implements UserService {
 			throw new InvalidParameterException("회원가입: 패스워드와 패스워드 확인 불일치.", request.getPassword());
 		}
 
-		TelAuthentication telAuthentication = telAuthenticationRepository.findById(request.getTel())
-			.orElseThrow(() -> new AuthenticationFailedException("회원가입: 인증되지 않은 회원임."));
-		if (!telAuthentication.getIsAuthenticated()) {
-			throw new AuthenticationFailedException("회원가입: 인증되지 않은 회원임.");
-		}
+		// TelAuthentication telAuthentication = telAuthenticationRepository.findById(request.getTel())
+		// 	.orElseThrow(() -> new AuthenticationFailedException("회원가입: 인증되지 않은 회원임."));
+		// if (!telAuthentication.getIsAuthenticated()) {
+		// 	throw new AuthenticationFailedException("회원가입: 인증되지 않은 회원임.");
+		// }
 
 		Admin admin = request.toEntity(passwordEncoder);
 		userRepository.save(admin);
