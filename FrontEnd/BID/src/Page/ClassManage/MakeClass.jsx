@@ -1,15 +1,34 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import styled from './MakeClass.module.css';
-import { useCallback, useState } from 'react';
+import React, { useEffect } from "react";
+import styled from "./MakeClass.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { useCallback, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { AddClass } from "../../Apis/ClassManageApis";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../Store/userSlice";
 
 export default function MakeClass() {
-  const XLSX = require('xlsx');
+  const XLSX = require("xlsx");
   const [uploadedFile, setUploadedFile] = useState(null);
   const [stuFile, setStuFile] = useState(
     uploadedFile ? uploadedFile.jsonData : []
   );
+  const [studentFormat, setStudentFormat] = useState([]);
+  const [year, setYear] = useState(0);
+  const [classRoom, setClassRoom] = useState(0);
+  const [classInfo, setClassInfo] = useState({
+    schoolCode: "AAA",
+    year: year,
+    classRoom: classRoom,
+    userNo: 36,
+    schoolNo: 1,
+    studentListSaveRequests: [],
+  });
+
+  const navigate = useNavigate();
+  const classSelector = useSelector(userSelector);
 
   const handleDrop = useCallback(async (acceptedFiles) => {
     if (acceptedFiles.length > 0) {
@@ -18,7 +37,7 @@ export default function MakeClass() {
       const reader = new FileReader();
       reader.onload = async (e) => {
         const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array', bookVBA: true });
+        const workbook = XLSX.read(data, { type: "array", bookVBA: true });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
@@ -38,9 +57,60 @@ export default function MakeClass() {
     setStuFile(updatedStuFile);
   };
 
+  const handleChange = (event, what) => {
+    if (what === "year") {
+      setYear(event.target.value);
+    } else if (what === "classRoom") {
+      setClassRoom(event.target.value);
+    }
+  };
+
+  const handleSubmit = () => {
+    setClassInfo({
+      schoolCode: classSelector.data.adminInfo.schoolCode,
+      year: year,
+      classRoom: classRoom,
+      userNo: classSelector.data.adminInfo.userNo,
+      schoolNo: classSelector.data.adminInfo.schoolNo,
+      studentListSaveRequests: studentFormat,
+    });
+
+    makingClass.mutate();
+  };
+
+  useEffect(() => {
+    setStudentFormat(
+      stuFile.map((student) => {
+        return {
+          id: `${classInfo.schoolCode}${year}${String(classRoom).padStart(
+            2,
+            "0"
+          )}${String(student.번호).padStart(2, "0")}`,
+          password: student.생년월일.split(".").join("").slice(2),
+          name: student.이름,
+          birthDate: student.생년월일.split(".").join("").slice(2),
+        };
+      })
+    );
+  }, [stuFile, classInfo, year, classRoom]);
+
+  const makingClass = useMutation({
+    mutationKey: ["makingClass"],
+    mutationFn: () =>
+      AddClass({ classInfo })
+        .then(() => {
+          // 추가된 클래스 리덕스에 저장
+          alert("추가 되었습니다.");
+          navigate("/classlist/:teacherId/modify");
+        })
+        .catch(() => {
+          alert("추가가 되지 않았습니다.");
+          navigate("/classlist/:teacherId/modify");
+        }),
+  });
+
   return (
     <section className={styled.makeClass}>
-      {console.log(stuFile)}
       <button className={styled.xlsxDownload}>
         <FontAwesomeIcon icon={faDownload} />
         엑셀 파일 다운로드
@@ -55,17 +125,30 @@ export default function MakeClass() {
       </div>
       <section className={styled.uploadedInfo}>
         <label htmlFor="year">
-          <input type="number" id="year" />
+          <input
+            type="number"
+            id="year"
+            value={year}
+            onChange={(e) => handleChange(e, "year")}
+          />
           학년
         </label>
         <label htmlFor="class">
-          <input type="number" id="class" className={styled.class} />반
+          <input
+            type="number"
+            id="class"
+            className={styled.class}
+            value={classRoom}
+            onChange={(e) => handleChange(e, "classRoom")}
+          />
+          반
         </label>
         <div className={styled.filebox}>
           <input
             className={styled.uploadName}
             value=""
             placeholder="첨부파일"
+            readOnly
           />
           <label htmlFor="file" className={styled.file}>
             파일 찾기
@@ -87,32 +170,34 @@ export default function MakeClass() {
         </div>
         {uploadedFile &&
           uploadedFile.jsonData.map((student, index) => (
-            <div className={styled.infoTitle}>
+            <div className={styled.infoTitle} key={index}>
               <input
                 className={`${styled.num} ${styled.newStu}`}
                 value={student.번호}
                 onChange={(e) =>
-                  handleInputChange(index, '번호', e.target.value)
+                  handleInputChange(index, "번호", e.target.value)
                 }
               />
               <input
                 className={`${styled.name} ${styled.newStu}`}
                 value={student.이름}
                 onChange={(e) =>
-                  handleInputChange(index, '이름', e.target.value)
+                  handleInputChange(index, "이름", e.target.value)
                 }
               />
               <input
                 className={`${styled.birth} ${styled.newStu}`}
                 value={student.생년월일}
                 onChange={(e) =>
-                  handleInputChange(index, '생년월일', e.target.value)
+                  handleInputChange(index, "생년월일", e.target.value)
                 }
               />
             </div>
           ))}
       </section>
-      <button className={styled.makeBtn}>학급 생성</button>
+      <button className={styled.makeBtn} onClick={handleSubmit}>
+        학급 생성
+      </button>
     </section>
   );
 }

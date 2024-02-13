@@ -1,15 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  models : null,
-  currentModel: null,
+  models: [],
   modelLoggedIn: false,
+  model: null,
 };
+
 
 export const modelSelector = (state) => {
-  return state.studentmodel.currentModel;
-};
+  return state.studentmodel.models;
 
+}
 
 export const modelLoggedInSelector = (state) => {
   return state.studentmodel.modelLoggedIn;
@@ -17,10 +18,11 @@ export const modelLoggedInSelector = (state) => {
 
 export const modelSlice = createSlice({
   name: "studentmodel",
-  initialState: initialState,
+  initialState,
   reducers: {
     initModels: (state, action) => {
       const models = action.payload;
+      console.log(models)
       state.models = models;
     },
     addModel: (state, action) => {
@@ -35,8 +37,8 @@ export const modelSlice = createSlice({
       state.models = updatedModels;
     },
     loginStudent: (state, action) => {
-        const currentModel = action.payload;
-        state.currentModel = currentModel;
+        const model = action.payload;
+        state.model = model;
         state.modelLoggedIn = true;
     },
     logoutStudent: (state) => {

@@ -138,3 +138,10 @@
   border-radius: 5px;
   border: 1px solid #ececec;
 }
+
+.noClass {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

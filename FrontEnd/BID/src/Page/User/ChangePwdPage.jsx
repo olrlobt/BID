@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import styled from "./ChangePwdPage.module.css";
 import Logo from "../../Component/Common/Logo";
 import { useMutation } from "@tanstack/react-query";
+import { SvgIcon } from "@material-ui/core";
+import PersonIcon from '@mui/icons-material/Person';
+import LockIcon from '@mui/icons-material/Lock';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { sendCodeApi, authenticateApi, changePwdApi } from "../../Apis/UserApis";
 
 function ChangePwdPage() {
   const [step, setStep] = useState(1); // Default step is 1
   const [id, setId] = useState("");
   const [tel, setTel] = useState("");
-  const [verifyNo, setVerifyNo] = useState("");
+  const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordCheck, setNewPasswordCheck] = useState("");
@@ -43,7 +47,6 @@ function ChangePwdPage() {
     mutationFn: (newPwd) => changePwdApi(newPwd), // corrected typo here
     onSuccess: (data) => {
       console.log(data);
-
     },
     onError: (error) => {
       console.log(error);
@@ -57,7 +60,8 @@ function ChangePwdPage() {
     if (step === 1) 
     {
       let userData = {
-        verifyNo
+        tel,
+        code
       }
       authenticateQuery.mutate(userData);
     }
@@ -65,9 +69,10 @@ function ChangePwdPage() {
     {
       let newPwd = {
         id,
-        tel,
-        verifyNo,
+        newPassword,
+        newPasswordCheck,
       };
+      console.log(newPwd)
       changePwdQuery.mutate(newPwd);
   };
     }
@@ -93,30 +98,51 @@ function ChangePwdPage() {
           <form className={styled.contentInput}
            onSubmit={handleChangePwd}>
             <div className={styled.telInput}>
-              <input
+              <div className={styled.inputWithIcon}>
+                <SvgIcon 
+                component={PersonIcon} 
+                style={{ fill: "#4D4D4D", height: "2.5vh" }}
+                className={styled.icon}
+                />
+                <input
                 type="id"
                 placeholder="아이디"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
               />
-              <input
+              </div>
+              <div className={styled.inputWithIcon}>
+                <SvgIcon 
+                component={PhoneIphoneIcon} 
+                style={{ fill: "#4D4D4D", height: "2.5vh" }}
+                className={styled.icon}
+                />
+                <input
                 type="tel"
                 placeholder="휴대전화번호"
                 value={tel}
                 onChange={(e) => setTel(e.target.value)}
-              />
-              <button
-                className={styled.sendCodeBtn}
-                onClick={handleSendCode}
-              >
-                코드 발송
-              </button>
-              <input
-                type="verifyNo"
+                />
+                <button
+                  className={styled.sendCodeBtn}
+                  onClick={handleSendCode}
+                >
+                  코드 발송
+                </button>
+              </div>
+              <div className={styled.inputWithIcon}>
+                <SvgIcon 
+                component={PhoneIphoneIcon} 
+                style={{ fill: "#4D4D4D", height: "2.5vh" }}
+                className={styled.icon}
+                />
+                <input
+                type="code"
                 placeholder="인증코드"
-                value={verifyNo}
-                onChange={(e) => setVerifyNo(e.target.value)}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
               />
+              </div>
             </div>
             {error && <p className={styled.error}>{error}</p>}
             <button className={styled.changePwdBtn} type="submit">
@@ -128,19 +154,32 @@ function ChangePwdPage() {
           <form className={styled.contentInput}
           onSubmit={handleChangePwd}>
            <div className={styled.telInput}>
-             <input
-               type="newpassword"
-               placeholder="새 비밀번호"
-               value={newPassword}
-               onChange={(e) => setNewPassword(e.target.value)}
-             />
-             <input
-               type="confirmNewPassword"
+            <div className={styled.inputWithIcon}>
+                  <SvgIcon 
+                  component={LockIcon} 
+                  style={{ fill: "#4D4D4D", height: "2.5vh" }}
+                  className={styled.icon}
+                  />
+                  <input
+                type="password"
+                placeholder="새 비밀번호"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+                </div>
+                <div className={styled.inputWithIcon}>
+                  <SvgIcon 
+                  component={LockIcon} 
+                  style={{ fill: "#4D4D4D", height: "2.5vh" }}
+                  className={styled.icon}
+                  />
+                  <input
+               type="password"
                placeholder="새 비밀번호 확인"
                value={newPasswordCheck}
                onChange={(e) => setNewPasswordCheck(e.target.value)}
              />
-
+            </div>
            </div>
            {error && <p className={styled.error}>{error}</p>}
            <button className={styled.changePwdBtn} type="submit">

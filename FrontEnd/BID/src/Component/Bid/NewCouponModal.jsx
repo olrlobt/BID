@@ -2,16 +2,26 @@ import React from 'react';
 import styled from './NewCouponModal.module.css';
 import Modal from '../Common/Modal';
 import SubmitButton from '../Common/SubmitButton';
-import { addNewCouponApi } from '../../Apis/CouponApis';
+import { getCouponListApi, addNewCouponApi } from '../../Apis/CouponApis';
 import { useMutation } from '@tanstack/react-query';
+import useCoupons from "../../hooks/useCoupons";
 
 export default function NewCouponModal({ onClose, ...props }){
+  const { initCoupons } = useCoupons();
+
+  const gradeNo = 3;
 
   /** 쿠폰 추가 쿼리 */
   const addNewCouponQuery  = useMutation({
     mutationKey: ['addNewCoupon'],
-    mutationFn: (form) => addNewCouponApi(1, form),
-    onSuccess: () => { props[1].invalidateQueries('couponList') },
+    mutationFn: (form) => addNewCouponApi(gradeNo, form),
+    onSuccess: () => {
+      getCouponListApi(gradeNo).then((res) => {
+        if(res.data !== undefined){
+          initCoupons({ couponList: res.data.coupons });
+        }
+      })
+    },
     onError: (error) => { console.log(error); }
   })
 

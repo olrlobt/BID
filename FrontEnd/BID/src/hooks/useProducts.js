@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { initProducts, addProduct, removeProduct } from "../Store/productSlice";
+import { initProducts, deleteProduct, modifyProduct } from "../Store/productSlice";
 
 export default function useProducts() {
   const dispatch = useDispatch();
@@ -7,18 +7,18 @@ export default function useProducts() {
   const handleInitProducts = ({ productList }) => {
     dispatch(initProducts(productList));
   }
-
-  const handleAddProduct = ({ newProduct }) => {
-    dispatch(addProduct(newProduct));
+  
+  const handleDeleteProduct = ({ productNo }) => {
+    dispatch(deleteProduct(productNo));
   }
-
-  const handleRemoveProduct = ({ productNo }) => {
-    dispatch(removeProduct(productNo));
+  
+  const handleModifyProduct = ({ productNo, patchData }) => {
+    dispatch(modifyProduct({ productNo, patchData }));
   }
 
   return {
     initProducts: handleInitProducts,
-    addProduct: handleAddProduct,
-    removeProduct: handleRemoveProduct
+    deleteProduct: handleDeleteProduct,
+    modifyProduct: handleModifyProduct,
   };
 }

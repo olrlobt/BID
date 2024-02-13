@@ -29,8 +29,8 @@ export default function useModels() {
   return {
     loginStudent: handleLoginStudent,
     logoutStudent: handleLogoutStudent,
-    initStudents: handleInitModels,
-    addStudent: handleAddModel,
-    editStudent: handleEditModel
+    initModels: handleInitModels,
+    addModel: handleAddModel,
+    editSteditModeludent: handleEditModel
   };
 }

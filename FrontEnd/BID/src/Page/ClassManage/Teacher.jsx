@@ -21,7 +21,8 @@ export default function Teacher() {
         </div>
         <section className={styled.teacherBtn}>
           {/* 현재 url에 따라 어떤 정보 보여줄지 표현 */}
-          {location.pathname === '/classlist/:teacherId/' ? (
+          {location.pathname === '/classlist/:teacherId/' ||
+          location.pathname === '/classlist/:teacherId/no-class/' ? (
             <Link to="/classlist/:teacherId/modify" className={styled.classBtn}>
               <FontAwesomeIcon className={styled.icon} icon={faGear} />
               계정/학급관리
