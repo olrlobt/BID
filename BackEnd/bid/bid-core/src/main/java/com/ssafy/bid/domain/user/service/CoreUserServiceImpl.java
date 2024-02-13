@@ -63,13 +63,20 @@ public class CoreUserServiceImpl implements CoreUserService {
 			}
 
 			List<StudentInfo> studentList = coreUserRepository.findByGradeNo(student.getGradeNo());
-			return new LoginResponse(tokenResponse, studentList);
+			StudentInfo studentInfo = null;
+			for (StudentInfo info : studentList) {
+				if (info.getNo() == user.getNo()) {
+					studentInfo = new StudentInfo(info.getNo(), info.getGradeNo(), info.getName(),
+						info.getProfileImgUrl());
+				}
+			}
+			return new LoginResponse(tokenResponse, studentList, studentInfo);
 		} else {
 			if (!isAdmin) {
 				throw new AuthenticationFailedException("로그인: 알맞은 권한이 아님.");
 			}
 
-			return new LoginResponse(tokenResponse, null);
+			return new LoginResponse(tokenResponse, null, null);
 		}
 	}
 

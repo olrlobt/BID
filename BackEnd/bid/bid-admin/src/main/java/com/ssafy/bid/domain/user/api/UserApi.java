@@ -30,6 +30,7 @@ import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
+import com.ssafy.bid.domain.user.dto.StudentUpdateRequest;
 import com.ssafy.bid.domain.user.dto.StudentsGetResponse;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationCheckRequest;
 import com.ssafy.bid.domain.user.dto.TelAuthenticationSendRequest;
@@ -108,6 +109,25 @@ public class UserApi {
 		UserType userType = userDetails.getUserInfo().getUserType();
 		userService.saveStudent(userType, request);
 		return ResponseEntity.status(CREATED).build();
+	}
+
+	@PatchMapping("/students/{userNo}")
+	public ResponseEntity<Void> updateStudent(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int userNo,
+		@RequestBody StudentUpdateRequest request) {
+		UserType userType = userDetails.getUserInfo().getUserType();
+		userService.updateStudent(userType, userNo, request);
+		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping("/students/{userNo}")
+	public ResponseEntity<Void> deleteStudent(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable int userNo) {
+		UserType userType = userDetails.getUserInfo().getUserType();
+		userService.deleteStudent(userType, userNo);
+		return ResponseEntity.ok().build();
 	}
 
 	@PatchMapping("/password/{userNo}")

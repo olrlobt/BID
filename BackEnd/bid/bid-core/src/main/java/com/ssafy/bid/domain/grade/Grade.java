@@ -113,6 +113,5 @@ public class Grade extends BaseEntity {
 		} else if (count <= -4) {
 			isDangerInDeflation = true;
 		}
-
 	}
 }

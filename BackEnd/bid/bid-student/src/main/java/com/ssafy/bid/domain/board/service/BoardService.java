@@ -19,6 +19,8 @@ import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
 import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.user.Student;
+import com.ssafy.bid.domain.user.UserType;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.repository.GradeRepository;
 import com.ssafy.bid.domain.user.repository.StudentRepository;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
@@ -174,5 +176,23 @@ public class BoardService {
 			board.addAttendeeCount();
 			return HttpStatus.CREATED;
 		});
+	}
+
+	@Transactional
+	public void transferWinningPrice(CustomUserInfo userInfo, long boardNo) {
+		if (!userInfo.getUserType().equals(UserType.STUDENT)) {
+			throw new AuthorizationFailedException("알맞지 않은 권한.");
+		}
+
+		Board board = boardRepository.findById(boardNo)
+			.orElseThrow(() -> new ResourceNotFoundException("찾는 유저가 없습니다", userInfo.getNo()));
+
+		Student sender = studentRepository.findById(userInfo.getNo())
+			.orElseThrow(() -> new ResourceNotFoundException("찾는 유저가 없습니다", userInfo.getNo()));
+		Student receiver = studentRepository.findById(board.getUserNo())
+			.orElseThrow(() -> new ResourceNotFoundException("찾는 유저가 없습니다", userInfo.getNo()));
+
+		sender.subtractPrice(board.getResultPrice());
+		receiver.addRewardPrice(board.getResultPrice());
 	}
 }

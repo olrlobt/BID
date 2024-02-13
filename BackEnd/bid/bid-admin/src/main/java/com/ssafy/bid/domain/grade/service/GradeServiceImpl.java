@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.avatar.UserAvatar;
 import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.dto.GradeListGetResponse;
 import com.ssafy.bid.domain.grade.dto.GradePeriodRequest;
@@ -22,6 +23,7 @@ import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
+import com.ssafy.bid.domain.user.repository.UserAvatarRepository;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
@@ -37,6 +39,7 @@ public class GradeServiceImpl implements GradeService {
 	private final GradePeriodRepository gradePeriodRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final GradePeriodScheduler gradePeriodScheduler;
+	private final UserAvatarRepository userAvatarRepository;
 
 	@Override
 	@Transactional
@@ -48,7 +51,12 @@ public class GradeServiceImpl implements GradeService {
 		List<Student> students = request.getStudentListSaveRequests().stream()
 			.map(studentListSaveRequest -> studentListSaveRequest.toEntity(passwordEncoder, schoolNo, grade.getNo()))
 			.toList();
-		studentRepository.saveAll(students);
+		List<Student> savedStudents = studentRepository.saveAll(students);
+
+		List<UserAvatar> userAvatars = savedStudents.stream()
+			.map(student -> new UserAvatar(student.getNo(), 1))
+			.toList();
+		userAvatarRepository.saveAll(userAvatars);
 
 		GradePeriodRequest gradePeriodRequest = new GradePeriodRequest(grade.getNo());
 		List<GradePeriod> gradePeriods = gradePeriodRequest.toEntity();
