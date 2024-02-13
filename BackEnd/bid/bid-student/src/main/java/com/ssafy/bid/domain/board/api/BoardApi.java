@@ -1,5 +1,7 @@
 package com.ssafy.bid.domain.board.api;
 
+import static org.springframework.http.HttpStatus.*;
+
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import com.ssafy.bid.domain.board.service.BoardService;
 import com.ssafy.bid.domain.board.service.CoreBoardScheduleService;
 import com.ssafy.bid.domain.board.service.CoreBoardService;
 import com.ssafy.bid.domain.gradeperiod.service.CoreGradePeriodService;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.service.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
@@ -74,7 +77,7 @@ public class BoardApi {
 		int gradeNo = userDetails.getUserInfo().getGradeNo();
 		Board board = coreBoardService.addBoard(userNo, gradeNo, boardCreateRequest);
 		coreBoardScheduleService.registerBoardTask(board);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(CREATED).build();
 	}
 
 	@PatchMapping("/boards/{boardNo}")
@@ -101,7 +104,7 @@ public class BoardApi {
 		int gradeNo = userDetails.getUserInfo().getGradeNo();
 
 		boardService.addBoardReply(userNo, gradeNo, boardNo, replyCreateRequest);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(CREATED).build();
 	}
 
 	// @PatchMapping("/boards/{boardNo}/reply/{replyNo}")
@@ -130,5 +133,15 @@ public class BoardApi {
 		int gradeNo = userDetails.getUserInfo().getGradeNo();
 		HttpStatus httpStatus = boardService.bidBoard(biddingCreateRequest, boardNo, gradeNo, userNo);
 		return ResponseEntity.status(httpStatus).build();
+	}
+
+	@PostMapping("boards/{boardNo}/transfer")
+	public ResponseEntity<?> transferWinningPrice(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable long boardNo
+	) {
+		CustomUserInfo userInfo = userDetails.getUserInfo();
+		boardService.transferWinningPrice(userInfo, boardNo);
+		return ResponseEntity.status(OK).build();
 	}
 }
