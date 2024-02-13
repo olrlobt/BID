@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const TeacherManageApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
@@ -52,7 +52,7 @@ export const updateSavingList = async (gradeNo, savingList) => {
  */
 export const changeStopTime = async (gradeNo, parseUpdatedTime) => {
   return await TeacherManageApis.patch(`/${gradeNo}/grade-periods`, {
-    gradePeriodsRequests: parseUpdatedTime,
+    gradePeriodUpdateRequests: parseUpdatedTime,
   });
 };
 
