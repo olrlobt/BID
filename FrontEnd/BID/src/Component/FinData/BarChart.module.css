@@ -40,8 +40,13 @@
   color: #5fa1c4;
 }
 
+.margin {
+  margin-right: 0.5vw;
+}
+
 .interestRate {
   font-size: 0.8rem;
   color: #4d4d4d;
   text-align: end;
+  margin-left: 1vw;
 }
