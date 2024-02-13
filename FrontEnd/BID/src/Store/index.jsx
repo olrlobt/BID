@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   classMoney: moneySlice.reducer,
   bidCount: bidCountSlice.reducer,
   savingInfo: savingSlice.reducer,
-  model: modelSlice.reducer,
+  studentmodel: modelSlice.reducer,
   stopTime: stopTimeSlice.reducer,
   requestCoupon: requestCouponSlice.reducer,
   studentSaving: studentSavingSlice.reducer,

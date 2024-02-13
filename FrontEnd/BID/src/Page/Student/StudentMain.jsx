@@ -1,14 +1,24 @@
 import React from 'react';
 import Models from './Models';
 import { Link } from 'react-router-dom';
+import { bidSelector } from '../../Store/bidSlice';
+
 // import styled from "./StudentMain.module.css";
 import { socket } from '../../Component/Models/SocketManager';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { viewSavingList } from '../../Apis/TeacherManageApis';
 import useSaving from '../../hooks/useSaving';
+import { useSelector } from "react-redux";
+import { modelSelector  } from "../../Store/modelSlice";
+import  useStudents  from "../../hooks/useModels";
+
 
 function StudentMain() {
+  const models = useSelector(modelSelector);
+  console.log(models); // 현재 모델 값 콘솔 출력
+  // const currentModel = useSelector(modelSelector);
+  // console.log(currentModel)
   const [chatMessage, setChatMessage] = useState('');
   const sendChatMessage = () => {
     if (chatMessage.length > 0) {
@@ -66,6 +76,8 @@ function StudentMain() {
           />
         </svg>
       </button>
+      <img src="https://ssafya306.s3.ap-northeast-2.amazonaws.com/AvocadoBody.png" alt="이미지" />
+
     </>
   );
 }
