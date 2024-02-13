@@ -76,6 +76,7 @@ export const authenticateApi = async (userData) => {
 */
 
 export const changePwdApi = async (userData) => {
+  console.log(userData)
   return await UserApis.patch(`/password`, userData);
 };
 
@@ -102,4 +103,26 @@ export const searchSchoolApi = async (schoolName) => {
 export const registerCodeApi = async (tel) => {
   console.log(tel)
   return await UserApis.post(`/send-code`, tel);
+};
+
+
+
+/**
+ * 학생 등록하기
+ * @param gradeNo schoolNo도 필요
+ * @returns 학급 내 학생 목록
+ */
+export const addStudentApi = async () => {
+  return await UserApis.post(`/students`);
+};
+
+
+
+/**
+ * 학생 편집하기
+ * @param gradeNo schoolNo도 필요
+ * @returns 학급 내 학생 목록
+ */
+export const editStudentApi = async () => {
+  return await UserApis.post(`/students`);
 };
