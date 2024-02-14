@@ -91,6 +91,15 @@ export const resetStudentBalls = async (gradeNo) => {
 };
 
 /**
+ * 학생 목록 가져오기
+ * @param gradeNo 학급 넘버
+ * @returns 학급 내 학생 목록
+ */
+export const getStudentListApi = async (gradeNo) => {
+  return await TeacherManageApis.get(`/${gradeNo}/users`);
+};
+
+/**
  * 학생 정보 가져오기
  * @param gradeNo 학급 넘버
  * @param userNo 학생 번호

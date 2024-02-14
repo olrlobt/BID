@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "./MakeClass.module.css";
+import Back from "../../Asset/Image/SeatGame/back_btn.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useState } from "react";
@@ -27,8 +28,19 @@ export default function MakeClass() {
     studentListSaveRequests: [],
   });
 
+  const handleDownload = () => {
+    const url = "/Student.xlsx";
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "Student.xlsx");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const navigate = useNavigate();
   const classSelector = useSelector(userSelector);
+  const { userNo, schoolNo, schoolCode } = classSelector.adminInfo;
 
   const handleDrop = useCallback(async (acceptedFiles) => {
     if (acceptedFiles.length > 0) {
@@ -67,14 +79,13 @@ export default function MakeClass() {
 
   const handleSubmit = () => {
     setClassInfo({
-      schoolCode: classSelector.data.adminInfo.schoolCode,
+      schoolCode: schoolCode,
       year: year,
       classRoom: classRoom,
-      userNo: classSelector.data.adminInfo.userNo,
-      schoolNo: classSelector.data.adminInfo.schoolNo,
+      userNo: userNo,
+      schoolNo: schoolNo,
       studentListSaveRequests: studentFormat,
     });
-
     makingClass.mutate();
   };
 
@@ -82,13 +93,10 @@ export default function MakeClass() {
     setStudentFormat(
       stuFile.map((student) => {
         return {
-          id: `${classInfo.schoolCode}${year}${String(classRoom).padStart(
-            2,
-            "0"
-          )}${String(student.번호).padStart(2, "0")}`,
           password: student.생년월일.split(".").join("").slice(2),
           name: student.이름,
           birthDate: student.생년월일.split(".").join("").slice(2),
+          number: student.번호,
         };
       })
     );
@@ -99,105 +107,122 @@ export default function MakeClass() {
     mutationFn: () =>
       AddClass({ classInfo })
         .then(() => {
-          // 추가된 클래스 리덕스에 저장
           alert("추가 되었습니다.");
-          navigate("/classlist/:teacherId/modify");
         })
         .catch(() => {
           alert("추가가 되지 않았습니다.");
-          navigate("/classlist/:teacherId/modify");
+        })
+        .finally(() => {
+          navigate(`/classlist/${userNo}`);
         }),
   });
 
   return (
-    <section className={styled.makeClass}>
-      <button className={styled.xlsxDownload}>
-        <FontAwesomeIcon icon={faDownload} />
-        엑셀 파일 다운로드
-      </button>
-      <div className={styled.makeInfo}>
-        <span>
-          엑셀 파일을 다운로드 받은 다음, 양식에 맞게 학생 정보를 입력해주세요
-        </span>
-        <span className={styled.info2}>
-          완성된 엑셀 파일을 업로드 하면 학생 정보가 자동으로 등록돼요!
-        </span>
-      </div>
-      <section className={styled.uploadedInfo}>
-        <label htmlFor="year">
-          <input
-            type="number"
-            id="year"
-            value={year}
-            onChange={(e) => handleChange(e, "year")}
-          />
-          학년
-        </label>
-        <label htmlFor="class">
-          <input
-            type="number"
-            id="class"
-            className={styled.class}
-            value={classRoom}
-            onChange={(e) => handleChange(e, "classRoom")}
-          />
-          반
-        </label>
-        <div className={styled.filebox}>
-          <input
-            className={styled.uploadName}
-            value=""
-            placeholder="첨부파일"
-            readOnly
-          />
-          <label htmlFor="file" className={styled.file}>
-            파일 찾기
+    <section>
+      <section className={styled.makeClass}>
+        <button className={styled.xlsxDownload} onClick={handleDownload}>
+          <FontAwesomeIcon icon={faDownload} />
+          엑셀 파일 다운로드
+        </button>
+        <div className={styled.makeInfo}>
+          <span>
+            엑셀 파일을 다운로드 받은 다음, 양식에 맞게 학생 정보를 입력해주세요
+          </span>
+          <span className={styled.info2}>
+            완성된 엑셀 파일을 업로드 하면 학생 정보가 자동으로 등록돼요!
+          </span>
+        </div>
+        <section className={styled.uploadedInfo}>
+          <label htmlFor="year">
+            <input
+              type="number"
+              id="year"
+              value={year}
+              onChange={(e) => handleChange(e, "year")}
+            />
+            학년
           </label>
-          <input
-            id="file"
-            className={styled.inputFile}
-            type="file"
-            accept=".xlsx, .xls, .csv"
-            onChange={(e) => handleDrop(e.target.files)}
-          />
-        </div>
+          <label htmlFor="class">
+            <input
+              type="number"
+              id="class"
+              className={styled.class}
+              value={classRoom}
+              onChange={(e) => handleChange(e, "classRoom")}
+            />
+            반
+          </label>
+          <div className={styled.filebox}>
+            <input
+              className={styled.uploadName}
+              value=""
+              placeholder="첨부파일"
+              readOnly
+            />
+            <label htmlFor="file" className={styled.file}>
+              파일 찾기
+            </label>
+            <input
+              id="file"
+              className={styled.inputFile}
+              type="file"
+              accept=".xlsx, .xls, .csv"
+              onChange={(e) => handleDrop(e.target.files)}
+            />
+          </div>
+        </section>
+        <section className={styled.viewStu}>
+          <div className={styled.infoTitle}>
+            <span className={styled.num}>번호</span>
+            <span className={styled.name}>이름</span>
+            <span className={styled.birth}>생년월일</span>
+          </div>
+          {uploadedFile &&
+            uploadedFile.jsonData.map((student, index) => (
+              <div className={styled.infoTitle} key={index}>
+                <input
+                  className={`${styled.num} ${styled.newStu}`}
+                  value={student.번호}
+                  onChange={(e) =>
+                    handleInputChange(index, "번호", e.target.value)
+                  }
+                />
+                <input
+                  className={`${styled.name} ${styled.newStu}`}
+                  value={student.이름}
+                  onChange={(e) =>
+                    handleInputChange(index, "이름", e.target.value)
+                  }
+                />
+                <input
+                  className={`${styled.birth} ${styled.newStu}`}
+                  value={student.생년월일}
+                  onChange={(e) =>
+                    handleInputChange(index, "생년월일", e.target.value)
+                  }
+                />
+              </div>
+            ))}
+        </section>
+        <button
+          className={styled.makeBtn}
+          onClick={() => {
+            if (year === 0 || classRoom === 0) {
+              alert("학년이나 반에 0은 입력할 수 없습니다.");
+              return;
+            }
+            handleSubmit();
+          }}
+        >
+          학급 생성
+        </button>
       </section>
-      <section className={styled.viewStu}>
-        <div className={styled.infoTitle}>
-          <span className={styled.num}>번호</span>
-          <span className={styled.name}>이름</span>
-          <span className={styled.birth}>생년월일</span>
-        </div>
-        {uploadedFile &&
-          uploadedFile.jsonData.map((student, index) => (
-            <div className={styled.infoTitle} key={index}>
-              <input
-                className={`${styled.num} ${styled.newStu}`}
-                value={student.번호}
-                onChange={(e) =>
-                  handleInputChange(index, "번호", e.target.value)
-                }
-              />
-              <input
-                className={`${styled.name} ${styled.newStu}`}
-                value={student.이름}
-                onChange={(e) =>
-                  handleInputChange(index, "이름", e.target.value)
-                }
-              />
-              <input
-                className={`${styled.birth} ${styled.newStu}`}
-                value={student.생년월일}
-                onChange={(e) =>
-                  handleInputChange(index, "생년월일", e.target.value)
-                }
-              />
-            </div>
-          ))}
-      </section>
-      <button className={styled.makeBtn} onClick={handleSubmit}>
-        학급 생성
-      </button>
+      <img
+        className={styled.back}
+        src={Back}
+        alt="뒤로가기"
+        onClick={() => navigate(`/classlist/${userNo}`)}
+      />
     </section>
   );
 }
