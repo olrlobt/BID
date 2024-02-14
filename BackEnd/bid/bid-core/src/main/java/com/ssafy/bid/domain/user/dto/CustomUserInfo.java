@@ -1,5 +1,7 @@
 package com.ssafy.bid.domain.user.dto;
 
+import com.ssafy.bid.domain.user.UserType;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ public class CustomUserInfo {
 	private int schoolNo;
 	private int gradeNo;
 	private String tel;
+	private UserType userType;
 
 	@Builder
 	public CustomUserInfo(
@@ -23,7 +26,8 @@ public class CustomUserInfo {
 		String name,
 		int schoolNo,
 		int gradeNo,
-		String tel
+		String tel,
+		UserType userType
 	) {
 		this.no = no;
 		this.id = id;
@@ -32,5 +36,6 @@ public class CustomUserInfo {
 		this.schoolNo = schoolNo;
 		this.gradeNo = gradeNo;
 		this.tel = tel;
+		this.userType = userType;
 	}
 }

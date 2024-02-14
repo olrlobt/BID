@@ -53,6 +53,7 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-batch'
         implementation 'net.nurigo:sdk:4.2.7'
         implementation 'org.apache.commons:commons-lang3'
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
         implementation 'org.springframework.boot:spring-boot-starter-cache'
         compileOnly 'org.projectlombok:lombok'
         runtimeOnly 'com.mysql:mysql-connector-j'

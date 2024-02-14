@@ -7,9 +7,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.ssafy.bid.configuration.datasource.RedisProperties;
 import com.ssafy.bid.configuration.security.JwtProperties;
 
-@EnableConfigurationProperties(JwtProperties.class)
+@EnableConfigurationProperties({JwtProperties.class, RedisProperties.class})
 @EnableBatchProcessing
 @EnableScheduling
 @EnableJpaAuditing
