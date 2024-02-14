@@ -80,8 +80,7 @@ public class CoreUserServiceImpl implements CoreUserService {
 			for (StudentInfo info : studentList) {
 				info.setSchoolName(school.getName());
 				if (info.getNo() == user.getNo()) {
-					studentInfo = new StudentInfo(info.getNo(), info.getGradeNo(), info.getName(),
-						info.getProfileImgUrl(), school.getName(), student.getAsset());
+					studentInfo = new StudentInfo(info.getNo(), info.getGradeNo(), info.getName(), info.getProfileImgUrl(), school.getName(), student.getAsset());
 				}
 			}
 			return new LoginResponse(tokenResponse, studentList, studentInfo, null);
@@ -92,8 +91,7 @@ public class CoreUserServiceImpl implements CoreUserService {
 
 			School school = schoolRepository.findById(user.getSchoolNo())
 				.orElseThrow(() -> new ResourceNotFoundException("학교 없음.", user.getSchoolNo()));
-			AdminInfo adminInfo = new AdminInfo(user.getNo(), school.getNo(), school.getCode(), school.getName(),
-				user.getName());
+			AdminInfo adminInfo = new AdminInfo(user.getNo(), school.getNo(), school.getCode(), school.getName(), user.getName());
 
 			return new LoginResponse(tokenResponse, null, null, adminInfo);
 		}
