@@ -52,7 +52,6 @@ public class StudentFindResponse {
 		Integer couponSum,
 		Integer gameSum,
 		Integer etcSum,
-		int asset,
 		int totalIncome,
 		int totalExpense
 	) {
@@ -77,7 +76,6 @@ public class StudentFindResponse {
 		this.couponSum = couponSum;
 		this.gameSum = gameSum;
 		this.etcSum = etcSum;
-		this.asset = asset;
 		this.totalCategorySum = snackSum + learningSum + couponSum + gameSum + etcSum;
 		this.totalIncome = totalIncome;
 		this.totalExpense = totalExpense;
