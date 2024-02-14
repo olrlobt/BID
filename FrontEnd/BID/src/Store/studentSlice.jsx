@@ -4,11 +4,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   students: null,
-  selectedStudent: null,
 };
 
 export const studentSelector = (state) => {
-  return state.student ? state.student.students : null;
+  return state.student.students;
 };
 
 export const studentSlice = createSlice({
@@ -38,4 +37,5 @@ export const studentSlice = createSlice({
   },
 });
 
-export const { initStudents, addStudent, removeStudent, editStudent } = studentSlice.actions;
+export const { initStudents, addStudent, removeStudent, editStudent } =
+  studentSlice.actions;

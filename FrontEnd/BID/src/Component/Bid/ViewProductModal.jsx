@@ -12,15 +12,14 @@ import DropDownSelect from '../Common/DropDownSelect';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getProductDetailApi, patchProductApi, deleteProductApi, addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
 import { useSelector } from 'react-redux';
-import { modelListSelector } from '../../Store/modelSlice';
+import { modelSelector } from '../../Store/modelSlice';
 import useProducts from "../../hooks/useProducts";
 
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
   
-  const currentUser = useSelector(modelListSelector);
-  console.log(currentUser.model.myInfo);
-  const nowUserId = currentUser.model.myInfo.no;
+  const currentUser = useSelector(modelSelector);
+  const nowUserId = currentUser.model.no;
 
   const queryClient = useQueryClient();
   const { deleteProduct } = useProducts();
