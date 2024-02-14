@@ -132,9 +132,6 @@ public class CouponService {
 	}
 
 	public void registerCoupon(int couponNo, int gradeNo, int userNo, UserType userType) {
-		// GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
-		// 	.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
-
 		Grade grade = gradeRepository.findById(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
@@ -149,10 +146,10 @@ public class CouponService {
 	}
 
 	public void unRegisterCoupon(int couponNo, int gradeNo, int userNo, UserType userType) {
-		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
+		Grade grade = gradeRepository.findById(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
+		if (grade.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 
