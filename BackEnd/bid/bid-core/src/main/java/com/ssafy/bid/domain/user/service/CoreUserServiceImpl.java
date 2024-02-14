@@ -81,7 +81,7 @@ public class CoreUserServiceImpl implements CoreUserService {
 				info.setSchoolName(school.getName());
 				if (info.getNo() == user.getNo()) {
 					studentInfo = new StudentInfo(info.getNo(), info.getGradeNo(), info.getName(),
-						info.getProfileImgUrl(), school.getName());
+						info.getProfileImgUrl(), school.getName(), student.getAsset());
 				}
 			}
 			return new LoginResponse(tokenResponse, studentList, studentInfo, null);
