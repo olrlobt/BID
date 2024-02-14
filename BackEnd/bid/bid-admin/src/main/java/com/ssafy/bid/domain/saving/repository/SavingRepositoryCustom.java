@@ -6,4 +6,6 @@ import com.ssafy.bid.domain.saving.dto.SavingListGetResponse;
 
 public interface SavingRepositoryCustom {
 	List<SavingListGetResponse> findAllSavingsByGradeNo(int gradeNo);
+
+	void deleteByGradeNo(int gradeNo);
 }
