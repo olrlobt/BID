@@ -11,7 +11,8 @@ import { getProductDetailApi, deleteProductApi } from "../../Apis/TeacherBidApis
 import useProducts from "../../hooks/useProducts";
 
 export default function ManageProductModal({ onClose, ...props }) {
-  const boardNo = props[0];
+  const gradeNo = props[0];
+  const boardNo = props[1];
 
   const { deleteProduct } = useProducts();
 
@@ -27,7 +28,7 @@ export default function ManageProductModal({ onClose, ...props }) {
   const { data: productDetailIinfo } = useQuery({
     queryKey: ['getProductDetailTCH'],
     queryFn: () =>
-      getProductDetailApi(1, boardNo).then((res) => {
+      getProductDetailApi(gradeNo, boardNo).then((res) => {
         if(res.data !== undefined){
           console.log(res.data);
           setTitle(res.data.title);
@@ -43,7 +44,7 @@ export default function ManageProductModal({ onClose, ...props }) {
   /** 경매 삭제 쿼리 */
   const deleteProductQuery = useMutation({
     mutationKey: ['deleteProduct'],
-    mutationFn: (boardNo) => deleteProductApi(1, boardNo),
+    mutationFn: (boardNo) => deleteProductApi(gradeNo, boardNo),
     onSuccess: () => { deleteProduct({productNo: boardNo}); },
     onError: (error) => { console.log(error);}
   });
@@ -127,6 +128,7 @@ export default function ManageProductModal({ onClose, ...props }) {
                 isWriter = {true}
                 isSetting = {false}
                 isTeacher = {false}
+                gradeNo = {gradeNo}
               />
             </div>
               <div className={styled.othersArea}>
