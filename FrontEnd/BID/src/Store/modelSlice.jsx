@@ -18,9 +18,6 @@ export const modelSelector = (state) => {
   return state.studentmodel.model;
 }
 
-export const myInfoSelector = (state) => {
-  return state.studentmodel.model;
-  };
 
 export const modelSlice = createSlice({
   name: "studentmodel",
