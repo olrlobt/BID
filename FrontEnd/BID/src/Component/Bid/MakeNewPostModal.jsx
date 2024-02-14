@@ -3,18 +3,24 @@ import styled from './MakeNewPostModal.module.css';
 import Modal from '../Common/Modal';
 import DropDownSelect from '../Common/DropDownSelect';
 import SubmitButton from "../Common/SubmitButton";
-import { addProductApi } from "../../Apis/StudentBidApis";
+import { getProductListApi, addProductApi } from "../../Apis/StudentBidApis";
 import { useMutation } from "@tanstack/react-query";
+import useProducts from '../../hooks/useProducts';
 
 export default function MakeNewPostModal({ onClose, ...props }) {
-
-  // let profileImage = '';
+  const { initProducts } = useProducts();
 
   /** 경매 등록 쿼리 */
   const addNewProductQuery = useMutation({
     mutationKey: ['addNewProduct'],
     mutationFn: (newProductData) => addProductApi(newProductData),
-    onSuccess: (res) => { console.log(res); },
+    onSuccess: () => {
+      getProductListApi().then((res) => {
+        if(res.data !== undefined){
+          initProducts({productList: res.data});
+        }
+      })
+    },
     onsError: (error) => { console.log(error); }
   })
 
@@ -31,6 +37,7 @@ export default function MakeNewPostModal({ onClose, ...props }) {
     }
     console.log(newProductData);
     addNewProductQuery.mutate(newProductData);
+    onClose();
   }
 
   const changeProfileImage = async () => {

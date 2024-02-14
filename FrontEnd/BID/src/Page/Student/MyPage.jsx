@@ -6,12 +6,12 @@ import PieChart from "../../Component/FinData/PieChart";
 import CalendarChart from "../../Component/FinData/CalendarChart";
 import styled from './MyPage.module.css';
 import { useSelector } from "react-redux";
-import { myInfoSelector } from "../../Store/modelSlice";
+import { modelSelector } from "../../Store/modelSlice";
 import Button2 from "../../Component/Common/Button2";
 
 function MyPage() {
 
-    const myInfo = useSelector(myInfoSelector);
+    const myInfo = useSelector(modelSelector);
     console.log(myInfo)
     
 

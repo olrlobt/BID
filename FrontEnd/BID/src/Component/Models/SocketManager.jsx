@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import {io} from "socket.io-client"
 import {useAtom, atom} from 'jotai'
 import { useSelector } from "react-redux";
-import { myInfoSelector } from "../../Store/modelSlice";
+import { modelSelector } from "../../Store/modelSlice";
 
 export const socket = io("https://i10a306.p.ssafy.io:3001");
 export const charactersAtom = atom([])
@@ -10,7 +10,7 @@ export const userAtom = atom(null);
 
 export const SocketManager = () => {
     
-    const myInfo = useSelector(myInfoSelector);
+    const myInfo = useSelector(modelSelector);
     const gradeNo = myInfo.model.gradeNo
     
     const [, setCharacters] = useAtom(charactersAtom)
