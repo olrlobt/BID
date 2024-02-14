@@ -1,25 +1,46 @@
-import { Server } from "socket.io";
+import { Server as SocketIOServer } from "socket.io";
+import { createServer as createHttpsServer } from "https";
+import fs from "fs";
 
-const origin ="http://localhost:3000";
+const origin = "https://i10a306.p.ssafy.io";
 
-const io = new Server({
-    cors: {
-      origin,
-    },
-  });
+let httpsOptions;
+try {
+  httpsOptions = {
+    key: fs.readFileSync('/etc/letsencrypt/live/i10a306.p.ssafy.io/privkey.pem', 'utf8'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/i10a306.p.ssafy.io/fullchain.pem', 'utf8'),
+  };
+  // 인증서 로드 성공 메시지
+  console.log('SSL/TLS 인증서가 성공적으로 로드되었습니다.');
+} catch (error) {
+  // 에러 로깅
+  console.error('SSL/TLS 인증서 로드 중 에러 발생:', error);
+}
 
-  io.listen(3001);
+const httpsServer = createHttpsServer(httpsOptions);
+
+
+const io = new SocketIOServer(httpsServer, {
+  cors: {
+    origin, // 허용할 CORS origin
+    methods: ["GET", "POST"] // 허용할 HTTP 메소드
+  },
+});
+
+httpsServer.listen(3001, () => {
+  console.log('HTTPS 서버가 포트 3001에서 시작되었습니다.');
+});
 
   console.log("Server started on port 3000, allowed cors origin: " + origin);
 
-  const characters = [];
-
+  const roomId = []
+  const characters = []
   const generateRandomPosition = () => {
-    const minX = 2.824 - 1;
-    const maxX = 2.824 + 1;
+    const minX = 0;
+    const maxX = 2.224 + 1;
 
     const minZ = -1.781 - 1;
-    const maxZ = -1.781 + 1;
+    const maxZ = -1.781 + 1.3;
 
     const x = minX + Math.random() * (maxX - minX);
     const z = minZ + Math.random() * (maxZ - minZ);
@@ -31,52 +52,69 @@ const io = new Server({
     return "#" + Math.floor(Math.random() * 16777215).toString(16);
   };
 
+  
+  const createCharacter = (model) => {
+    const position = generateRandomPosition();
+    const selectedCharacter = model.profileImgUrl.split('/').pop().replace('.png', '');
+    const id = model.no;
+    const gradeNo = model.gradeNo;
+    const name = model.name
+    
+    return {
+      id,
+      name,
+      gradeNo,
+      position,
+      selectedCharacter
+    };
+  };
+
   io.on("connection", (socket) => {
     console.log("user", socket.id);
 
-    const existingCharacter = characters.find(
-      (character) => character.id === socket.id
-    );
 
-    if (!existingCharacter) {
-      characters.push({
-        id: socket.id,
-        position: generateRandomPosition(),
-        bodyColor: generateRandomHexColor(),
-        selectedCharacter: "AvocadoBody",
+    socket.on("characters", (data) => {
+      // 여기서 models 이벤트를 수신하여 원하는 작업을 수행합니다.
+      // console.log("Received models data:", data);
+      data.forEach(model => {
+        // 중복 추가 방지
+        const gradeNo = model.gradeNo;
+        if (!roomId[gradeNo]) {
+          roomId[gradeNo] = [];
+        }
+        if (!roomId[gradeNo].some(character => character.id === model.no)) {
+          const character = createCharacter(model);
+          roomId[gradeNo].push(character);
+        }
+        Object.keys(roomId).forEach(gradeNo => {
+          io.emit(`characters-${gradeNo}`, roomId[gradeNo]);
+        });
       });
-    }
-
-    socket.emit("hello", {
-      characters,
-      id: socket.id,
     });
 
-    io.emit("characters", characters);
+    socket.on("move", (position, characters, userId, gradeNo) => {
+      characters.forEach((character) => {
 
-    socket.on("move", (position) => {
-      const character = characters.find(
-        (character) => character.id === socket.id
-      );
-      character.position = position;
-      io.emit("characters", characters);
+        if (character.id === userId) {
+          character.position = position
+        }
+      })
+      io.emit(`characters-${gradeNo}`, characters);
     });
 
-    socket.on("chatMessage", (message) => {
+    socket.on("chatMessage", (message, userId) => {
+      console.log(userId)
+      console.log(message)
       // Assuming the message object has a sender and content property
       io.emit("playerChatMessage", {
-        id: socket.id,
+        id: userId,
         message,
       });
     });
-
+  
     socket.on("disconnect", () => {
       console.log("user disconnected");
-
-      characters.splice(
-        characters.findIndex((character) => character.id === socket.id),
-        1
-      );
+      const characters = []
 
       // Broadcast the updated characters array to all connected clients
       io.emit("characters", characters);

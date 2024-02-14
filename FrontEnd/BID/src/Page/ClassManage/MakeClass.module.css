@@ -138,3 +138,18 @@
   border-radius: 5px;
   border: 1px solid #ececec;
 }
+
+.noClass {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back {
+  position: absolute;
+  width: 5vw;
+  height: 9vh;
+  left: 5vh;
+  top: 53vw;
+}

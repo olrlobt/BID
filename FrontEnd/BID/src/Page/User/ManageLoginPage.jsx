@@ -1,75 +1,103 @@
-import React,{useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "./LoginPage.module.css";
-import { Link , useNavigate } from "react-router-dom";
-import Logo from '../../Asset/Image/LoginLogo.png';
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../Asset/Image/LoginLogo.png";
 import useUser from "../../hooks/useUser";
 import { loginUserApi } from "../../Apis/UserApis";
-import { useMutation } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { setCookie } from "../../cookie";
+import { getGrades } from "../../Apis/ClassManageApis";
+import useMain from "../../hooks/useMain";
+import { useSelector } from "react-redux";
+import { mainSelector } from "../../Store/mainSlice";
 
 function ManageLoginPage() {
-
-  const [id, setId] = useState('')
-  const [password, setPassword] = useState('')
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
   const { loginUser } = useUser();
-  const navigate = useNavigate()
+  const { initClass } = useMain();
+  const mainClass = useSelector(mainSelector);
 
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   /** 로그인 쿼리 */
   const loginUserQuery = useMutation({
-    mutationKey: ['loginUser'],
-    mutationFn: (userCredentials) => loginUserApi( userCredentials),
+    mutationKey: ["loginUser"],
+    mutationFn: (userCredentials) => loginUserApi(userCredentials),
     onSuccess: (data) => {
       loginUser(data);
-      navigate('/');
-      console.log(data)
+
+      setCookie("accessToken", data.data.tokenResponse.accessToken);
+      queryClient.setQueryData("ClassList");
+      if (mainClass) {
+        navigate("/");
+      } else {
+        navigate(`/classlist/${data.data.adminInfo.userNo}/no-class`, {
+          state: {
+            teacherId: data.data.adminInfo.userNo,
+          },
+        });
+      }
     },
     onError: (error) => {
       console.log(error);
     },
   });
 
+  useQuery({
+    queryKey: ["ClassList"],
+    queryFn: () =>
+      getGrades().then((res) => {
+        const foundMainClass = res.data.find((item) => item.main === true);
+        initClass(foundMainClass);
+        return res.data;
+      }),
+  });
+
   /** 로그인 버튼 */
   const handleLoginEvent = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let userCredentials = {
-      id, 
-      password
-    }
-    console.log(userCredentials)
+      id,
+      password,
+    };
     loginUserQuery.mutate(userCredentials);
-  }
-  
+  };
+
   return (
     <section className={styled.back}>
       <div className={styled.logo}>
         <img src={Logo} alt="로고" />
       </div>
       <div className={styled.content}>
-        <form className={styled.contentInput} 
-        onSubmit={handleLoginEvent}>
-          <input 
-            type="id" 
-            value={id} 
-            onChange={(e)=> setId(e.target.value)}
-            placeholder="아이디" 
+        <form className={styled.contentInput} onSubmit={handleLoginEvent}>
+          <input
+            type="id"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            placeholder="아이디"
           />
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e)=> setPassword(e.target.value)}
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="비밀번호"
           />
-          <button type="submit">
-            LOGIN
-          </button>
+          <button type="submit">LOGIN</button>
           <div className={styled.ContentOption}>
             <div className={styled.ContentOptions}>
               <Link to="/find_id" className={styled.findIdLink}>
-                <p>아이디 찾기</p> 
-              </Link >
+                <p>아이디 찾기</p>
+              </Link>
               <Link to="/change_pwd" className={styled.changePwdLink}>
-                <p>비밀번호 찾기</p> 
-              </Link >
+                <p>비밀번호 찾기</p>
+              </Link>
               <Link to="/register" className={styled.registerLink}>
                 <p>회원가입</p>
               </Link>
