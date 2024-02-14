@@ -16,16 +16,37 @@ UserApis.interceptors.request.use(
     console.log(error);
     return Promise.reject(error);
   }
-);
+  );
+  
+  /**
+   * 회원가입
+   * @param userData 사용자 정보
+   * @returns
+  */
+ export const addUserApi = async (userData) => {
+   console.log(userData);
+   return await UserApis.post(`/register`, userData);
+  };
+  
+  /**
+   * 회원가입 전 휴대폰 코드 전송
+   * @param tel 전화번호
+   * @returns
+   */
+  
+  export const registerCodeApi = async (tel) => {
+    console.log(tel);
+    return await UserApis.post(`/send-code`, tel);
+  };
 
-/**
- * 사용자 추가
- * @param userData 사용자 정보
- * @returns
+  /**
+   * 아이디 찾기
+   * @param userData 사용자 정보
+ * @returns 해당 아이디 값
  */
-export const addUserApi = async (userData) => {
-  console.log(userData);
-  return await UserApis.post(`/register`, userData);
+
+export const findIdApi = async (userData) => {
+  return await UserApis.post(`/find-id`, userData);
 };
 
 /**
@@ -39,7 +60,7 @@ export const duplicateIdApi = async (userData) => {
 };
 
 /**
- * 사용자 로그인
+ * 로그인
  * @param userData 사용자 정보
  * @returns
  */
@@ -48,14 +69,15 @@ export const loginUserApi = async (userData) => {
 };
 
 /**
- * 사용자 아이디 찾기
+ * 로그아웃
  * @param userData 사용자 정보
- * @returns 해당 아이디 값
+ * @returns
  */
-
-export const findIdApi = async (userData) => {
-  return await UserApis.post(`/find-id`, userData);
+export const logoutUserApi = async (userData) => {
+  return await UserApis.get(`/signout`, userData);
 };
+
+
 
 
 /**
@@ -100,16 +122,6 @@ export const searchSchoolApi = async (schoolName) => {
   return await UserApis.get(`/schools`, { params: { name: schoolName } });
 };
 
-/**
- * 회원가입 전 휴대폰 코드 전송
- * @param tel 전화번호
- * @returns
- */
-
-export const registerCodeApi = async (tel) => {
-  console.log(tel);
-  return await UserApis.post(`/send-code`, tel);
-};
 
 /**
  * 학생 등록하기
@@ -127,4 +139,19 @@ export const addStudentApi = async () => {
  */
 export const editStudentApi = async () => {
   return await UserApis.post(`/students`);
+};
+
+
+/**
+ * 회원 탈퇴
+ * @param gradeNo
+ * @param userNo 
+ * @param userData 사용자 정보
+ */
+export const deleteUserApi = async (gradeNo, userNo, userData) => {
+  const requestData = {
+    data: { password: userData.password } // 사용자 비밀번호만 필요한 형태로 데이터 조정
+  };
+
+  return await UserApis.delete(`${gradeNo}/users/${userNo}`, requestData);
 };

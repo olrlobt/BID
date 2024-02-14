@@ -6,11 +6,11 @@ import AddIcon from "@material-ui/icons/Add";
 import Product from "../../Component/Bid/Product";
 import NoContent from "../../Component/Bid/NoContent";
 import useModal from '../../hooks/useModal';
-// import useProducts from "../../hooks/useProducts";
+import useProducts from "../../hooks/useProducts";
 import { useSelector } from "react-redux";
 import { productSelector } from "../../Store/productSlice";
-// import { useQuery } from "@tanstack/react-query";
-// import { getProductListApi } from "../../Apis/StudentBidApis";
+import { useQuery } from "@tanstack/react-query";
+import { getProductListApi } from "../../Apis/StudentBidApis";
 
 export default function StudentBidPage(){
   const reduxProducts = useSelector(productSelector);
@@ -20,7 +20,7 @@ export default function StudentBidPage(){
   const [keyword, setKeyword] = useState('');
 
   const { openModal } = useModal();
-  // const { initProducts } = useProducts();
+  const { initProducts } = useProducts();
 
 /******************************* 경매 */
   /** redux에 저장된 값 변경될 때마다 경매 목록 세팅 */

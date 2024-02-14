@@ -10,9 +10,9 @@ export default function Alarm(props) {
   return (
     <group {...props} dispose={null}>
       <group
-        position={[2.292, 0.585, -5.304]}
+        position={[2.292, 0.755, -6.34]}
         rotation={[0, -Math.PI / 4, 0]}
-        scale={[0.139, 0.234, 0.139]}
+        scale={[0.189, 0.384, 0.189]}
       >
         <mesh
           castShadow
