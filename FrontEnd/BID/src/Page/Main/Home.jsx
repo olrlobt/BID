@@ -11,8 +11,8 @@ import { useSelector } from "react-redux";
 import { bidSelector } from "../../Store/bidSlice";
 import { bidCountSelector } from "../../Store/bidCountSlice";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { viewDashboard } from "../../Apis/TeacherManageApis";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import { getStudentListApi, viewDashboard } from "../../Apis/TeacherManageApis";
 import { stopTimeSelector } from "../../Store/stopTimeSlice";
 import { getCouponList } from "../../Apis/CouponApis";
 import { requestCouponSelector } from "../../Store/requestCouponSlice";
@@ -25,6 +25,7 @@ import { moneySeletor } from "../../Store/moneySlice";
 import PieChart from "../../Component/Common/PieChart";
 import LineChart from "../../Component/Common/LineChart";
 import { mainSelector } from "../../Store/mainSlice";
+import useStudents from "../../hooks/useStudents";
 
 export default function Home() {
   const { openModal } = useModal();
@@ -33,6 +34,7 @@ export default function Home() {
   const { initCount } = useBidCount();
   const { initTime } = useStopTime();
   const { changeRequestList } = useRequestedCoupons();
+  const { initStudents } = useStudents();
   const currentBid = useSelector(bidSelector);
   const classMoney = useSelector(moneySeletor);
   const bidCount = useSelector(bidCountSelector);
@@ -62,7 +64,6 @@ export default function Home() {
         return res.data;
       }),
   });
-
   const { data: couponList } = useQuery({
     queryKey: ["CouponList"],
     queryFn: () =>
@@ -71,6 +72,22 @@ export default function Home() {
         return res.data;
       }),
   });
+  // useQueries();
+  /** 대시보드 */
+  /** 쿠폰 리스트 가져오기 */
+  // /** 학생 목록 쿼리 */
+  // {
+  //   queryKey: ["studentList"],
+  //   queryFn: () =>
+  //     getStudentListApi(mainClass.no).then((res) => {
+  //       if (res.data !== undefined) {
+  //         const sortedInfo = res.data.sort((a, b) => a.number - b.number);
+  //         // setStudentList(sortedInfo);
+  //       }
+  //       // initStudents({ students: studentList });
+  //       return res.data;
+  //     }),
+  // }
 
   useEffect(() => {}, [currentBid, couponList]);
   return (

@@ -55,7 +55,7 @@ function App() {
         <Route path="/studentmain/" element={<StudentMain />} />
         <Route path="/studentmain/:studentId/" element={<MyPage />} />
         <Route path="/auctionHouse" element={<StudentBidPage />} />
-        <Route path="/student/saving" element={<StudentSaving />} />
+        <Route path="/studentmain/saving" element={<StudentSaving />} />
       </Routes>
     </QueryClientProvider>
   );
