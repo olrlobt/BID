@@ -9,41 +9,49 @@ import useModal from "../../hooks/useModal";
 import TimeTable from "../../Component/Common/TimeTable";
 import { useSelector } from "react-redux";
 import { bidSelector } from "../../Store/bidSlice";
+import { bidCountSelector } from "../../Store/bidCountSlice";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { viewDashboard } from "../../Apis/TeacherManageApis";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import { getStudentListApi, viewDashboard } from "../../Apis/TeacherManageApis";
+import { stopTimeSelector } from "../../Store/stopTimeSlice";
+import { getCouponList } from "../../Apis/CouponApis";
+import { requestCouponSelector } from "../../Store/requestCouponSlice";
 import useBid from "../../hooks/useBid";
 import useMoney from "../../hooks/useMoney";
 import useBidCount from "../../hooks/useBidCount";
+import useStopTime from "../../hooks/useStopTime";
+import useRequestedCoupons from "../../hooks/useRequestedCoupons";
 import { moneySeletor } from "../../Store/moneySlice";
-import { bidCountSelector } from "../../Store/bidCountSlice";
 import PieChart from "../../Component/Common/PieChart";
 import LineChart from "../../Component/Common/LineChart";
+import { mainSelector } from "../../Store/mainSlice";
+import useStudents from "../../hooks/useStudents";
 
 export default function Home() {
   const { openModal } = useModal();
   const { changeBid } = useBid();
   const { initMoney } = useMoney();
   const { initCount } = useBidCount();
+  const { initTime } = useStopTime();
+  const { changeRequestList } = useRequestedCoupons();
+  const { initStudents } = useStudents();
   const currentBid = useSelector(bidSelector);
   const classMoney = useSelector(moneySeletor);
   const bidCount = useSelector(bidCountSelector);
+  const stopTime = useSelector(stopTimeSelector);
+  const requestedCoupons = useSelector(requestCouponSelector);
   const [lineData, setLineData] = useState([]);
-  const dumpData = [
-    { name: "이승헌", coupon: "청소 역할 선점 쿠폰" },
-    { name: "이현진", coupon: "급식 먼저 먹기 쿠폰" },
-    { name: "배민지", coupon: "10분 노래 틀기 쿠폰" },
-    { name: "배미남", coupon: "자유 이용 쿠폰" },
-  ];
+  const mainClass = useSelector(mainSelector);
 
   const { data: dashboardInfo } = useQuery({
     queryKey: ["HomeDashboard"],
     queryFn: () =>
-      viewDashboard().then((res) => {
+      viewDashboard(mainClass.no).then((res) => {
         if (res.data !== undefined) {
           changeBid(res.data.salary);
           initMoney(res.data.asset);
           initCount(res.data.biddingStatisticsFindResponses[13].count);
+          initTime(res.data.gradePeriodsGetResponses);
           setLineData(
             res.data.biddingStatisticsFindResponses.map((item) => {
               return {
@@ -56,12 +64,35 @@ export default function Home() {
         return res.data;
       }),
   });
+  const { data: couponList } = useQuery({
+    queryKey: ["CouponList"],
+    queryFn: () =>
+      getCouponList(mainClass.no).then((res) => {
+        changeRequestList(res.data);
+        return res.data;
+      }),
+  });
+  // useQueries();
+  /** 대시보드 */
+  /** 쿠폰 리스트 가져오기 */
+  // /** 학생 목록 쿼리 */
+  // {
+  //   queryKey: ["studentList"],
+  //   queryFn: () =>
+  //     getStudentListApi(mainClass.no).then((res) => {
+  //       if (res.data !== undefined) {
+  //         const sortedInfo = res.data.sort((a, b) => a.number - b.number);
+  //         // setStudentList(sortedInfo);
+  //       }
+  //       // initStudents({ students: studentList });
+  //       return res.data;
+  //     }),
+  // }
 
-  useEffect(() => {}, [currentBid]);
+  useEffect(() => {}, [currentBid, couponList]);
   return (
     <>
-      {console.log(dashboardInfo)}
-      {dashboardInfo && (
+      {dashboardInfo && couponList && (
         <main className={styled.home}>
           <button className={styled.holdBtn}>
             <span className={styled.hold}>HOLD</span>
@@ -78,9 +109,12 @@ export default function Home() {
               },
             ]}
             icons={[{ src: Card, alt: "카드", css: "card" }]}
-            text={"7건"}
+            text={`${requestedCoupons.length}건`}
             modalClick={() =>
-              openModal({ type: "coupon", props: ["쿠폰 신청 목록", dumpData] })
+              openModal({
+                type: "coupon",
+                props: ["쿠폰 신청 목록", requestedCoupons],
+              })
             }
           />
           <section className={styled.secondRow}>
@@ -167,11 +201,11 @@ export default function Home() {
             </section>
             <section className={styled.schedule}>
               <TimeTable
-                gradePeriods={dashboardInfo.gradePeriodsGetResponses}
+                gradePeriods={stopTime}
                 modalClick={() =>
                   openModal({
                     type: "timeModal",
-                    props: ["수업 시간 변경", {}],
+                    props: ["수업 시간 변경", stopTime],
                   })
                 }
               />

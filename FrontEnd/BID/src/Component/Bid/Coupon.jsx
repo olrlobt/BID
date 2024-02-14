@@ -4,25 +4,27 @@ import Price from "../Common/Price";
 import { SvgIcon } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import { deleteCouponApi } from "../../Apis/CouponApis";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import useCoupons from "../../hooks/useCoupons";
 
 export default function Coupon(props){
+	const {no, name, description, startPrice, gradeNo} = props;
 
-	const {no, name, description, startPrice} = props;
-	const queryClient = useQueryClient();
+	const { deleteCoupon } = useCoupons();
 
 	/** 쿠폰 삭제 쿼리 */
 	const deleteCouponQuery = useMutation({
 		mutationKey: ['deleteCoupon'],
-		mutationFn: (no) => deleteCouponApi(1, no),
-		onSuccess: () => { queryClient.invalidateQueries('couponList') },
+		mutationFn: (no) => deleteCouponApi(gradeNo, no),
+		onSuccess: () => { deleteCoupon({couponNo: no}); },
 		onError: (error) => { console.log(error) }
 	})
 
 	/** X 버튼 클릭 -> 쿠폰 삭제 함수 */
-	const deleteCoupon = (e) => {
+	const onClickDeleteCoupon = (e) => {
 		e.preventDefault();
 		deleteCouponQuery.mutate(no);
+		
 	}
 
 	return(
@@ -30,7 +32,7 @@ export default function Coupon(props){
 			<div className = {styled.left}>
 				<button
 					className = {styled.removeButton}
-					onClick = {deleteCoupon}
+					onClick = {onClickDeleteCoupon}
 				>
 					<SvgIcon
 						component = {Close}

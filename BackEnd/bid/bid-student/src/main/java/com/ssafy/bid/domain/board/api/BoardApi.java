@@ -22,6 +22,7 @@ import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
 import com.ssafy.bid.domain.board.dto.BoardListResponse;
 import com.ssafy.bid.domain.board.dto.BoardModifyRequest;
 import com.ssafy.bid.domain.board.dto.BoardResponse;
+import com.ssafy.bid.domain.board.dto.ImageSaveRequest;
 import com.ssafy.bid.domain.board.dto.MyBoardsResponse;
 import com.ssafy.bid.domain.board.dto.ReplyCreateRequest;
 import com.ssafy.bid.domain.board.service.BoardService;
@@ -135,7 +136,7 @@ public class BoardApi {
 		return ResponseEntity.status(httpStatus).build();
 	}
 
-	@PostMapping("boards/{boardNo}/transfer")
+	@PostMapping("/boards/{boardNo}/transfer")
 	public ResponseEntity<?> transferWinningPrice(
 		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable long boardNo
@@ -143,5 +144,11 @@ public class BoardApi {
 		CustomUserInfo userInfo = userDetails.getUserInfo();
 		boardService.transferWinningPrice(userInfo, boardNo);
 		return ResponseEntity.status(OK).build();
+	}
+
+	@PostMapping("/boards/images")
+	public ResponseEntity<String> saveImage(ImageSaveRequest request) {
+		String imageUrl = boardService.saveImage(request);
+		return ResponseEntity.status(CREATED).body(imageUrl);
 	}
 }

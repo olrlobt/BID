@@ -1,36 +1,69 @@
 .couponContainer {
-  background-color: #F7F7F7;
-  padding: 20px;
-  box-shadow: 0px 3px 3px #4D4D4D;
-  width: 15vw;
-  border-radius: 1vw;
+  height: 15vh;
+  background-color: #f7f7f7;
+  padding: 2vh;
+  box-shadow: 0px 3px 3px #4d4d4d;
+  width: 18vw;
+  border-radius: 10px;
+  overflow: scroll;
+}
+
+.couponLeft {
   display: flex;
   flex-direction: column;
 }
 
-.couponName {
-  font-size: 0.95rem;
-  color: #FFFFFF;
-  background-color: #FFD43A;
-  border-radius: 0.3vw;
-  padding: 0.5vh;
-  width: 100%; /* 변경된 부분 */
-  text-align: center;
-  margin-bottom: 1vh;
+.coupons {
+  display: flex;
+  justify-content: space-around;
+  font-size: 0.8rem;
 }
 
-.couponCount {
-  flex: 1;
-  margin-left: 1vw;
+.couponName {
+  color: #ffffff;
+  background-color: #ffd43a;
+  border-radius: 5px;
+  padding: 0.5vh;
+  width: 13vw;
+  height: 3vh;
+  line-height: 3vh;
+  text-align: center;
+  margin-bottom: 1vh;
+  display: flex;
+  font-weight: 600;
+}
+
+.couponName span {
+  color: #ffffff;
+}
+
+.couponCheck {
+  width: 3vw;
   margin-top: 0.5vh;
 }
 
-.coupon {
-  display: flex;
+.couponCheck > path {
+  line-height: 3vh;
+  color: #ffffff;
+}
+
+.couponCount {
+  line-height: 4vh;
 }
 
 .couponIcon {
   font-size: 0.8rem;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-right: 0.5vw; /* 변경된 부분 */
+}
+
+.noData {
+  height: 15vh;
+  line-height: 15vh;
+  color: #a6a6a6;
+  text-align: center;
+}
+
+.coupon_1 {
+  background-color: #5fa1c4;
 }
