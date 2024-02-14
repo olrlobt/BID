@@ -4,12 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../Asset/Image/LoginLogo.png";
 import useUser from "../../hooks/useUser";
 import { loginUserApi } from "../../Apis/UserApis";
-import {
-  useMutation,
-  useQueries,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { setCookie } from "../../cookie";
 import { getGrades } from "../../Apis/ClassManageApis";
 import useMain from "../../hooks/useMain";
