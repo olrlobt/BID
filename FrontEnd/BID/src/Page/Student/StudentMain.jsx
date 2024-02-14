@@ -7,13 +7,13 @@ import { viewSavingList } from '../../Apis/TeacherManageApis';
 import { stuAttendApi } from '../../Apis/ModelApis';
 import useSaving from '../../hooks/useSaving';
 import { useSelector } from "react-redux";
-import { modelSelector, myInfoSelector } from "../../Store/modelSlice";
+import { modelListSelector, modelSelector } from "../../Store/modelSlice";
 import styled from "./StudentMain.module.css";
 import { socket  } from '../../Component/Models/SocketManager'; 
 
 function StudentMain() {
-  const models = useSelector(modelSelector);
-  const myInfo = useSelector(myInfoSelector);
+  const models = useSelector(modelListSelector);
+  const myInfo = useSelector(modelSelector);
   const gradeNo = myInfo.model.gradeNo
 
   console.log(models)
