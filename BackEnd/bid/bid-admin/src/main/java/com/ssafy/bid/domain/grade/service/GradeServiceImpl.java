@@ -55,7 +55,7 @@ public class GradeServiceImpl implements GradeService {
 		// 학생등록
 		int schoolNo = request.getSchoolNo();
 		List<Student> students = request.getStudentListSaveRequests().stream()
-			.map(studentListSaveRequest -> studentListSaveRequest.toEntity(passwordEncoder, schoolNo, grade.getNo(),
+			.map(studentListSaveRequest -> studentListSaveRequest.toEntity(passwordEncoder, schoolNo, savedGrade.getNo(),
 				request.createId()))
 			.toList();
 		List<Student> savedStudents = studentRepository.saveAll(students);
