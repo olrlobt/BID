@@ -9,7 +9,7 @@ import com.ssafy.bid.domain.board.Bidding;
 
 import jakarta.validation.constraints.NotNull;
 
-public interface CoreBiddingRepository extends JpaRepository<Bidding, Long> {
+public interface CoreBiddingRepository extends JpaRepository<Bidding, Long>, CoreBiddingRepositoryCustom {
 
 	Optional<Bidding> findByUserNoAndBoardNo(@NotNull Integer userNo, @NotNull Long boardNo);
 
