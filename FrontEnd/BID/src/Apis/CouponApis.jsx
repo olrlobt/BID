@@ -1,8 +1,22 @@
-import axios from 'axios';
+import axios from "axios";
+import { getCookie } from "../cookie";
 
 export const CouponApis = axios.create({
   baseURL: process.env.REACT_APP_TCH_API,
 });
+
+CouponApis.interceptors.request.use(
+  (config) => {
+    config.headers["Content-Type"] = "application/json";
+    config.headers["Authorization"] = `Bearer ${getCookie("accessToken")}`;
+
+    return config;
+  },
+  (error) => {
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
 
 /**
  * 쿠폰 목록 가져오기
