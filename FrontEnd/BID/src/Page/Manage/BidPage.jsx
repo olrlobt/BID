@@ -230,6 +230,7 @@ export default function BidPage(){
                   displayPrice = {product.displayPrice}
                   goodsImgUrl = {product.goodsImgUrl}
                   userName = {product.userName}
+                  boardStatus = {product.boardStatus}
                 />
               )
             }
