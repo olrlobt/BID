@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { initCoupons, addCoupon, deleteCoupon, registCoupon, unregistCoupon } from "../Store/couponSlice";
+import { initCoupons, deleteCoupon, registCoupon, unregistCoupon } from "../Store/couponSlice";
 
 export default function useCoupons() {
   const dispatch = useDispatch();
