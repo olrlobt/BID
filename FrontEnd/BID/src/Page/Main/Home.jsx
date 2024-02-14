@@ -11,10 +11,10 @@ import { useSelector } from "react-redux";
 import { bidSelector } from "../../Store/bidSlice";
 import { bidCountSelector } from "../../Store/bidCountSlice";
 import { useEffect, useState } from "react";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getStudentListApi, viewDashboard } from "../../Apis/TeacherManageApis";
 import { stopTimeSelector } from "../../Store/stopTimeSlice";
-import { getCouponList } from "../../Apis/CouponApis";
+import { getCouponList, getCouponListApi } from "../../Apis/CouponApis";
 import { requestCouponSelector } from "../../Store/requestCouponSlice";
 import useBid from "../../hooks/useBid";
 import useMoney from "../../hooks/useMoney";
@@ -26,7 +26,9 @@ import PieChart from "../../Component/Common/PieChart";
 import LineChart from "../../Component/Common/LineChart";
 import { mainSelector } from "../../Store/mainSlice";
 import useStudents from "../../hooks/useStudents";
-import { studentSelector } from "../../Store/studentSlice";
+import useProducts from "../../hooks/useProducts";
+import useCoupons from "../../hooks/useCoupons";
+import { getProductListApi } from "../../Apis/TeacherBidApis";
 
 export default function Home() {
   const { openModal } = useModal();
@@ -36,6 +38,8 @@ export default function Home() {
   const { initTime } = useStopTime();
   const { changeRequestList } = useRequestedCoupons();
   const { initStudents } = useStudents();
+  const { initCoupons } = useCoupons();
+  const { initProducts } = useProducts();
   const currentBid = useSelector(bidSelector);
   const classMoney = useSelector(moneySeletor);
   const bidCount = useSelector(bidCountSelector);
@@ -82,7 +86,6 @@ export default function Home() {
     queryKey: ["studentList"],
     queryFn: () =>
       getStudentListApi(mainClass.no).then((res) => {
-        console.log(res.data);
         if (res.data !== undefined) {
           const sortedInfo = res.data.sort((a, b) => a.number - b.number);
           console.log(sortedInfo);
@@ -92,11 +95,32 @@ export default function Home() {
       }),
   });
 
-  useEffect(() => {
-    if (dashboardInfo && couponList && studentList) {
-      console.log(dashboardInfo);
-    }
-  }, [dashboardInfo, couponList, studentList]);
+  /** 쿠폰 목록 쿼리 */
+  useQuery({
+    queryKey: ["couponList"],
+    queryFn: () =>
+      getCouponListApi(mainClass.no).then((res) => {
+        if (res.data !== undefined) {
+          initCoupons({ couponList: res.data.coupons });
+          console.log(res.data);
+        }
+        return res.data;
+      }),
+  });
+
+  /** 경매 목록 쿼리 */
+  useQuery({
+    queryKey: ["productList"],
+    queryFn: () =>
+      getProductListApi(mainClass.no).then((res) => {
+        if (res.data !== undefined) {
+          initProducts({ productList: res.data });
+        }
+        return res.data;
+      }),
+  });
+
+  useEffect(() => {}, [dashboardInfo, couponList, studentList]);
   return (
     <>
       {dashboardInfo && couponList && studentList && (

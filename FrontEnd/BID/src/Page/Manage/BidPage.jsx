@@ -6,7 +6,7 @@ import CouponList from "../../Component/Bid/CouponList";
 import AddIcon from "@material-ui/icons/Add";
 import Product from "../../Component/Bid/Product";
 import NoContent from "../../Component/Bid/NoContent";
-import useModal from '../../hooks/useModal';
+import useModal from "../../hooks/useModal";
 import useCoupons from "../../hooks/useCoupons";
 import useProducts from "../../hooks/useProducts";
 import { useSelector } from "react-redux";
@@ -17,21 +17,20 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
 import { getProductListApi } from "../../Apis/TeacherBidApis";
 import { userSelector } from "../../Store/userSlice";
+import { mainSelector } from "../../Store/mainSlice";
 
-export default function BidPage(){
-
-  const gradeNo=10;
-
+export default function BidPage() {
   const currentUser = useSelector(userSelector);
-
   const reduxCoupons = useSelector(couponSelector);
   const reduxProducts = useSelector(productSelector);
+  const mainClass = useSelector(mainSelector);
+  const gradeNo = mainClass.no;
 
   const [isTeacher, setIsTeacher] = useState(false);
   const [coupons, setCoupons] = useState(reduxCoupons);
   const [products, setProducts] = useState(reduxProducts);
-  const [productFilter, setProductFilter] = useState('전체');
-  const [keyword, setKeyword] = useState('');
+  const [productFilter, setProductFilter] = useState("전체");
+  const [keyword, setKeyword] = useState("");
 
   const { openModal } = useModal();
   const { initCoupons, registCoupon, unregistCoupon } = useCoupons();
@@ -39,36 +38,42 @@ export default function BidPage(){
 
   /** 게시자 종류를 toggle하는 함수 */
   const changeWriter = (writer) => {
-    if(isTeacher && writer==='teacher') {}
-    else if(!isTeacher && writer==='student') {}
-    else {setIsTeacher(!isTeacher);}
-  }
+    if (isTeacher && writer === "teacher") {
+    } else if (!isTeacher && writer === "student") {
+    } else {
+      setIsTeacher(!isTeacher);
+    }
+  };
 
-/******************************* 쿠폰 */
+  /******************************* 쿠폰 */
   /** redux에 저장된 값 변경될 때마다 쿠폰 목록 세팅 */
   useLayoutEffect(() => {
     setCoupons(reduxCoupons);
   }, [reduxCoupons]);
 
   /** 쿠폰 목록 쿼리 */
-  useQuery({
-    queryKey: ['couponList'],
-    queryFn: () => 
-      getCouponListApi(gradeNo).then((res) => {
-        if(res.data !== undefined){
-          initCoupons({ couponList: res.data.coupons });
-          console.log(res.data);
-        }
-        return res.data;
-      }),
-  });
-  
+  // useQuery({
+  //   queryKey: ['couponList'],
+  //   queryFn: () =>
+  //     getCouponListApi(1).then((res) => {
+  //       if(res.data !== undefined){
+  //         initCoupons({ couponList: res.data.coupons });
+  //         console.log(res.data);
+  //       }
+  //       return res.data;
+  //     }),
+  // });
+
   /** 경매 포함/제외 쿠폰 구분 */
   const { unregisteredCoupons, registeredCoupons } = useMemo(() => {
-    const unregisteredCoupons = coupons && coupons.filter((coupon) => coupon.couponStatus==='UNREGISTERED');
-    const registeredCoupons = coupons && coupons.filter((coupon) => coupon.couponStatus==='REGISTERED');
+    const unregisteredCoupons =
+      coupons &&
+      coupons.filter((coupon) => coupon.couponStatus === "UNREGISTERED");
+    const registeredCoupons =
+      coupons &&
+      coupons.filter((coupon) => coupon.couponStatus === "REGISTERED");
     return { unregisteredCoupons, registeredCoupons };
-  }, [coupons]); 
+  }, [coupons]);
 
   /** 쿠폰 경매 포함 쿼리 */
   const registerCouponQuery = useMutation({
@@ -99,32 +104,31 @@ export default function BidPage(){
     else{
       unregisterCouponQuery.mutate(params);
     }
-  }
+  };
 
-/******************************* 경매 */
+  /******************************* 경매 */
   /** redux에 저장된 값 변경될 때마다 경매 목록 세팅 */
   useEffect(() => {
     setProducts(reduxProducts);
   }, [reduxProducts]);
 
   /** 경매 목록 쿼리 */
-  useQuery({
-    queryKey: ['productList'],
-    queryFn: () => 
-      getProductListApi(gradeNo).then((res) => {
-        if(res.data !== undefined){
-          initProducts({ productList: res.data });
-        }
-        return res.data;
-      }),
-  });
-  
+  // useQuery({
+  //   queryKey: ['productList'],
+  //   queryFn: () =>
+  //     getProductListApi(1).then((res) => {
+  //       if(res.data !== undefined){
+  //         initProducts({ productList: res.data });
+  //       }
+  //       return res.data;
+  //     }),
+  // });
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
-    if(productFilter !== filter){
+    if (productFilter !== filter) {
       setProductFilter(filter);
     }
-  }
+  };
 
   /** keyword 기준으로 게시글을 검색하는 함수 */
   const handleChange = (e) => {
@@ -135,18 +139,22 @@ export default function BidPage(){
   /** 필터/검색 조건에 따른 결과 */
   const filteredProducts = useMemo(() => {
     let filteredProducts = products && [...products];
-    if(productFilter !== '전체'){
-      filteredProducts = filteredProducts.filter((p) => p.category === productFilter);
+    if (productFilter !== "전체") {
+      filteredProducts = filteredProducts.filter(
+        (p) => p.category === productFilter
+      );
     }
-    if(keyword !== ''){
-      filteredProducts = filteredProducts.filter((p) => p.title.includes(keyword));
+    if (keyword !== "") {
+      filteredProducts = filteredProducts.filter((p) =>
+        p.title.includes(keyword)
+      );
     }
     return filteredProducts;
   }, [products, productFilter, keyword]);
   /** 경매 카테고리 초기 설정 */
-  
+
   return (
-    <>
+<>
     <div className={styled.bidSection}>
       <div className={styled.bidHeader}>
         <div>
