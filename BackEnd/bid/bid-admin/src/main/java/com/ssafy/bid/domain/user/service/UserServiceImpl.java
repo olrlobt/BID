@@ -186,6 +186,8 @@ public class UserServiceImpl implements UserService {
 
 		User user = userRepository.findById(userNo)
 			.orElseThrow(() -> new ResourceNotFoundException("학생삭제: 삭제하려는 Student가 없음", userNo));
+
+		userAvatarRepository.deleteByUserNo(userNo);
 		userRepository.delete(user);
 	}
 
