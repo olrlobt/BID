@@ -69,7 +69,6 @@ public class CoreUserRepositoryCustomImpl implements CoreUserRepositoryCustom {
 						student.expenditureStatistics.sumCouponExpenditure,
 						student.expenditureStatistics.sumGameExpenditure,
 						student.expenditureStatistics.sumEtcExpenditure,
-						student.asset,
 						ExpressionUtils.as(
 							JPAExpressions
 								.select(account.price.sum())
@@ -204,7 +203,8 @@ public class CoreUserRepositoryCustomImpl implements CoreUserRepositoryCustom {
 				student.no,
 				student.gradeNo,
 				student.name,
-				student.profileImgUrl))
+				student.profileImgUrl,
+				student.asset))
 			.from(student)
 			.where(student.gradeNo.eq(gradeNo))
 			.fetch();
