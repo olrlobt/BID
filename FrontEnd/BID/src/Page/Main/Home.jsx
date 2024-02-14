@@ -11,10 +11,10 @@ import { useSelector } from "react-redux";
 import { bidSelector } from "../../Store/bidSlice";
 import { bidCountSelector } from "../../Store/bidCountSlice";
 import { useEffect, useState } from "react";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getStudentListApi, viewDashboard } from "../../Apis/TeacherManageApis";
 import { stopTimeSelector } from "../../Store/stopTimeSlice";
-import { getCouponList } from "../../Apis/CouponApis";
+import { getCouponList, getCouponListApi } from "../../Apis/CouponApis";
 import { requestCouponSelector } from "../../Store/requestCouponSlice";
 import useBid from "../../hooks/useBid";
 import useMoney from "../../hooks/useMoney";
@@ -26,6 +26,9 @@ import PieChart from "../../Component/Common/PieChart";
 import LineChart from "../../Component/Common/LineChart";
 import { mainSelector } from "../../Store/mainSlice";
 import useStudents from "../../hooks/useStudents";
+import useProducts from "../../hooks/useProducts";
+import useCoupons from "../../hooks/useCoupons";
+import { getProductListApi } from "../../Apis/TeacherBidApis";
 
 export default function Home() {
   const { openModal } = useModal();
@@ -35,6 +38,8 @@ export default function Home() {
   const { initTime } = useStopTime();
   const { changeRequestList } = useRequestedCoupons();
   const { initStudents } = useStudents();
+  const { initCoupons } = useCoupons();
+  const { initProducts } = useProducts();
   const currentBid = useSelector(bidSelector);
   const classMoney = useSelector(moneySeletor);
   const bidCount = useSelector(bidCountSelector);
@@ -43,6 +48,7 @@ export default function Home() {
   const [lineData, setLineData] = useState([]);
   const mainClass = useSelector(mainSelector);
 
+  /** 대시보드 */
   const { data: dashboardInfo } = useQuery({
     queryKey: ["HomeDashboard"],
     queryFn: () =>
@@ -64,6 +70,8 @@ export default function Home() {
         return res.data;
       }),
   });
+
+  /** 쿠폰 리스트 가져오기 */
   const { data: couponList } = useQuery({
     queryKey: ["CouponList"],
     queryFn: () =>
@@ -72,28 +80,52 @@ export default function Home() {
         return res.data;
       }),
   });
-  // useQueries();
-  /** 대시보드 */
-  /** 쿠폰 리스트 가져오기 */
-  // /** 학생 목록 쿼리 */
-  // {
-  //   queryKey: ["studentList"],
-  //   queryFn: () =>
-  //     getStudentListApi(mainClass.no).then((res) => {
-  //       if (res.data !== undefined) {
-  //         const sortedInfo = res.data.sort((a, b) => a.number - b.number);
-  //         // setStudentList(sortedInfo);
-  //       }
-  //       // initStudents({ students: studentList });
-  //       return res.data;
-  //     }),
-  // }
 
-  useEffect(() => {}, [currentBid, couponList]);
+  /** 학생 목록 쿼리 */
+  const { data: studentList } = useQuery({
+    queryKey: ["studentList"],
+    queryFn: () =>
+      getStudentListApi(mainClass.no).then((res) => {
+        if (res.data !== undefined) {
+          const sortedInfo = res.data.sort((a, b) => a.number - b.number);
+          console.log(sortedInfo);
+          initStudents(sortedInfo);
+        }
+        return res.data;
+      }),
+  });
+
+  /** 쿠폰 목록 쿼리 */
+  useQuery({
+    queryKey: ["couponList"],
+    queryFn: () =>
+      getCouponListApi(mainClass.no).then((res) => {
+        if (res.data !== undefined) {
+          initCoupons({ couponList: res.data.coupons });
+          console.log(res.data);
+        }
+        return res.data;
+      }),
+  });
+
+  /** 경매 목록 쿼리 */
+  useQuery({
+    queryKey: ["productList"],
+    queryFn: () =>
+      getProductListApi(mainClass.no).then((res) => {
+        if (res.data !== undefined) {
+          initProducts({ productList: res.data });
+        }
+        return res.data;
+      }),
+  });
+
+  useEffect(() => {}, [dashboardInfo, couponList, studentList]);
   return (
     <>
-      {dashboardInfo && couponList && (
+      {dashboardInfo && couponList && studentList && (
         <main className={styled.home}>
+          {console.log(dashboardInfo)}
           <button className={styled.holdBtn}>
             <span className={styled.hold}>HOLD</span>
             <span className={styled.holdInfo}>
@@ -189,12 +221,17 @@ export default function Home() {
                 <div className={styled.infoText}>
                   <div>
                     적금 알림은{" "}
-                    <span className={styled.infoImportant}>8:00</span>에
-                    발송돼요
+                    <span className={styled.infoImportant}>
+                      {dashboardInfo.transferAlertPeriod}
+                    </span>
+                    에 발송돼요
                   </div>
                   <div>
-                    적금은 <span className={styled.infoImportant}>15:00</span>에
-                    이체돼요
+                    적금은{" "}
+                    <span className={styled.infoImportant}>
+                      {dashboardInfo.transferPeriod}
+                    </span>
+                    에 이체돼요
                   </div>
                 </div>
               </div>

@@ -149,6 +149,7 @@ export default function ManageProductModal({ onClose, ...props }) {
                     isWriter = {false}
                     isDelete = {true}
                     isTeacher = {true}
+                    gradeNo = {gradeNo}
                   />
                 )
               }

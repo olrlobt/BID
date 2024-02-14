@@ -16,18 +16,16 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
 import { getProductListApi } from "../../Apis/TeacherBidApis";
-import { userSelector } from "../../Store/userSlice";
+import { mainSelector } from "../../Store/mainSlice";
 
 export default function BidPage(){
-
-  const gradeNo=10;
-
-  const currentUser = useSelector(userSelector);
-
   const reduxCoupons = useSelector(couponSelector);
   const reduxProducts = useSelector(productSelector);
+  const mainClass = useSelector(mainSelector);
 
-  const [isTeacher, setIsTeacher] = useState(false);
+  const gradeNo = mainClass.no;
+
+  const [isCoupon, setIsCoupon] = useState(true);
   const [coupons, setCoupons] = useState(reduxCoupons);
   const [products, setProducts] = useState(reduxProducts);
   const [productFilter, setProductFilter] = useState('전체');
@@ -39,9 +37,9 @@ export default function BidPage(){
 
   /** 게시자 종류를 toggle하는 함수 */
   const changeWriter = (writer) => {
-    if(isTeacher && writer==='teacher') {}
-    else if(!isTeacher && writer==='student') {}
-    else {setIsTeacher(!isTeacher);}
+    if(isCoupon && writer==='teacher') {}
+    else if(!isCoupon && writer==='student') {}
+    else {setIsCoupon(!isCoupon);}
   }
 
 /******************************* 쿠폰 */
@@ -74,7 +72,7 @@ export default function BidPage(){
   const registerCouponQuery = useMutation({
     mutationKey: ['includeCoupon'],
     mutationFn: (params) => registerCouponApi(params.gradeNo, params.couponNo),
-    onSuccess: (data, variables) => { registCoupon({couponNo: variables}); },
+    onSuccess: (data, variables) => { registCoupon({couponNo: variables.couponNo}); },
     onError: (error, variables) => { console.log(variables, error); }
   });
 
@@ -82,7 +80,7 @@ export default function BidPage(){
   const unregisterCouponQuery = useMutation({
     mutationKey: ['excludeCoupon'],
     mutationFn: (params) => unregisterCouponApi(params.gradeNo, params.couponNo),
-    onSuccess: (data, variables) => { unregistCoupon({couponNo: variables}); },
+    onSuccess: (data, variables) => { unregistCoupon({couponNo: variables.couponNo}); },
     onError: (error, variables) => { console.log(variables, error); }
   }); 
 
@@ -153,18 +151,18 @@ export default function BidPage(){
           <WriterButton
             onClick = {() => changeWriter('teacher')}
             text = {'선생님'}
-            active = { isTeacher }
+            active = { isCoupon }
           />
           <WriterButton
             onClick = {() => changeWriter('student')}
             text = {'학생'}
-            active = { !isTeacher }
+            active = { !isCoupon }
           />
         </div>
         
         <div>
         {
-          isTeacher ?
+          isCoupon ?
           <SettingButton
             onClick = {() =>
               openModal({
@@ -219,7 +217,7 @@ export default function BidPage(){
 
       <div className={styled.bidBody}>
         {
-          isTeacher?
+          isCoupon?
           (<div className = {styled.couponListWrapper}>
               <DragDropContext onDragEnd={onDragEnd} >
                 <div>

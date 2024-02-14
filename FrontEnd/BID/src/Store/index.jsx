@@ -13,8 +13,9 @@ import { stopTimeSlice } from "./stopTimeSlice";
 import { requestCouponSlice } from "./requestCouponSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import { studentSavingSlice } from "./studentSavingSlice";
-import storage from "redux-persist/lib/storage";
 import { mainSlice } from "./mainSlice";
+import { studentSlice } from "./studentSlice";
+import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   requestCoupon: requestCouponSlice.reducer,
   studentSaving: studentSavingSlice.reducer,
   mainClass: mainSlice.reducer,
+  student: studentSlice.reducer,
 });
 
 const persistConfig = {

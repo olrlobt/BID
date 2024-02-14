@@ -4,7 +4,7 @@ import {useAtom, atom} from 'jotai'
 import { useSelector } from "react-redux";
 import { modelSelector } from "../../Store/modelSlice";
 
-export const socket = io("https://i10a306.p.ssafy.io:3001");
+export const socket = io("http://localhost:3001");
 export const charactersAtom = atom([])
 export const userAtom = atom(null);
 
