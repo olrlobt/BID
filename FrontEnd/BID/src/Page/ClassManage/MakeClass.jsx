@@ -108,10 +108,18 @@ export default function MakeClass() {
     mutationFn: () =>
       AddClass({ classInfo })
         .then(() => {
-          alert('추가 되었습니다.');
+          alertBtn({
+            text: '추가되었습니다.',
+            confirmColor: '#ffd43a',
+            icon: 'success',
+          });
         })
         .catch(() => {
-          alert('추가가 되지 않았습니다.');
+          alertBtn({
+            text: '추가가 되지 않았습니다.',
+            confirmColor: '#E81818',
+            icon: 'error',
+          });
         })
         .finally(() => {
           navigate(`/classlist/${userNo}`);
@@ -211,6 +219,7 @@ export default function MakeClass() {
             if (year === 0 || classRoom === 0) {
               alertBtn({
                 title: '학년이나 반에 0은 입력할 수 없습니다.',
+                confirmColor: '#E81818',
                 icon: 'warning',
               });
               return;
