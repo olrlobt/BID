@@ -17,6 +17,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.user.AccountType;
+import com.ssafy.bid.domain.user.Attendance;
 import com.ssafy.bid.domain.user.DealType;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
@@ -255,5 +256,16 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 			)
 			.orderBy(account.createdAt.desc())
 			.fetch();
+	}
+
+	@Override
+	public Optional<Attendance> findAttendanceByUserNo(int userNo) {
+		return Optional.ofNullable(
+			queryFactory
+				.select(student.attendance)
+				.from(student)
+				.where(student.no.eq(userNo))
+				.fetchOne()
+		);
 	}
 }
