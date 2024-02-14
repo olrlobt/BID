@@ -1,10 +1,10 @@
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 
-export default function alertBtn({ title, text }) {
+export default function alertBtn({ title, text, confirmColor, icon }) {
   Swal.fire({
     title,
     text,
-    confirmButtonColor: "#ffd43a",
-    icon: "warning",
+    confirmButtonColor: confirmColor,
+    icon,
   });
 }
