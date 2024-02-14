@@ -10,11 +10,26 @@ import { modelListSelector, modelSelector } from "../../Store/modelSlice";
 import styled from "./StudentMain.module.css";
 import { socket } from '../../Component/Models/SocketManager'; 
 import { useMutation } from "@tanstack/react-query";
+import useProducts from "../../hooks/useProducts";
+import { getProductListApi } from "../../Apis/StudentBidApis";
 
 function StudentMain() {
   const models = useSelector(modelListSelector);
   const myInfo = useSelector(modelSelector);
+  const { initProducts } = useProducts();
   const gradeNo = myInfo.model.gradeNo;
+
+  /** 경매 목록 쿼리 */
+  useQuery({
+    queryKey: ["productList"],
+    queryFn: () =>
+      getProductListApi().then((res) => {
+        if (res.data !== undefined) {
+          initProducts({ productList: res.data });
+        }
+        return res.data;
+      }),
+  });
 
   useEffect(() => {
     if (models.length > 0) {
