@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Models from './Models';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { viewSavingList } from '../../Apis/TeacherManageApis';
 import { stuAttendApi } from '../../Apis/ModelApis';
@@ -9,15 +8,14 @@ import useSaving from '../../hooks/useSaving';
 import { useSelector } from "react-redux";
 import { modelListSelector, modelSelector } from "../../Store/modelSlice";
 import styled from "./StudentMain.module.css";
-import { socket  } from '../../Component/Models/SocketManager'; 
+import { socket } from '../../Component/Models/SocketManager'; 
+import { useMutation } from "@tanstack/react-query";
 
 function StudentMain() {
   const models = useSelector(modelListSelector);
   const myInfo = useSelector(modelSelector);
-  const gradeNo = myInfo.model.gradeNo
+  const gradeNo = myInfo.model.gradeNo;
 
-  console.log(models)
-  console.log(myInfo)
   useEffect(() => {
     if (models.length > 0) {
       socket.emit("characters", models); // 서버에 gradeNo 기반으로 캐릭터 데이터 전송
@@ -25,19 +23,34 @@ function StudentMain() {
   }, [models, gradeNo]);
   
   const [chatMessage, setChatMessage] = useState('');
+  const [attendanceSuccess, setAttendanceSuccess] = useState(false); // 출석 성공 상태 추가
 
   const sendChatMessage = () => {
     if (chatMessage.length > 0) {
-      socket.emit('chatMessage', chatMessage,myInfo.model.no);
+      socket.emit('chatMessage', chatMessage, myInfo.model.no);
       setChatMessage('');
     }
   };
 
-  const studentId = myInfo.model.no
-  // const gradeNo = 1;
-  // const selectedCharacter = myInfo.model.profileImgUrl.split('/').pop().replace('.png', '');
+  const studentId = myInfo.model.no;
 
-  // 선생님 적금 가입정보 가져와 저장
+  const stuAttendQuery = useMutation({
+    mutationKey: ['stuAttend'],
+    mutationFn: () => stuAttendApi(),
+    onSuccess: (res) => {
+      setAttendanceSuccess(true); // 출석 성공 시 상태 변경
+      console.log(res);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleAttendEvent = (e) => {
+    e.preventDefault();
+    stuAttendQuery.mutate();
+  }
+  
   const { initSavingList } = useSaving();
   const { data } = useQuery({
     queryKey: ['SavingInfo'],
@@ -46,7 +59,6 @@ function StudentMain() {
         initSavingList(res.data);
       }),
   });
-
 
   return (
     <div className={styled.container}>
@@ -57,7 +69,8 @@ function StudentMain() {
         <div>
           <p>안녕하세요!</p>
           <p className={styled.name}>{myInfo.model.name}님</p>
-          <button className={styled.attendanceBtn}>출석</button>
+          {/* 출석 성공 시 버튼 스타일 변경 */}
+          <button className={`${styled.attendanceBtn} ${attendanceSuccess ? styled.attendanceBtnSuccess : ''}`} onClick={handleAttendEvent}>출석</button>
         </div>
       </div>
       <Models myInfo={myInfo}/>
