@@ -72,7 +72,7 @@ export default function BidPage(){
   const registerCouponQuery = useMutation({
     mutationKey: ['includeCoupon'],
     mutationFn: (params) => registerCouponApi(params.gradeNo, params.couponNo),
-    onSuccess: (data, variables) => { registCoupon({couponNo: variables}); },
+    onSuccess: (data, variables) => { registCoupon({couponNo: variables.couponNo}); },
     onError: (error, variables) => { console.log(variables, error); }
   });
 
@@ -80,7 +80,7 @@ export default function BidPage(){
   const unregisterCouponQuery = useMutation({
     mutationKey: ['excludeCoupon'],
     mutationFn: (params) => unregisterCouponApi(params.gradeNo, params.couponNo),
-    onSuccess: (data, variables) => { unregistCoupon({couponNo: variables}); },
+    onSuccess: (data, variables) => { unregistCoupon({couponNo: variables.couponNo}); },
     onError: (error, variables) => { console.log(variables, error); }
   }); 
 
