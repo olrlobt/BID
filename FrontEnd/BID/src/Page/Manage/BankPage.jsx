@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { moneySeletor } from '../../Store/moneySlice';
 import { useLocation } from 'react-router-dom';
 import { mainSelector } from '../../Store/mainSlice';
+import alertBtn from '../../Component/Common/Alert';
 
 export default function BankPage() {
   // 이후 백엔드에서 국고 금액 받아오면 바꾸기
@@ -54,10 +55,10 @@ export default function BankPage() {
         .then(() => {
           changeSavingList(savingBasket);
           setIsEdit(!isEdit);
-          alert('변경되었습니다.');
+          alertBtn({ text: '변경되었습니다.' });
         })
         .catch(() => {
-          alert('변경이 되지 않았습니다.');
+          alertBtn({ text: '변경이 되지 않았습니다.' });
         }),
   });
 
