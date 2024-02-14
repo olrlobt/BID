@@ -10,13 +10,20 @@ import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
 import DropDownSelect from '../Common/DropDownSelect';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProductDetailApi, deleteProductApi, addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
+import { getProductDetailApi, patchProductApi, deleteProductApi, addCommentApi, biddingApi } from "../../Apis/StudentBidApis";
+import { useSelector } from 'react-redux';
+import { modelListSelector } from '../../Store/modelSlice';
+import useProducts from "../../hooks/useProducts";
 
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
-  const parentQueryClient = props[1];
+  
+  const currentUser = useSelector(modelListSelector);
+  console.log(currentUser.model.myInfo);
+  const nowUserId = currentUser.model.myInfo.no;
 
   const queryClient = useQueryClient();
+  const { deleteProduct } = useProducts();
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -24,8 +31,6 @@ export default function ViewProductModal({ onClose, ...props }) {
   const [description, setDescription] = useState('');
   const [comments, setComments] = useState([]);
   const [isSetting, setIsSetting] = useState(false);
-
-  const userId = 89;
 
   /** 경매 상세 쿼리 */
   const { data: productDetailIinfo } = useQuery({
@@ -44,12 +49,28 @@ export default function ViewProductModal({ onClose, ...props }) {
       })
   });
 
+  /** 경매 수정 쿼리 */
+  const patchProductQuery = useMutation({
+    mutationKey: ['patchProduct'],
+    mutationFn: (params) => patchProductApi(params.boardNo, params.productInfo),
+    onSuccess: () => { queryClient.invalidateQueries('getProductDetail');; },
+    onError: (error) => { console.log(error); }
+  })
+
   /** 경매 삭제 쿼리 */
   const deleteProductQuery = useMutation({
     mutationKey: ['deleteProduct'],
     mutationFn: (boardNo) => deleteProductApi(boardNo),
-    onSuccess: () => { parentQueryClient.invalidateQueries('productList') },
+    onSuccess: () => { deleteProduct({productNo: boardNo}); },
     onError: (error) => { console.log(error);}
+  });
+
+  /** 입찰 쿼리 */
+  const biddingQuery = useMutation({
+    mutationKey: ['bidding'],
+    mutationFn: (params) => biddingApi(params.boardNo, params.biddingInfo),
+    onSuccess: (res) => { console.log(res); },
+    onError: (error) => { console.log(error); }
   });
 
   /** 댓글 작성 쿼리 */
@@ -60,16 +81,26 @@ export default function ViewProductModal({ onClose, ...props }) {
     onError: (error) => { console.log(error); }
   })
 
-  /** 첫 입찰 쿼리 */
-  const biddingQuery = useMutation({
-    mutationKey: ['bidding'],
-    mutationFn: (params) => biddingApi(params.boardNo, params.biddingInfo),
-    onSuccess: (res) => { console.log(res); },
-    onError: (error) => { console.log(error); }
-  });
+  /** 경매 수정 함수 */
+  const toggleSettingMode = () => {
+    if(isSetting){
+      const productInfo = {
+        title: title,
+        description: description,
+        category: category
+      }
+      const params = {
+        boardNo: boardNo,
+        productInfo: productInfo
+      }
+      console.log(params)
+      patchProductQuery.mutate(params);
+    }
+    setIsSetting(!isSetting);
+  }
 
   /** 경매 삭제 함수 */
-  const deleteProduct = (e) => {
+  const onClickDeleteProduct = (e) => {
     deleteProductQuery.mutate(boardNo);
     onClose();
   }
@@ -86,11 +117,10 @@ export default function ViewProductModal({ onClose, ...props }) {
       }
       const params = {
         boardNo: boardNo,
-        biddingInfo:biddingInfo
+        biddingInfo: biddingInfo
       }
       biddingQuery.mutate(params);
-      console.log(biddingPrice+'비드 입찰되었습니다');
-
+      // console.log(biddingPrice+'비드 입찰되었습니다');
     }
   };
 
@@ -113,6 +143,18 @@ export default function ViewProductModal({ onClose, ...props }) {
     }
   }
 
+  /** 날짜 형식 변환 함수 */
+  const trimmedCreateAt = (originalDate) => {
+    let trimmedDate = new Date(originalDate);
+    const year = trimmedDate.getFullYear();
+    const month = trimmedDate.getMonth() + 1;
+    const day = trimmedDate.getDate();
+    const hours = trimmedDate.getHours();
+    const minutes = trimmedDate.getMinutes();
+    trimmedDate = year+"."+month+"."+day+" "+hours+":"+minutes;
+    return trimmedDate;
+  }
+
   return (
     <>
     {
@@ -121,17 +163,17 @@ export default function ViewProductModal({ onClose, ...props }) {
       <div className={styled.wrapper}>
         <div className={styled.left}>
           {
-            userId===89?
+            productDetailIinfo.userNo===nowUserId?
             <div className={styled.header}>
               <SettingButton
-                onClick={ () => setIsSetting(!isSetting) }
+                onClick={ toggleSettingMode }
                 svg={ Edit }
                 text='수정'
                 height='1vw'
                 backgroundColor='#A6A6A6'
               />
               <SettingButton
-                onClick={ deleteProduct }
+                onClick={ onClickDeleteProduct }
                 svg={ Delete }
                 text='삭제'
                 height='1vw'
@@ -149,6 +191,7 @@ export default function ViewProductModal({ onClose, ...props }) {
               <input 
                 type='text'
                 defaultValue={title}
+                onChange={ (e) => setTitle(e.target.value) }
                 disabled={!isSetting}
               />
               {
@@ -162,6 +205,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                     {'value': 'GAME', 'text': '오락'},
                     {'value': 'ETC', 'text': '기타'},
                   ]}
+                  onChange={ (e) => setCategory(e.target.value) }
                 />
                 :
                 <>
@@ -205,7 +249,7 @@ export default function ViewProductModal({ onClose, ...props }) {
             
           </div>
           {
-            userId===89?
+            productDetailIinfo.userNo===nowUserId?
             null
             :
             <div className={styled.footer}>
@@ -230,19 +274,24 @@ export default function ViewProductModal({ onClose, ...props }) {
         </div>
 
         <div className={styled.right}>
-          <div className={styled.commentsArea}>
+          <div className={styled.commentsArea} style={isSetting? {height: '100%'}: {height: '42vw'}}>
             <div className={styled.writerArea}>
-              <Comment
-                key = {-1}
-                boardNo = {boardNo}
-                replyNo = {-1}
-                userName = {productDetailIinfo.userName}
-                content = {description}
-                createAt = {productDetailIinfo.createdAt}
-                userImgUrl = {productDetailIinfo.userProfileImgUrl}
-                isWriter = {true}
-                isSetting = {isSetting}
-              />
+              <div className={styled.left}>
+                <div className={styled.descHeader}>
+                  <h3>{ productDetailIinfo.userName }</h3>
+                  <div>{ trimmedCreateAt(productDetailIinfo.createdAt) }</div>
+                </div>
+                <div className={styled.descBody}>
+                  <textarea
+                    defaultValue={ description }
+                    disabled={!isSetting}
+                    onChange={ (e) => setDescription(e.target.value) }
+                    />
+                </div>
+              </div>
+              <div className={styled.right}>
+                <img src={ productDetailIinfo.userProfileImgUrl } alt='프로필 이미지' />
+              </div>
             </div>
             {
               isSetting?
@@ -263,8 +312,9 @@ export default function ViewProductModal({ onClose, ...props }) {
                     createAt = {c.createAt}
                     userImgUrl = {c.userImgUrl}
                     queryClient = {queryClient}
-                    isWriter = {false}
-                    isDelete = {c.userNo===userId}
+                    isWriter = {productDetailIinfo.userNo===c.userNo} // 게시글 작성자가 쓴 댓글인가
+                    isDelete = {c.userNo===nowUserId} // 현재 로그인한 유저가 쓴 댓글인가
+                    isTeacher = {false}
                   />
                 )
               }

@@ -1,38 +1,58 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Models from './Models';
 import { Link } from 'react-router-dom';
-import { bidSelector } from '../../Store/bidSlice';
-
-// import styled from "./StudentMain.module.css";
-import { socket } from '../../Component/Models/SocketManager';
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { viewSavingList } from '../../Apis/TeacherManageApis';
+import { stuAttendApi } from '../../Apis/ModelApis';
 import useSaving from '../../hooks/useSaving';
 import { useSelector } from "react-redux";
-import { modelSelector  } from "../../Store/modelSlice";
-import  useStudents  from "../../hooks/useModels";
-
+import { modelListSelector, modelSelector } from "../../Store/modelSlice";
+import styled from "./StudentMain.module.css";
+import { socket } from '../../Component/Models/SocketManager'; 
+import { useMutation } from "@tanstack/react-query";
 
 function StudentMain() {
-  const models = useSelector(modelSelector);
-  console.log(models); // 현재 모델 값 콘솔 출력
-  // const currentModel = useSelector(modelSelector);
-  // console.log(currentModel)
+  const models = useSelector(modelListSelector);
+  const myInfo = useSelector(modelSelector);
+  const gradeNo = myInfo.model.gradeNo;
+
+  useEffect(() => {
+    if (models.length > 0) {
+      socket.emit("characters", models); // 서버에 gradeNo 기반으로 캐릭터 데이터 전송
+    }
+  }, [models, gradeNo]);
+  
   const [chatMessage, setChatMessage] = useState('');
+  const [attendanceSuccess, setAttendanceSuccess] = useState(false); // 출석 성공 상태 추가
+
   const sendChatMessage = () => {
     if (chatMessage.length > 0) {
-      socket.emit('chatMessage', chatMessage);
+      socket.emit('chatMessage', chatMessage, myInfo.model.no);
       setChatMessage('');
     }
   };
-  const gradeNo = 1;
 
-  // 선생님 적금 가입정보 가져와 저장
+  const studentId = myInfo.model.no;
+
+  const stuAttendQuery = useMutation({
+    mutationKey: ['stuAttend'],
+    mutationFn: () => stuAttendApi(),
+    onSuccess: (res) => {
+      setAttendanceSuccess(true); // 출석 성공 시 상태 변경
+      console.log(res);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleAttendEvent = (e) => {
+    e.preventDefault();
+    stuAttendQuery.mutate();
+  }
+  
   const { initSavingList } = useSaving();
-  const {
-    data, // eslint-disable-line no-unused-vars
-  } = useQuery({
+  const { data } = useQuery({
     queryKey: ['SavingInfo'],
     queryFn: () =>
       viewSavingList(gradeNo).then((res) => {
@@ -41,17 +61,23 @@ function StudentMain() {
   });
 
   return (
-    <>
-      <Link to="/studentmain/:studentId/">
-        <button>캐릭터 이미지</button>
-      </Link>
-      <div>안녕하세요!</div>
-      <button>출석</button>
-      <Models />
+    <div className={styled.container}>
+      <div className={styled.header}>
+        <Link to={`/studentmain/${studentId}/`}>
+          <img className={styled.img} src={myInfo.model.profileImgUrl} alt="이미지" />
+        </Link>
+        <div>
+          <p>안녕하세요!</p>
+          <p className={styled.name}>{myInfo.model.name}님</p>
+          {/* 출석 성공 시 버튼 스타일 변경 */}
+          <button className={`${styled.attendanceBtn} ${attendanceSuccess ? styled.attendanceBtnSuccess : ''}`} onClick={handleAttendEvent}>출석</button>
+        </div>
+      </div>
+      <Models myInfo={myInfo}/>
       <input
         type="text"
-        className=""
-        placeholder="Message..."
+        className={styled.chatMessage}
+        placeholder="채팅하기"
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             sendChatMessage();
@@ -76,9 +102,7 @@ function StudentMain() {
           />
         </svg>
       </button>
-      <img src="https://ssafya306.s3.ap-northeast-2.amazonaws.com/AvocadoBody.png" alt="이미지" />
-
-    </>
+    </div>
   );
 }
 

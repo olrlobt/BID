@@ -6,14 +6,13 @@ import AddIcon from "@material-ui/icons/Add";
 import Product from "../../Component/Bid/Product";
 import NoContent from "../../Component/Bid/NoContent";
 import useModal from '../../hooks/useModal';
-import useProducts from "../../hooks/useProducts";
+// import useProducts from "../../hooks/useProducts";
 import { useSelector } from "react-redux";
 import { productSelector } from "../../Store/productSlice";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProductListApi } from "../../Apis/StudentBidApis";
+// import { useQuery } from "@tanstack/react-query";
+// import { getProductListApi } from "../../Apis/StudentBidApis";
 
 export default function StudentBidPage(){
-  const queryClient = useQueryClient();
   const reduxProducts = useSelector(productSelector);
 
   const [products, setProducts] = useState(reduxProducts);
@@ -21,7 +20,7 @@ export default function StudentBidPage(){
   const [keyword, setKeyword] = useState('');
 
   const { openModal } = useModal();
-  const { initProducts } = useProducts();
+  // const { initProducts } = useProducts();
 
 /******************************* 경매 */
   /** redux에 저장된 값 변경될 때마다 경매 목록 세팅 */
@@ -75,7 +74,7 @@ export default function StudentBidPage(){
 						onClick = {() =>
 							openModal({
 								type: 'makeNewPost',
-								props: ['경매 올리기', queryClient] })
+								props: ['경매 올리기'] })
 							}
 						svg = {AddIcon}
 						text = '경매 올리기' 
@@ -134,7 +133,7 @@ export default function StudentBidPage(){
                 onClick = {() => {
                   openModal({
                     type: 'viewProduct',
-                    props: [product.no, queryClient] })
+                    props: [product.no] })
                 }}
                 key = {product.no}
                 title = {product.title}

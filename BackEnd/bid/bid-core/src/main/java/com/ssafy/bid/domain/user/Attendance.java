@@ -2,13 +2,14 @@ package com.ssafy.bid.domain.user;
 
 import java.time.LocalDateTime;
 
+import com.ssafy.bid.global.error.exception.InvalidParameterException;
+
 import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Embeddable
 public class Attendance {
 	private boolean monday;
@@ -19,23 +20,43 @@ public class Attendance {
 
 	public void checkAttendance() {
 		int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue();
-		if (dayOfWeek == 1) {
-			monday = true;
-		} else if (dayOfWeek == 2) {
-			tuesday = true;
-		} else if (dayOfWeek == 3) {
-			wednesday = true;
-		} else if (dayOfWeek == 4) {
-			thursday = true;
-		} else if (dayOfWeek == 5) {
-			friday = true;
-		} else {
-			// TODO: 예외
+		switch (dayOfWeek) {
+			case 1 -> monday = true;
+			case 2 -> tuesday = true;
+			case 3 -> wednesday = true;
+			case 4 -> thursday = true;
+			case 5 -> friday = true;
+			default -> throw new InvalidParameterException("출석가능한 요일이 아님.", dayOfWeek);
 		}
 	}
 
-	public int calculateSalary() {
-		// TODO: 주급 계산하는 로직
-		return 0;
+	public int calculateSalary(int salary) {
+		int fee = salary / 5;
+		int result = salary;
+		if (!monday) {
+			result -= fee;
+		}
+		if (!tuesday) {
+			result -= fee;
+		}
+		if (!wednesday) {
+			result -= fee;
+		}
+		if (!thursday) {
+			result -= fee;
+		}
+		if (!friday) {
+			result -= fee;
+		}
+		reset();
+		return result;
+	}
+
+	private void reset() {
+		this.monday = false;
+		this.tuesday = false;
+		this.wednesday = false;
+		this.thursday = false;
+		this.friday = false;
 	}
 }

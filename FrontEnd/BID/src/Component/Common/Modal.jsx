@@ -20,10 +20,8 @@ function Modal({ onClose, children }) {
   return (
     <section className={styled.modalSection}>
       <div className={styled.modalWrap} ref={modalRef}>
-        <div className={styled.modalHeader}>
-          <div className={styled.closeBtn} onClick={handleClose}>
-            <FontAwesomeIcon icon={faXmark} size="xl"/>
-          </div>
+        <div className={styled.closeBtn} onClick={handleClose}>
+          <FontAwesomeIcon icon={faXmark} />
         </div>
         <div className={styled.contents}>{children}</div>
       </div>
