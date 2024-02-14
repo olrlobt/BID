@@ -1,7 +1,21 @@
 .modalH2 {
   font-size: 1rem;
   text-align: center;
+  margin-top: -2vh;
   margin-bottom: 2vh;
+}
+
+.isUp {
+  color: #014e77;
+  margin-bottom: 1vh;
+}
+
+.isReal {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+.isDown {
+  color: #e81818;
 }
 
 .bidInput {
