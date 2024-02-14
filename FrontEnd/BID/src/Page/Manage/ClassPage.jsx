@@ -1,36 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import styled from './ClassPage.module.css';
-import StudentList from '../../Component/Manage/StudentList';
-import StudentFinData from '../../Component/Manage/StudentFinData';
-import Button from '../../Component/Common/Button';
-import Button2 from '../../Component/Common/Button2';
-import Button3 from '../../Component/Common/Button3';
-import useModal from '../../hooks/useModal';
-import { getStudentListApi } from '../../Apis/StudentApis';
-import { useSelector } from 'react-redux';
-import { studentSelector } from '../../Store/studentSlice';
-import useStudents from '../../hooks/useStudents';
-import { useQuery } from '@tanstack/react-query';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import styled from "./ClassPage.module.css";
+import StudentList from "../../Component/Manage/StudentList";
+import StudentFinData from "../../Component/Manage/StudentFinData";
+import Button from "../../Component/Common/Button";
+import Button2 from "../../Component/Common/Button2";
+import Button3 from "../../Component/Common/Button3";
+import useModal from "../../hooks/useModal";
+import useStudents from "../../hooks/useStudents";
+import { getStudentListApi } from "../../Apis/TeacherManageApis";
+import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { mainSelector } from "../../Store/mainSlice";
 
 function ClassPage() {
   const [studentList, setStudentList] = useState([]);
-  const [activeButton, setActiveButton] = useState('number'); // 기본 정렬 기준은 번호(id)로 설정
+  const [activeButton, setActiveButton] = useState("number"); // 기본 정렬 기준은 번호(id)로 설정
   const [showAdd, setShowAdd] = useState(false); // New state to toggle Add Student button
   const [showRemove, setShowRemove] = useState(false); // New state to toggle Add Student button
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const location = useLocation();
-  const gradeNo = location.state.schoolInfo.no;
 
   const { initStudents } = useStudents();
-  const students = useSelector(studentSelector);
+  const mainClass = useSelector(mainSelector);
 
   /** 학생 목록 쿼리 */
   useQuery({
-    queryKey: ['studentList'],
+    queryKey: ["studentList"],
     queryFn: () =>
-      getStudentListApi(gradeNo).then((res) => {
+      getStudentListApi(mainClass.no).then((res) => {
         if (res.data !== undefined) {
           const sortedInfo = res.data.sort((a, b) => a.number - b.number);
           setStudentList(sortedInfo);
@@ -55,7 +52,7 @@ function ClassPage() {
   }, [studentList]);
 
   const handleEdit = (student) => {
-    console.log('Edit student:', student);
+    console.log("Edit student:", student);
   };
 
   const handleButton2Click = () => {
@@ -76,9 +73,9 @@ function ClassPage() {
   const handleSort = (type) => {
     setActiveButton(type);
     const sortedInfo = studentList.sort((a, b) => {
-      if (type === 'number') {
+      if (type === "number") {
         return a.number - b.number;
-      } else if (type === 'asset') {
+      } else if (type === "asset") {
         return b.asset - a.asset;
       }
       return 0;
@@ -94,8 +91,8 @@ function ClassPage() {
             text="학생 추가"
             onClick={() =>
               openModal({
-                type: 'addStudent',
-                props: ['학생 등록'],
+                type: "addStudent",
+                props: ["학생 등록"],
               })
             }
           />
@@ -106,16 +103,16 @@ function ClassPage() {
       <div className={styled.orderlist}>
         <Button
           text="번호"
-          onClick={() => handleSort('number')}
-          active={activeButton === 'number'}
+          onClick={() => handleSort("number")}
+          active={activeButton === "number"}
         />
         <Button
           text="총 비드"
-          onClick={() => handleSort('asset')}
-          active={activeButton === 'asset'}
+          onClick={() => handleSort("asset")}
+          active={activeButton === "asset"}
         />
       </div>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: "flex" }}>
         <div className={styled.orderTableContainer}>
           <table className={styled.orderTable}>
             <thead>

@@ -1,19 +1,19 @@
-import React from 'react';
-import Logo from '../../Asset/Image/logo.png';
-import styled from './Teacher.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import Logo from "../../Asset/Image/logo.png";
+import styled from "./Teacher.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGear,
   faArrowRightFromBracket,
-} from '@fortawesome/free-solid-svg-icons';
-import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../../Store/userSlice';
+} from "@fortawesome/free-solid-svg-icons";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../Store/userSlice";
 
 export default function Teacher() {
   const location = useLocation();
   const teacherInfo = useSelector(userSelector);
-  const { userNo, schoolName, adminName } = teacherInfo.data.adminInfo;
+  const { userNo, schoolName, adminName } = teacherInfo.adminInfo;
 
   return (
     <section className={styled.teacherArea}>
@@ -41,7 +41,7 @@ export default function Teacher() {
               className={`${styled.classBtn} ${
                 location.pathname !== `/classlist/${userNo}`
                   ? styled.disabled
-                  : ''
+                  : ""
               }`}
             >
               비밀번호 변경

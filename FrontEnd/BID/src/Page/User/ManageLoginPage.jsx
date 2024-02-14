@@ -1,40 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import styled from './LoginPage.module.css';
-import { Link, useNavigate } from 'react-router-dom';
-import Logo from '../../Asset/Image/LoginLogo.png';
-import useUser from '../../hooks/useUser';
-import { loginUserApi } from '../../Apis/UserApis';
+import React, { useEffect, useState } from "react";
+import styled from "./LoginPage.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../Asset/Image/LoginLogo.png";
+import useUser from "../../hooks/useUser";
+import { loginUserApi } from "../../Apis/UserApis";
 import {
   useMutation,
   useQueries,
   useQuery,
   useQueryClient,
-} from '@tanstack/react-query';
-import { setCookie } from '../../cookie';
-import { getGrades } from '../../Apis/ClassManageApis';
+} from "@tanstack/react-query";
+import { setCookie } from "../../cookie";
+import { getGrades } from "../../Apis/ClassManageApis";
+import useMain from "../../hooks/useMain";
+import { useSelector } from "react-redux";
+import { mainSelector } from "../../Store/mainSlice";
 
 function ManageLoginPage() {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
   const { loginUser } = useUser();
-  const [mainClass, setMainClass] = useState(null);
+  const { initClass } = useMain();
+  const mainClass = useSelector(mainSelector);
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   /** 로그인 쿼리 */
   const loginUserQuery = useMutation({
-    mutationKey: ['loginUser'],
+    mutationKey: ["loginUser"],
     mutationFn: (userCredentials) => loginUserApi(userCredentials),
     onSuccess: (data) => {
       loginUser(data);
-      setCookie('accessToken', data.data.tokenResponse.accessToken);
 
-      queryClient.setQueryData('ClassList');
-      // console.log(classList);
-      if (classList.find((item) => item.main === true)) {
-        // main학급 정보 넣어서 보여줄 것
-        navigate('/', { state: mainClass });
+      setCookie("accessToken", data.data.tokenResponse.accessToken);
+      queryClient.setQueryData("ClassList");
+      if (mainClass) {
+        navigate("/");
       } else {
         navigate(`/classlist/${data.data.adminInfo.userNo}/no-class`, {
           state: {
@@ -47,12 +49,13 @@ function ManageLoginPage() {
       console.log(error);
     },
   });
-  const { data: classList } = useQuery({
-    queryKey: ['ClassList'],
+
+  useQuery({
+    queryKey: ["ClassList"],
     queryFn: () =>
       getGrades().then((res) => {
         const foundMainClass = res.data.find((item) => item.main === true);
-        setMainClass(foundMainClass);
+        initClass(foundMainClass);
         return res.data;
       }),
   });
@@ -64,7 +67,6 @@ function ManageLoginPage() {
       id,
       password,
     };
-    console.log(userCredentials);
     loginUserQuery.mutate(userCredentials);
   };
 
