@@ -26,7 +26,12 @@ services:
     container_name: bid-core
     ports:
       - "8083:8083"
+    volumes:
+      - /home/ubuntu/config/application.yml:/config/core/application.yml
+      - /home/ubuntu/config/application_core.yml:/config/core/application_port.yml
     environment:
+      - SPRING_CONFIG_LOCATION=file:/config/core/
+      - SPRING_PROFILES_ACTIVE=port
       - TZ=Asia/Seoul
 
   bid-admin:
@@ -36,7 +41,12 @@ services:
       - bid-core
     ports:
       - "8081:8081"
+    volumes:
+      - /home/ubuntu/config/application.yml:/config/admin/application.yml
+      - /home/ubuntu/config/application_admin.yml:/config/admin/application_port.yml
     environment:
+      - SPRING_CONFIG_LOCATION=file:/config/admin/
+      - SPRING_PROFILES_ACTIVE=port
       - TZ=Asia/Seoul
 
   bid-student:
@@ -46,5 +56,10 @@ services:
       - bid-core
     ports:
       - "8082:8082"
+    volumes:
+      - /home/ubuntu/config/application.yml:/config/student/application.yml
+      - /home/ubuntu/config/application_student.yml:/config/student/application_port.yml
     environment:
+      - SPRING_CONFIG_LOCATION=file:/config/student/
+      - SPRING_PROFILES_ACTIVE=port
       - TZ=Asia/Seoul
