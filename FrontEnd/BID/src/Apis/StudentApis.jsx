@@ -18,19 +18,6 @@ StudentApis.interceptors.request.use(
   }
 );
 
-export const StudentRewardsApis = axios.create({
-  baseURL: process.env.REACT_APP_TCH_API,
-});
-
-/**
- * 학생 목록 가져오기
- * @param gradeNo 학급 넘버
- * @returns 학급 내 학생 목록
- */
-export const getStudentListApi = async () => {
-  return await StudentRewardsApis.get(`/1/users`);
-};
-
 /**
  * 학생 적금 내역 가져오기
  * @returns 적금 가입 내역

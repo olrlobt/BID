@@ -24,7 +24,7 @@ import useRequestedCoupons from "../../hooks/useRequestedCoupons";
 import { moneySeletor } from "../../Store/moneySlice";
 import PieChart from "../../Component/Common/PieChart";
 import LineChart from "../../Component/Common/LineChart";
-import { useLocation } from "react-router-dom";
+import { mainSelector } from "../../Store/mainSlice";
 
 export default function Home() {
   const { openModal } = useModal();
@@ -39,13 +39,12 @@ export default function Home() {
   const stopTime = useSelector(stopTimeSelector);
   const requestedCoupons = useSelector(requestCouponSelector);
   const [lineData, setLineData] = useState([]);
+  const mainClass = useSelector(mainSelector);
 
-  const location = useLocation();
-  const gradeNo = 3;
   const { data: dashboardInfo } = useQuery({
     queryKey: ["HomeDashboard"],
     queryFn: () =>
-      viewDashboard(gradeNo).then((res) => {
+      viewDashboard(mainClass.no).then((res) => {
         if (res.data !== undefined) {
           changeBid(res.data.salary);
           initMoney(res.data.asset);
@@ -67,7 +66,7 @@ export default function Home() {
   const { data: couponList } = useQuery({
     queryKey: ["CouponList"],
     queryFn: () =>
-      getCouponList(gradeNo).then((res) => {
+      getCouponList(mainClass.no).then((res) => {
         changeRequestList(res.data);
         return res.data;
       }),
@@ -78,7 +77,6 @@ export default function Home() {
     <>
       {dashboardInfo && couponList && (
         <main className={styled.home}>
-          {console.log(dashboardInfo)}
           <button className={styled.holdBtn}>
             <span className={styled.hold}>HOLD</span>
             <span className={styled.holdInfo}>
