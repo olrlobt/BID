@@ -24,7 +24,7 @@ export function BiddingPlace(props) {
       onPointerOver={handleHover} 
       onPointerOut={handleUnhover}
     >
-      <group position={[3.159, 2.696, -0.024]} 
+      <group position={[3.159, 2.676, 0.424]} 
       scale={isHovered ? [0.982, 0.284, 0.817] :[0.972, 0.274, 0.807]}
       >
         <mesh

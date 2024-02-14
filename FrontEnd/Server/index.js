@@ -15,11 +15,11 @@ const io = new Server({
   const roomId = []
   const characters = []
   const generateRandomPosition = () => {
-    const minX = 0;
-    const maxX = 2.224 + 1;
+    const minX = 1.4;
+    const maxX = 2.224 + 3;
 
-    const minZ = -1.781 - 1;
-    const maxZ = -1.781 + 1.3;
+    const minZ = -1.781 - 1.5 ;
+    const maxZ = -1.781 + 1.5;
 
     const x = minX + Math.random() * (maxX - minX);
     const z = minZ + Math.random() * (maxZ - minZ);
@@ -33,11 +33,17 @@ const io = new Server({
 
   
   const createCharacter = (model) => {
-    const position = generateRandomPosition();
+    const [baseX, baseY, baseZ] = generateRandomPosition(); // 랜덤한 기준 포지션 생성
+    const deltaX = (Math.random() * 0.3) - 0.6; // x 값에 더해줄 랜덤한 값 생성 (0.3 ~ 0.65)
+    const deltaZ = (Math.random() * 0.3) + 0.6; // z 값에 더해줄 랜덤한 값 생성 (0.3 ~ 0.65)
+  
+    // 기준 포지션에 더해진 값을 사용하여 캐릭터의 위치를 설정
+    const position = [baseX + deltaX, baseY, baseZ + deltaZ];
+  
     const selectedCharacter = model.profileImgUrl.split('/').pop().replace('.png', '');
     const id = model.no;
     const gradeNo = model.gradeNo;
-    const name = model.name
+    const name = model.name;
     
     return {
       id,
