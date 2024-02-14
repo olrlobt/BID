@@ -30,7 +30,7 @@ export default function ClassList() {
         setEditedClassList(res.data);
 
         const filteredMainClass = res.data.filter((item) => item.main === true);
-        changeMainClass(filteredMainClass);
+        changeMainClass(filteredMainClass[0]);
         return res.data;
       }),
   });
@@ -70,7 +70,7 @@ export default function ClassList() {
     const mainClass = editedClassList.filter(
       (eachClass) => eachClass.main === true
     );
-    changeMainClass(mainClass);
+    changeMainClass(mainClass[0]);
     editMainClass(mainClass[0].no);
   };
 
