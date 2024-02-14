@@ -32,7 +32,7 @@ export function BiddingPlace(props) {
           receiveShadow
           geometry={nodes.Cube023.geometry}
           material={materials["PlasterShader.001"]}
-          onClick={() => navigate('/auctionHouse')}
+          onClick={() => navigate('/studentmain/auctionHouse')}
         />
         <mesh
           castShadow
