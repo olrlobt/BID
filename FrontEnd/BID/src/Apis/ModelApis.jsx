@@ -44,3 +44,11 @@ export const stuAttendApi = async () => {
   return await ModelApis.patch(`/users/attendance/check`);
 };
 
+/**
+ * 학생 출석 체크 확인 여부
+ * @param  사용자 정보
+ */
+export const stuAttendCheckApi = async () => {
+  return await ModelApis.get(`/users/attendance/exists`);
+};
+
