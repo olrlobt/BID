@@ -1,17 +1,24 @@
 package com.ssafy.bid.domain.avatar.service;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.avatar.Avatar;
+import com.ssafy.bid.domain.avatar.UserAvatar;
+import com.ssafy.bid.domain.avatar.dto.AvatarRequest;
+import com.ssafy.bid.domain.avatar.dto.AvatarResponse;
 import com.ssafy.bid.domain.avatar.dto.UserAvatarUpdateRequest;
 import com.ssafy.bid.domain.avatar.dto.UserAvatarsGetResponse;
+import com.ssafy.bid.domain.avatar.repository.AvatarRepository;
 import com.ssafy.bid.domain.avatar.repository.UserAvatarRepository;
 import com.ssafy.bid.domain.user.Student;
-import com.ssafy.bid.domain.user.User;
+import com.ssafy.bid.domain.user.UserType;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.repository.UserRepository;
-import com.ssafy.bid.global.error.exception.InvalidParameterException;
+import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -23,25 +30,50 @@ public class AvatarServiceImpl implements AvatarService {
 
 	private final UserAvatarRepository userAvatarRepository;
 	private final UserRepository userRepository;
+	private final AvatarRepository avatarRepository;
 
 	@Override
-	public List<UserAvatarsGetResponse> getUserAvatars(int userNo) {
+	public List<UserAvatarsGetResponse> getUserAvatars(UserType userType, int userNo) {
+		if (!userType.equals(UserType.STUDENT)) {
+			throw new AuthorizationFailedException("아바타목록조회: Student 권한 사용자가 아님.");
+		}
+
 		return userAvatarRepository.findAllByUserNo(userNo);
 	}
 
 	@Override
 	@Transactional
-	public void updateUserAvatar(int userNo, UserAvatarUpdateRequest userAvatarUpdateRequest) {
-		User user = userRepository.findById(userNo)
-			.orElseThrow(() -> new ResourceNotFoundException("아바타를 수정하려는 User 가 없음.", userNo));
-
-		if (!(user instanceof Student student)) {
-			throw new InvalidParameterException("아바타를 수정하려는 User 의 타입이 올바르지 않음.", userNo);
+	public void updateUserAvatar(CustomUserInfo userInfo, UserAvatarUpdateRequest userAvatarUpdateRequest) {
+		if (!userInfo.getUserType().equals(UserType.STUDENT)) {
+			throw new AuthorizationFailedException("아바타수정: Student 권한 사용자가 아님.");
 		}
+
+		Student student = userRepository.findStudentByUserNo(userInfo.getNo())
+			.orElseThrow(() -> new ResourceNotFoundException("아바타수정: Student 가 없음.", userInfo.getNo()));
 
 		String url = userAvatarRepository.findUrlByUserAvatarNo(userAvatarUpdateRequest.getNo())
 			.orElseThrow(
-				() -> new ResourceNotFoundException("수정하려는 UserAvatar 가 없음.", userAvatarUpdateRequest.getNo()));
+				() -> new ResourceNotFoundException("아바타수정: UserAvatar 가 없음.", userAvatarUpdateRequest.getNo()));
+
 		student.updateAvatar(url);
+	}
+
+	@Override
+	@Transactional
+	public AvatarResponse buyAvatar(int userNo, AvatarRequest avatarRequest) {
+
+		Student student = userRepository.findStudentByUserNo(userNo)
+			.orElseThrow(() -> new ResourceNotFoundException("아바타구매: Student 가 없음.", userNo));
+
+		List<Avatar> allAvatars = avatarRepository.findAll();
+		Avatar avatar = allAvatars.get(ThreadLocalRandom.current().nextInt(allAvatars.size()));
+
+		userAvatarRepository.save(UserAvatar.builder()
+			.avatarNo(avatar.getNo())
+			.userNo(userNo)
+			.build());
+
+		student.subtractPrice(avatar.getPrice());
+		return avatar.toDto();
 	}
 }

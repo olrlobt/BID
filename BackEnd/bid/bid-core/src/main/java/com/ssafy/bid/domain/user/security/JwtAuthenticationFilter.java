@@ -2,21 +2,22 @@ package com.ssafy.bid.domain.user.security;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.ssafy.bid.domain.user.repository.CoreTokenBlacklistRepository;
 import com.ssafy.bid.domain.user.service.CustomUserDetailsService;
+import com.ssafy.bid.global.error.exception.AuthenticationFailedException;
+import com.ssafy.bid.global.util.SecurityUtils;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -24,18 +25,19 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final CustomUserDetailsService customUserDetailsService;
-	private final CoreTokenBlacklistRepository coreTokenBlacklistRepository;
+	private final RedisTemplate redisTemplate;
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
 		IOException,
 		ServletException {
-		String token = getAccessToken((HttpServletRequest)request);
+		String token = SecurityUtils.getAccessToken((HttpServletRequest)request);
 
 		if (token != null && jwtTokenProvider.validateToken(token)) {
-			if (isTokenBlacklisted(token)) {
-				((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				return;
+
+			String isLogout = (String)redisTemplate.opsForValue().get(token);
+			if (!ObjectUtils.isEmpty(isLogout)) {
+				throw new AuthenticationFailedException("로그아웃된 사용자 토큰.");
 			}
 
 			String id = jwtTokenProvider.getUserId(token);
@@ -50,17 +52,5 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 			}
 		}
 		chain.doFilter(request, response);
-	}
-
-	private String getAccessToken(HttpServletRequest request) {
-		String bearerToken = request.getHeader("Authorization");
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-			return bearerToken.substring(7);
-		}
-		return null;
-	}
-
-	private boolean isTokenBlacklisted(String token) {
-		return coreTokenBlacklistRepository.findByToken(token).isPresent();
 	}
 }
