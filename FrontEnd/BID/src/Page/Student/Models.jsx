@@ -23,17 +23,18 @@ import {
 import { useAtom } from 'jotai';
 import * as THREE from 'three';
 
-export default function Models() {
+export default function Models(myInfo) {
   const [characters] = useAtom(charactersAtom);
+  console.log(characters)
   const [onFloor, setOnFloor] = useState(false);
   // const [selectedCharacter, setSelectedCharacter] = useState(null);
-
   useCursor(onFloor);
   const navigate = useNavigate(); // useNavigate hook
 
   const handleCharacterClick = (characterId) => {
     navigate(`/studentmain/${characterId}`);
   };
+
   return (
     <>
       <SocketManager />
@@ -42,13 +43,16 @@ export default function Models() {
         camera={{ position: [12, 10, 20], fov: 20 }}
       >
         <CameraControls minPolarAngle={2} maxPolarAngle={Math.PI / 2} />
-        <directionalLight position={[1, 1, 1]} intensity={2} />
-        <ambientLight intensity={2} />
+        <directionalLight position={[1, 1, 1]} 
+        castShadow
+        intensity={2} >
+        </directionalLight>
+        <ambientLight intensity={1.7} />
         <OrbitControls />
         <group scale={20} position={[0, 0, 0]}>
           <mesh
             onClick={(e) =>
-              socket.emit('move', [e.point.x / 45, 0, e.point.z / 45])
+              socket.emit('move', [e.point.x / 40, 0, e.point.z / 40], characters, myInfo.myInfo.model.no, myInfo.myInfo.model.gradeNo)
             }
             onPointerEnter={() => setOnFloor(true)}
             onPointerLeave={() => setOnFloor(false)}
@@ -59,6 +63,7 @@ export default function Models() {
             <CharacterModel
               key={character.id}
               id={character.id}
+              name={character.name}
               position={
                 new THREE.Vector3(
                   character.position[0],
@@ -66,10 +71,9 @@ export default function Models() {
                   character.position[2]
                 )
               }
-              bodyColor={character.bodyColor}
               selectedCharacter={character.selectedCharacter}
-              onClick={() => handleCharacterClick(character.id)}
-            />
+              myModelNo={myInfo.myInfo.model.no} // 내 캐릭터의 번호 전달
+              />
           ))}
           <BlackBoard />
           <Cactus />

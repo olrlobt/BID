@@ -24,10 +24,11 @@ function LoginPage() {
     mutationKey: ['studentLogin'],
     mutationFn: (userCredentials) => studentLoginApi( userCredentials),
     onSuccess: (res) => {
-      loginStudent({ model: res.data});
+      loginStudent({ model: res.data.myInfo});
       initModels({ models: res.data.studentList });
       navigate('/studentmain');
       console.log(res)
+    
     },
     onError: (error) => {
       console.log(error);
