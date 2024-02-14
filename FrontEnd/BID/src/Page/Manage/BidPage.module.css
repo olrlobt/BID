@@ -4,7 +4,6 @@
 	width: calc(100% - 20vw);
   height: 100vh;
 	padding: 5vh;
-	margin: 0 auto;
 	box-sizing: border-box;
 }
 
@@ -12,13 +11,27 @@
 	display: flex;
 	justify-content: space-between;
 	margin: 5vh 0;
-}
 
-.bidBody {
-}
+	.filterArea{
+		display: flex;
 
-.bidBody{
-	overflow-x: scroll;
+		.keywordSearch{
+			margin-left: 3vw;
+
+			input{
+			border: 1px solid #c8c8c8;
+			padding: 0 1vw;
+					box-sizing: border-box;
+			border-radius: 0.5vw;
+			width: 18vw;
+					height: 2vw;
+					margin-right: 1vw;
+			}
+			input:focus{
+			outline: none;
+			}
+		}
+	}
 }
 
 .couponListWrapper{
@@ -35,8 +48,6 @@
 
 .productsWrapper {
 	display: flex;
+	justify-content: flex-start;
 	flex-wrap: wrap;
-	gap: 1.8vw;
-	padding: 2vw;
-	box-sizing: border-box;
 }
