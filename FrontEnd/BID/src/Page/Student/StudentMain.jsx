@@ -1,25 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Models from './Models';
 import { Link } from 'react-router-dom';
-import { socket } from '../../Component/Models/SocketManager';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { viewSavingList } from '../../Apis/TeacherManageApis';
+import { stuAttendApi } from '../../Apis/ModelApis';
 import useSaving from '../../hooks/useSaving';
 import { useSelector } from "react-redux";
-import { modelListSelector } from "../../Store/modelSlice";
+import { modelSelector, myInfoSelector } from "../../Store/modelSlice";
 import styled from "./StudentMain.module.css";
+import { socket  } from '../../Component/Models/SocketManager'; 
 
 function StudentMain() {
-  const models = useSelector(modelListSelector);
+  const models = useSelector(modelSelector);
+  const myInfo = useSelector(myInfoSelector);
+  const gradeNo = myInfo.model.gradeNo
+
+  console.log(models)
+  console.log(myInfo)
+  useEffect(() => {
+    if (models.length > 0) {
+      socket.emit("characters", models); // 서버에 gradeNo 기반으로 캐릭터 데이터 전송
+    }
+  }, [models, gradeNo]);
+  
   const [chatMessage, setChatMessage] = useState('');
+
   const sendChatMessage = () => {
     if (chatMessage.length > 0) {
-      socket.emit('chatMessage', chatMessage);
+      socket.emit('chatMessage', chatMessage,myInfo.model.no);
       setChatMessage('');
     }
   };
-  const gradeNo = 1;
+
+  const studentId = myInfo.model.no
+  // const gradeNo = 1;
+  // const selectedCharacter = myInfo.model.profileImgUrl.split('/').pop().replace('.png', '');
 
   // 선생님 적금 가입정보 가져와 저장
   const { initSavingList } = useSaving();
@@ -31,19 +47,20 @@ function StudentMain() {
       }),
   });
 
+
   return (
     <div className={styled.container}>
       <div className={styled.header}>
-        <Link to="/studentmain/:studentId/">
-          <img className={styled.img} src="https://ssafya306.s3.ap-northeast-2.amazonaws.com/AvocadoBody.png" alt="이미지" />
+        <Link to={`/studentmain/${studentId}/`}>
+          <img className={styled.img} src={myInfo.model.profileImgUrl} alt="이미지" />
         </Link>
         <div>
           <p>안녕하세요!</p>
-          <p className={styled.name}>백지윤님</p>
-      <button className={styled.attendanceBtn}>출석</button>
+          <p className={styled.name}>{myInfo.model.name}님</p>
+          <button className={styled.attendanceBtn}>출석</button>
         </div>
       </div>
-      <Models />
+      <Models myInfo={myInfo}/>
       <input
         type="text"
         className={styled.chatMessage}
