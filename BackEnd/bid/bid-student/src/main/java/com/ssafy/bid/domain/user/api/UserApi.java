@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.LoginResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
@@ -45,6 +46,15 @@ public class UserApi {
 		int userNo = userDetails.getUserInfo().getNo();
 		userService.checkAttendance(userNo);
 		return ResponseEntity.status(OK).build();
+	}
+
+	@GetMapping("/users/attendance/exists")
+	public ResponseEntity<Boolean> isAttendanceChecked(
+		@AuthenticationPrincipal CustomUserDetails userDetails
+	) {
+		CustomUserInfo userInfo = userDetails.getUserInfo();
+		boolean response = userService.isAttendanceChecked(userInfo);
+		return ResponseEntity.status(OK).body(response);
 	}
 
 	@GetMapping("/users/{userNo}")
