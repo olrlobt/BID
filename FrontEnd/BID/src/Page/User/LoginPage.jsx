@@ -40,7 +40,7 @@ function LoginPage() {
   const handleLoginEvent = (e) => {
     e.preventDefault()
     let userCredentials = {
-      id, 
+      id,
       password
     }
     console.log(userCredentials)

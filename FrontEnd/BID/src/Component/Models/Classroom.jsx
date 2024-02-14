@@ -13,9 +13,9 @@ export function Classroom(props) {
   return (
     <group {...props} dispose={null}>
       <group
-        position={[1.003, 1.557, -3.131]}
+        position={[1.003, 1.847, -3.131]}
         rotation={[0, 0, -Math.PI / 2]}
-        scale={0.344}
+        scale={0.426}
       >
 
         <mesh
