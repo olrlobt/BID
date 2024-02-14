@@ -69,6 +69,7 @@ public class CoreUserRepositoryCustomImpl implements CoreUserRepositoryCustom {
 						student.expenditureStatistics.sumCouponExpenditure,
 						student.expenditureStatistics.sumGameExpenditure,
 						student.expenditureStatistics.sumEtcExpenditure,
+						student.asset,
 						ExpressionUtils.as(
 							JPAExpressions
 								.select(account.price.sum())
