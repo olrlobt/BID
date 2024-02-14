@@ -6,9 +6,9 @@ export function Cactus() {
     return (
       <mesh 
       geometry={nodes.Cactus.geometry} 
-      position={[1.284, 0.456, -4.645]}
+      position={[1.354, 0.496, -5.005]}
       rotation={[Math.PI / 2, 0, 0]}
-      scale={0.351}
+      scale={0.421}
       >
         <MeshWobbleMaterial 
         factor={0.4} 
