@@ -1,5 +1,5 @@
-import axios from "axios";
-import { getCookie } from "../cookie";
+import axios from 'axios';
+import { getCookie } from '../cookie';
 
 export const StudentApis = axios.create({
   baseURL: process.env.REACT_APP_STU_API,
@@ -7,8 +7,8 @@ export const StudentApis = axios.create({
 
 StudentApis.interceptors.request.use(
   (config) => {
-    config.headers["Content-Type"] = "application/json";
-    config.headers["Authorization"] = `Bearer ${getCookie("accessToken")}`;
+    config.headers['Content-Type'] = 'application/json';
+    config.headers['Authorization'] = `Bearer ${getCookie('accessToken')}`;
 
     return config;
   },
@@ -23,7 +23,7 @@ StudentApis.interceptors.request.use(
  * @returns 적금 가입 내역
  */
 export const getStudentSavingInfo = async () => {
-  return await StudentApis.get('/savings');
+  return await StudentApis.get(`/savings`);
 };
 
 /**
@@ -35,5 +35,3 @@ export const getStudentSavingInfo = async () => {
 export const applyStudentSaving = async (savingInfo) => {
   return await StudentApis.post('/savings', savingInfo);
 };
-
-

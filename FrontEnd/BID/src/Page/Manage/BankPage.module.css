@@ -174,3 +174,27 @@
 .already {
   background-color: #a6a6a6;
 }
+
+/* student 부분 */
+
+.taxList {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.taxEnd {
+  position: absolute;
+  margin-top: -6vh;
+  margin-left: 5vw;
+  font-size: 0.7rem;
+}
+
+.taxRate {
+  text-align: center;
+  color: #ffffff;
+  width: 8vw;
+  height: 3vh;
+  background-color: #5fa1c4;
+  margin-right: 0.1vw;
+}
