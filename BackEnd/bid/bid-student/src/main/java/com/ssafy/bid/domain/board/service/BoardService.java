@@ -195,10 +195,6 @@ public class BoardService {
 
 		List<Account> accounts = new ArrayList<>();
 
-		Student sender = studentRepository.findById(userInfo.getNo())
-			.orElseThrow(() -> new ResourceNotFoundException("찾는 유저가 없습니다", userInfo.getNo()));
-		sender.subtractPrice(board.getResultPrice());
-
 		Account accountSender = Account.builder()
 			.accountType(AccountType.EXPENDITURE)
 			.price(board.getResultPrice())
