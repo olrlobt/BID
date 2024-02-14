@@ -15,6 +15,7 @@ import com.ssafy.bid.domain.coupon.dto.CouponResponse;
 import com.ssafy.bid.domain.coupon.dto.UserCouponResponse;
 import com.ssafy.bid.domain.coupon.repository.CouponRepository;
 import com.ssafy.bid.domain.coupon.repository.UserCouponRepository;
+import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.dto.GradeProjection;
 import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.domain.notification.NotificationType;
@@ -131,15 +132,17 @@ public class CouponService {
 	}
 
 	public void registerCoupon(int couponNo, int gradeNo, int userNo, UserType userType) {
-		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
+		// GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
+		// 	.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
+
+		Grade grade = gradeRepository.findById(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
+		if (grade.getUserNo() != userNo || !userType.equals(UserType.ADMIN)) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 
-		Coupon coupon = couponRepository.findByNoAndCouponStatus(couponNo,
-				CouponStatus.UNREGISTERED)
+		Coupon coupon = couponRepository.findByNoAndCouponStatus(couponNo, CouponStatus.UNREGISTERED)
 			.orElseThrow(() -> new ResourceNotFoundException("쿠폰이 없습니다."));
 
 		coupon.register();
