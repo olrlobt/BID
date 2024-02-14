@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import styled from "./ManageProductModal.module.css";
 import Modal from "../Common/Modal";
 import RoundedInfoButton from "../Common/RoundedInfoButton";
-import { SvgIcon } from "@material-ui/core";
-import { Eject, Edit, Delete } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import Comment from "./Comment";
 import SettingButton from "../Common/SettingButton"
 import NoContent from "./NoContent";
@@ -12,8 +11,8 @@ import { getProductDetailApi, deleteProductApi } from "../../Apis/TeacherBidApis
 import useProducts from "../../hooks/useProducts";
 
 export default function ManageProductModal({ onClose, ...props }) {
-  const boardNo = props[0];
-  const parentQueryClient = props[1];
+  const gradeNo = props[0];
+  const boardNo = props[1];
 
   const { deleteProduct } = useProducts();
 
@@ -29,7 +28,7 @@ export default function ManageProductModal({ onClose, ...props }) {
   const { data: productDetailIinfo } = useQuery({
     queryKey: ['getProductDetailTCH'],
     queryFn: () =>
-      getProductDetailApi(1, boardNo).then((res) => {
+      getProductDetailApi(gradeNo, boardNo).then((res) => {
         if(res.data !== undefined){
           console.log(res.data);
           setTitle(res.data.title);
@@ -45,7 +44,7 @@ export default function ManageProductModal({ onClose, ...props }) {
   /** 경매 삭제 쿼리 */
   const deleteProductQuery = useMutation({
     mutationKey: ['deleteProduct'],
-    mutationFn: (boardNo) => deleteProductApi(1, boardNo),
+    mutationFn: (boardNo) => deleteProductApi(gradeNo, boardNo),
     onSuccess: () => { deleteProduct({productNo: boardNo}); },
     onError: (error) => { console.log(error);}
   });
@@ -128,6 +127,8 @@ export default function ManageProductModal({ onClose, ...props }) {
                 userImgUrl = {productDetailIinfo.userProfileImgUrl}
                 isWriter = {true}
                 isSetting = {false}
+                isTeacher = {false}
+                gradeNo = {gradeNo}
               />
             </div>
               <div className={styled.othersArea}>
@@ -147,6 +148,7 @@ export default function ManageProductModal({ onClose, ...props }) {
                     queryClient = {queryClient}
                     isWriter = {false}
                     isDelete = {true}
+                    isTeacher = {true}
                   />
                 )
               }

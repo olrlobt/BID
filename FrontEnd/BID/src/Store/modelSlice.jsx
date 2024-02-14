@@ -6,15 +6,18 @@ const initialState = {
   model: null,
 };
 
-
-export const modelSelector = (state) => {
+export const modelListSelector = (state) => {
   return state.studentmodel.models;
-
 }
 
 export const modelLoggedInSelector = (state) => {
   return state.studentmodel.modelLoggedIn;
-  };
+};
+
+export const modelSelector = (state) => {
+  return state.studentmodel.model;
+}
+
 
 export const modelSlice = createSlice({
   name: "studentmodel",
