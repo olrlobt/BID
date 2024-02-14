@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "./RewardPage.module.css";
 import SubmitButton from "../../Component/Common/SubmitButton";
 import Reward from "../../Component/Reward/Reward";
@@ -11,8 +11,12 @@ import {
   sendRewardApi,
 } from "../../Apis/RewardApis";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { studentSelector } from "../../Store/studentSlice";
 
 export default function RewardPage() {
+  const students = useSelector(studentSelector);
+
   const [isSetting, setIsSetting] = useState(false);
   const [studentList, setStudentList] = useState([]);
   const [rewardList, setRewardList] = useState([]);
@@ -20,18 +24,6 @@ export default function RewardPage() {
   const [rReward, setRReward] = useState(0);
 
   const queryClient = useQueryClient();
-
-  /** 학생 목록 쿼리 */
-  useQuery({
-    queryKey: ["studentList"],
-    queryFn: () =>
-      getStudentListApi().then((res) => {
-        if (res.data !== undefined) {
-          setStudentList(res.data);
-        }
-        return res.data;
-      }),
-  });
 
   /** 리워드 목록 쿼리 */
   useQuery({
@@ -44,6 +36,10 @@ export default function RewardPage() {
         return res.data;
       }),
   });
+
+  useEffect(() => {
+    setStudentList(students);
+  }, []);
 
   /** 리워드 추가 쿼리 */
   const addRewardQuery = useMutation({
