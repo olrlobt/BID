@@ -28,7 +28,7 @@ services:
       - "8083:8083"
     volumes:
       - /home/ubuntu/config/application.yml:/config/core/application.yml
-      - /home/ubuntu/config/application_core.yml:/config/core/application_port.yml
+      - /home/ubuntu/config/application_core.yml:/config/core/application-port.yml
     environment:
       - SPRING_CONFIG_LOCATION=file:/config/core/
       - SPRING_PROFILES_ACTIVE=port
@@ -43,7 +43,7 @@ services:
       - "8081:8081"
     volumes:
       - /home/ubuntu/config/application.yml:/config/admin/application.yml
-      - /home/ubuntu/config/application_admin.yml:/config/admin/application_port.yml
+      - /home/ubuntu/config/application_admin.yml:/config/admin/application-port.yml
     environment:
       - SPRING_CONFIG_LOCATION=file:/config/admin/
       - SPRING_PROFILES_ACTIVE=port
@@ -58,7 +58,7 @@ services:
       - "8082:8082"
     volumes:
       - /home/ubuntu/config/application.yml:/config/student/application.yml
-      - /home/ubuntu/config/application_student.yml:/config/student/application_port.yml
+      - /home/ubuntu/config/application_student.yml:/config/student/application-port.yml
     environment:
       - SPRING_CONFIG_LOCATION=file:/config/student/
       - SPRING_PROFILES_ACTIVE=port
