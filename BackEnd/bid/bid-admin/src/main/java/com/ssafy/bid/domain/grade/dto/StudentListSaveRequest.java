@@ -27,8 +27,8 @@ public class StudentListSaveRequest {
 			"https://ssafya306.s3.ap-northeast-2.amazonaws.com/DefaultBody.png",
 			new Attendance(),
 			new ExpenditureStatistics(),
-			gradeNo,
-			3
+			3,
+			gradeNo
 		);
 	}
 }
