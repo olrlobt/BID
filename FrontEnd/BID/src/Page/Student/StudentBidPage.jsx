@@ -29,16 +29,16 @@ export default function StudentBidPage(){
   }, [reduxProducts]);
 
   /** 경매 목록 쿼리 */
-  useQuery({
-    queryKey: ['productList'],
-    queryFn: () => 
-      getProductListApi().then((res) => {
-        if(res.data !== undefined){
-          initProducts({ productList: res.data });
-        }
-        return res.data;
-      }),
-  });
+  // useQuery({
+    //   queryKey: ['productList'],
+    //   queryFn: () => 
+      //     getProductListApi().then((res) => {
+        //       if(res.data !== undefined){
+          //         initProducts({ productList: res.data });
+        //       }
+  //       return res.data;
+      //     }),
+  // });
   
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
@@ -123,7 +123,7 @@ export default function StudentBidPage(){
       </div>
 
       <div className={styled.bidBody}>
-        <div className = {styled.productsWrapper} style={{gap: '2.4vw'}} >
+        <div className = {styled.productsWrapper} style={{gap: '3vw'}} >
           {
             filteredProducts && filteredProducts.length === 0?
             <NoContent text='현재 진행 중인 경매가 없어요'/>

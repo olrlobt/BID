@@ -57,11 +57,12 @@ export default function Comment(props){
   });
 
   /** 댓글 삭제 함수 */
-  const deleteComment = (e) => {
-    e.preventDefault();
-    isTeacher?
-    TCHdeleteCommentQuery.mutate():
-    STUdeleteCommentQuery.mutate();
+  const deleteComment = () => {
+    if(window.confirm('댓글을 삭제하시겠습니까?')){
+      isTeacher?
+      TCHdeleteCommentQuery.mutate():
+      STUdeleteCommentQuery.mutate();
+    }
   }
 
   return(
