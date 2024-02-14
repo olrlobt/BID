@@ -148,7 +148,7 @@ export default function ManageProductModal({ onClose, ...props }) {
                     createAt = {c.createAt}
                     userImgUrl = {c.userImgUrl}
                     queryClient = {queryClient}
-                    isWriter = {false}
+                    isWriter = {productDetailIinfo.userNo===c.userNo}
                     isDelete = {true}
                     isTeacher = {true}
                     gradeNo = {gradeNo}
