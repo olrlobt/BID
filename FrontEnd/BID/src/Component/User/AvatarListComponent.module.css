@@ -1,0 +1,24 @@
+.avatarContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .imageArea{
+    width: 17vw;
+    height: 17vw;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2vw;
+    
+    img{
+      width: 120%;
+      height: 120%;
+    }
+  }
+  
+  h3{
+    line-height: 4vw;
+  }
+}

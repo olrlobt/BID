@@ -126,6 +126,7 @@ export default function StudentBidPage(){
                 displayPrice = {product.displayPrice}
                 goodsImgUrl = {product.goodsImgUrl}
                 userName = {product.userName}
+                boardStatus = {product.boardStatus}
               />
             )
           }
