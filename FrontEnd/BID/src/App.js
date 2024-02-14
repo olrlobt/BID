@@ -54,7 +54,7 @@ function App() {
         <Route path="/game/seat" element={<SeatGame />} />
         <Route path="/studentmain/" element={<StudentMain />} />
         <Route path="/studentmain/:studentId/" element={<MyPage />} />
-        <Route path="/auctionHouse" element={<StudentBidPage />} />
+        <Route path="/studentmain/auctionHouse" element={<StudentBidPage />} />
         <Route path="/studentmain/saving" element={<StudentSaving />} />
       </Routes>
     </QueryClientProvider>
