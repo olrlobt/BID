@@ -20,6 +20,7 @@ public class CoreReplyCustomRepositoryImpl implements CoreReplyCustomRepository 
 		return queryFactory.select(Projections.constructor(ReplyResponse.class,
 				reply.no,
 				reply.content,
+				student.no,
 				student.name,
 				student.profileImgUrl,
 				reply.createdAt
@@ -27,7 +28,7 @@ public class CoreReplyCustomRepositoryImpl implements CoreReplyCustomRepository 
 			.from(reply)
 			.innerJoin(student)
 			.on(reply.boardNo.eq(boardNo).and(reply.userNo.eq(student.no)))
-			.orderBy(reply.createdAt.desc())
+			.orderBy(reply.createdAt.asc())
 			.fetch();
 	}
 }

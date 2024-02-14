@@ -41,6 +41,7 @@ public class GradeRepositoryCustomImpl implements GradeRepositoryCustom {
 			)
 			.from(grade)
 			.innerJoin(school).on(school.code.eq(grade.schoolCode))
+			.where(grade.userNo.eq(userNo))
 			.fetch();
 	}
 

@@ -15,6 +15,17 @@ public class NotificationRequest {
 	private String title;
 	private String content;
 	private NotificationType notificationType;
+	private long subNo;
+
+	@Builder
+	public NotificationRequest(int receiverNo, String title, String content, NotificationType notificationType,
+		long subNo) {
+		this.receiverNo = receiverNo;
+		this.title = title;
+		this.content = content;
+		this.notificationType = notificationType;
+		this.subNo = subNo;
+	}
 
 	@Builder
 	public NotificationRequest(

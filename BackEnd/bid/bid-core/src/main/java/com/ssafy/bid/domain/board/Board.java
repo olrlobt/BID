@@ -2,8 +2,10 @@ package com.ssafy.bid.domain.board;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.ssafy.bid.domain.board.dto.BoardModifyRequest;
 import com.ssafy.bid.domain.common.BaseEntity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -82,12 +84,16 @@ public class Board extends BaseEntity {
 	/**
 	 * bidding : board(me) = 1 : N
 	 */
+	@Nullable
 	private Long biddingNo;
+
+	@Nullable
+	private Integer subNo;
 
 	@Builder
 	private Board(String title, String description, Integer startPrice, BoardStatus boardStatus, Integer totalPrice,
 		Integer attendeeCount, Category category, String goodsImgUrl, Integer userNo, Integer gradeNo,
-		Integer gradePeriodNo) {
+		Integer gradePeriodNo, @org.jetbrains.annotations.Nullable Integer subNo) {
 		this.title = title;
 		this.description = description;
 		this.startPrice = startPrice;
@@ -99,5 +105,25 @@ public class Board extends BaseEntity {
 		this.userNo = userNo;
 		this.gradeNo = gradeNo;
 		this.gradePeriodNo = gradePeriodNo;
+		this.subNo = subNo;
+	}
+
+	public Long modify(BoardModifyRequest boardModifyRequest) {
+		this.title = boardModifyRequest.getTitle();
+		this.category = boardModifyRequest.getCategory();
+		this.description = boardModifyRequest.getDescription();
+		return this.no;
+	}
+
+	public void complete() {
+		this.boardStatus = BoardStatus.COMPLETED;
+	}
+
+	public void addTotalPrice(int price) {
+		this.totalPrice += price;
+	}
+
+	public void addAttendeeCount() {
+		this.attendeeCount++;
 	}
 }
