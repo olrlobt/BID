@@ -6,11 +6,11 @@ import Button from "../../Component/Common/Button";
 import Button2 from "../../Component/Common/Button2";
 import Button3 from "../../Component/Common/Button3";
 import useModal from "../../hooks/useModal";
-import { getStudentListApi } from "../../Apis/StudentApis";
-import { useSelector } from "react-redux";
-import { studentSelector } from "../../Store/studentSlice";
 import useStudents from "../../hooks/useStudents";
+import { getStudentListApi } from "../../Apis/TeacherManageApis";
+import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
+import { mainSelector } from "../../Store/mainSlice";
 
 function ClassPage() {
   const [studentList, setStudentList] = useState([]);
@@ -21,13 +21,13 @@ function ClassPage() {
   const [isEditing, setIsEditing] = useState(false);
 
   const { initStudents } = useStudents();
-  const students = useSelector(studentSelector);
+  const mainClass = useSelector(mainSelector);
 
   /** 학생 목록 쿼리 */
   useQuery({
     queryKey: ["studentList"],
     queryFn: () =>
-      getStudentListApi().then((res) => {
+      getStudentListApi(mainClass.no).then((res) => {
         if (res.data !== undefined) {
           const sortedInfo = res.data.sort((a, b) => a.number - b.number);
           setStudentList(sortedInfo);

@@ -10,9 +10,13 @@ import {
   editMainClass,
   getGrades,
 } from "../../Apis/ClassManageApis";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../Store/userSlice";
 export default function ClassList() {
   const location = useLocation();
   const navigate = useNavigate();
+  const teacherInfo = useSelector(userSelector);
+  const { userNo } = teacherInfo.adminInfo;
   const [editedClassList, setEditedClassList] = useState([]);
 
   const { data: classList } = useQuery({
@@ -65,21 +69,23 @@ export default function ClassList() {
     setEditedClassList(updatedClassList);
   };
 
-  useEffect(() => {}, [classList, editedClassList]);
+  useEffect(() => {
+    console.log(editedClassList);
+  }, [classList, editedClassList]);
   return (
     <main className={styled.classList}>
       <section>
         <div className={styled.classTitle}>학급 목록</div>
-        {location.pathname === "/classlist/:teacherId/" ? (
+        {location.pathname === `/classlist/${userNo}` ? (
           ""
         ) : (
-          <Link to="/classlist/:teacherId/make/">
+          <Link to={`/classlist/${userNo}/make`}>
             <button className={styled.addClass}>학급 생성</button>
           </Link>
         )}
       </section>
       {/* 편집버전 아닐 때 */}
-      {location.pathname === "/classlist/:teacherId/" ? (
+      {location.pathname === `/classlist/${userNo}` ? (
         <ul className={styled.classes}>
           {editedClassList &&
             editedClassList.map((value) => (
@@ -89,9 +95,7 @@ export default function ClassList() {
                     ? `${styled.eachClass} ${styled.classMain}`
                     : `${styled.eachClass}`
                 }
-                onClick={() =>
-                  navigate("/", { state: { gradeNo: editedClassList.no } })
-                }
+                onClick={() => navigate("/", { state: { schoolInfo: value } })}
               >
                 <span>{value.createdAt}년도 </span>
                 <span>{value.schoolName} </span>
@@ -132,7 +136,7 @@ export default function ClassList() {
               ))}
           </ul>
           {/* 클릭시 편집상 황 반영 후 편집 완료 */}
-          <Link to="/classlist/:teacherId/">
+          <Link to={`/classlist/${userNo}`}>
             <button className={styled.complete} onClick={handleCompleteEditing}>
               편집 완료
             </button>

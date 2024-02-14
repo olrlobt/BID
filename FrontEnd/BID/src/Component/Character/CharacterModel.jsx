@@ -12,30 +12,33 @@ import styled from "./CharacterModel.module.css";
 const MOVEMENT_SPEED = 0.002;
 
 export function CharacterModel({ 
-  bodyColor = "green",
-  selectedCharacter: externalSelectedCharacter,
+  selectedCharacter,
   id,
+  name,
+  myModelNo,
   ...props
   }) {
     const [chatMessage, setChatMessage] = useState("");
     const group = useRef()
     const { scene, materials } = useGLTF("/characters/CharacterModel.glb");
-    const [selectedCharacter, setSelectedCharacter] = useState(externalSelectedCharacter || "DoraemonBody");
-    console.log(props)
-    console.log(id)
     const [showChatBubble, setShowChatBubble] = useState(false);
     const clone = useMemo(() => SkeletonUtils.clone(scene),[scene])
     const {nodes} = useGraph(clone)
 
+    console.log(myModelNo)
     useEffect(() => {
-      setSelectedCharacter(externalSelectedCharacter || "DefaultBody");
-    }, [externalSelectedCharacter]);
-
-
-
+      clone.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+    }, [clone]);
+  
     useEffect(() => {
       let chatMessageBubbleTimeout;
       function onPlayerChatMessage(value) {
+        console.log(value)
         if (value.id === id) {
           setChatMessage(value.message);
           clearTimeout(chatMessageBubbleTimeout);
@@ -54,29 +57,25 @@ export function CharacterModel({
 
     const [user] = useAtom(userAtom);
 
-    useFrame((state, delta) => {
-      if (group.current.position.distanceTo(props.position) > 0.1) {
-        const direction = group.current.position
-          .clone()
-          .sub(props.position)
-          .normalize()
-          .multiplyScalar(MOVEMENT_SPEED * delta);
-        group.current.position.sub(direction);
-        group.current.lookAt(props.position);
-      }
-      if (id === user) {
-        // state.camera.position.x = group.current.position.x +8;
-        // state.camera.position.y = group.current.position.y + 8;
-        // state.camera.position.z = group.current.position.z + 8;
-        state.camera.lookAt(group.current.position);
-      }
-    });
-    console.log(showChatBubble)
-    console.log(chatMessage)
-
+    // useFrame((state, delta) => {
+    //   if (id === myModelNo) { // 내 캐릭터인 경우에만 움직임 제어
+    //     if (group.current.position.distanceTo(props.position) > 0.1) {
+    //       const direction = group.current.position
+    //         .clone()
+    //         .sub(props.position)
+    //         .normalize()
+    //         .multiplyScalar(MOVEMENT_SPEED * delta);
+    //       group.current.position.sub(direction);
+    //       group.current.lookAt(props.position);
+    //     }
+    //     if (id === user) {
+    //       state.camera.lookAt(group.current.position);
+    //     }
+    //   }
+    // });
     
     // useFrame((state) => {
-    //   const classroomXMin = 1.003 - 3;
+    //   const classroomXMin = -10;
     //   const classroomXMax = 1.003 +  3;
     //   const classroomZMin = -3.131 -  2;
     //   const classroomZMax = -3.131 + 2;
@@ -92,14 +91,14 @@ export function CharacterModel({
     //   const newZ = Math.min(Math.max(newPosition.z, classroomZMin), classroomZMax);
     
     //   // Update the position only if it's within the boundaries
-    //   if (newX !== newPosition.x || newZ !== newPosition.z) {
-    //     group.current.position.set(newX, newPosition.y, newZ);
-    //   }
-    //   group.current.lookAt(props.position);
+    //   // if (newX !== newPosition.x || newZ !== newPosition.z) {
+    //   //   group.current.position.set(newX, newPosition.y, newZ);
+    //   // }
+    //   // group.current.lookAt(props.position);
     //   if (id===user) {
-    //     state.camera.position.x = group.current.position.x + 8
-    //     state.camera.position.y = group.current.position.y + 8
-    //     state.camera.position.z = group.current.position.z + 8
+    //     state.camera.position.x = group.current.position.x + 1
+    //     state.camera.position.y = group.current.position.y + 1
+    //     state.camera.position.z = group.current.position.z + 1
     //     state.camera.lookAt(group.current.position)
     //   }
     // });
@@ -111,9 +110,8 @@ export function CharacterModel({
     {...props} 
     position={props.position}
     dispose={null}
-    name={`character-${id}`}
+    name={name}
     >
-
     <Html position-y={1}>
       <div className={styled.characterBubble}>
         <p
@@ -121,12 +119,10 @@ export function CharacterModel({
             showChatBubble ? styled.chatMessageVisible : styled.chatMessageHidden
           }`}
         >
-         {`character-${id}`} : {chatMessage}
+         {name} : {chatMessage}
         </p>
       </div>
     </Html>
-    
-
       {/* 얼굴 */}
       <mesh 
         castShadow
@@ -148,7 +144,6 @@ export function CharacterModel({
           rotation={[0, Math.PI / 2, 0]}
           scale={0.029}
         >
-       <meshStandardMaterial color={bodyColor} />
       </mesh>
       )}
       {/* 리본 */}
@@ -396,7 +391,7 @@ export function CharacterModel({
       <mesh geometry={nodes.Cube016_2.geometry} material={materials['pit.001']} />
     </group>
       )}
-      <Box position={[2.892, 1, -1.964]} />
+      <Box position={[2.892, 0.9, -1.964]} />
     </group>
   );
 }
