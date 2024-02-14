@@ -67,4 +67,11 @@ public class Bidding extends BaseEntity {
 		this.price = price;
 	}
 
+	public void bidSuccess() {
+		this.biddingStatus = BiddingStatus.WINNING_BID;
+	}
+
+	public void bidFail() {
+		this.biddingStatus = BiddingStatus.FAILING_BID;
+	}
 }

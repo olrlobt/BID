@@ -9,12 +9,15 @@ import lombok.Getter;
 public class JwtProperties {
 	private final String secret;
 	private final long expirationTime;
+	private final long refreshExpirationTime;
 
 	public JwtProperties(
 		String secret,
-		long expirationTime
+		long expirationTime,
+		long refreshExpirationTime
 	) {
 		this.secret = secret;
 		this.expirationTime = expirationTime;
+		this.refreshExpirationTime = refreshExpirationTime;
 	}
 }

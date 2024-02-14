@@ -38,6 +38,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 			.from(board)
 			.innerJoin(student)
 			.on(board.userNo.eq(student.no)
+				.and(board.gradeNo.eq(gradeNo))
 				.and(student.gradeNo.eq(gradeNo))
 				.and(board.boardStatus.eq(BoardStatus.PROGRESS)))
 			.orderBy(board.createdAt.desc())

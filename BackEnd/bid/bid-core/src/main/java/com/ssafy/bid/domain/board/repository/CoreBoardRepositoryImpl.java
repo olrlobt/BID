@@ -1,7 +1,7 @@
 package com.ssafy.bid.domain.board.repository;
 
 import static com.ssafy.bid.domain.board.QBoard.*;
-import static com.ssafy.bid.domain.user.QStudent.*;
+import static com.ssafy.bid.domain.user.QUser.*;
 
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ public class CoreBoardRepositoryImpl implements CoreBoardCustomRepository {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public Optional<BoardResponse> getStudentBoard(long boardNo) {
+	public Optional<BoardResponse> getStudentBoard(long boardNo, int gradeNo) {
 
 		return Optional.ofNullable(
 			queryFactory.select(Projections.constructor(BoardResponse.class,
@@ -30,14 +30,16 @@ public class CoreBoardRepositoryImpl implements CoreBoardCustomRepository {
 					board.resultPrice,
 					board.category,
 					board.goodsImgUrl,
-					student.name,
+					user.no,
+					user.name,
+					user.profileImgUrl,
 					board.gradePeriodNo,
 					board.createdAt
 				))
 				.from(board)
-				.innerJoin(student)
-				.on(board.userNo.eq(student.no)
-					.and(board.gradeNo.eq(student.gradeNo))
+				.innerJoin(user)
+				.on(board.userNo.eq(user.no)
+					.and(board.gradeNo.eq(gradeNo))
 					.and(board.no.eq(boardNo)))
 				.fetchOne());
 	}

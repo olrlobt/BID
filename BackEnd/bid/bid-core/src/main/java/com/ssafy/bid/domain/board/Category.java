@@ -10,6 +10,7 @@ public enum Category {
 	LEARNING("학습"),
 	COUPON("쿠폰"),
 	GAME("오락"),
+	CANNON("대포알"),
 	ETC("기타");
 
 	private final String category;
