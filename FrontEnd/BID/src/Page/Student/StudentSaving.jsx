@@ -11,6 +11,7 @@ import Back from '../../Asset/Image/SeatGame/back_btn.png';
 import { useNavigate } from 'react-router-dom';
 import { studentSavingSelector } from '../../Store/studentSavingSlice';
 import useStudentSaving from '../../hooks/useStudentSaving';
+import alertBtn from '../../Component/Common/Alert';
 
 export default function StudentSaving() {
   const navigate = useNavigate();
@@ -42,7 +43,11 @@ export default function StudentSaving() {
       changeStudentSavingList(applySavingData.no);
       applySaving.mutate(applySavingData);
     } else {
-      alert('이미 가입된 적금이 있어 가입이 어렵습니다.');
+      alertBtn({
+        text: '이미 가입된 적금이 있어 가입이 어렵습니다.',
+        confirmColor: '#E81818',
+        icon: 'error',
+      });
     }
   };
 
@@ -51,10 +56,18 @@ export default function StudentSaving() {
     mutationFn: (wantedSaving) =>
       applyStudentSaving(wantedSaving)
         .then(() => {
-          alert('가입되었습니다.');
+          alertBtn({
+            text: '가입되었습니다.',
+            confirmColor: '#ffd43a',
+            icon: 'success',
+          });
         })
         .catch(() => {
-          alert('가입이 되지 않았습니다.');
+          alertBtn({
+            text: '가입이 되지 않았습니다.',
+            confirmColor: '#E81818',
+            icon: 'error',
+          });
         }),
   });
 

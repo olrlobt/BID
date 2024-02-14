@@ -3,6 +3,7 @@ import Modal from '../Common/Modal';
 import styled from './TimeModal.module.css';
 import useStopTime from '../../hooks/useStopTime';
 import { changeStopTime } from '../../Apis/TeacherManageApis';
+import alertBtn from '../Common/Alert';
 
 export default function TimeModal({ onClose, ...props }) {
   const hour = [
@@ -66,7 +67,11 @@ export default function TimeModal({ onClose, ...props }) {
     changeTime(updatedTime);
     changeStopTime(1, parseUpdatedTime);
     setSelectedTimeRange(updatedTime);
-    alert('변경되었습니다.');
+    alertBtn({
+      text: '변경되었습니다.',
+      confirmColor: '#ffd43a',
+      icon: 'success',
+    });
     onClose();
   };
 
