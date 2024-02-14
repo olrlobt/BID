@@ -12,6 +12,9 @@ import {
 } from "../../Apis/ClassManageApis";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../Store/userSlice";
+import swalWithBootstrapButtons from "../../Component/Common/Confirm";
+import confirmBtn from "../../Component/Common/Confirm";
+import alertBtn from "../../Component/Common/Alert";
 export default function ClassList() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -33,7 +36,15 @@ export default function ClassList() {
     const updatedClassList = [...editedClassList];
     const deletedClass = editedClassList[index];
     if (deletedClass.main) {
-      alert("메인 학급은 삭제할 수 없습니다.");
+      // alertBtn({ text: "메인 학급은 삭제할 수 없습니다." });
+      const confirmValue = confirmBtn({
+        confirmTxt: "삭제",
+        confirmColor: "#F23F3F",
+        cancelTxt: "취소",
+        cancelColor: "#a6a6a6",
+      });
+      console.log(confirmValue);
+      // alert("메인 학급은 삭제할 수 없습니다.");
     } else {
       const deleteAlert = window.confirm(
         "삭제하신 학급은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?"
