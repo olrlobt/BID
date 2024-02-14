@@ -8,18 +8,21 @@ import Product from "../../Component/Bid/Product";
 import NoContent from "../../Component/Bid/NoContent";
 import useModal from '../../hooks/useModal';
 import useCoupons from "../../hooks/useCoupons";
-// import useProducts from "../../hooks/useProducts";
+import useProducts from "../../hooks/useProducts";
 import { useSelector } from "react-redux";
 import { couponSelector } from "../../Store/couponSlice";
 import { productSelector } from "../../Store/productSlice";
 import { DragDropContext } from "react-beautiful-dnd";
-import { /*useQuery, */useMutation } from "@tanstack/react-query";
-import { /*getCouponListApi, */registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
-// import { getProductListApi } from "../../Apis/TeacherBidApis";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
+import { getProductListApi } from "../../Apis/TeacherBidApis";
+import { userSelector } from "../../Store/userSlice";
 
 export default function BidPage(){
 
-  const gradeNo = 3;
+  const gradeNo=10;
+
+  const currentUser = useSelector(userSelector);
 
   const reduxCoupons = useSelector(couponSelector);
   const reduxProducts = useSelector(productSelector);
@@ -31,8 +34,8 @@ export default function BidPage(){
   const [keyword, setKeyword] = useState('');
 
   const { openModal } = useModal();
-  const { /*initCoupons, */registCoupon, unregistCoupon } = useCoupons();
-  // const { initProducts } = useProducts();
+  const { initCoupons, registCoupon, unregistCoupon } = useCoupons();
+  const { initProducts } = useProducts();
 
   /** 게시자 종류를 toggle하는 함수 */
   const changeWriter = (writer) => {
@@ -48,17 +51,17 @@ export default function BidPage(){
   }, [reduxCoupons]);
 
   /** 쿠폰 목록 쿼리 */
-  // useQuery({
-  //   queryKey: ['couponList'],
-  //   queryFn: () => 
-  //     getCouponListApi(greadeNo).then((res) => {
-  //       if(res.data !== undefined){
-  //         initCoupons({ couponList: res.data.coupons });
-  //         console.log(res.data);
-  //       }
-  //       return res.data;
-  //     }),
-  // });
+  useQuery({
+    queryKey: ['couponList'],
+    queryFn: () => 
+      getCouponListApi(gradeNo).then((res) => {
+        if(res.data !== undefined){
+          initCoupons({ couponList: res.data.coupons });
+          console.log(res.data);
+        }
+        return res.data;
+      }),
+  });
   
   /** 경매 포함/제외 쿠폰 구분 */
   const { unregisteredCoupons, registeredCoupons } = useMemo(() => {
@@ -70,7 +73,7 @@ export default function BidPage(){
   /** 쿠폰 경매 포함 쿼리 */
   const registerCouponQuery = useMutation({
     mutationKey: ['includeCoupon'],
-    mutationFn: (couponNo) => registerCouponApi(gradeNo, couponNo),
+    mutationFn: (params) => registerCouponApi(params.gradeNo, params.couponNo),
     onSuccess: (data, variables) => { registCoupon({couponNo: variables}); },
     onError: (error, variables) => { console.log(variables, error); }
   });
@@ -78,7 +81,7 @@ export default function BidPage(){
   /** 쿠폰 경매 제외 쿼리 */
   const unregisterCouponQuery = useMutation({
     mutationKey: ['excludeCoupon'],
-    mutationFn: (couponNo) => unregisterCouponApi(gradeNo, couponNo),
+    mutationFn: (params) => unregisterCouponApi(params.gradeNo, params.couponNo),
     onSuccess: (data, variables) => { unregistCoupon({couponNo: variables}); },
     onError: (error, variables) => { console.log(variables, error); }
   }); 
@@ -86,11 +89,15 @@ export default function BidPage(){
   /** 쿠폰을 드래그 해서 옮길 때 실행되는 함수 */
   const onDragEnd = ({source, destination}) => {
     if(!destination || source.droppableId===destination.droppableId){ return; }
+    const params = {
+      gradeNo: gradeNo,
+      couponNo: source.index
+    }
     if(JSON.parse(destination.droppableId)){
-      registerCouponQuery.mutate(source.index);
+      registerCouponQuery.mutate(params);
     }
     else{
-      unregisterCouponQuery.mutate(source.index);
+      unregisterCouponQuery.mutate(params);
     }
   }
 
@@ -101,16 +108,16 @@ export default function BidPage(){
   }, [reduxProducts]);
 
   /** 경매 목록 쿼리 */
-  // useQuery({
-  //   queryKey: ['productList'],
-  //   queryFn: () => 
-  //     getProductListApi(gradeNo).then((res) => {
-  //       if(res.data !== undefined){
-  //         initProducts({ productList: res.data });
-  //       }
-  //       return res.data;
-  //     }),
-  // });
+  useQuery({
+    queryKey: ['productList'],
+    queryFn: () => 
+      getProductListApi(gradeNo).then((res) => {
+        if(res.data !== undefined){
+          initProducts({ productList: res.data });
+        }
+        return res.data;
+      }),
+  });
   
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
@@ -162,7 +169,7 @@ export default function BidPage(){
             onClick = {() =>
               openModal({
                 type: 'newCoupon',
-                props: ['새 쿠폰 등록'] })
+                props: ['새 쿠폰 등록', gradeNo] })
               }
             svg = {AddIcon}
             text = '새 쿠폰 등록' 
@@ -244,7 +251,7 @@ export default function BidPage(){
                   onClick = {() => {
                     openModal({
                       type: 'manageProduct',
-                      props: [product.no] })
+                      props: [gradeNo, product.no] })
                   }}
                   key = {product.no}
                   title = {product.title}

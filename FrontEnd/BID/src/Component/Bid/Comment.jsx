@@ -17,7 +17,8 @@ export default function Comment(props){
     isDelete,
     isSetting,
     isTeacher,
-    handleDescription
+    handleDescription,
+    gradeNo
   } = props;
   
   /** 날짜 형식 변환 */
@@ -42,7 +43,7 @@ export default function Comment(props){
   /** [선생님] 댓글 삭제 쿼리 */
   const TCHdeleteCommentQuery = useMutation({
     mutationKey: ['TCHdeleteComment'],
-    mutationFn: () => TCHdeleteCommentApi(1, boardNo, replyNo),
+    mutationFn: () => TCHdeleteCommentApi(gradeNo, boardNo, replyNo),
     onSuccess: () => { queryClient.invalidateQueries('getProductDetail'); },
     onError: (error) => { console.log(error); },
   });

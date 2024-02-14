@@ -8,13 +8,12 @@ import useCoupons from "../../hooks/useCoupons";
 
 export default function NewCouponModal({ onClose, ...props }){
   const { initCoupons } = useCoupons();
-
-  const gradeNo = 3;
+  const gradeNo = props[1];
 
   /** 쿠폰 추가 쿼리 */
   const addNewCouponQuery  = useMutation({
     mutationKey: ['addNewCoupon'],
-    mutationFn: (form) => addNewCouponApi(gradeNo, form),
+    mutationFn: (params) => addNewCouponApi(params.gradeNo, params.form),
     onSuccess: () => {
       getCouponListApi(gradeNo).then((res) => {
         if(res.data !== undefined){
@@ -40,7 +39,11 @@ export default function NewCouponModal({ onClose, ...props }){
         description: e.target.description.value,
         startPrice: e.target.startPrice.value,
       };
-      addNewCouponQuery.mutate(form);
+      const params = {
+        gradeNo: gradeNo,
+        form: form
+      }
+      addNewCouponQuery.mutate(params);
       onClose();
     }
   }
