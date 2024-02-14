@@ -69,6 +69,19 @@ public class CoreBoardService {
 			return;
 		}
 
+		List<Bidding> biddings = coreBiddingRepository.findAllByBoardNoLimit(board.getNo());
+		StringBuilder forWinner = new StringBuilder();
+		for (int i = 1; i < biddings.size(); i++) {
+			forWinner.append(i).append(":").append(biddings.get(i).getPrice()).append(",");
+		}
+		StringBuilder forLoser = new StringBuilder();
+		for (int i = 0; i < biddings.size(); i++) {
+			if (i >= 5) {
+				break;
+			}
+			forLoser.append(i).append(":").append(biddings.get(i).getPrice()).append(",");
+		}
+
 		allBidding.forEach(bidding -> {
 
 			Student student = coreStudentRepository.findById(bidding.getUserNo())
@@ -82,7 +95,7 @@ public class CoreBoardService {
 
 					notificationService.send(NotificationRequest.builder()
 						.title(board.getTitle() + " 경매 낙찰")
-						.content(board.getTitle() + " 경매에 낙찰 되었어요.")
+						.content(forWinner.toString())
 						.receiverNo(bidding.getUserNo())
 						.notificationType(NotificationType.BIDDING_WINNING)
 						.subNo(board.getNo())
@@ -100,7 +113,7 @@ public class CoreBoardService {
 			} else {
 				notificationService.send(NotificationRequest.builder()
 					.title(board.getTitle() + " 경매 유찰")
-					.content(board.getTitle() + " 경매에 실패했어요.")
+					.content(forLoser.toString())
 					.receiverNo(bidding.getUserNo())
 					.notificationType(NotificationType.BIDDING_FAILED)
 					.build());
