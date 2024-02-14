@@ -9,8 +9,6 @@ import useModal from '../../hooks/useModal';
 import useProducts from "../../hooks/useProducts";
 import { useSelector } from "react-redux";
 import { productSelector } from "../../Store/productSlice";
-import { useQuery } from "@tanstack/react-query";
-import { getProductListApi } from "../../Apis/StudentBidApis";
 
 export default function StudentBidPage(){
   const reduxProducts = useSelector(productSelector);
@@ -28,18 +26,6 @@ export default function StudentBidPage(){
     setProducts(reduxProducts);
   }, [reduxProducts]);
 
-  /** 경매 목록 쿼리 */
-  // useQuery({
-    //   queryKey: ['productList'],
-    //   queryFn: () => 
-      //     getProductListApi().then((res) => {
-        //       if(res.data !== undefined){
-          //         initProducts({ productList: res.data });
-        //       }
-  //       return res.data;
-      //     }),
-  // });
-  
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
     if(productFilter !== filter){
