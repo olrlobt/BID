@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import styled from './ClassList.module.css';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faStar } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import React, { useEffect, useState } from "react";
+import styled from "./ClassList.module.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark, faStar } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import {
   deleteClass,
   editMainClass,
   getGrades,
-} from '../../Apis/ClassManageApis';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../../Store/userSlice';
+} from "../../Apis/ClassManageApis";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../Store/userSlice";
 export default function ClassList() {
   const location = useLocation();
   const navigate = useNavigate();
   const teacherInfo = useSelector(userSelector);
-  const { userNo } = teacherInfo.data.adminInfo;
+  const { userNo } = teacherInfo.adminInfo;
   const [editedClassList, setEditedClassList] = useState([]);
 
   const { data: classList } = useQuery({
-    queryKey: ['ClassList'],
+    queryKey: ["ClassList"],
     queryFn: () =>
       getGrades().then((res) => {
         setEditedClassList(res.data);
@@ -33,10 +33,10 @@ export default function ClassList() {
     const updatedClassList = [...editedClassList];
     const deletedClass = editedClassList[index];
     if (deletedClass.main) {
-      alert('메인 학급은 삭제할 수 없습니다.');
+      alert("메인 학급은 삭제할 수 없습니다.");
     } else {
       const deleteAlert = window.confirm(
-        '삭제하신 학급은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?'
+        "삭제하신 학급은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?"
       );
       if (deleteAlert) {
         updatedClassList.splice(index, 1); // 해당 인덱스의 요소 제거
@@ -77,7 +77,7 @@ export default function ClassList() {
       <section>
         <div className={styled.classTitle}>학급 목록</div>
         {location.pathname === `/classlist/${userNo}` ? (
-          ''
+          ""
         ) : (
           <Link to={`/classlist/${userNo}/make`}>
             <button className={styled.addClass}>학급 생성</button>
@@ -95,7 +95,7 @@ export default function ClassList() {
                     ? `${styled.eachClass} ${styled.classMain}`
                     : `${styled.eachClass}`
                 }
-                onClick={() => navigate('/', { state: { schoolInfo: value } })}
+                onClick={() => navigate("/", { state: { schoolInfo: value } })}
               >
                 <span>{value.createdAt}년도 </span>
                 <span>{value.schoolName} </span>
