@@ -11,9 +11,13 @@ import { getStudentListApi } from "../../Apis/TeacherManageApis";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { mainSelector } from "../../Store/mainSlice";
+import { studentSelector } from "../../Store/studentSlice";
 
 function ClassPage() {
-  const [studentList, setStudentList] = useState([]);
+  const students = useSelector(studentSelector);
+  const mainClass = useSelector(mainSelector);
+
+  const [studentList, setStudentList] = useState();
   const [activeButton, setActiveButton] = useState("number"); // 기본 정렬 기준은 번호(id)로 설정
   const [showAdd, setShowAdd] = useState(false); // New state to toggle Add Student button
   const [showRemove, setShowRemove] = useState(false); // New state to toggle Add Student button
@@ -21,21 +25,20 @@ function ClassPage() {
   const [isEditing, setIsEditing] = useState(false);
 
   const { initStudents } = useStudents();
-  const mainClass = useSelector(mainSelector);
 
   /** 학생 목록 쿼리 */
-  useQuery({
-    queryKey: ["studentList"],
-    queryFn: () =>
-      getStudentListApi(mainClass.no).then((res) => {
-        if (res.data !== undefined) {
-          const sortedInfo = res.data.sort((a, b) => a.number - b.number);
-          setStudentList(sortedInfo);
-        }
-        initStudents({ students: studentList });
-        return res.data;
-      }),
-  });
+  // useQuery({
+  //   queryKey: ["studentList"],
+  //   queryFn: () =>
+  //     getStudentListApi(mainClass.no).then((res) => {
+  //       if (res.data !== undefined) {
+  //         const sortedInfo = res.data.sort((a, b) => a.number - b.number);
+  //         setStudentList(sortedInfo);
+  //       }
+  //       initStudents({ students: studentList });
+  //       return res.data;
+  //     }),
+  // });
 
   const handleStudentClick = (student) => {
     if (!isEditing) {
@@ -48,8 +51,11 @@ function ClassPage() {
   const { openModal } = useModal();
 
   useEffect(() => {
-    setSelectedStudent(studentList[0]);
-  }, [studentList]);
+    setStudentList(students);
+    if (studentList) {
+      setSelectedStudent(studentList[0]);
+    }
+  }, [students, studentList]);
 
   const handleEdit = (student) => {
     console.log("Edit student:", student);
@@ -72,7 +78,7 @@ function ClassPage() {
 
   const handleSort = (type) => {
     setActiveButton(type);
-    const sortedInfo = studentList.sort((a, b) => {
+    const sortedInfo = [...studentList].sort((a, b) => {
       if (type === "number") {
         return a.number - b.number;
       } else if (type === "asset") {
@@ -81,6 +87,7 @@ function ClassPage() {
       return 0;
     });
     setStudentList(sortedInfo);
+    initStudents(sortedInfo);
   };
 
   return (

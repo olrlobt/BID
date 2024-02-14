@@ -19,7 +19,6 @@ export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
   
   const currentUser = useSelector(modelSelector);
-  console.log(currentUser.model);
   const nowUserId = currentUser.model.no;
 
   const queryClient = useQueryClient();

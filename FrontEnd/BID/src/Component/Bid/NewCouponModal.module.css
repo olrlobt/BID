@@ -1,27 +1,27 @@
 .inputRow{
-    /* background-color: pink; */
-    /* padding: 1vw 0; */
-    margin-bottom: 2.5vw;
+  /* background-color: pink; */
+  /* padding: 1vw 0; */
+  margin-bottom: 2.5vw;
 
-    label{
-        margin-right: 2vw;
-        font-size: 1.5vw;
-        text-align: center;
-    }
+  label{
+      margin-right: 2vw;
+      font-size: 1.5vw;
+      text-align: center;
+  }
 
-    input{
-        border: 1px solid #c8c8c8;
-        padding: 1vw;
-        border-radius: 0.5vw;
-        width: 27vw;
-        font-size: 1.5vw;
-    }
+  input{
+      border: 1px solid #c8c8c8;
+      padding: 1vw;
+      border-radius: 0.5vw;
+      width: 27vw;
+      font-size: 1.5vw;
+  }
 
-    input:focus{
-        outline: none;
-    }
+  input:focus{
+      outline: none;
+  }
 }
 
 .inputRow:last-child{
-    margin-bottom: 0;;
+  margin-bottom: 0;;
 }
