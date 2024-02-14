@@ -50,9 +50,11 @@ export default function ManageProductModal({ onClose, ...props }) {
   });
 
   /** 경매 삭제 함수 */
-  const onClickDeleteProduct = (e) => {
-    deleteProductQuery.mutate(boardNo);
-    onClose();
+  const onClickDeleteProduct = () => {
+    if(window.confirm('게시글을 삭제하시겠습니까?')){
+      deleteProductQuery.mutate(boardNo);
+      onClose();
+    }
   }
 
   return (
