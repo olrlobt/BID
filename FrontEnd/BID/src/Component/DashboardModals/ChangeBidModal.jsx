@@ -1,14 +1,16 @@
-import { useState } from 'react';
-import Modal from '../Common/Modal';
-import styled from './ChangeBidModal.module.css';
-import { useSelector } from 'react-redux';
-import { bidSelector } from '../../Store/bidSlice';
-import useBid from '../../hooks/useBid';
-import { useMutation } from '@tanstack/react-query';
-import { changeSalaries } from '../../Apis/TeacherManageApis';
+import { useState } from "react";
+import Modal from "../Common/Modal";
+import styled from "./ChangeBidModal.module.css";
+import { useSelector } from "react-redux";
+import { bidSelector } from "../../Store/bidSlice";
+import useBid from "../../hooks/useBid";
+import { useMutation } from "@tanstack/react-query";
+import { changeSalaries } from "../../Apis/TeacherManageApis";
+import { mainSelector } from "../../Store/mainSlice";
 
 export default function ChangeBidModal({ onClose, ...props }) {
   const currentBid = useSelector(bidSelector);
+  const mainClass = useSelector(mainSelector);
   const [bid, setBid] = useState(currentBid);
   const { changeBid } = useBid();
   const handleChange = (event) => {
@@ -19,18 +21,18 @@ export default function ChangeBidModal({ onClose, ...props }) {
     changeBidSalary.mutate();
   };
 
-  const groupNo = 1;
+  const gradeNo = mainClass.no;
 
   const changeBidSalary = useMutation({
-    mutationKey: ['changeSalaries'],
+    mutationKey: ["changeSalaries"],
     mutationFn: () =>
-      changeSalaries(groupNo, bid)
+      changeSalaries(gradeNo, bid)
         .then(() => {
           changeBid(bid);
-          alert('변경되었습니다.');
+          alert("변경되었습니다.");
           onClose();
         })
-        .catch(() => alert('변경이 되지 않았습니다.')),
+        .catch(() => alert("변경이 되지 않았습니다.")),
   });
 
   return (

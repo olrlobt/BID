@@ -10,7 +10,6 @@ import { mainSelector } from "../../Store/mainSlice";
 export default function GamePage() {
   const { initBalls } = useBalls();
   const ballList = useSelector(ballSelector);
-  const location = useLocation();
   const mainClass = useSelector(mainSelector);
   const gradeNo = mainClass.no;
   const { data: stuBalls } = useQuery({
