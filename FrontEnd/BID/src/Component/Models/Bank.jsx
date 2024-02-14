@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 export function Bank(props) {
   const { nodes, materials } = useGLTF("/models/Bank.glb");
   const [isHovered, setHovered] = useState(false);
-  const naviate = useNavigate();
+  const navigate = useNavigate();
   const handleHover = () => {
     setHovered(true);
   };
@@ -23,10 +23,10 @@ export function Bank(props) {
       dispose={null}
       onPointerOver={handleHover}
       onPointerOut={handleUnhover}
-      onClick={() => naviate("/studentmain/saving")}
+      onClick={() => navigate("/studentmain/saving")}
     >
       <group
-        position={[0.652, 2.721, -2.992]}
+        position={[0.652, 2.701, -2.992]}
         rotation={[Math.PI / 2, 0, -Math.PI / 2]}
         // scale={0.624}
         scale={isHovered ? 0.654 : 0.624} // 호버 시 크기 변경
