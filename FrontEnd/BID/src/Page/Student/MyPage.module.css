@@ -10,11 +10,11 @@
 
 .section {
     max-width: 1138px;
-    width: calc(100% - 260px);
+    width: 100vw;
+    max-height: 712px;
     /* float: right; */
     margin-left: 2vw;
     background-color: #FFFEF0;
-    height: auto; 
   
   }
 .dashboardContainer {
@@ -37,4 +37,25 @@
 
 .chartsContainer {
     width: 50%; /* To take up 50% of the parent container width */
+}
+
+.img {
+    width: 20vw;
+    height: 20vw;
+    margin-right: 3vw;
+  }
+
+
+.schoolName{
+    font-size: 0.8rem;
+}
+.name{
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 0.5vw;
+}
+
+.buttonContainer {
+    display: flex;
+    margin-top: 30vh; /* 캐릭터 이미지와의 거리를 조정합니다. */
 }

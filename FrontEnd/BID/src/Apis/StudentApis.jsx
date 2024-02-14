@@ -36,7 +36,7 @@ export const getStudentListApi = async () => {
  * @returns 적금 가입 내역
  */
 export const getStudentSavingInfo = async () => {
-  return await StudentApis.get("/savings");
+  return await StudentApis.get('/savings');
 };
 
 /**
@@ -46,5 +46,7 @@ export const getStudentSavingInfo = async () => {
  */
 
 export const applyStudentSaving = async (savingInfo) => {
-  return await StudentApis.post("/savings", savingInfo);
+  return await StudentApis.post('/savings', savingInfo);
 };
+
+
