@@ -10,18 +10,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "group_period")
+@Table(name = "grade_period")
 @Entity
 public class GradePeriod {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "group_period_no")
+	@Column(name = "grade_period_no")
 	private Integer no;
 
 	@NotNull
@@ -38,4 +39,25 @@ public class GradePeriod {
 	 */
 	@NotNull
 	private Integer gradeNo;
+
+	@Builder
+	public GradePeriod(
+		Integer sequence,
+		LocalTime startPeriod,
+		LocalTime endPeriod,
+		Integer gradeNo
+	) {
+		this.sequence = sequence;
+		this.startPeriod = startPeriod;
+		this.endPeriod = endPeriod;
+		this.gradeNo = gradeNo;
+	}
+
+	public void update(
+		LocalTime startPeriod,
+		LocalTime endPeriod
+	) {
+		this.startPeriod = startPeriod;
+		this.endPeriod = endPeriod;
+	}
 }

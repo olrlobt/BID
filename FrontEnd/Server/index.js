@@ -1,14 +1,35 @@
-import { Server } from "socket.io";
+import { Server as SocketIOServer } from "socket.io";
+import { createServer as createHttpsServer } from "https";
+import fs from "fs";
 
-const origin ="http://localhost:3000";
+const origin = "https://i10a306.p.ssafy.io";
 
-const io = new Server({
-    cors: {
-      origin,
-    },
-  });
+let httpsOptions;
+try {
+  httpsOptions = {
+    key: fs.readFileSync('/etc/letsencrypt/live/i10a306.p.ssafy.io/privkey.pem', 'utf8'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/i10a306.p.ssafy.io/fullchain.pem', 'utf8'),
+  };
+  // 인증서 로드 성공 메시지
+  console.log('SSL/TLS 인증서가 성공적으로 로드되었습니다.');
+} catch (error) {
+  // 에러 로깅
+  console.error('SSL/TLS 인증서 로드 중 에러 발생:', error);
+}
 
-  io.listen(3001);
+const httpsServer = createHttpsServer(httpsOptions);
+
+
+const io = new SocketIOServer(httpsServer, {
+  cors: {
+    origin, // 허용할 CORS origin
+    methods: ["GET", "POST"] // 허용할 HTTP 메소드
+  },
+});
+
+httpsServer.listen(3001, () => {
+  console.log('HTTPS 서버가 포트 3001에서 시작되었습니다.');
+});
 
   console.log("Server started on port 3000, allowed cors origin: " + origin);
 

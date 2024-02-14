@@ -14,9 +14,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder
 @Table(name = "account")
 @Entity
 public class Account extends BaseEntity {
@@ -45,4 +47,10 @@ public class Account extends BaseEntity {
 	 */
 	@NotNull
 	private Integer userNo;
+
+	/**
+	 * grade : account(me) = 1 : N
+	 */
+	@NotNull
+	private Integer gradeNo;
 }
