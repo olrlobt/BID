@@ -129,6 +129,8 @@ public class GradeServiceImpl implements GradeService {
 		if (!exists) {
 			throw new ResourceNotFoundException("학급삭제: 삭제하려는 Grade 엔티티가 없음.", gradeNo);
 		}
+		savingRepository.deleteByGradeNo(gradeNo);
+		gradePeriodRepository.deleteByGradeNo(gradeNo);
 
 		gradeRepository.deleteById(gradeNo);
 		studentRepository.deleteAllByGradeNo(gradeNo);
