@@ -180,6 +180,7 @@ export default function StudentBidPage(){
       </div>
 
       <div className={styled.bidBody}>
+        { biddingCoupon && biddingCannonball &&
         <div className={styled.teacherProducts}>
           <div className={styled.prod}>
               <div className={styled.header}>
@@ -248,6 +249,9 @@ export default function StudentBidPage(){
               <button className={styled.getAvatarBtn} type="button" onClick={buyRandomItem}>아바타 뽑기</button>
             </div>
         </div>
+        }
+
+
         <div className = {styled.productsWrapper} style={{gap: '3vw'}} >
           {
             filteredProducts && filteredProducts.length === 0?

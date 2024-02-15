@@ -222,42 +222,45 @@ export default function BidPage(){
               </DragDropContext>
           </div>)
           :
-          (<div>
+          biddingCoupon && biddingCannonball && (
+          <div>
             <div className={styled.teacherProducts}>
-          <div className={styled.prod}>
-              <div className={styled.header}>
-                <h3>오늘의 쿠폰</h3>
-                <Price price = {biddingCoupon.displayPrice}/>
-              </div>
-              <div className={styled.desc}>쿠폰은 매일매일 바뀌어요!</div>
-              <BiddingCoupon
-                no = {biddingCoupon.no}
-                name = {biddingCoupon.title}
-                description = ''
-                startPrice = {biddingCoupon.displayPrice}
-              />
+              <div className={styled.prod}>
+                  <div className={styled.header}>
+                    <h3>오늘의 쿠폰</h3>
+                    <Price price = {biddingCoupon.displayPrice}/>
+                  </div>
+                  <div className={styled.desc}>쿠폰은 매일매일 바뀌어요!</div>
+                  <BiddingCoupon
+                    no = {biddingCoupon.no}
+                    name = {biddingCoupon.title}
+                    description = ''
+                    startPrice = {biddingCoupon.displayPrice}
+                  />
+                </div>
+
+                <div className={styled.prod}>
+                  <div className={styled.header}>
+                    <h3>자리 구슬</h3>
+                    <Price price = {biddingCannonball.displayPrice}/>
+                  </div>
+                  <div className={styled.desc}>내가 먼저 뽑힐 확률을 높일 수 있어요</div>
+                  <CannonBall
+                    displayPrice = {biddingCannonball.displayPrice}
+                  />
+                </div>
+
+                <div className={styled.prod}>
+                  <div className={styled.header}>
+                    <h3>랜덤 아바타 뽑기</h3>
+                    <Price price = {70}/>
+                  </div>
+                  <div className={styled.desc}>이번엔 어떤 아바타가 나올까요?</div>
+                  <RandomItemBox/>
+                </div>
             </div>
 
-            <div className={styled.prod}>
-              <div className={styled.header}>
-                <h3>자리 구슬</h3>
-                <Price price = {biddingCannonball.displayPrice}/>
-              </div>
-              <div className={styled.desc}>내가 먼저 뽑힐 확률을 높일 수 있어요</div>
-              <CannonBall
-                displayPrice = {biddingCannonball.displayPrice}
-              />
-            </div>
 
-            <div className={styled.prod}>
-              <div className={styled.header}>
-                <h3>랜덤 아바타 뽑기</h3>
-                <Price price = {70}/>
-              </div>
-              <div className={styled.desc}>이번엔 어떤 아바타가 나올까요?</div>
-              <RandomItemBox/>
-            </div>
-        </div>
             <div className = {styled.productsWrapper}>
               {
                 filteredProducts && filteredProducts.length === 0?
@@ -280,7 +283,8 @@ export default function BidPage(){
                 )
               }
             </div>
-          </div>)
+          </div>
+          )
         }
       </div>
     </div>
