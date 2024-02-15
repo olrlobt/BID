@@ -74,7 +74,7 @@ public class TestApi {
 			forWinner.append(i+1).append("등 입찰가 : ").append(300 - i * 10).append("\n");
 		}
 		notificationService.send(NotificationRequest.builder()
-			.title("곰돌이 인형")
+			.title("1")
 			.content(forWinner.toString())
 			.receiverNo(userNo)
 			.notificationType(NotificationType.BIDDING_WINNING)
