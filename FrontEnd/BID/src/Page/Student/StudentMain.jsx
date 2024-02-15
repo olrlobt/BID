@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Models from "./Models";
 import { Link } from "react-router-dom";
-import { stuAttendApi, stuAttendCheckApi } from "../../Apis/ModelApis";
+import { stuAttendApi, stuAttendCheckApi, studentLogoutApi } from "../../Apis/ModelApis";
 import { useSelector } from "react-redux";
 import { modelListSelector, modelSelector, modelImgSelector } from "../../Store/modelSlice";
 import styled from "./StudentMain.module.css";
@@ -11,12 +11,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import useAlarm from "../../hooks/useAlarm";
 import useProducts from "../../hooks/useProducts";
 import { getProductListApi } from "../../Apis/StudentBidApis";
+import { useNavigate } from "react-router-dom";
+import { removeCookie } from "../../cookie";
 
 function StudentMain() {
   const models = useSelector(modelListSelector);
   const myInfo = useSelector(modelSelector);
   const imgInfo = useSelector(modelImgSelector)
-  console.log(imgInfo)
+  const navigate = useNavigate();
   const gradeNo = myInfo.model.gradeNo;
   useEffect(() => {
     // gradeNo를 사용하여 방에 조인
@@ -31,7 +33,6 @@ function StudentMain() {
   useEffect(() => {
     if (models.length > 0) {
       socket.emit("characters", models); // 서버에 gradeNo 기반으로 캐릭터 데이터 전송
-      console.log(models)
       return () => {
         socket.emit("leaveRoom", gradeNo);
       };
@@ -57,7 +58,6 @@ function StudentMain() {
   }, [models, gradeNo]);
 
   const [chatMessage, setChatMessage] = useState("");
-  const [attendanceSuccess, setAttendanceSuccess] = useState(false); // 출석 성공 상태 추가
 
   const sendChatMessage = () => {
     if (chatMessage.length > 0) {
@@ -72,7 +72,6 @@ function StudentMain() {
     mutationKey: ["stuAttend"],
     mutationFn: () => stuAttendApi(),
     onSuccess: (res) => {
-      setAttendanceSuccess(true); // 출석 성공 시 상태 변경
       alertBtn({
         text: '출석 완료!',
         confirmColor: '#ffd43a',
@@ -108,13 +107,29 @@ function StudentMain() {
     },
   });
 
+  const handleLogoutQuery = useMutation({
+    mutationKey: ['logout'],
+    mutationFn: () => studentLogoutApi(),
+    onSuccess: (res) => {
+      console.log(res)
+      removeCookie("accessToken");
+    },
+    onError: (error) =>{
+      console.log(error)
+    }
+  })
+
   // 출석 버튼 클릭 이벤트 핸들러
   const handleAttendEvent = (e) => {
-    e.preventDefault();
     // 출석 상태를 체크하는 쿼리 호출
     stuAttendCheckQuery.mutate();
   };
 
+  // 로그아웃 버튼 클릭
+  const handleLogoutBtn = () => {
+    handleLogoutQuery.mutate();
+    navigate('/login')
+  }
   return (
     <div className={styled.container}>
       <div className={styled.header}>
@@ -124,9 +139,10 @@ function StudentMain() {
         <div>
           <p>안녕하세요!</p>
           <p className={styled.name}>{myInfo.model.name}님</p>
-          {/* 출석 성공 시 버튼 스타일 변경 */}
           <button className={styled.attendanceBtn}
            onClick={handleAttendEvent}>출석</button>
+           <button className={styled.logoutBtn}
+           onClick={handleLogoutBtn}>로그아웃</button>
         </div>
       </div>
       <Models myInfo={myInfo} />
