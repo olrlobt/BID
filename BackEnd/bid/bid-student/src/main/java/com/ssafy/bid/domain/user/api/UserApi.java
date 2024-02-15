@@ -22,6 +22,7 @@ import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.LoginResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.service.CoreUserService;
 import com.ssafy.bid.domain.user.service.CustomUserDetails;
@@ -102,5 +103,15 @@ public class UserApi {
 		int userNo = userDetails.getUserInfo().getNo();
 		coreUserService.logout(userNo, request);
 		return ResponseEntity.ok().build();
+	}
+
+	@PatchMapping("/password")
+	public ResponseEntity<?> updateStudentPassword(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@RequestBody StudentPasswordUpdateRequest request
+	) {
+		CustomUserInfo userInfo = userDetails.getUserInfo();
+		userService.updatePassword(userInfo, request);
+		return ResponseEntity.status(OK).build();
 	}
 }
