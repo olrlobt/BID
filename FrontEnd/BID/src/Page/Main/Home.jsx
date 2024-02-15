@@ -113,6 +113,7 @@ export default function Home() {
     queryKey: ['productList'],
     queryFn: () =>
       getProductListApi(mainClass.no).then((res) => {
+        console.log(res.data)
         if (res.data !== undefined) {
           initProducts({ productList: res.data });
         }
@@ -125,7 +126,7 @@ export default function Home() {
     <>
       {dashboardInfo && couponList && studentList && (
         <main className={styled.home}>
-          {console.log(dashboardInfo)}
+          {/* {console.log(dashboardInfo)} */}
           <button className={styled.holdBtn}>
             <span className={styled.hold}>HOLD</span>
             <span className={styled.holdInfo}>
