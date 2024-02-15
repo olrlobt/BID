@@ -25,14 +25,22 @@ function ManageLoginPage() {
   const loginUserQuery = useMutation({
     mutationKey: ["loginUser"],
     mutationFn: (userCredentials) => loginUserApi(userCredentials),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      console.log(">> 2 "+"get into loginUserQuery");
       loginUser(data);
 
+      console.log(">> 4 "+"after loginUser");
       setCookie("accessToken", data.data.tokenResponse.accessToken);
-      queryClient.setQueryData("ClassList");
+      console.log(">> 5 "+"after setCookie");
+      console.log(">> 6 "+"before setQueryData('ClassList')");
+      await queryClient.invalidateQueries("ClassList");
+      console.log("????끝난 거 맞냐? 다시");
       if (mainClass) {
+        console.log(">> 8-1 "+"mainClass exist!");
+        console.log(mainClass)
         navigate("/");
       } else {
+        console.log(">> 8-2 "+"mainClass not exist!");
         navigate(`/classlist/${data.data.adminInfo.userNo}/no-class`, {
           state: {
             teacherId: data.data.adminInfo.userNo,
@@ -49,11 +57,17 @@ function ManageLoginPage() {
     queryKey: ["ClassList"],
     queryFn: () =>
       getGrades().then((res) => {
+        console.log(">> 8 "+"Entering setQueryData('ClassList'), res:");
+        console.log(res);
         const foundMainClass = res.data.find((item) => item.main === true);
+        console.log('so... found this!')
+        console.log(foundMainClass);
         initClass(foundMainClass);
+        queryClient.setQueryData("ClassList", res.data);
         return res.data;
       }),
   });
+
 
   /** 로그인 버튼 */
   const handleLoginEvent = (e) => {
@@ -62,6 +76,7 @@ function ManageLoginPage() {
       id,
       password,
     };
+    console.log(">> 1 "+"handleLoginEvent");
     loginUserQuery.mutate(userCredentials);
   };
 

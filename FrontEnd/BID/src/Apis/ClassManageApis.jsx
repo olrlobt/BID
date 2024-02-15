@@ -24,6 +24,7 @@ ClassManageApis.interceptors.request.use(
  * @returns 학급 조회
  */
 export const getGrades = async () => {
+  console.log(">> 6+++ "+"getGrades");
   return await ClassManageApis.get("/grades");
 };
 
