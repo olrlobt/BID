@@ -52,3 +52,18 @@ export const stuAttendCheckApi = async () => {
   return await ModelApis.get(`/users/attendance/exists`);
 };
 
+/**
+ * 경매 입찰/업로드 현황
+ * @param userNo 사용자 pk
+ */
+export const getMyBidListApi = async (userNo) => {
+  return await ModelApis.get(`/users/${userNo}/boards`)
+}
+
+/**
+ * 보유 아바타 현황
+ * @param userNo 사용자pk
+ */
+export const getMyAvatarListApi = async (userNo) => {
+  return await(ModelApis).get(`/${userNo}/avatars`);
+}

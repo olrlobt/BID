@@ -74,7 +74,7 @@
       }
 
       .average{
-        color: red;
+        color: #ff3f3f;
       }
     }
   }
@@ -165,7 +165,6 @@
             max-height: 10vw;
             border: none;
             resize: none;
-            border: none;
             padding: 1vw;
             border-radius: 0.5vw;
             box-sizing: border-box;
