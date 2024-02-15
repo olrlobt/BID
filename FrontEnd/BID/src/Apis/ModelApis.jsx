@@ -33,7 +33,7 @@ export const studentLoginApi = async (studentData) => {
  * @returns 선생님 이름, 학교 이름
  */
 export const stuChangePwdApi = async (studentData) => {
-  return await ModelApis.post(`/password`, studentData);
+  return await ModelApis.patch(`/password`, studentData);
 };
 
 /**
@@ -66,4 +66,21 @@ export const getMyBidListApi = async (userNo) => {
  */
 export const getMyAvatarListApi = async (userNo) => {
   return await(ModelApis).get(`/${userNo}/avatars`);
+}
+
+/**
+ * 아바타 수정
+ * @param AvatarNo 아바타pk
+ */
+export const editAvatarApi = async (AvatarNo) => {
+  return await ModelApis.patch(`/avatars`, AvatarNo); // body에 no: AvatarNo 넣어서 보내기
+}
+
+
+/**
+ * 아바타 업데이트후 유저들 불러오기
+ * @param 
+ */
+export const updateUsersApi = async () => {
+  return await ModelApis.get(`/users`); // body에 no: AvatarNo 넣어서 보내기
 }
