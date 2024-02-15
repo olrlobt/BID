@@ -1,0 +1,234 @@
+.wrapper{
+  display: flex;
+  /* background-color: orange; */
+  width: 75vw;
+  height: 50vw;
+  justify-content: space-between;
+}
+
+.left{
+  width: 30vw;
+  /* background-color: gray; */
+
+  .header{
+    display: flex;
+    margin-bottom: 2.5vw;
+    gap: 0 1vw;
+  }
+
+  .content{
+    height: 45vw;
+
+    .imgArea{
+      width: 30vw;
+      height: 30vw;
+      overflow: hidden;
+    
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .infoArea{
+      display: flex;
+      gap: 0 0.7vw;
+      margin: 2vw 0;
+
+      input[type='text']{
+        background-color: rgba(255, 255, 255, 0);
+        width: 60%;
+        font-size: 2.2vw;
+        font-weight: 900;
+        border: none;
+      }
+      input[type='text']:focus{
+        outline: none;
+      }
+    }
+
+    .priceArea{
+      display: flex;
+      
+      .startPrice{
+        flex: 1;
+        text-align: center;
+      }
+
+      .verticalLine{
+        border-right: 0.1vw solid #c8c8c8;
+      }
+
+      .averagePrice{
+        flex: 1;
+        text-align: center;
+      }
+
+      .priceCategory{
+        margin-bottom: 0.3vw;
+      }
+
+      .price{
+        font-size: 2vw;
+      }
+
+      .average{
+        color: #ff3f3f;
+      }
+    }
+  }
+
+  .footer{
+    /* background-color: yellow; */
+    height: 5vw;
+    /* display: flex;
+    align-items: end; */
+
+    form{
+      display: flex;
+      align-items: center;
+
+      input{
+        color: #FFD43A;
+        border: 2px solid #FFD43A;
+        padding: 1vw;
+        border-radius: 0.5vw;
+        width: 16vw;
+        height: 4vw;
+        font-size: 2vw;
+        font-weight: 900;
+        text-align: right;
+        box-sizing: border-box;
+      }
+      input:focus{
+          outline: none;
+      }
+
+      .biddingUnit{
+        font-size: 2vw;
+        font-weight: 900;
+        margin: 0 2.5vw 0 1vw;
+        color: #FFD43A;
+      }
+    }
+  }
+}
+
+.right{
+  width: 42vw;
+
+  .commentsArea{
+    background-color: #F7F7F7;
+    height: 50vw;
+    padding: 2vw;
+    box-sizing: border-box;
+    border-radius: 1vw;
+    overflow-x: scroll;
+
+    .writerArea{
+      margin-bottom: 1.5vw;
+      display: flex;
+      border-radius: 1vw;
+      justify-content: space-between;
+      
+      .left{
+        background-color: #f2f2f2;
+        padding: 1vw 1.3vw;
+        box-sizing: border-box;
+        width: 31.5vw;
+        border-radius: 0.5vw;
+        border: '0.3vw solid #ECECEC';
+        background-color: white;
+        
+        .descHeader{
+          display: flex;
+          margin-bottom: 0.5vw;
+          align-items: flex-end;
+
+          h3 {
+            font-size: 1.8vw;
+            margin-right: 1vw;
+          }
+          div {
+            color: #929292;
+            font-size: 1.2vw;
+          }
+        }
+
+        .descBody {
+          line-height: 2vw;
+      
+          textarea{
+            background-color: rgba(255, 255, 255, 0);
+            width: 100%;
+            max-height: 10vw;
+            border: none;
+            resize: none;
+            padding: 1vw;
+            border-radius: 0.5vw;
+            box-sizing: border-box;
+          }
+        }
+      }
+      .right{
+        width: 5vw;
+        height: 5vw;
+        border-radius: 50%;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+    }
+
+    .othersArea{
+      display: flex;
+      flex-direction: column;
+      gap: 1.5vw 0;
+    }
+  }
+
+  .newCommentArea{
+    border: 0.15vw solid #c8c8c8;
+    padding: 1vw;
+    border-radius: 0.5vw;
+    width: 100%;
+    height: 7vw;
+    font-size: 2vw;
+    text-align: right;
+    box-sizing: border-box;
+    margin-top: 1vw;
+
+    form{
+      display: flex;
+      justify-content: space-between;
+
+      textarea{
+        width: 36vw;
+        height: 4.5vw;
+        border: none;
+        font-size: 1.5vw;
+        line-height: 2vw;
+        resize: none;
+      }
+      textarea:focus{
+        outline: none;
+      }
+
+      button{
+        border: 0.3vw solid #FFD43A;
+        border-radius: 50%;
+        width: 3vw;
+        height: 3vw;
+        margin-top: auto;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
+

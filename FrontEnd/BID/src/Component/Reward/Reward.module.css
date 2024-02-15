@@ -1,0 +1,22 @@
+.reward{
+  background-color: white;
+  display: flex;
+  padding: 1.2vw;
+  box-sizing: border-box;
+  border-radius: 1vw;
+  margin-bottom: 1vw; 
+  justify-content: space-between;
+
+  .title{
+    margin-right: 0.7vw;
+    max-width: 15vw;
+  }
+
+  .rewardRight{
+    display: flex;
+  }
+}
+
+.reward:last-child{
+  margin: 0;;
+}
