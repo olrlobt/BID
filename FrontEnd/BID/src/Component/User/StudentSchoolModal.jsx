@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Modal from '../Common/Modal';
 import SubmitButton from '../Common/SubmitButton';
-import styled from './SearchSchoolModal.module.css';
+import styled from './StudentSchoolModal.module.css';
 import { searchSchoolApi } from '../../Apis/UserApis';
 import { useMutation } from "@tanstack/react-query";
+import { SvgIcon } from "@material-ui/core";
+import SearchIcon from '@mui/icons-material/Search';
+
 
 export default function StudentSchoolModal({ onClose, ...props }) {
   console.log(props[1])
@@ -45,13 +48,19 @@ export default function StudentSchoolModal({ onClose, ...props }) {
     <Modal onClose={onClose} {...props}>
       <h1>{props[0]}</h1>
       <div>
-        <input
+        <input className={styled.input}
           type="text"
           placeholder="학교 검색"
           value={searchQuery}
           onChange={handleInputChange}
         />
-        <button onClick={handleSearch}>검색</button>
+        <button className={styled.search}
+        onClick={handleSearch}>
+        <SvgIcon
+          component={SearchIcon}
+          style={{ fill: "#4D4D4D", height: "2.5vh" }}
+          />
+        </button>
       </div>
       <div className={styled.tableContainer}>
         <table>
