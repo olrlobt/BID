@@ -36,11 +36,10 @@ public class BoardService {
 	private final CoreBoardScheduleService coreBoardScheduleService;
 
 	public List<BoardListResponse> findAllStudentBoards(int gradeNo, int userNo) {
-
-		GradeProjection gradeProjection = gradeRepository.findByNo(gradeNo)
+		Grade grade = gradeRepository.findById(gradeNo)
 			.orElseThrow(() -> new AuthorizationFailedException("권한이 없습니다."));
 
-		if (gradeProjection.getUserNo() != userNo) {
+		if (grade.getUserNo() != userNo) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
 		return boardRepository.findAllStudentBoards(gradeNo);
