@@ -95,7 +95,7 @@ public class CoreBoardService {
 
 				if (board.getCategory() == Category.COUPON) {
 					notificationService.send(NotificationRequest.builder()
-						.title(board.getTitle())
+						.title(String.valueOf(board.getNo()))
 						.content(forWinner.toString())
 						.receiverNo(bidding.getUserNo())
 						.notificationType(NotificationType.BIDDING_WINNING)
