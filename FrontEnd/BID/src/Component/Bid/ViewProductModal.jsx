@@ -190,7 +190,7 @@ export default function ViewProductModal({ onClose, ...props }) {
           }
           <div className={styled.content}>
             <div className={styled.imgArea}>
-              <img src='https://img.freepik.com/premium-psd/chocolate-3d-render_553817-59.jpg?w=2000' alt='' />
+              <img src={productDetailIinfo.goodsImgUrl} alt='' />
             </div>
             <div className={styled.infoArea}>
               <input 
@@ -281,7 +281,7 @@ export default function ViewProductModal({ onClose, ...props }) {
         <div className={styled.right}>
           <div className={styled.commentsArea} style={isSetting? {height: '100%'}: {height: '42vw'}}>
             <div className={styled.writerArea}>
-              <div className={styled.left}>
+              <div className={styled.left} style={{border: '0.3vw solid #ECECEC'}}>
                 <div className={styled.descHeader}>
                   <h3>{ productDetailIinfo.userName }</h3>
                   <div>{ trimmedCreateAt(productDetailIinfo.createdAt) }</div>
