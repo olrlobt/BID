@@ -2,9 +2,29 @@ import styled from "./RealTimeModal.module.css";
 import Bell from "../../Asset/Image/HOME_icons/bell-front-color.png";
 import { useSelector } from "react-redux";
 import { alarmSelector } from "../../Store/alarmSlice";
+import { useMutation } from "@tanstack/react-query";
+import { transferMoney } from "../../Apis/StudentBidApis";
+import alertBtn from "../Common/Alert";
 
 export default function RealTimeModal({ handleClick }) {
   const alarmList = useSelector(alarmSelector);
+
+  const handleComplete = (boardNo) => {
+    completeBid(boardNo).mutate();
+  };
+
+  const completeBid = useMutation({
+    mutationKey: ["completeBid"],
+    mutationFn: (boardNo) =>
+      transferMoney(boardNo)
+        .then(() => {
+          alertBtn({ text: "완료되었습니다." });
+        })
+        .catch(() => {
+          alertBtn({ text: "완료되지 않았습니다." });
+        }),
+  });
+
   return (
     <section className={styled.alarmBackground}>
       <section className={styled.alarm}>
@@ -70,6 +90,7 @@ export default function RealTimeModal({ handleClick }) {
                 {/* 4번째 경매 낙찰 알림*/}
                 {JSON.parse(alarm).notificationType === "BIDDING_WINNING" ? (
                   <section className={styled.alarmList}>
+                    {console.log(alarm)}
                     <div>
                       <div>{JSON.parse(alarm).content.split("요")[0]}요</div>
                       <span>
@@ -81,6 +102,12 @@ export default function RealTimeModal({ handleClick }) {
                           ))}
                       </span>
                     </div>
+                    <button
+                      className={styled.complete}
+                      onClick={() => handleComplete(JSON.parse(alarm).title)}
+                    >
+                      완료
+                    </button>
                     <span className={styled.createdAt}>
                       {JSON.parse(alarm)
                         .createdAt.split("T")[0]
@@ -119,12 +146,10 @@ export default function RealTimeModal({ handleClick }) {
                 {/* 6번째 경매 낙찰 확정(송금)*/}
                 {JSON.parse(alarm).notificationType === "BIDDING_UPLOADER" ? (
                   <section className={styled.alarmList}>
-                    {console.log(alarm)}
                     <div>
                       <div>{JSON.parse(alarm).content.split("!")[0]}!</div>
                       <div>{JSON.parse(alarm).content.split("!")[1]}</div>
                     </div>
-                    <button className={styled.complete}>완료</button>
                     <span className={styled.createdAt}>
                       {JSON.parse(alarm)
                         .createdAt.split("T")[0]
