@@ -3,6 +3,8 @@ package com.ssafy.bid.domain.gradeperiod.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.board.repository.BoardRepository;
+import com.ssafy.bid.domain.board.service.CoreBoardScheduleService;
 import com.ssafy.bid.domain.gradeperiod.dto.GradePeriodListUpdateRequest;
 import com.ssafy.bid.domain.gradeperiod.repository.GradePeriodRepository;
 import com.ssafy.bid.domain.user.UserType;
@@ -17,6 +19,8 @@ public class GradePeriodServiceImpl implements GradePeriodService {
 
 	private final GradePeriodRepository gradePeriodRepository;
 	private final GradePeriodScheduler gradePeriodScheduler;
+	private final BoardRepository boardRepository;
+	private final CoreBoardScheduleService coreBoardScheduleService;
 
 	@Override
 	public void updateGradePeriod(UserType userType, int gradeNo,
@@ -32,6 +36,11 @@ public class GradePeriodServiceImpl implements GradePeriodService {
 					gradePeriod.update(request.getStartPeriod(), request.getEndPeriod());
 					gradePeriodScheduler.cancelScheduledTask(gradeNo, gradePeriod.getNo());
 					gradePeriodScheduler.scheduleClassLessonTask(gradePeriod);
+
+					boardRepository.findAllByGradePeriodNo(gradePeriod.getNo()).forEach(board -> {
+						coreBoardScheduleService.cancelScheduledTask(board.getNo());
+						coreBoardScheduleService.registerBoardTask(board);
+					} );
 				})
 		);
 	}
