@@ -17,11 +17,15 @@ import { modelSelector } from "../../Store/modelSlice";
 import { useMutation } from "@tanstack/react-query";
 import { stuChangePwdApi, getMyBidListApi, getMyAvatarListApi } from '../../Apis/ModelApis';
 import { useQuery } from "@tanstack/react-query";
-import { openModal } from "../../Store/modalSlice";
+import useModal from "../../hooks/useModal";
 
 function MyPage() {
   const [page, setPage] = useState('myFin');
   const myInfo = useSelector(modelSelector).model;
+  console.log(myInfo)
+
+  const { openModal } = useModal();
+
   const s3BaseUrl = 'https://ssafya306.s3.ap-northeast-2.amazonaws.com/';
   const avatarList = [
     {url: 'DefaultBody.png', name: '기본'},
@@ -92,7 +96,7 @@ function MyPage() {
             <div className={styled.descArea}>
               <div className={styled.schoolName}> {myInfo.schoolName} </div>
               <div className={styled.name}> {myInfo.name} </div>
-              <div className={styled.asset}> 총 자산을 <span>4227비드</span> 모았어요! </div>
+              <div className={styled.asset}> 총 자산을 <span>{myInfo.asset}비드</span> 모았어요! </div>
             </div>
           </div>
           <div className={styled.buttonContainer}>
@@ -142,16 +146,16 @@ function MyPage() {
             page==='myBid'?
             <div className={styled.myBidContainer}>
               <div className={`${styled.biddedArea} ${styled.myBidArea}`}>
-                <h2>내가 입찰한 경매</h2>
+                <h3>내가 입찰한 경매</h3>
                 <div className={styled.products}>
                   {
-                    myBiddingInfo &&
-                    myBiddingInfo.myBiddingBoards.length === 0?
+                    myBiddingInfo && myBiddingInfo.myBiddingBoards.length === 0?
                     <NoContent text='아직 입찰 중인 경매가 없어요'/>
                     :
-                    myBiddingInfo.myBiddingBoards.map((product) =>
+                    myBiddingInfo && myBiddingInfo.myBiddingBoards.map((product) =>
                       <Product
                         onClick = {() => {
+                          console.log(product);
                           openModal({
                             type: 'viewProduct',
                             props: [product.no] })
@@ -160,6 +164,7 @@ function MyPage() {
                         title = {product.title}
                         displayPrice = {product.displayPrice}
                         goodsImgUrl = {product.goodsImgUrl}
+                        userName = {product.userName}
                         boardStatus = {product.boardStatus}
                       />
                     )
@@ -167,16 +172,16 @@ function MyPage() {
                 </div>
               </div>
               <div className={`${styled.uploadedArea} ${styled.myBidArea}`}>
-                <h2>내가 올린 경매</h2>
+                <h3>내가 올린 경매</h3>
                 <div className={styled.products}>
                   {
-                    myBiddingInfo &&
-                    myBiddingInfo.myBoards.length === 0?
+                    myBiddingInfo &&  myBiddingInfo.myBoards.length === 0?
                     <NoContent text='아직 작성한 경매글이 없어요'/>
                     :
-                    myBiddingInfo.myBoards.map((product) =>
+                    myBiddingInfo && myBiddingInfo.myBoards.map((product) =>
                       <Product
                         onClick = {() => {
+                          console.log(product);
                           openModal({
                             type: 'viewProduct',
                             props: [product.no] })
@@ -198,6 +203,7 @@ function MyPage() {
               {
                 avatarList.map((avatar) =>
                   <AvatarListComponent
+                    key={avatar.url}
                     url={s3BaseUrl+avatar.url}
                     name={avatar.name}
                     onClick={() => console.log('lets update avatar')}
