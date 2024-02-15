@@ -8,14 +8,12 @@ import Product from "../../Component/Bid/Product";
 import NoContent from "../../Component/Bid/NoContent";
 import useModal from '../../hooks/useModal';
 import useCoupons from "../../hooks/useCoupons";
-import useProducts from "../../hooks/useProducts";
 import { useSelector } from "react-redux";
 import { couponSelector } from "../../Store/couponSlice";
 import { productSelector } from "../../Store/productSlice";
 import { DragDropContext } from "react-beautiful-dnd";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
-import { getProductListApi } from "../../Apis/TeacherBidApis";
+import { useMutation } from "@tanstack/react-query";
+import { registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
 import { mainSelector } from "../../Store/mainSlice";
 
 export default function BidPage(){
@@ -33,7 +31,6 @@ export default function BidPage(){
 
   const { openModal } = useModal();
   const { initCoupons, registCoupon, unregistCoupon } = useCoupons();
-  const { initProducts } = useProducts();
 
   /** 게시자 종류를 toggle하는 함수 */
   const changeWriter = (writer) => {
@@ -48,18 +45,6 @@ export default function BidPage(){
     setCoupons(reduxCoupons);
   }, [reduxCoupons]);
 
-  /** 쿠폰 목록 쿼리 */
-  useQuery({
-    queryKey: ['couponList'],
-    queryFn: () => 
-      getCouponListApi(gradeNo).then((res) => {
-        if(res.data !== undefined){
-          initCoupons({ couponList: res.data.coupons });
-          console.log(res.data);
-        }
-        return res.data;
-      }),
-  });
   
   /** 경매 포함/제외 쿠폰 구분 */
   const { unregisteredCoupons, registeredCoupons } = useMemo(() => {
@@ -105,17 +90,6 @@ export default function BidPage(){
     setProducts(reduxProducts);
   }, [reduxProducts]);
 
-  /** 경매 목록 쿼리 */
-  useQuery({
-    queryKey: ['productList'],
-    queryFn: () => 
-      getProductListApi(gradeNo).then((res) => {
-        if(res.data !== undefined){
-          initProducts({ productList: res.data });
-        }
-        return res.data;
-      }),
-  });
   
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
@@ -256,6 +230,7 @@ export default function BidPage(){
                   displayPrice = {product.displayPrice}
                   goodsImgUrl = {product.goodsImgUrl}
                   userName = {product.userName}
+                  boardStatus = {product.boardStatus}
                 />
               )
             }

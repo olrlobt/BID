@@ -50,9 +50,11 @@ export default function ManageProductModal({ onClose, ...props }) {
   });
 
   /** 경매 삭제 함수 */
-  const onClickDeleteProduct = (e) => {
-    deleteProductQuery.mutate(boardNo);
-    onClose();
+  const onClickDeleteProduct = () => {
+    if(window.confirm('게시글을 삭제하시겠습니까?')){
+      deleteProductQuery.mutate(boardNo);
+      onClose();
+    }
   }
 
   return (
@@ -73,7 +75,7 @@ export default function ManageProductModal({ onClose, ...props }) {
           </div>
           <div className={styled.content}>
             <div className={styled.imgArea}>
-              <img src='https://img.freepik.com/premium-psd/chocolate-3d-render_553817-59.jpg?w=2000' alt='' />
+              <img src={productDetailIinfo.goodsImgUrl} alt='' />
             </div>
             <div className={styled.infoArea}>
               <input 
@@ -146,7 +148,7 @@ export default function ManageProductModal({ onClose, ...props }) {
                     createAt = {c.createAt}
                     userImgUrl = {c.userImgUrl}
                     queryClient = {queryClient}
-                    isWriter = {false}
+                    isWriter = {productDetailIinfo.userNo===c.userNo}
                     isDelete = {true}
                     isTeacher = {true}
                     gradeNo = {gradeNo}
