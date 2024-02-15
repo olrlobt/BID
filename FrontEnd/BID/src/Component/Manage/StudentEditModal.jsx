@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { userSelector } from "../../Store/userSlice";
 import { mainSelector } from "../../Store/mainSlice";
 
-const PwdRemoveModal = ({ onClose, ...props }) => {
+const StudentEditModal = ({ onClose, ...props }) => {
   const teacherInfo = useSelector(userSelector);
   const schoolNo = teacherInfo.adminInfo.schoolNo;
 
@@ -124,4 +124,4 @@ const PwdRemoveModal = ({ onClose, ...props }) => {
   );
 };
 
-export default PwdRemoveModal;
+export default StudentEditModal;
