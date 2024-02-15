@@ -92,43 +92,43 @@ export default function Home() {
   });
 
   /** 학생 목록 쿼리 */
-  const { data: studentList } = useQuery({
-    queryKey: ["studentList"],
-    queryFn: () =>
-      getStudentListApi(mainClass.no).then((res) => {
-        if (res.data !== undefined) {
-          const sortedInfo = res.data.sort((a, b) => a.number - b.number);
-          console.log(sortedInfo);
-          initStudents(sortedInfo);
-        }
-        return res.data;
-      }),
-  });
+  // const { data: studentList } = useQuery({
+  //   queryKey: ["studentList"],
+  //   queryFn: () =>
+  //     getStudentListApi(mainClass.no).then((res) => {
+  //       if (res.data !== undefined) {
+  //         const sortedInfo = res.data.sort((a, b) => a.number - b.number);
+  //         console.log(sortedInfo);
+  //         initStudents(sortedInfo);
+  //       }
+  //       return res.data;
+  //     }),
+  // });
 
   /** 쿠폰 목록 쿼리 */
-  useQuery({
-    queryKey: ["couponList"],
-    queryFn: () =>
-      getCouponListApi(mainClass.no).then((res) => {
-        if (res.data !== undefined) {
-          initCoupons({ couponList: res.data.coupons });
-        }
-        return res.data;
-      }),
-  });
+  // useQuery({
+  //   queryKey: ["couponList"],
+  //   queryFn: () =>
+  //     getCouponListApi(mainClass.no).then((res) => {
+  //       if (res.data !== undefined) {
+  //         initCoupons({ couponList: res.data.coupons });
+  //       }
+  //       return res.data;
+  //     }),
+  // });
 
   /** 경매 목록 쿼리 */
-  useQuery({
-    queryKey: ["productList"],
-    queryFn: () =>
-      getProductListApi(mainClass.no).then((res) => {
-        console.log(res.data);
-        if (res.data !== undefined) {
-          initProducts({ productList: res.data });
-        }
-        return res.data;
-      }),
-  });
+  // useQuery({
+  //   queryKey: ["productList"],
+  //   queryFn: () =>
+  //     getProductListApi(mainClass.no).then((res) => {
+  //       console.log(res.data);
+  //       if (res.data !== undefined) {
+  //         initProducts({ productList: res.data });
+  //       }
+  //       return res.data;
+  //     }),
+  // });
 
   const handleBid = (gradeNo) => {
     holdBid(gradeNo).then((res) => {
@@ -141,10 +141,17 @@ export default function Home() {
     });
   };
 
-  useEffect(() => {}, [dashboardInfo, couponList, studentList, holdView]);
+  useEffect(() => {}, [
+    dashboardInfo,
+    couponList,
+    ,
+    // studentList
+    holdView,
+  ]);
   return (
     <>
-      {dashboardInfo && couponList && studentList && (
+      {dashboardInfo && couponList && (
+        // studentList &&
         <main className={styled.home}>
           <button
             onClick={() => handleBid(mainClass.no)}
