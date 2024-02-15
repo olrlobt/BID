@@ -108,7 +108,7 @@ export function CharacterModel({
     dispose={null}
     name={name}
     >
-    <Html position-y={1}>
+    <Html position-y={1.3} position-x={2} position-z={-1}>
       <div className={styled.characterBubble}>
         <p
            className={`${styled.chatMessage} ${
@@ -116,6 +116,14 @@ export function CharacterModel({
           }`}
         >
          {name} : {chatMessage}
+        </p>
+      </div>
+    </Html>
+
+    <Html position-y={0.8} position-x={2.5} position-z={-1.5}>
+      <div className={styled.characterBubble}>
+        <p className={styled.profile}>
+          {name}
         </p>
       </div>
     </Html>

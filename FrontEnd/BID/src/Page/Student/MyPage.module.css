@@ -78,10 +78,12 @@
             flex-wrap: wrap;
             height: 50vw;
             gap: 2.5vw;
+            
             overflow: scroll;
         }
     }
 }
+
 
 .additionalChartsContainer {
     display: flex;
@@ -113,7 +115,7 @@
     box-sizing: border-box;
     margin-top: 30vh;
     margin-right: 15vw;
-  }
+}
 
 
 .contentInput input:focus {
@@ -134,8 +136,8 @@
 
 
 .inputWithIcon {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .icon {
@@ -157,7 +159,7 @@
     color: #A6A6A6;
     cursor: pointer;
     margin-left: 1.2rem;
-  }
+}
 
 .changePwdLink {
     text-decoration: none;
@@ -179,14 +181,14 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-
+    
 }
 
 .telInput {
-  position: relative;
-  display: flex;
-  flex-direction: column; /* Added to ensure inputs are displayed vertically */
-  align-items: center;
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Added to ensure inputs are displayed vertically */
+    align-items: center;
 }
 
 .telInput button {
@@ -206,4 +208,49 @@
     margin-top: 0.5vh;
     font-size: 1rem;
     color: #E81818;
+}
+
+.back {
+    width: 4vw;
+}
+
+.avatar {
+    position: relative;
+    cursor: pointer;
+}
+
+.avatarEquipped {
+    position: relative;
+    cursor: pointer;
+}
+
+.avatarImage {
+    width: 17vw;
+    height: 17vw;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2vw;
+}
+
+.avatarImageInactive {
+    width: 17vw;
+    height: 17vw;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2vw;
+    filter: grayscale(100%);
+}
+
+.avatarOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 2vw;
+    background-color: rgba(0, 0, 0, 0.5);
 }
