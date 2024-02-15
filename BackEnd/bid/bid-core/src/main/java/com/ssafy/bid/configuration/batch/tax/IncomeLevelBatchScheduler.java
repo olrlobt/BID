@@ -24,7 +24,7 @@ public class IncomeLevelBatchScheduler {
 	@Qualifier("incomeLevelStep")
 	private final Step incomeLevelStep;
 
-	@Scheduled(cron = "0 16 8 * * 6")
+	@Scheduled(cron = "0 25 8 * * 6")
 	void incomeLevel() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
