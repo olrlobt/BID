@@ -11,6 +11,8 @@ import com.ssafy.bid.domain.avatar.UserAvatar;
 import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.domain.grade.repository.StudentRepository;
+import com.ssafy.bid.domain.grade.service.GradeService;
+import com.ssafy.bid.domain.grade.service.GradeServiceImpl;
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.TelAuthentication;
@@ -53,6 +55,7 @@ public class UserServiceImpl implements UserService {
 	private final GradeRepository gradeRepository;
 	private final StudentRepository studentRepository;
 	private final UserAvatarRepository userAvatarRepository;
+	private final GradeService gradeService;
 
 	@Override
 	@Transactional
@@ -289,6 +292,11 @@ public class UserServiceImpl implements UserService {
 		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 			throw new InvalidParameterException("관리자탈퇴: 패스워드와 패스워드 확인 불일치.", request.getPassword());
 		}
+		List<Grade> grades = gradeRepository.findAllByUserNo(userNo);
+		for (Grade grade: grades) {
+			gradeService.deleteGrade(userType, grade.getNo());
+		}
+
 		userRepository.delete(user);
 	}
 

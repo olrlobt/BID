@@ -101,7 +101,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 					student.no,
 					student.id,
 					student.name,
-					student.asset
+					student.asset,
+					student.birthDate
 				)
 			)
 			.from(student)
