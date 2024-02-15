@@ -10,17 +10,18 @@ import { getGrades } from "../../Apis/ClassManageApis";
 import useMain from "../../hooks/useMain";
 import { useSelector } from "react-redux";
 import { mainSelector } from "../../Store/mainSlice";
+import { userLoggedInSelector } from "../../Store/userSlice";
 
 function ManageLoginPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const { loginUser } = useUser();
   const { initClass } = useMain();
+  const teacherLogin = useSelector(userLoggedInSelector);
   const mainClass = useSelector(mainSelector);
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
   /** 로그인 쿼리 */
   const loginUserQuery = useMutation({
     mutationKey: ["loginUser"],
@@ -54,6 +55,7 @@ function ManageLoginPage() {
         initClass(foundMainClass);
         return res.data;
       }),
+    enabled: teacherLogin.isLoggedIn,
   });
 
 
@@ -66,6 +68,12 @@ function ManageLoginPage() {
     };
     loginUserQuery.mutate(userCredentials);
   };
+
+  useEffect(() => {
+    if (!teacherLogin.isLoggedIn) {
+      queryClient.cancelQueries(["ClassList"]);
+    }
+  }, [teacherLogin.isLoggedIn, mainClass]);
 
   return (
     <section className={styled.back}>
