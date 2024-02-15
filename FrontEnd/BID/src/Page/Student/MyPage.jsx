@@ -21,12 +21,13 @@ import { stuChangePwdApi, getMyBidListApi, getMyAvatarListApi,editAvatarApi ,upd
 import { useQuery } from "@tanstack/react-query";
 import useModal from "../../hooks/useModal";
 import useModels from "../../hooks/useModels";
+import Back from "../../Asset/Image/SeatGame/back_btn.png";
+import { useNavigate } from "react-router-dom";
 
 
 function MyPage() {
   const [page, setPage] = useState('myFin');
   const myInfo = useSelector(modelSelector).model 
-  console.log(myInfo)
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordCheck, setNewPasswordCheck] = useState("");
@@ -35,6 +36,7 @@ function MyPage() {
   const { initModels } = useModels();
   const { editModel } =  useModels();
   const imgInfo = useSelector(modelImgSelector)
+  const navigate = useNavigate();
 
   // const [myProfileImg, SetmyProfileImg] = 
   const { openModal } = useModal();
@@ -149,6 +151,7 @@ const editAvatarQuery = useMutation({
       let avatarNo = {
         no: targetAvatar.userAvatarNo
       };
+      console.log("장착하기")
       // 찾은 아바타가 있으면 해당 아바타의 userAvatarNo를 사용하여 editAvatarApi 호출
       editAvatarQuery.mutate(avatarNo);
       editModel(targetAvatar.url)
@@ -164,6 +167,12 @@ const editAvatarQuery = useMutation({
       <div className={styled.dashboardContainer}>
         <div className={styled.leftArea}>
           <div className={styled.userInfoArea}>
+            <img
+              className={styled.back}
+              src={Back}
+              alt="뒤로가기"
+              onClick={() => navigate("/studentMain")}
+            />
             <div className={styled.imgArea}>
               <img src={imgInfo} alt="이미지" />
             </div>
@@ -276,15 +285,28 @@ const editAvatarQuery = useMutation({
             :
             page==='myAvatar'?
             <div className={styled.myAvatarContainer}>
-            {avatarList.map((avatar) => (
-              <AvatarListComponent
-                key={avatar.url}
-                url={s3BaseUrl + avatar.url}
-                name={avatar.name}
-                onClick={() => changeAvatar(avatar.avatarNo)} // 클릭 시 changeAvatar 함수 호출
-              />
-            ))}
-          </div>
+              {avatarList.map((avatar) => {
+              const isEquipped = myAvatarInfo.some(info => info.avatarNo === avatar.avatarNo);
+              return (
+                <div
+                  key={avatar.url}
+                  className={isEquipped ? styled.avatarEquipped : styled.avatar}
+                  onClick={() => {
+                    if (isEquipped) {
+                      changeAvatar(avatar.avatarNo); // 클릭 시 changeAvatar 함수 호출
+                    }
+                  }}
+                >
+                  <img
+                    src={s3BaseUrl + avatar.url}
+                    alt={avatar.name}
+                    className={isEquipped ? styled.avatarImage : styled.avatarImageInactive}
+                  />
+                  {!isEquipped && <div className={styled.avatarOverlay}></div>}
+                </div>
+              );
+            })}
+            </div>
             :
             <>
               <div>
