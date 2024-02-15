@@ -16,6 +16,7 @@ import { studentSavingSlice } from "./studentSavingSlice";
 import { mainSlice } from "./mainSlice";
 import { studentSlice } from "./studentSlice";
 import storage from "redux-persist/lib/storage";
+import { alarmSlice } from "./alarmSlice";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   studentSaving: studentSavingSlice.reducer,
   mainClass: mainSlice.reducer,
   student: studentSlice.reducer,
+  alarmList: alarmSlice.reducer,
 });
 
 const persistConfig = {

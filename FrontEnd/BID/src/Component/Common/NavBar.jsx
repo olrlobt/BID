@@ -125,21 +125,6 @@ export default function NavBar() {
             <span>자리 뽑기</span>
           </li>
         </div>
-        <div onClick={() => navigate("/for-student")}>
-          <li
-            className={`${styled.navLi} ${
-              location.pathname === "/student-version" ? styled.active : ""
-            }`}
-          >
-            <FontAwesomeIcon
-              icon={faSchool}
-              className={`${styled.navImage} ${
-                location.pathname === "/student-version" ? styled.clicked : ""
-              }`}
-            />
-            <span>학생 버전</span>
-          </li>
-        </div>
       </ul>
       <Link
         to={`/classlist/${teacherInfo.adminInfo.userNo}`}

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   savingList: null,
@@ -7,7 +7,7 @@ const initialState = {
 export const studentSavingSelector = (state) => state.studentSaving.savingList;
 
 export const studentSavingSlice = createSlice({
-  name: 'studentSaving',
+  name: "studentSaving",
   initialState,
   reducers: {
     initStudentSavingList: (state, action) => {
