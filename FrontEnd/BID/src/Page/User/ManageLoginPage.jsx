@@ -28,36 +28,35 @@ function ManageLoginPage() {
     mutationFn: (userCredentials) => loginUserApi(userCredentials),
     onSuccess: async (data) => {
       loginUser(data);
-
       setCookie("accessToken", data.data.tokenResponse.accessToken);
-      await queryClient.invalidateQueries("ClassList");
-      if (mainClass) {
-        navigate("/");
-      } else {
-        navigate(`/classlist/${data.data.adminInfo.userNo}/no-class`, {
-          state: {
-            teacherId: data.data.adminInfo.userNo,
-          },
-        });
-      }
+      navigate(`/classlist/${data.data.adminInfo.userNo}`, {
+        state: {
+          teacherId: data.data.adminInfo.userNo,
+        },
+      });
+      // await queryClient.invalidateQueries("ClassList");
+      // if (mainClass) {
+      //   navigate("/");
+      // } else {
+      // }
+      // queryClient.invalidateQueries("ClassList");
     },
     onError: (error) => {
       console.log(error);
     },
   });
 
-  useQuery({
-    queryKey: ["ClassList"],
-    queryFn: () =>
-      getGrades().then((res) => {
-        console.log(res);
-        const foundMainClass = res.data.find((item) => item.main === true);
-        initClass(foundMainClass);
-        return res.data;
-      }),
-    enabled: teacherLogin.isLoggedIn,
-  });
-
+  // useQuery({
+  //   queryKey: ["ClassList"],
+  //   queryFn: () =>
+  //     getGrades().then((res) => {
+  //       console.log(res);
+  //       const foundMainClass = res.data.find((item) => item.main === true);
+  //       initClass(foundMainClass);
+  //       return res.data;
+  //     }),
+  //   enabled: teacherLogin.isLoggedIn,
+  // });
 
   /** 로그인 버튼 */
   const handleLoginEvent = (e) => {
@@ -69,11 +68,11 @@ function ManageLoginPage() {
     loginUserQuery.mutate(userCredentials);
   };
 
-  useEffect(() => {
-    if (!teacherLogin.isLoggedIn) {
-      queryClient.cancelQueries(["ClassList"]);
-    }
-  }, [teacherLogin.isLoggedIn, mainClass]);
+  // useEffect(() => {
+  //   if (!teacherLogin.isLoggedIn) {
+  //     queryClient.cancelQueries(["ClassList"]);
+  //   }
+  // }, [teacherLogin.isLoggedIn, mainClass]);
 
   return (
     <section className={styled.back}>
