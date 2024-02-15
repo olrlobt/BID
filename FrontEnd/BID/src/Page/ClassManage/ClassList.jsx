@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faStar } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   deleteClass,
   editMainClass,
@@ -22,7 +22,6 @@ export default function ClassList() {
   const { userNo } = teacherInfo.adminInfo;
   const [editedClassList, setEditedClassList] = useState([]);
   const { changeMainClass } = useMain();
-  const queryClient = useQueryClient();
 
   const { data: classList } = useQuery({
     queryKey: ["ClassList"],
@@ -87,8 +86,7 @@ export default function ClassList() {
   };
 
   useEffect(() => {
-    queryClient.cancelQueries(["ClassList"]);
-    queryClient.invalidateQueries(["ClassList"]);
+    console.log(editedClassList);
   }, [classList, editedClassList]);
   return (
     <main className={styled.classList}>
