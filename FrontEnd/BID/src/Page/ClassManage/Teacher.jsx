@@ -69,7 +69,7 @@ export default function Teacher() {
             </Link>
           ) : (
             <Link
-              to={`/classlist/${userNo}/modify`}
+              to={`/classlist/${userNo}/changepass`}
               className={`${styled.classBtn} ${
                 location.pathname !== `/classlist/${userNo}`
                   ? styled.disabled
