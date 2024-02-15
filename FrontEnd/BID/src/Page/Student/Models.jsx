@@ -108,14 +108,6 @@ export default function Models(myInfo) {
           <Alarm onClick={handleAlarmClick} />
           <Bank />
           <BiddingPlace />
-          {/* <CharacterModel selectedCharacter="SnowmanBody" bodyColor="green"/> */}
-          {/* <CharacterModel 
-            selectedCharacter="DefaultBody" 
-             position-x={1} 
-             
-            /> */}
-          {/* <BasicBean /> */}
-          {/* <CharacterModel position-x={1} /> */}
           <SnowBean />
         </group>
         <OrbitControls
