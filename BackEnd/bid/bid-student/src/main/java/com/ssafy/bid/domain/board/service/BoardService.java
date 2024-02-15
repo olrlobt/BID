@@ -20,6 +20,9 @@ import com.ssafy.bid.domain.board.repository.BiddingRepository;
 import com.ssafy.bid.domain.board.repository.BoardRepository;
 import com.ssafy.bid.domain.board.repository.ReplyRepository;
 import com.ssafy.bid.domain.grade.Grade;
+import com.ssafy.bid.domain.notification.NotificationType;
+import com.ssafy.bid.domain.notification.dto.NotificationRequest;
+import com.ssafy.bid.domain.notification.service.NotificationService;
 import com.ssafy.bid.domain.user.Account;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.DealType;
@@ -49,6 +52,7 @@ public class BoardService {
 	private final StudentRepository studentRepository;
 	private final AccountRepository accountRepository;
 	private final ImageUploader imageUploader;
+	private final NotificationService notificationService;
 
 	public List<BoardListResponse> findBoards(int gradeNo) {
 		return boardRepository.findBoards(gradeNo);
@@ -220,6 +224,16 @@ public class BoardService {
 			.gradeNo(receiver.getGradeNo())
 			.build();
 		accounts.add(accountReceiver);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(board.getTitle()).append(" 경매가 끝났어요! 친구에게 전달해주세요.");
+		NotificationRequest notificationRequest = NotificationRequest.builder()
+			.receiverNo(receiver.getNo())
+			.title(board.getTitle())
+			.content(sb.toString())
+			.notificationType(NotificationType.BIDDING_UPLOADER)
+			.build();
+		notificationService.send(notificationRequest);
 
 		accountRepository.saveAll(accounts);
 	}
