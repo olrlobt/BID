@@ -12,7 +12,11 @@ import { bidSelector } from "../../Store/bidSlice";
 import { bidCountSelector } from "../../Store/bidCountSlice";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getStudentListApi, viewDashboard } from "../../Apis/TeacherManageApis";
+import {
+  getStudentListApi,
+  holdBid,
+  viewDashboard,
+} from "../../Apis/TeacherManageApis";
 import { stopTimeSelector } from "../../Store/stopTimeSlice";
 import { getCouponList, getCouponListApi } from "../../Apis/CouponApis";
 import { requestCouponSelector } from "../../Store/requestCouponSlice";
@@ -29,6 +33,9 @@ import useStudents from "../../hooks/useStudents";
 import useProducts from "../../hooks/useProducts";
 import useCoupons from "../../hooks/useCoupons";
 import { getProductListApi } from "../../Apis/TeacherBidApis";
+import useHold from "../../hooks/useHold";
+import { holdSelector } from "../../Store/holdSlice";
+import alertBtn from "../../Component/Common/Alert";
 
 export default function Home() {
   const { openModal } = useModal();
@@ -40,6 +47,7 @@ export default function Home() {
   const { initStudents } = useStudents();
   const { initCoupons } = useCoupons();
   const { initProducts } = useProducts();
+  const { changeHold } = useHold();
   const currentBid = useSelector(bidSelector);
   const classMoney = useSelector(moneySeletor);
   const bidCount = useSelector(bidCountSelector);
@@ -47,6 +55,7 @@ export default function Home() {
   const requestedCoupons = useSelector(requestCouponSelector);
   const [lineData, setLineData] = useState([]);
   const mainClass = useSelector(mainSelector);
+  const holdView = useSelector(holdSelector);
 
   /** 대시보드 */
   const { data: dashboardInfo } = useQuery({
@@ -58,6 +67,7 @@ export default function Home() {
           initMoney(res.data.asset);
           initCount(res.data.biddingStatisticsFindResponses[13].count);
           initTime(res.data.gradePeriodsGetResponses);
+          changeHold(res.data.hold);
           setLineData(
             res.data.biddingStatisticsFindResponses.map((item) => {
               return {
@@ -112,7 +122,7 @@ export default function Home() {
     queryKey: ["productList"],
     queryFn: () =>
       getProductListApi(mainClass.no).then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data !== undefined) {
           initProducts({ productList: res.data });
         }
@@ -120,16 +130,31 @@ export default function Home() {
       }),
   });
 
-  useEffect(() => {}, [dashboardInfo, couponList, studentList]);
+  const handleBid = (gradeNo) => {
+    holdBid(gradeNo).then((res) => {
+      changeHold(res.data);
+      alertBtn({
+        text: "변경되었습니다.",
+        confirmColor: "#ffd43a",
+        icon: "success",
+      });
+    });
+  };
+
+  useEffect(() => {}, [dashboardInfo, couponList, studentList, holdView]);
   return (
     <>
       {dashboardInfo && couponList && studentList && (
         <main className={styled.home}>
-          {/* {console.log(dashboardInfo)} */}
-          <button className={styled.holdBtn}>
+          <button
+            onClick={() => handleBid(mainClass.no)}
+            className={holdView ? styled.stopBtn : styled.holdBtn}
+          >
             <span className={styled.hold}>HOLD</span>
             <span className={styled.holdInfo}>
-              지금은 경매가 진행되고 있어요
+              {holdView
+                ? "지금은 경매가 중단된 상태에요"
+                : "지금은 경매가 진행되고 있어요"}
             </span>
           </button>
           <InfoBox
