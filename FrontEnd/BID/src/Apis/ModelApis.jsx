@@ -27,6 +27,16 @@ export const studentLoginApi = async (studentData) => {
     return await ModelApis.post(`/login`, studentData);
   };
   
+
+/**
+ * 학생 로그아웃
+ * @param  
+ */
+export const studentLogoutApi = async () => {
+  return await ModelApis.get(`/logout`);
+};
+
+
 /**
  * 학생 패스워드 수정
  * @param studentData 사용자 정보
