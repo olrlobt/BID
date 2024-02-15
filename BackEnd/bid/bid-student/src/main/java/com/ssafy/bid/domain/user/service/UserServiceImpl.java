@@ -1,6 +1,7 @@
 package com.ssafy.bid.domain.user.service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,9 @@ import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
+import com.ssafy.bid.domain.user.dto.StudentInfo;
 import com.ssafy.bid.domain.user.dto.StudentPasswordUpdateRequest;
+import com.ssafy.bid.domain.user.repository.CoreUserRepository;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
 import com.ssafy.bid.global.error.exception.InvalidParameterException;
@@ -27,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final CoreUserRepository coreUserRepository;
 
 	@Override
 	@Transactional
@@ -85,5 +89,11 @@ public class UserServiceImpl implements UserService {
 		}
 
 		throw new AuthorizationFailedException("학생 권한이 아님.");
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<StudentInfo> getStudentInfosByGradeNo(int gradeNo) {
+		return coreUserRepository.findByGradeNo(gradeNo);
 	}
 }
