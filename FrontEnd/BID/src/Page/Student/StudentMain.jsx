@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { modelListSelector, modelSelector } from "../../Store/modelSlice";
 import styled from "./StudentMain.module.css";
 import { socket } from "../../Component/Models/SocketManager";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAlarm from "../../hooks/useAlarm";
 import useProducts from "../../hooks/useProducts";
 import { getProductListApi } from "../../Apis/StudentBidApis";
