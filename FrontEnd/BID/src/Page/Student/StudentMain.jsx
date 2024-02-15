@@ -23,9 +23,6 @@ function StudentMain() {
     socket.emit("joinRoom", gradeNo);
 
     // 컴포넌트 언마운트 시에 방을 떠나는 로직도 추가할 수 있습니다.
-    return () => {
-      socket.emit("leaveRoom", gradeNo);
-    };
   }, []);
 
   const { updateAlarms } = useAlarm();
@@ -35,6 +32,9 @@ function StudentMain() {
     if (models.length > 0) {
       socket.emit("characters", models); // 서버에 gradeNo 기반으로 캐릭터 데이터 전송
       console.log(models)
+      return () => {
+        socket.emit("leaveRoom", gradeNo);
+      };
     }
     const eventSource = new EventSource(
       `${process.env.REACT_APP_TCH_API}/notification/subscribe/${myInfo.model.no}`
