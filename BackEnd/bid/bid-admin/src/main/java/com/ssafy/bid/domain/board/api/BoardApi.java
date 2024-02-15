@@ -36,7 +36,7 @@ public class BoardApi {
 		@PathVariable int gradeNo) {
 		int userNo = userDetails.getUserInfo().getNo();
 		int userGradeNo = userDetails.getUserInfo().getGradeNo();
-		return boardService.findAllStudentBoards(gradeNo, userNo, userGradeNo);
+		return boardService.findAllStudentBoards(gradeNo, userNo);
 	}
 
 	@GetMapping("/{gradeNo}/boards/{boardNo}")
