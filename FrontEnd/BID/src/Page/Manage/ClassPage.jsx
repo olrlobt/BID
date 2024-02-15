@@ -1,44 +1,49 @@
 import React, { useEffect, useState } from "react";
 import styled from "./ClassPage.module.css";
-import StudentList from "../../Component/Manage/StudentList";
-import StudentFinData from "../../Component/Manage/StudentFinData";
+import StudentList from '../../Component/Manage/StudentList'
+import StudentFinData from '../../Component/Manage/StudentFinData';
 import Button from "../../Component/Common/Button";
 import Button2 from "../../Component/Common/Button2";
 import Button3 from "../../Component/Common/Button3";
 import useModal from "../../hooks/useModal";
-import useStudents from "../../hooks/useStudents";
-import { getStudentListApi } from "../../Apis/TeacherManageApis";
+import { getStudentListApi  } from "../../Apis/TeacherManageApis";
+import { deleteStudentApi } from "../../Apis/UserApis";
 import { useSelector } from "react-redux";
+import { studentSelector  } from "../../Store/studentSlice";
+import  useStudents  from "../../hooks/useStudents";
 import { useQuery } from "@tanstack/react-query";
 import { mainSelector } from "../../Store/mainSlice";
-import { studentSelector } from "../../Store/studentSlice";
 
 function ClassPage() {
-  const students = useSelector(studentSelector);
-  const mainClass = useSelector(mainSelector);
-
-  const [studentList, setStudentList] = useState();
-  const [activeButton, setActiveButton] = useState("number"); // 기본 정렬 기준은 번호(id)로 설정
-  const [showAdd, setShowAdd] = useState(false); // New state to toggle Add Student button
-  const [showRemove, setShowRemove] = useState(false); // New state to toggle Add Student button
+  const [studentList, setStudentList] = useState([]);
+  const [activeButton, setActiveButton] = useState('number');
+  const [sortType, setSortType] = useState('number');
+  const [showAdd, setShowAdd] = useState(false);
+  const [showRemove, setShowRemove] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const mainClass = useSelector(mainSelector);
 
+  const gradeNo = mainClass.no;
   const { initStudents } = useStudents();
+  const students = useSelector(studentSelector);
+  console.log(students)
+  const { openModal } = useModal();
 
-  /** 학생 목록 쿼리 */
-  // useQuery({
-  //   queryKey: ["studentList"],
-  //   queryFn: () =>
-  //     getStudentListApi(mainClass.no).then((res) => {
-  //       if (res.data !== undefined) {
-  //         const sortedInfo = res.data.sort((a, b) => a.number - b.number);
-  //         setStudentList(sortedInfo);
-  //       }
-  //       initStudents({ students: studentList });
-  //       return res.data;
-  //     }),
-  // });
+  useEffect(() => {
+    fetchStudentList();
+  }, [showAdd, onclose]);
+
+  const fetchStudentList = () => {
+    getStudentListApi(gradeNo).then((res) => {
+      if (res.data !== undefined) {
+        setStudentList(res.data);
+        initStudents(res.data );
+      }
+    }).catch(error => {
+      console.error("학생 목록을 불러오는 중 오류가 발생했습니다:", error);
+    });
+  };
 
   const handleStudentClick = (student) => {
     if (!isEditing) {
@@ -48,14 +53,14 @@ function ClassPage() {
     }
   };
 
-  const { openModal } = useModal();
-
   useEffect(() => {
-    setStudentList(students);
-    if (studentList) {
-      setSelectedStudent(studentList[0]);
+    const firstStudentWithNumberOne = studentList.find(student => student.number === 1);
+    if (firstStudentWithNumberOne) {
+      setSelectedStudent(firstStudentWithNumberOne);
+    } else {
+      setSelectedStudent(studentList[0])
     }
-  }, [students, studentList]);
+  }, [studentList]);
 
   const handleEdit = (student) => {
     console.log("Edit student:", student);
@@ -65,29 +70,36 @@ function ClassPage() {
     setShowAdd(!showAdd);
     setShowRemove(!showRemove);
     setIsEditing(!isEditing);
-    if (!showRemove) {
-      setSelectedStudent(null);
-    } else if (studentList.length > 0) {
-      setSelectedStudent(studentList[0]);
-    }
   };
 
   const handleRemove = (no) => {
-    setSelectedStudent(null);
+    console.log(no)
+    deleteStudentApi(no, gradeNo).then((res) => {
+      console.log(res);
+      fetchStudentList();
+    }).catch(error => {
+      console.error("학생 삭제 중 오류가 발생했습니다:", error);
+    });
   };
 
   const handleSort = (type) => {
     setActiveButton(type);
-    const sortedInfo = [...studentList].sort((a, b) => {
-      if (type === "number") {
-        return a.number - b.number;
-      } else if (type === "asset") {
-        return b.asset - a.asset;
-      }
-      return 0;
-    });
-    setStudentList(sortedInfo);
-    initStudents(sortedInfo);
+    setSortType(type);
+  };
+
+  const sortedInfo = studentList && [...studentList].sort((a, b) => {
+    if (sortType === 'number') {
+      return a.number - b.number;
+    } else if (sortType === 'asset') {
+      const assetA = parseInt(a.asset);
+      const assetB = parseInt(b.asset);
+      return assetB - assetA;
+    }
+    return 0;
+  });
+
+  const handleAddStudentComplete = () => {
+    setIsEditing(true); // 학생 추가 후 편집 모드로 전환
   };
 
   return (
@@ -97,29 +109,32 @@ function ClassPage() {
           <Button3
             text="학생 추가"
             onClick={() =>
-              openModal({
-                type: "addStudent",
-                props: ["학생 등록"],
+              openModal({ 
+              type: "addStudent", 
+              props: ["학생 등록", handleAddStudentComplete],
               })
             }
           />
         )}
         <div className={styled.buttonSpacing} />
-        <Button2 text="학생 편집" onClick={handleButton2Click} />
+        <Button2
+          text="학생 편집"
+          onClick={handleButton2Click}
+        />
       </div>
       <div className={styled.orderlist}>
         <Button
           text="번호"
-          onClick={() => handleSort("number")}
-          active={activeButton === "number"}
+          onClick={() => handleSort('number')}
+          active={activeButton === 'number'}
         />
         <Button
           text="총 비드"
-          onClick={() => handleSort("asset")}
-          active={activeButton === "asset"}
+          onClick={() => handleSort('asset')}
+          active={activeButton === 'asset'}
         />
       </div>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: 'flex' }}>
         <div className={styled.orderTableContainer}>
           <table className={styled.orderTable}>
             <thead>
@@ -137,7 +152,7 @@ function ClassPage() {
               </tr>
             </thead>
             <StudentList
-              students={studentList}
+              students={sortedInfo}
               handleStudentClick={handleStudentClick}
               handleRemove={handleRemove}
               showRemove={showRemove}
@@ -146,8 +161,8 @@ function ClassPage() {
             />
           </table>
         </div>
-        {selectedStudent && (
-          <div className={styled.studentFinDataContainer}>
+        {selectedStudent && !isEditing && (
+          <div className={`${styled.studentFinDataContainer} ${styled.studentFinDataTable}`}>
             <StudentFinData student={selectedStudent} />
           </div>
         )}
