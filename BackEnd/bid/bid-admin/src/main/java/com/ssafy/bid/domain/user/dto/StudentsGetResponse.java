@@ -10,16 +10,19 @@ public class StudentsGetResponse {
 	private int number;
 	private String name;
 	private int asset;
+	private String birthDate;
 
 	public StudentsGetResponse(
 		int no,
 		String id,
 		String name,
-		int asset
+		int asset,
+		String birthDate
 	) {
 		this.no = no;
 		this.number = Integer.parseInt(id.substring(6).strip());
 		this.name = name;
 		this.asset = asset;
+		this.birthDate = birthDate;
 	}
 }
