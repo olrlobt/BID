@@ -1,0 +1,65 @@
+version: '3.8'
+services:
+
+  frontend:
+    image: olrlobt/bid-front:latest
+    container_name: bid-front
+    ports:
+      - "3000:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+    environment:
+      TZ: Asia/Seoul
+
+  bid-socket:
+    image: olrlobt/bid-socket:latest
+    container_name: bid-socket
+    ports:
+      - "3001:3001"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+    environment:
+      TZ: Asia/Seoul
+
+  bid-core:
+    image: olrlobt/bid-core:latest
+    container_name: bid-core
+    ports:
+      - "8083:8083"
+    volumes:
+      - /home/ubuntu/config/application.yml:/config/core/application.yml
+      - /home/ubuntu/config/application_core.yml:/config/core/application-port.yml
+    environment:
+      - SPRING_CONFIG_LOCATION=file:/config/core/
+      - SPRING_PROFILES_ACTIVE=port
+      - TZ=Asia/Seoul
+
+  bid-admin:
+    image: olrlobt/bid-admin:latest
+    container_name: bid-admin
+    depends_on:
+      - bid-core
+    ports:
+      - "8081:8081"
+    volumes:
+      - /home/ubuntu/config/application.yml:/config/admin/application.yml
+      - /home/ubuntu/config/application_admin.yml:/config/admin/application-port.yml
+    environment:
+      - SPRING_CONFIG_LOCATION=file:/config/admin/
+      - SPRING_PROFILES_ACTIVE=port
+      - TZ=Asia/Seoul
+
+  bid-student:
+    image: olrlobt/bid-student:latest
+    container_name: bid-student
+    depends_on:
+      - bid-core
+    ports:
+      - "8082:8082"
+    volumes:
+      - /home/ubuntu/config/application.yml:/config/student/application.yml
+      - /home/ubuntu/config/application_student.yml:/config/student/application-port.yml
+    environment:
+      - SPRING_CONFIG_LOCATION=file:/config/student/
+      - SPRING_PROFILES_ACTIVE=port
+      - TZ=Asia/Seoul

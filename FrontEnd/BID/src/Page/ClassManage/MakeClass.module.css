@@ -1,0 +1,155 @@
+.makeClass {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 80vh;
+}
+.xlsxDownload {
+  align-self: flex-start;
+  width: 12vw;
+  height: 4vh;
+  line-height: 4vh;
+  border-radius: 5px;
+  color: #ffffff;
+  font-weight: 600;
+  background-color: var(--color-text-important);
+}
+
+.xlsxDownload path {
+  color: #ffffff;
+}
+
+.makeInfo {
+  display: flex;
+  flex-direction: column;
+  width: 47vw;
+  font-weight: 0.9rem;
+  height: 13vh;
+  text-align: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.makeInfo span {
+  color: #ffffff;
+}
+
+.info2 {
+  margin-top: 1vh;
+}
+
+.uploadedInfo {
+  align-self: center;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+
+  input {
+    text-align: center;
+    border: 1px solid #ececec;
+    height: 4vh;
+    width: 4vw;
+    margin-right: 1vw;
+    border-radius: 5px;
+  }
+
+  .uploadName {
+    position: relative;
+    width: 26vw;
+    border-radius: 11px;
+    text-align: left;
+    padding-left: 1vw;
+  }
+
+  .file {
+    position: absolute;
+    margin-left: -8vw;
+    font-size: 0.8rem;
+    width: 6vw;
+    color: #ffffff;
+    height: 3vh;
+    line-height: 3vh;
+    margin-top: 0.6vh;
+    text-align: center;
+    background-color: #a6a6a6;
+    border-radius: 20px;
+  }
+}
+
+.viewStu {
+  height: 35vh;
+  width: 47vw;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow-y: scroll;
+}
+
+.makeBtn {
+  width: 47vw;
+  height: 7vh;
+  background-color: var(--color-point-yellow);
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.filebox input[type='file'] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.infoTitle {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.num,
+.name,
+.birth {
+  display: inline-block;
+  width: 10vw;
+  height: 4vh;
+  text-align: center;
+  line-height: 4vh;
+  margin-bottom: 1vh;
+  margin-top: 1vh;
+}
+
+.num {
+  width: 5vw;
+}
+
+.birth {
+  width: 13vw;
+}
+
+.newStu {
+  margin-top: 0vh;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: 1px solid #ececec;
+}
+
+.noClass {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back {
+  position: absolute;
+  width: 5vw;
+  height: 9vh;
+  left: 5vh;
+  top: 53vw;
+}
