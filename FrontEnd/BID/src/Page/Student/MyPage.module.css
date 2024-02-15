@@ -61,12 +61,7 @@
             gap: 3vw 0;
 
             .myBidArea{
-                /* background-color: pink; */
-
-                h2{
-                    margin-bottom: 1vw;
-                }
-
+                
                 .products{
                     display: flex;
                     width: 61vw;

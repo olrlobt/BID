@@ -21,7 +21,7 @@ function StudentMain() {
 
   /** 경매 목록 쿼리 */
   useQuery({
-    queryKey: ["productList"],
+    queryKey: ["STUproductList"],
     queryFn: () =>
       getProductListApi().then((res) => {
         if (res.data !== undefined) {
@@ -106,8 +106,12 @@ function StudentMain() {
           <p>안녕하세요!</p>
           <p className={styled.name}>{myInfo.model.name}님</p>
           {/* 출석 성공 시 버튼 스타일 변경 */}
-          <button className={styled.attendanceBtn}
-           onClick={handleAttendEvent}>출석</button>
+          <button
+            className={styled.attendanceBtn}
+            onClick={handleAttendEvent}
+          >
+            출석
+          </button>
         </div>
       </div>
       <Models myInfo={myInfo}/>
