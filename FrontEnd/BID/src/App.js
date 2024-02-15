@@ -23,6 +23,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import NoClass from "./Page/ClassManage/NoClass";
 import StudentSaving from "./Page/Student/StudentSaving";
+import UserChangePwd from "./Page/User/UserChangePwd";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ function App() {
           <Route path="/classlist/:teacherId/" element={<ClassList />} />
           <Route path="/classlist/:teacherId/no-class/" element={<NoClass />} />
           <Route path="/classlist/:teacherId/modify/" element={<ClassList />} />
+          <Route path="/classlist/:teacherId/changepass/" element={<UserChangePwd />} />
           <Route path="/classlist/:teacherId/make/" element={<AddClass />} />
         </Route>
         <Route path="/register" element={<RegisterPage />} />
