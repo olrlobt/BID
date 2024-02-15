@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useLayoutEffect, useState, useMemo } from "react";
 import styled from "./BidPage.module.css";
 import WriterButton from "../../Component/Bid/WriterButton";
 import SettingButton from "../../Component/Common/SettingButton";
@@ -8,191 +8,43 @@ import Product from "../../Component/Bid/Product";
 import NoContent from "../../Component/Bid/NoContent";
 import useModal from '../../hooks/useModal';
 import useCoupons from "../../hooks/useCoupons";
-import useProducts from "../../hooks/useProducts";
 import { useSelector } from "react-redux";
 import { couponSelector } from "../../Store/couponSlice";
 import { productSelector } from "../../Store/productSlice";
 import { DragDropContext } from "react-beautiful-dnd";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCouponListApi, registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
-import { getProductListApi } from "../../Apis/BidApis";
+import { useMutation } from "@tanstack/react-query";
+import { registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
+import { mainSelector } from "../../Store/mainSlice";
 
 export default function BidPage(){
-
-  // const dummyProducts = [
-  //   {
-  //     no: 1,
-  //     title: '곰돌이 인형',
-  //     description: '제가 좋아하던 곰돌이 인형이에요! 조금 오래됐지만 깨끗해요 ㅎㅎ',
-  //     goodsImgUrl: 'https://sitem.ssgcdn.com/64/46/21/item/1000524214664_i1_750.jpg',
-  //     category: '기타',
-  //     userName: '백지윤',
-  //     startPrice: 360,
-  //     averagePrice: 480,
-  //     gradePeriodNo: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON(),
-  //     comments: [
-  //       {
-  //         userNo: 17,
-  //         name: '유현지',
-  //         content: '우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 ',
-  //         createdAt: new Date('2022-5-20 10:32:20').toJSON(),
-  //         deleteAt: null,
-  //       },
-  //       {
-  //         userNo: 3,
-  //         name: '곽희웅',
-  //         content: '음 친구군',
-  //         createdAt: new Date('2022-5-20 10:32:25').toJSON(),
-  //         deleteAt: null,
-  //       },
-  //       {
-  //         userNo: 34,
-  //         name: '장수민',
-  //         content: '3대 몇인가요?',
-  //         createdAt: new Date('2022-5-20 10:33:20').toJSON(),
-  //         deleteAt: null,
-  //       },
-  //       {
-  //         userNo: 25,
-  //         name: '왕종욱',
-  //         content: '후욱 곰돌쟝...',
-  //         createdAt: new Date('2022-5-20 10:42:20').toJSON(),
-  //         deleteAt: null,
-  //       }
-  //     ],
-  //   }, 
-  //   {
-  //     no: 2,
-  //     title: '주판',
-  //     description: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다! 연락 많이 주세용',
-  //     goodsImgUrl: 'https://img.freepik.com/premium-psd/abacus-icon-3d-render-illustration-for-children-education_620202-2754.jpg?w=2000',
-  //     category: '기타',
-  //     userName: '김예림',
-  //     startPrice: 360,
-  //     averagePrice: 480,
-  //     gradePeriodNo: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON(),
-  //     comments: [
-  //       {
-  //         userNo: 17,
-  //         name: '유현지',
-  //         content: '우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 우효~ 귀여워라 ',
-  //         createdAt: new Date('2022-5-20 10:32:20').toJSON(),
-  //         deleteAt: null,
-  //       },
-  //       {
-  //         userNo: 3,
-  //         name: '곽희웅',
-  //         content: '음 친구군',
-  //         createdAt: new Date('2022-5-20 10:32:25').toJSON(),
-  //         deleteAt: null,
-  //       },
-  //       {
-  //         userNo: 34,
-  //         name: '장수민',
-  //         content: '3대 몇인가요?',
-  //         createdAt: new Date('2022-5-20 10:33:20').toJSON(),
-  //         deleteAt: null,
-  //       },
-  //       {
-  //         userNo: 25,
-  //         name: '왕종욱',
-  //         content: '후욱 곰돌쟝...',
-  //         createdAt: new Date('2022-5-20 10:42:20').toJSON(),
-  //         deleteAt: null,
-  //       }
-  //     ],
-  //   },
-  //   {
-  //     no: 3,
-  //     title: 'ABC 초콜릿',
-  //     description: '맛있는 쪼꼬',
-  //     goodsImgUrl: 'https://img.freepik.com/premium-psd/chocolate-3d-render_553817-59.jpg',
-  //     category: '간식',
-  //     userName: '이승헌',
-  //     startPrice: 360,
-  //     averagePrice: 480,
-  //     gradePeriodNo: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON()
-  //   }, 
-  //   {
-  //     no: 4,
-  //     title: '초미니 퍼즐',
-  //     description: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다!',
-  //     goodsImgUrl: 'https://img.freepik.com/premium-psd/jigsaw-puzzle-cube-isolated-gaming-and-streaming-icon-set-cute-minimal-style-3d-render_570783-710.jpg',
-  //     category: '기타',
-  //     userName: '이현진',
-  //     startPrice: 360,
-  //     averagePrice: 480,
-  //     gradePeriodNo: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON()
-  //   },
-  //   {
-  //     no: 5,
-  //     title: '빈츠',
-  //     description: '제가 좋아하던 곰돌이 인형이에요! 조금 오래됐지만 깨끗해요 ㅎㅎ',
-  //     goodsImgUrl: 'https://img.freepik.com/free-psd/3d-birthday-icon-with-candy_23-2149664024.jpg?size=338&ext=jpg&ga=GA1.1.1546980028.1703721600&semt=ais',
-  //     category: '간식',
-  //     userName: '유현지',
-  //     startPrice: 360,
-  //     averagePrice: 480,
-  //     gradePeriodNo: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON()
-  //   }, 
-  //   {
-  //     no: 6,
-  //     title: '사탕',
-  //     description: '주판 학원 다닐 때 쓰던 건데 이젠 사용하지 않아서 경매에 올립니다!',
-  //     goodsImgUrl: 'https://previews.123rf.com/images/virtosmedia/virtosmedia2303/virtosmedia230311535/199668012-%ED%8C%8C%EB%9E%80%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%ED%99%94%EB%A0%A4%ED%95%9C-%EC%82%AC%ED%83%95%EA%B3%BC-%EA%B3%BC%EC%9E%90%EC%9E%85%EB%8B%88%EB%8B%A4-3d-%EA%B7%B8%EB%A6%BC.jpg',
-  //     category: '간식',
-  //     userName: '배민지',
-  //     startPrice: 360,
-  //     averagePrice: 480,
-  //     gradePeriodNo: 6,
-  //     createdAt: new Date('2022-5-20 10:30:20').toJSON()
-  //   }
-  // ]
-  
-  const queryClient = useQueryClient();
   const reduxCoupons = useSelector(couponSelector);
   const reduxProducts = useSelector(productSelector);
+  const mainClass = useSelector(mainSelector);
 
-  const [isTeacher, setIsTeacher] = useState(true);
+  const gradeNo = mainClass.no;
+
+  const [isCoupon, setIsCoupon] = useState(true);
   const [coupons, setCoupons] = useState(reduxCoupons);
   const [products, setProducts] = useState(reduxProducts);
   const [productFilter, setProductFilter] = useState('전체');
   const [keyword, setKeyword] = useState('');
 
   const { openModal } = useModal();
-  const { initCoupons } = useCoupons();
-  const { initProducts } = useProducts();
-  let filteredProducts = [];
+  const { initCoupons, registCoupon, unregistCoupon } = useCoupons();
 
   /** 게시자 종류를 toggle하는 함수 */
   const changeWriter = (writer) => {
-    if(isTeacher && writer==='teacher') {}
-    else if(!isTeacher && writer==='student') {}
-    else {setIsTeacher(!isTeacher);}
+    if(isCoupon && writer==='teacher') {}
+    else if(!isCoupon && writer==='student') {}
+    else {setIsCoupon(!isCoupon);}
   }
 
 /******************************* 쿠폰 */
   /** redux에 저장된 값 변경될 때마다 쿠폰 목록 세팅 */
-  useEffect(() => {
+  useLayoutEffect(() => {
     setCoupons(reduxCoupons);
   }, [reduxCoupons]);
 
-  /** 쿠폰 목록 쿼리 */
-  useQuery({
-    queryKey: ['couponList'],
-    queryFn: () => 
-      getCouponListApi(1).then((res) => {
-        if(res.data !== undefined){
-          initCoupons({ couponList: res.data.coupons });
-        }
-        return res.data;
-      }),
-  });
   
   /** 경매 포함/제외 쿠폰 구분 */
   const { unregisteredCoupons, registeredCoupons } = useMemo(() => {
@@ -204,27 +56,31 @@ export default function BidPage(){
   /** 쿠폰 경매 포함 쿼리 */
   const registerCouponQuery = useMutation({
     mutationKey: ['includeCoupon'],
-    mutationFn: (couponNo) => registerCouponApi(1, couponNo),
-    onSuccess: () => { queryClient.invalidateQueries('couponList'); },
-    onError: (error) => { console.log(error); }
+    mutationFn: (params) => registerCouponApi(params.gradeNo, params.couponNo),
+    onSuccess: (data, variables) => { registCoupon({couponNo: variables.couponNo}); },
+    onError: (error, variables) => { console.log(variables, error); }
   });
 
   /** 쿠폰 경매 제외 쿼리 */
   const unregisterCouponQuery = useMutation({
     mutationKey: ['excludeCoupon'],
-    mutationFn: (couponNo) => unregisterCouponApi(1, couponNo),
-    onSuccess: () => { queryClient.invalidateQueries('couponList'); },
-    onError: (error) => { console.log(error); }
+    mutationFn: (params) => unregisterCouponApi(params.gradeNo, params.couponNo),
+    onSuccess: (data, variables) => { unregistCoupon({couponNo: variables.couponNo}); },
+    onError: (error, variables) => { console.log(variables, error); }
   }); 
 
   /** 쿠폰을 드래그 해서 옮길 때 실행되는 함수 */
   const onDragEnd = ({source, destination}) => {
     if(!destination || source.droppableId===destination.droppableId){ return; }
+    const params = {
+      gradeNo: gradeNo,
+      couponNo: source.index
+    }
     if(JSON.parse(destination.droppableId)){
-      registerCouponQuery.mutate(source.index);
+      registerCouponQuery.mutate(params);
     }
     else{
-      unregisterCouponQuery.mutate(source.index);
+      unregisterCouponQuery.mutate(params);
     }
   }
 
@@ -234,17 +90,6 @@ export default function BidPage(){
     setProducts(reduxProducts);
   }, [reduxProducts]);
 
-  /** 경매 목록 쿼리 */
-  useQuery({
-    queryKey: ['productList'],
-    queryFn: () => 
-      getProductListApi(1).then((res) => {
-        if(res.data !== undefined){
-          initProducts({ productList: res.data });
-        }
-        return res.data;
-      }),
-  });
   
   /** 게시글 필터를 toggle하는 함수 */
   const changeFilter = (filter) => {
@@ -259,63 +104,44 @@ export default function BidPage(){
     setKeyword(value);
   };
 
+  /** 필터/검색 조건에 따른 결과 */
+  const filteredProducts = useMemo(() => {
+    let filteredProducts = products && [...products];
+    if(productFilter !== '전체'){
+      filteredProducts = filteredProducts.filter((p) => p.category === productFilter);
+    }
+    if(keyword !== ''){
+      filteredProducts = filteredProducts.filter((p) => p.title.includes(keyword));
+    }
+    return filteredProducts;
+  }, [products, productFilter, keyword]);
   /** 경매 카테고리 초기 설정 */
-  if(products !== null) {
-    if(productFilter === '전체'){
-      if(keyword === ''){ filteredProducts = [...products]; }
-      else{
-        filteredProducts = products.filter((product) => product.title.includes(keyword));
-      }
-    }
-    else{
-      if(keyword === ''){ filteredProducts = products.filter((product) => product.category === productFilter); }
-      else{
-        filteredProducts = products.filter((product) => product.category === productFilter && product.title.includes(keyword));
-      }
-    }
-  }
-
-
+  
   return (
     <>
-    <div className = {styled.bidSection}>
-      <div className = {styled.bidHeader}>
-        <div className={styled.headerTeacher}>
-          <div>
-            <WriterButton
-              onClick = {() => changeWriter('teacher')}
-              text = {'선생님'}
-              active = { isTeacher }
-            />
-            <WriterButton
-              onClick = {() => changeWriter('student')}
-              text = {'학생'}
-              active = { !isTeacher }
-            />
-          </div>
+    <div className={styled.bidSection}>
+      <div className={styled.bidHeader}>
+        <div>
+          <WriterButton
+            onClick = {() => changeWriter('teacher')}
+            text = {'선생님'}
+            active = { isCoupon }
+          />
+          <WriterButton
+            onClick = {() => changeWriter('student')}
+            text = {'학생'}
+            active = { !isCoupon }
+          />
         </div>
         
-        {/* <div className={styled.headerStudent}>
-          <SettingButton
-            onClick = {() =>
-              openModal({
-                type: 'makeNewPost',
-                props: ['경매 올리기', queryClient] })
-              }
-            svg = {AddIcon}
-            text = '경매 올리기' 
-            height = '3vw'
-            backgroundColor = '#5FA1C4'
-          />
-        </div> */}
         <div>
         {
-          isTeacher ?
+          isCoupon ?
           <SettingButton
             onClick = {() =>
               openModal({
                 type: 'newCoupon',
-                props: ['새 쿠폰 등록', queryClient] })
+                props: ['새 쿠폰 등록', gradeNo] })
               }
             svg = {AddIcon}
             text = '새 쿠폰 등록' 
@@ -338,11 +164,6 @@ export default function BidPage(){
                 onClick = { () => changeFilter('학습') }
                 text = '학습'
                 active = { productFilter==='학습' }
-              />
-              <WriterButton
-                onClick = { () => changeFilter('쿠폰') }
-                text = '쿠폰'
-                active = { productFilter==='쿠폰' }
               />
               <WriterButton
                 onClick = { () => changeFilter('오락') }
@@ -368,9 +189,9 @@ export default function BidPage(){
         </div>
       </div>
 
-      <div>
+      <div className={styled.bidBody}>
         {
-          isTeacher?
+          isCoupon?
           (<div className = {styled.couponListWrapper}>
               <DragDropContext onDragEnd={onDragEnd} >
                 <div>
@@ -378,6 +199,7 @@ export default function BidPage(){
                   <CouponList
                     title = 'false'
                     coupons = {unregisteredCoupons? unregisteredCoupons: []}
+                    gradeNo = {gradeNo}
                   />
                 </div>
                 <div>
@@ -385,6 +207,7 @@ export default function BidPage(){
                   <CouponList
                     title= 'true'
                     coupons = {registeredCoupons? registeredCoupons: []}
+                    gradeNo = {gradeNo}
                   />
                 </div>
               </DragDropContext>
@@ -392,24 +215,22 @@ export default function BidPage(){
           :
           (<div className = {styled.productsWrapper}>
             {
-              filteredProducts.length === 0?
+              filteredProducts && filteredProducts.length === 0?
               <NoContent text='현재 진행 중인 경매가 없어요'/>
               :
-              filteredProducts.map((product) => 
+              filteredProducts && filteredProducts.map((product) => 
                 <Product
                   onClick = {() => {
                     openModal({
-                      type: 'viewProduct',
-                      props: [
-                        product.no,
-                        queryClient
-                      ] })
+                      type: 'manageProduct',
+                      props: [gradeNo, product.no] })
                   }}
                   key = {product.no}
                   title = {product.title}
                   displayPrice = {product.displayPrice}
                   goodsImgUrl = {product.goodsImgUrl}
                   userName = {product.userName}
+                  boardStatus = {product.boardStatus}
                 />
               )
             }

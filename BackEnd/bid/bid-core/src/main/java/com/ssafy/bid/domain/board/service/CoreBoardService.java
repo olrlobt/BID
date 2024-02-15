@@ -1,18 +1,11 @@
 package com.ssafy.bid.domain.board.service;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.board.Bidding;
 import com.ssafy.bid.domain.board.Board;
 import com.ssafy.bid.domain.board.Category;
 import com.ssafy.bid.domain.board.dto.BoardCreateRequest;
@@ -20,13 +13,13 @@ import com.ssafy.bid.domain.board.dto.BoardResponse;
 import com.ssafy.bid.domain.board.repository.CoreBiddingRepository;
 import com.ssafy.bid.domain.board.repository.CoreBoardRepository;
 import com.ssafy.bid.domain.board.repository.CoreReplyRepository;
-import com.ssafy.bid.domain.coupon.Coupon;
-import com.ssafy.bid.domain.coupon.CouponStatus;
-import com.ssafy.bid.domain.coupon.repository.CoreCouponRepository;
-import com.ssafy.bid.domain.grade.dto.GradeProjection;
-import com.ssafy.bid.domain.grade.repository.CoreGradeRepository;
-import com.ssafy.bid.domain.gradeperiod.repository.CoreGradePeriodRepository;
-import com.ssafy.bid.domain.gradeperiod.service.CoreGradePeriodService;
+import com.ssafy.bid.domain.coupon.UserCoupon;
+import com.ssafy.bid.domain.coupon.repository.CoreUserCouponRepository;
+import com.ssafy.bid.domain.notification.NotificationType;
+import com.ssafy.bid.domain.notification.dto.NotificationRequest;
+import com.ssafy.bid.domain.notification.service.NotificationService;
+import com.ssafy.bid.domain.user.Student;
+import com.ssafy.bid.domain.user.repository.CoreStudentRepository;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -35,25 +28,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CoreBoardService {
 
 	private final CoreBoardRepository coreBoardRepository;
 	private final CoreReplyRepository coreReplyRepository;
 	private final CoreBiddingRepository coreBiddingRepository;
-	private final TaskScheduler taskScheduler;
-	private final CoreBoardScheduleService coreBoardScheduleService;
+	private final NotificationService notificationService;
+	private final CoreStudentRepository coreStudentRepository;
+	private final CoreUserCouponRepository coreUserCouponRepository;
 
-	private final CoreGradeRepository coreGradeRepository;
-	private final CoreCouponRepository coreCouponRepository;
-	private final CoreGradePeriodRepository coreGradePeriodRepository;
-	private final CoreGradePeriodService coreGradePeriodService;
-
+	@Transactional(readOnly = true)
 	public BoardResponse getBoardDetail(int userNo, long boardNo, int gradeNo) {
 
-		// user의 gradeNo이 넘겨받은 gradeNo이 아닐경우 예외 처리
-
-		BoardResponse boardResponse = coreBoardRepository.getStudentBoard(boardNo)
+		BoardResponse boardResponse = coreBoardRepository.getStudentBoard(boardNo, gradeNo)
 			.orElseThrow(() -> new ResourceNotFoundException("해당 글이 없습니다.", boardNo));
 
 		coreBiddingRepository.findByUserNoAndBoardNo(userNo, boardNo)
@@ -64,48 +51,78 @@ public class CoreBoardService {
 	}
 
 	@Transactional
-	public void registerBoardTask(LocalTime time, long boardNo) {
-
-		LocalDateTime dateTime = LocalDateTime.of(LocalDate.now(), time);
-		Instant instant = dateTime.atZone(ZoneId.systemDefault()).toInstant();
-
-		taskScheduler.schedule(() -> {
-			coreBoardScheduleService.job(boardNo);
-		}, instant);
+	public Board addBoard(int userNo, int gradeNo, BoardCreateRequest boardCreateRequest) {
+		Board board = boardCreateRequest.toEntity(userNo, gradeNo);
+		return coreBoardRepository.save(board);
 	}
 
-	@Scheduled(cron = "0 0 9 * * *")
 	@Transactional
-	public void addWeeklyCoupon() {
-		// 모든 학급의 쿠폰
-		List<GradeProjection> allGradeNo = coreGradeRepository.findBy();
+	protected void bidProgress(long boardNo) {
+		Board board = coreBoardRepository.findById(boardNo)
+			.orElseThrow(() -> new ResourceNotFoundException("게시물이 없습니다.", boardNo));
 
-		for (GradeProjection gradeProjection : allGradeNo) {
-			int gradeNo = gradeProjection.getNo();
-			int userNo = gradeProjection.getUserNo();
+		board.complete();
 
-			// 해당 학급의 모든 쿠폰
-			List<Coupon> allCoupons = coreCouponRepository.findAllByGradeNoAndCouponStatus(gradeNo,
-				CouponStatus.REGISTERED);
-
-			if (!allCoupons.isEmpty()) {
-				Coupon coupon = allCoupons.get(ThreadLocalRandom.current().nextInt(allCoupons.size()));
-
-				BoardCreateRequest boardCreateRequest = BoardCreateRequest.builder()
-					.title(coupon.getName())
-					.description(coupon.getDescription())
-					.startPrice(coupon.getStartPrice())
-					.category(Category.COUPON)
-					.goodsImgUrl("urltest")
-					.gradePeriodNo(6)
-					.build();
-
-				Board board = boardCreateRequest.toEntity(userNo, gradeNo);
-				Board save = coreBoardRepository.save(board);
-
-				LocalTime startTime = coreGradePeriodService.findStartTime(gradeNo, 6);
-				registerBoardTask(startTime, save.getNo());
-			}
+		// 낙찰자가 없을 경우 선행 처리
+		List<Bidding> allBidding = coreBiddingRepository.findAllByBoardNo(board.getNo());
+		if (allBidding.isEmpty()) {
+			return;
 		}
+
+		List<Bidding> biddings = coreBiddingRepository.findAllByBoardNoLimit(board.getNo());
+		StringBuilder forWinner = new StringBuilder();
+		forWinner.append(board.getTitle()).append(" 경매에 낙찰되었어요");
+		for (int i = 1; i < biddings.size(); i++) {
+			forWinner.append(i+1).append("등 입찰가 : ").append(biddings.get(i).getPrice()).append("\n");
+		}
+		StringBuilder forLoser = new StringBuilder();
+		forLoser.append(board.getTitle()).append(" 경매에 유찰되었어요");
+		for (int i = 0; i < biddings.size(); i++) {
+			if (i >= 5) {
+				break;
+			}
+			forLoser.append(i+1).append("등 입찰가 : ").append(biddings.get(i).getPrice()).append("\n");
+		}
+
+		allBidding.forEach(bidding -> {
+
+			Student student = coreStudentRepository.findById(bidding.getUserNo())
+				.orElseThrow(() -> new ResourceNotFoundException("해당 회원이 없습니다.", bidding.getUserNo()));
+
+			if (bidding.getNo().equals(board.getBiddingNo())) {
+
+				bidding.bidSuccess();
+
+				if (board.getCategory() == Category.COUPON) {
+					notificationService.send(NotificationRequest.builder()
+						.title(board.getTitle())
+						.content(forWinner.toString())
+						.receiverNo(bidding.getUserNo())
+						.notificationType(NotificationType.BIDDING_WINNING)
+						.subNo(board.getNo())
+						.build());
+					coreUserCouponRepository.save(UserCoupon.builder()
+						.couponNo(board.getSubNo())
+						.gradeNo(board.getGradeNo())
+						.userNo(board.getUserNo())
+						.build());
+
+				} else if (board.getCategory() == Category.CANNON) {
+					student.addBall();
+				}
+
+			} else {
+				notificationService.send(NotificationRequest.builder()
+					.title(board.getTitle())
+					.content(forLoser.toString())
+					.receiverNo(bidding.getUserNo())
+					.notificationType(NotificationType.BIDDING_FAILED)
+					.build());
+
+				bidding.bidFail();
+				student.addPrice(bidding.getPrice());
+			}
+		});
+
 	}
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,13 @@ public class UserAvatar {
 	 * avatar : userAvatar(me) = 1 : N
 	 */
 	private Integer avatarNo;
+
+	@Builder
+	public UserAvatar(
+		Integer userNo,
+		Integer avatarNo
+	) {
+		this.userNo = userNo;
+		this.avatarNo = avatarNo;
+	}
 }

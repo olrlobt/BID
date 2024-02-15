@@ -19,7 +19,7 @@ public class StudentSalaryResponse {
 		this.salary = salary;
 	}
 
-	public void calculateSalary(int salary) {
-		this.student.calculateSalary(salary);
+	public int calculateSalary(int salary) {
+		return this.student.calculateSalary(salary);
 	}
 }

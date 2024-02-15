@@ -46,6 +46,8 @@ public class User extends BaseEntity {
 	@NotNull
 	private Integer schoolNo;
 
+	private String profileImgUrl;
+
 	public User(
 		String id,
 		String password,
@@ -58,12 +60,35 @@ public class User extends BaseEntity {
 		this.schoolNo = schoolNo;
 	}
 
+	public User(
+		String id,
+		String password,
+		String name,
+		Integer schoolNo,
+		String profileImgUrl
+	) {
+		this.id = id;
+		this.password = password;
+		this.name = name;
+		this.schoolNo = schoolNo;
+		this.profileImgUrl = profileImgUrl;
+	}
+
 	public void updateAdmin(String name, int schoolNo) {
 		this.name = name;
 		this.schoolNo = schoolNo;
 	}
 
+	public void updateProfileImgUrl(String profileImgUrl) {
+		this.profileImgUrl = profileImgUrl;
+	}
+
 	public void changePassword(String encodedNewPassword) {
 		this.password = encodedNewPassword;
+	}
+
+	public void updateInfo(String newId, String newName) {
+		this.id = newId;
+		this.name = newName;
 	}
 }

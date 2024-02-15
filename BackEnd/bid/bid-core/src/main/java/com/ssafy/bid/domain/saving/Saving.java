@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,6 +46,25 @@ public class Saving {
 	 */
 	@NotNull
 	private Integer gradeNo;
+
+	@Builder
+	public Saving(
+		String name,
+		Integer depositPeriod,
+		Integer depositCycle,
+		Integer depositPrice,
+		Integer interestRate,
+		Integer gradeNo
+	) {
+		this.name = name;
+		this.depositPeriod = depositPeriod;
+		this.depositCycle = depositCycle;
+		this.depositPrice = depositPrice;
+		this.interestRate = interestRate;
+		this.terms = "매일 1교시 시작 전 이체 알림이 발송되고, 6교시 종료 전 자동으로 이체돼요\n"
+			+ "이체될 때 가지고 있는 비드가 부족하면 적금은 자동으로 해지돼요";
+		this.gradeNo = gradeNo;
+	}
 
 	public void modify(int depositPrice, int interestRate) {
 		this.depositPrice = depositPrice;

@@ -24,12 +24,17 @@ public class GradeSaveRequest {
 			.schoolCode(schoolCode)
 			.year(year)
 			.classRoom(classRoom)
-			.salary(200)
+			.salary(20000)
+			.salaryRecommendation(20000)
 			.transferAlertPeriod(LocalTime.of(8, 50, 0))
 			.transferPeriod(LocalTime.of(15, 0, 0))
 			.expenditureStatistics(new ExpenditureStatistics())
 			.biddingStatistics(new BiddingStatistics())
 			.userNo(userNo)
 			.build();
+	}
+
+	public String createId() {
+		return this.schoolCode + String.valueOf(this.year) + String.format("%02d", this.classRoom);
 	}
 }

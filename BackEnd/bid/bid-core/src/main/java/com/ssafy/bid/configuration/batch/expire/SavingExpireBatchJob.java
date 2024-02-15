@@ -57,12 +57,12 @@ public class SavingExpireBatchJob {
 	}
 
 	private NotificationRequest createNotificationRequest(SavingExpireAlertRequest savingExpireAlertRequest) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("적금이 만료되어 ").append(savingExpireAlertRequest.getPrice()).append("원이 입금되었어요");
 		return NotificationRequest.builder()
 			.receiverNo(savingExpireAlertRequest.getUserNo())
-			.title("적금 만기 알림")
-			.content(String.valueOf(savingExpireAlertRequest.getPrice())
-				.concat(" ")
-				.concat(String.valueOf(savingExpireAlertRequest.getEndDate())))
+			.title(String.valueOf(savingExpireAlertRequest.getPrice()))
+			.content(String.valueOf(sb.toString()))
 			.notificationType(NotificationType.SAVING_EXPIRE)
 			.build();
 	}

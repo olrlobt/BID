@@ -54,7 +54,7 @@
 }
 
 .savingAImage {
-  background-image: url("../../Asset/Image/HOME_icons/savingA.png");
+  background-image: url('../../Asset/Image/HOME_icons/savingA.png');
   width: 19vw;
   height: 50vh;
   background-size: cover;
@@ -65,7 +65,7 @@
 .savingBImage {
   width: 20vw;
   height: 50vh;
-  background-image: url("../../Asset/Image/HOME_icons/savingB.png");
+  background-image: url('../../Asset/Image/HOME_icons/savingB.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: -1vw -3vh;
@@ -141,4 +141,36 @@
 
 .inputArea div {
   height: 6vh;
+}
+
+.studentBank {
+  display: flex;
+}
+
+.back {
+  align-self: flex-end;
+  width: 5vw;
+  height: 9vh;
+  margin: 0 1vw 2vh 4vw;
+}
+
+.title {
+  display: inline-block;
+  width: 9vw;
+}
+
+.applyBtn {
+  font-size: 1.2rem;
+  background-color: #5fa1c4;
+  color: #ffffff;
+  width: 6vw;
+  height: 5vh;
+  border-radius: 5px;
+  position: absolute;
+  left: 2vw;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.already {
+  background-color: #a6a6a6;
 }
