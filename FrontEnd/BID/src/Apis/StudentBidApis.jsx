@@ -7,7 +7,7 @@ export const STUBidApis = axios.create({
 
 STUBidApis.interceptors.request.use(
   (config) => {
-    config.headers["Content-Type"] = "application/json";
+    // config.headers["Content-Type"] = "application/json";
     config.headers["Authorization"] = `Bearer ${getCookie("accessToken")}`;
 
     return config;
@@ -40,6 +40,21 @@ export const getProductDetailApi = async (boardNo) => {
 export const addProductApi = async (productInfo) => {
   return await STUBidApis.post(`boards`, productInfo);
 };
+
+/**
+ * 이미지 url 발급하기
+ * @param imageFile 이미지 파일
+ */
+export const getImageUrlApi = async (imageFile) => {
+  for (const pair of imageFile.entries()) {
+    console.log(pair[0], pair[1]);
+  }
+  return await STUBidApis.post(`boards/images`, imageFile, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+}
 
 /**
  * 경매 수정하기

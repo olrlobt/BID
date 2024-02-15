@@ -8,6 +8,7 @@ export default function Product(props) {
     displayPrice,
     goodsImgUrl,
     userName,
+    boardStatus
   } = props;
 
   return (
@@ -19,7 +20,12 @@ export default function Product(props) {
         <span className={styled.title}>{title}</span>
         <span className={styled.userName}>{userName}</span>
       </div>
-      <div className={styled.displayPrice}>{displayPrice}비드</div>
+      <div
+        className={styled.displayPrice}
+        style={boardStatus==='PROGRESS'? {}: {color: 'gray'}}
+      >
+        {displayPrice}비드
+      </div>
     </div>
   );
 }

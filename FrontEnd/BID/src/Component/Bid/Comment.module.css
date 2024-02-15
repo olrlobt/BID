@@ -22,6 +22,7 @@
   padding: 1vw 1.3vw;
   box-sizing: border-box;
   width: 31.5vw;
+  border: '0.3vw solid #ECECEC';
   border-radius: 0.5vw;
 
   .commentHeader {

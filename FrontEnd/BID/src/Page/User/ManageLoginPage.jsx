@@ -26,11 +26,11 @@ function ManageLoginPage() {
   const loginUserQuery = useMutation({
     mutationKey: ["loginUser"],
     mutationFn: (userCredentials) => loginUserApi(userCredentials),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       loginUser(data);
 
       setCookie("accessToken", data.data.tokenResponse.accessToken);
-      // console.log(mainClass);
+      await queryClient.invalidateQueries("ClassList");
       if (mainClass) {
         navigate("/");
       } else {
@@ -50,12 +50,14 @@ function ManageLoginPage() {
     queryKey: ["ClassList"],
     queryFn: () =>
       getGrades().then((res) => {
+        console.log(res);
         const foundMainClass = res.data.find((item) => item.main === true);
         initClass(foundMainClass);
         return res.data;
       }),
     enabled: teacherLogin.isLoggedIn,
   });
+
 
   /** 로그인 버튼 */
   const handleLoginEvent = (e) => {

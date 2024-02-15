@@ -50,4 +50,7 @@
 	display: flex;
 	justify-content: flex-start;
 	flex-wrap: wrap;
+	gap: 2.8vw;
+	height: 48vw;
+	overflow: scroll;
 }
