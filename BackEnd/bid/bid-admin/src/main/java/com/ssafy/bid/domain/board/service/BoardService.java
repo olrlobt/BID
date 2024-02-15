@@ -42,7 +42,7 @@ public class BoardService {
 		if (grade.getUserNo() != userNo) {
 			throw new AuthorizationFailedException("권한이 없습니다.");
 		}
-		return boardRepository.findAllStudentBoards(gradeNo, userGradeNo);
+		return boardRepository.findAllStudentBoards(gradeNo, gradeNo);
 	}
 
 	@Transactional
