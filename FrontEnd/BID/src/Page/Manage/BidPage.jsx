@@ -27,9 +27,6 @@ export default function BidPage(){
   const biddingCoupon = useSelector(biddingCouponSelector);
   const biddingCannonball = useSelector(biddingCannonballSelector);
 
-  const biddingCouponInfo = reduxCoupons.find(c => c.no === biddingCoupon.no);
-  console.log(biddingCouponInfo)
-
   const gradeNo = mainClass.no;
 
   const [isCoupon, setIsCoupon] = useState(false);
@@ -222,8 +219,8 @@ export default function BidPage(){
               </DragDropContext>
           </div>)
           :
-          biddingCoupon && biddingCannonball && (
           <div>
+          {biddingCoupon && biddingCannonball && (
             <div className={styled.teacherProducts}>
               <div className={styled.prod}>
                   <div className={styled.header}>
@@ -259,6 +256,7 @@ export default function BidPage(){
                   <RandomItemBox/>
                 </div>
             </div>
+          )}
 
 
             <div className = {styled.productsWrapper}>
@@ -284,7 +282,6 @@ export default function BidPage(){
               }
             </div>
           </div>
-          )
         }
       </div>
     </div>
