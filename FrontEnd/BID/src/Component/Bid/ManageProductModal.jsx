@@ -75,7 +75,7 @@ export default function ManageProductModal({ onClose, ...props }) {
           </div>
           <div className={styled.content}>
             <div className={styled.imgArea}>
-              <img src='https://img.freepik.com/premium-psd/chocolate-3d-render_553817-59.jpg?w=2000' alt='' />
+              <img src={productDetailIinfo.goodsImgUrl} alt='' />
             </div>
             <div className={styled.infoArea}>
               <input 
