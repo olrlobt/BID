@@ -8,12 +8,11 @@ import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.LoginResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
-import com.ssafy.bid.domain.user.dto.TokenResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface CoreUserService {
-	LoginResponse login(LoginRequest loginRequest);
+	LoginResponse login(LoginRequest loginRequest, boolean isAdmin);
 
 	void logout(int userNo, HttpServletRequest request);
 

@@ -7,6 +7,8 @@
     display: flex; 
     justify-content: center; 
     align-items: center; 
+    position: relative; /* Added position relative */
+
 }
 
 
@@ -29,29 +31,31 @@
 }
 
 .contentInput {
-    padding: 0 1rem;
     display: flex;
     justify-content: center;
-    flex-direction: column;
     align-items: center;
-    box-sizing: border-box; 
+    flex-direction: column; /* Changed to column layout */
+    box-sizing: border-box;
 }
+
 
 .contentInput input:focus {
     outline: none; /* 클릭할 때 검정색 테두리 제거 */
-    border: 1px solid #A6A6A6; /* 클릭 시 보여질 테두리 스타일 */
+    border: 1px solid #ECECEC; /* 클릭 시 보여질 테두리 스타일 */
 }
 
 .contentInput input {
     height: 40px;
     width: 250px;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 0.75rem;
     padding: 0 1rem;
     border-radius: .3rem;
-    border: 1px solid #A6A6A6;
+    border: 1px solid #ECECEC;
     box-sizing: border-box;
 }
+
+
 
 .contentInput button{
     width: 250px;
@@ -96,6 +100,14 @@
     color: #A6A6A6;
     cursor: pointer;
     margin-right: 1.2rem;
+}
+
+
+.managelogin { 
+    text-decoration: none;
+    color: #A6A6A6;
+    cursor: pointer;
+    margin-bottom: 5vh;
 }
 
 .registerLink {
@@ -144,3 +156,40 @@
 }
 
 
+.inputWithIcon {
+    display: flex;
+    align-items: center;
+}
+
+  
+.searchSchool {
+    position: absolute;
+    display: flex;
+    height: 18px;
+    width: 110px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Changed to column layout */
+    box-sizing: border-box;
+    top: -25px; 
+    border-radius: .3rem;
+    border: 1px solid #ECECEC;
+    font-size: 0.65rem;
+
+}
+
+.searchSchool input:focus {
+  border: none; 
+  outline: none; 
+}
+
+.searchSchoolIcon {
+    position: absolute;
+    right: 48px;
+    top: -25px; /* 로고 아래로 조정 */
+}
+
+.info {
+    font-size: 0.8rem;
+    margin-top: 1vh;
+}

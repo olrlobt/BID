@@ -17,7 +17,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.user.AccountType;
+import com.ssafy.bid.domain.user.Attendance;
 import com.ssafy.bid.domain.user.DealType;
+import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.dto.AccountRequest;
 import com.ssafy.bid.domain.user.dto.AccountResponse;
 import com.ssafy.bid.domain.user.dto.AccountsResponse;
@@ -30,6 +32,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
+
+	@Override
+	public Optional<Student> findStudentByUserNo(int userNo) {
+		return Optional.ofNullable(
+			queryFactory
+				.selectFrom(student)
+				.where(student.no.eq(userNo))
+				.fetchOne()
+		);
+	}
 
 	@Override
 	public List<UserCouponsResponse> findUserCoupons(int userNo) {
@@ -244,5 +256,16 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 			)
 			.orderBy(account.createdAt.desc())
 			.fetch();
+	}
+
+	@Override
+	public Optional<Attendance> findAttendanceByUserNo(int userNo) {
+		return Optional.ofNullable(
+			queryFactory
+				.select(student.attendance)
+				.from(student)
+				.where(student.no.eq(userNo))
+				.fetchOne()
+		);
 	}
 }

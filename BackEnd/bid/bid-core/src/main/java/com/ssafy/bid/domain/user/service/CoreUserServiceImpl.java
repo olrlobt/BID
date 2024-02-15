@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.user.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -8,12 +9,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.user.Account;
+import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.Admin;
+import com.ssafy.bid.domain.user.DealType;
+import com.ssafy.bid.domain.user.School;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
+import com.ssafy.bid.domain.user.dto.AdminInfo;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.LoginResponse;
@@ -22,7 +28,9 @@ import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentInfo;
 import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
+import com.ssafy.bid.domain.user.repository.AccountRepository;
 import com.ssafy.bid.domain.user.repository.CoreUserRepository;
+import com.ssafy.bid.domain.user.repository.SchoolRepository;
 import com.ssafy.bid.domain.user.security.JwtTokenProvider;
 import com.ssafy.bid.global.error.exception.AuthenticationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
@@ -40,6 +48,8 @@ public class CoreUserServiceImpl implements CoreUserService {
 	private final CoreUserRepository coreUserRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final RedisTemplate redisTemplate;
+	private final SchoolRepository schoolRepository;
+	private final AccountRepository accountRepository;
 
 	private User authenticateUser(String id, String password) {
 		return coreUserRepository.findById(id)
@@ -48,7 +58,8 @@ public class CoreUserServiceImpl implements CoreUserService {
 	}
 
 	@Override
-	public LoginResponse login(LoginRequest loginRequest) {
+	@Transactional
+	public LoginResponse login(LoginRequest loginRequest, boolean isAdmin) {
 		User user = authenticateUser(loginRequest.getId(), loginRequest.getPassword());
 		CustomUserInfo userInfo = createCustomUserInfo(user);
 
@@ -56,11 +67,33 @@ public class CoreUserServiceImpl implements CoreUserService {
 
 		redisTemplate.opsForValue().set("RT:" + user.getNo(), tokenResponse.getRefreshToken(), 7, TimeUnit.DAYS);
 
-		if (user instanceof Student) {
-			List<StudentInfo> studentList = coreUserRepository.findByGradeNo(((Student)user).getGradeNo());
-			return new LoginResponse(tokenResponse, studentList);
+		if (user instanceof Student student) {
+			if (isAdmin) {
+				throw new AuthenticationFailedException("로그인: 알맞은 권한이 아님.");
+			}
+
+			School school = schoolRepository.findById(user.getSchoolNo())
+				.orElseThrow(() -> new ResourceNotFoundException("학교 없음.", user.getSchoolNo()));
+
+			List<StudentInfo> studentList = coreUserRepository.findByGradeNo(student.getGradeNo());
+			StudentInfo studentInfo = null;
+			for (StudentInfo info : studentList) {
+				info.setSchoolName(school.getName());
+				if (info.getNo() == user.getNo()) {
+					studentInfo = new StudentInfo(info.getNo(), info.getGradeNo(), info.getName(), info.getProfileImgUrl(), school.getName(), student.getAsset());
+				}
+			}
+			return new LoginResponse(tokenResponse, studentList, studentInfo, null);
 		} else {
-			return new LoginResponse(tokenResponse, null);
+			if (!isAdmin) {
+				throw new AuthenticationFailedException("로그인: 알맞은 권한이 아님.");
+			}
+
+			School school = schoolRepository.findById(user.getSchoolNo())
+				.orElseThrow(() -> new ResourceNotFoundException("학교 없음.", user.getSchoolNo()));
+			AdminInfo adminInfo = new AdminInfo(user.getNo(), school.getNo(), school.getCode(), school.getName(), user.getName());
+
+			return new LoginResponse(tokenResponse, null, null, adminInfo);
 		}
 	}
 
@@ -113,8 +146,21 @@ public class CoreUserServiceImpl implements CoreUserService {
 	@Override
 	@Transactional
 	public void resetAttendance() {
+		List<Account> accounts = new ArrayList<>();
 		coreUserRepository.findAllStudentsAndSalaries()
-			.forEach(response -> response.calculateSalary(response.getSalary()));
+			.forEach(response -> {
+				int price = response.calculateSalary(response.getSalary());
+				Account account = Account.builder()
+					.accountType(AccountType.INCOME)
+					.price(price)
+					.content("주급 입금.")
+					.dealType(DealType.SALARY)
+					.userNo(response.getStudent().getNo())
+					.gradeNo(response.getStudent().getGradeNo())
+					.build();
+				accounts.add(account);
+			});
+		accountRepository.saveAll(accounts);
 	}
 
 	@Override

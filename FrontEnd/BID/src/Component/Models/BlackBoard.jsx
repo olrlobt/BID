@@ -10,9 +10,9 @@ export default function BlackBoard(props) {
   return (
     <group {...props} dispose={null}>
       <group
-        position={[0.998, 1.029, -3.111]}
+        position={[1.198, 1.229, -3.111]}
         rotation={[Math.PI / 2, 0, -Math.PI / 2]}
-        scale={[0.713, 0.388, 0.388]}
+        scale={[0.753, 0.408, 0.408]}
       >
         <mesh
           castShadow

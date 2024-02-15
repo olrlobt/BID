@@ -5,15 +5,18 @@ import { SvgIcon } from "@material-ui/core";
 import DoDisturbOnIcon from "@mui/icons-material/DoDisturbOn";
 import { deleteRewardApi } from "../../Apis/RewardApis";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { mainSelector } from "../../Store/mainSlice";
 
 export default function Reward(props){
   const { rNo, rName, rPrice, isSetting, onClick, isActivated } = props;
   const queryClient = useQueryClient();
+  const gradeNo = useSelector(mainSelector).no;
 
   /** 리워드 삭제 쿼리 */
   const deleteRewardQuery = useMutation({
     mutationKey: ['deleteReward'],
-    mutationFn: () => deleteRewardApi(rNo),
+    mutationFn: () => deleteRewardApi(gradeNo, rNo),
     onSuccess: () => {
       queryClient.invalidateQueries('rewardList');
     },

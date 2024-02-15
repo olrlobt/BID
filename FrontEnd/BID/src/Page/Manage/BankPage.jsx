@@ -7,10 +7,14 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import useSaving from '../../hooks/useSaving';
 import { useSelector } from 'react-redux';
 import { moneySeletor } from '../../Store/moneySlice';
+import { useLocation } from 'react-router-dom';
+import { mainSelector } from '../../Store/mainSlice';
+import alertBtn from '../../Component/Common/Alert';
 
 export default function BankPage() {
   // 이후 백엔드에서 국고 금액 받아오면 바꾸기
   const classMoney = useSelector(moneySeletor);
+  const mainClass = useSelector(mainSelector);
 
   const [isEdit, setIsEdit] = useState(false);
   const { initSavingList, changeSavingList } = useSaving();
@@ -47,21 +51,21 @@ export default function BankPage() {
   const changeSavings = useMutation({
     mutationKey: ['changeSaving'],
     mutationFn: () =>
-      updateSavingList(savingBasket)
+      updateSavingList(mainClass.no, savingBasket)
         .then(() => {
           changeSavingList(savingBasket);
           setIsEdit(!isEdit);
-          alert('변경되었습니다.');
+          alertBtn({ text: '변경되었습니다.' });
         })
         .catch(() => {
-          alert('변경이 되지 않았습니다.');
+          alertBtn({ text: '변경이 되지 않았습니다.' });
         }),
   });
 
   const { data: savingInfo } = useQuery({
     queryKey: ['savingInfo'],
     queryFn: () =>
-      viewSavingList().then((res) => {
+      viewSavingList(mainClass.no).then((res) => {
         initSavingList(res.data);
         setSavingBasket((prev) => [
           {

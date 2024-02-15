@@ -10,7 +10,6 @@ export default function LineChart({ data }) {
   const prettyData = data[0].data;
   const min = Math.min(...prettyData.map((v) => v.y));
   const max = Math.max(...prettyData.map((v) => v.y));
-  console.log(min);
 
   return (
     <div className={styled.line}>

@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  productList: null,
+  productList: [],
 };
 
 export const productSelector = (state) => {
@@ -17,16 +17,24 @@ export const productSlice = createSlice({
       const productList = action.payload;
       state.productList = productList;
     },
-    addProduct: (state, action) => {
-      const newProduct = action.payload;
-      state.productList = [...state.productList, newProduct];
-    },
-    removeProduct: (state, action) => {
+
+    deleteProduct: (state, action) => {
       const productNo = action.payload;
-      const newList = state.productList.filter((c) => c.no !== productNo);
+      const newList = state.productList.filter((p) => p.no !== productNo);
       state.productList = [...newList];
+    },
+
+    modifyProduct: (state, action) => {
+      const { productNo, patchData } = action.payload;
+      state.productList.forEach((p) => {
+        if(p.no === productNo){
+          p.title = patchData.title;
+          p.category = patchData.category;
+          p.description = patchData.description;
+        }
+      })
     },
   },
 });
 
-export const { initProducts, addProduct, removeProduct } = productSlice.actions;
+export const { initProducts, deleteProduct, modifyProduct } = productSlice.actions;
