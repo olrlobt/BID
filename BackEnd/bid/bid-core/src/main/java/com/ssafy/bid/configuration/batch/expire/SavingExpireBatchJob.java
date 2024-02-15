@@ -62,7 +62,7 @@ public class SavingExpireBatchJob {
 		return NotificationRequest.builder()
 			.receiverNo(savingExpireAlertRequest.getUserNo())
 			.title(String.valueOf(savingExpireAlertRequest.getPrice()))
-			.content(String.valueOf(sb.toString()))
+			.content(sb.toString())
 			.notificationType(NotificationType.SAVING_EXPIRE)
 			.build();
 	}
