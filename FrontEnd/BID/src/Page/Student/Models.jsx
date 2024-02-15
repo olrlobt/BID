@@ -1,32 +1,34 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Canvas } from '@react-three/fiber';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Canvas } from "@react-three/fiber";
 import {
   OrbitControls,
   CameraControls,
   PerspectiveCamera,
   useCursor,
-} from '@react-three/drei';
-import { Classroom, Box } from '../../Component/Models/Classroom';
-import BlackBoard from '../../Component/Models/BlackBoard';
-import { Cactus } from '../../Component/Models/Cactus';
-import Alarm from '../../Component/Models/Alarm';
-import { BiddingPlace } from '../../Component/Models/BiddingPlace';
-import { Bank } from '../../Component/Models/Bank';
-import { SnowBean } from '../../Component/Character/SnowBean';
-import { CharacterModel } from '../../Component/Character/CharacterModel';
+} from "@react-three/drei";
+import { Classroom, Box } from "../../Component/Models/Classroom";
+import BlackBoard from "../../Component/Models/BlackBoard";
+import { Cactus } from "../../Component/Models/Cactus";
+import Alarm from "../../Component/Models/Alarm";
+import { BiddingPlace } from "../../Component/Models/BiddingPlace";
+import { Bank } from "../../Component/Models/Bank";
+import { SnowBean } from "../../Component/Character/SnowBean";
+import { CharacterModel } from "../../Component/Character/CharacterModel";
 import {
   SocketManager,
   socket,
   charactersAtom,
-} from '../../Component/Models/SocketManager';
-import { useAtom } from 'jotai';
-import * as THREE from 'three';
+} from "../../Component/Models/SocketManager";
+import { useAtom } from "jotai";
+import * as THREE from "three";
+import RealTimeModal from "../../Component/User/RealTimeModal";
 
 export default function Models(myInfo) {
   const [characters] = useAtom(charactersAtom);
-  console.log(characters)
+  console.log(characters);
   const [onFloor, setOnFloor] = useState(false);
+  const [isAlarm, setIsAlarm] = useState(true);
   // const [selectedCharacter, setSelectedCharacter] = useState(null);
   useCursor(onFloor);
   const navigate = useNavigate(); // useNavigate hook
@@ -35,24 +37,34 @@ export default function Models(myInfo) {
     navigate(`/studentmain/${characterId}`);
   };
 
+  const handleAlarmClick = () => {
+    setIsAlarm(!isAlarm);
+  };
   return (
     <>
       <SocketManager />
       <Canvas
-        style={{ width: '100%', height: '70vh' }}
+        style={{ width: "100%", height: "70vh" }}
         camera={{ position: [12, 10, 20], fov: 20 }}
       >
         <CameraControls minPolarAngle={2} maxPolarAngle={Math.PI / 2} />
-        <directionalLight position={[1, 1, 1]} 
-        castShadow
-        intensity={2} >
-        </directionalLight>
+        <directionalLight
+          position={[1, 1, 1]}
+          castShadow
+          intensity={2}
+        ></directionalLight>
         <ambientLight intensity={1.7} />
         <OrbitControls />
         <group scale={20} position={[0, 0, 0]}>
           <mesh
             onClick={(e) =>
-              socket.emit('move', [e.point.x / 40, 0, e.point.z / 40], characters, myInfo.myInfo.model.no, myInfo.myInfo.model.gradeNo)
+              socket.emit(
+                "move",
+                [e.point.x / 40, 0, e.point.z / 40],
+                characters,
+                myInfo.myInfo.model.no,
+                myInfo.myInfo.model.gradeNo
+              )
             }
             onPointerEnter={() => setOnFloor(true)}
             onPointerLeave={() => setOnFloor(false)}
@@ -73,11 +85,11 @@ export default function Models(myInfo) {
               }
               selectedCharacter={character.selectedCharacter}
               myModelNo={myInfo.myInfo.model.no} // 내 캐릭터의 번호 전달
-              />
+            />
           ))}
           <BlackBoard />
           <Cactus />
-          <Alarm />
+          <Alarm onClick={handleAlarmClick} />
           <Bank />
           <BiddingPlace />
           {/* <CharacterModel selectedCharacter="SnowmanBody" bodyColor="green"/> */}
@@ -103,6 +115,7 @@ export default function Models(myInfo) {
         />
         <PerspectiveCamera makeDefault position={[0, 10, 190]} />
       </Canvas>
+      {isAlarm && <RealTimeModal handleClick={handleAlarmClick} />}
     </>
   );
 }

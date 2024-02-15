@@ -1,40 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import Models from './Models';
-import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { stuAttendApi, stuAttendCheckApi } from '../../Apis/ModelApis';
-import useSaving from '../../hooks/useSaving';
-import { useSelector } from 'react-redux';
-import { modelListSelector, modelSelector } from '../../Store/modelSlice';
-import styled from './StudentMain.module.css';
-import { socket } from '../../Component/Models/SocketManager';
-import { useMutation } from '@tanstack/react-query';
+import React, { useEffect, useState } from "react";
+import Models from "./Models";
+import { Link } from "react-router-dom";
+import { stuAttendApi, stuAttendCheckApi } from "../../Apis/ModelApis";
+import { useSelector } from "react-redux";
+import { modelListSelector, modelSelector } from "../../Store/modelSlice";
+import styled from "./StudentMain.module.css";
+import { socket } from "../../Component/Models/SocketManager";
+import { useMutation } from "@tanstack/react-query";
+import useAlarm from "../../hooks/useAlarm";
 
 function StudentMain() {
   const models = useSelector(modelListSelector);
   const myInfo = useSelector(modelSelector);
   const gradeNo = myInfo.model.gradeNo;
+  const { updateAlarms } = useAlarm();
 
   useEffect(() => {
     if (models.length > 0) {
-      socket.emit('characters', models); // 서버에 gradeNo 기반으로 캐릭터 데이터 전송
+      socket.emit("characters", models); // 서버에 gradeNo 기반으로 캐릭터 데이터 전송
     }
+    const eventSource = new EventSource(
+      `${process.env.REACT_APP_TCH_API}/notification/subscribe/${myInfo.model.no}`
+    );
+    eventSource.onopen = (e) => {
+      console.log("Connection established");
+    };
+    eventSource.addEventListener("sse", (e) => {
+      console.log(e.data);
+      if (JSON.parse(e.data).title !== "EventStream Created.") {
+        console.log([e.data]);
+        updateAlarms([e.data]);
+      }
+    });
+
+    eventSource.onerror = (e) => {
+      console.log(e);
+      eventSource.close();
+    };
   }, [models, gradeNo]);
 
-  const [chatMessage, setChatMessage] = useState('');
+  const [chatMessage, setChatMessage] = useState("");
   const [attendanceSuccess, setAttendanceSuccess] = useState(false); // 출석 성공 상태 추가
 
   const sendChatMessage = () => {
     if (chatMessage.length > 0) {
-      socket.emit('chatMessage', chatMessage, myInfo.model.no);
-      setChatMessage('');
+      socket.emit("chatMessage", chatMessage, myInfo.model.no);
+      setChatMessage("");
     }
   };
 
   const studentId = myInfo.model.no;
 
   const stuAttendQuery = useMutation({
-    mutationKey: ['stuAttend'],
+    mutationKey: ["stuAttend"],
     mutationFn: () => stuAttendApi(),
     onSuccess: (res) => {
       setAttendanceSuccess(true); // 출석 성공 시 상태 변경
@@ -46,13 +64,13 @@ function StudentMain() {
   });
 
   const stuAttendCheckQuery = useMutation({
-    mutationKey: ['stuAttendCheck'],
+    mutationKey: ["stuAttendCheck"],
     mutationFn: () => stuAttendCheckApi(), // 출석 상태를 체크하는 API 호출
     onSuccess: (res) => {
       if (res.success) {
         console.log(res);
         // 출석이 확인되었을 때 출석 API 호출
-        console.log('이미 출석이 완료되었습니다.');
+        console.log("이미 출석이 완료되었습니다.");
       } else {
         console.log(res);
         // 출석이 안될 상태일때, 출석 체크
@@ -96,7 +114,7 @@ function StudentMain() {
         className={styled.chatMessage}
         placeholder="채팅하기"
         onKeyDown={(e) => {
-          if (e.key === 'Enter') {
+          if (e.key === "Enter") {
             sendChatMessage();
           }
         }}
@@ -124,3 +142,6 @@ function StudentMain() {
 }
 
 export default StudentMain;
+
+// DJD50201
+//130524

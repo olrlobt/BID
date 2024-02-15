@@ -1,33 +1,35 @@
-import React from 'react';
-import styled from '../Manage/BankPage.module.css';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import styled from "../Manage/BankPage.module.css";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
 import {
   applyStudentSaving,
   getStudentSavingInfo,
-} from '../../Apis/StudentApis';
-import Back from '../../Asset/Image/SeatGame/back_btn.png';
-import { useNavigate } from 'react-router-dom';
-import { studentSavingSelector } from '../../Store/studentSavingSlice';
-import useStudentSaving from '../../hooks/useStudentSaving';
-import alertBtn from '../../Component/Common/Alert';
+} from "../../Apis/StudentApis";
+import Back from "../../Asset/Image/SeatGame/back_btn.png";
+import { useNavigate } from "react-router-dom";
+import { studentSavingSelector } from "../../Store/studentSavingSlice";
+import useStudentSaving from "../../hooks/useStudentSaving";
+import alertBtn from "../../Component/Common/Alert";
 
 export default function StudentSaving() {
   const navigate = useNavigate();
   const studentSaving = useSelector(studentSavingSelector);
-  const taxRateList = studentSaving[0].taxRateListGetResponses;
-  const { initStudentstudentSaving, changeStudentstudentSaving } =
-    useStudentSaving();
+  const [taxRateList, setTaxRateList] = useState([]);
+  const { initStudentSavingList, changeStudentSavingList } = useStudentSaving();
 
   // 학생 가입 정보 가져오기
   useQuery({
-    queryKey: ['studentSavingInfo'],
+    queryKey: ["studentSavingInfo"],
     queryFn: () =>
       getStudentSavingInfo().then((res) => {
-        initStudentstudentSaving(res.data);
+        initStudentSavingList(res.data);
+        setTaxRateList(res.data[0].taxRateListGetResponses);
         return res.data;
       }),
   });
+
+  useEffect(() => {}, [studentSaving]);
 
   const handleSubmit = (wantedSaving) => {
     const alreadyApplied = studentSaving.filter((saving) => saving.mySaving);
@@ -39,33 +41,33 @@ export default function StudentSaving() {
       interestRate: wantedSaving.savingInterestRate,
     };
     if (alreadyApplied.length === 0) {
-      changeStudentstudentSaving(applySavingData.no);
+      changeStudentSavingList(applySavingData.no);
       applySaving.mutate(applySavingData);
     } else {
       alertBtn({
-        text: '이미 가입된 적금이 있어 가입이 어렵습니다.',
-        confirmColor: '#E81818',
-        icon: 'error',
+        text: "이미 가입된 적금이 있어 가입이 어렵습니다.",
+        confirmColor: "#E81818",
+        icon: "error",
       });
     }
   };
 
   const applySaving = useMutation({
-    mutationKey: ['studenApplySaving'],
+    mutationKey: ["studenApplySaving"],
     mutationFn: (wantedSaving) =>
       applyStudentSaving(wantedSaving)
         .then(() => {
           alertBtn({
-            text: '가입되었습니다.',
-            confirmColor: '#ffd43a',
-            icon: 'success',
+            text: "가입되었습니다.",
+            confirmColor: "#ffd43a",
+            icon: "success",
           });
         })
         .catch(() => {
           alertBtn({
-            text: '가입이 되지 않았습니다.',
-            confirmColor: '#E81818',
-            icon: 'error',
+            text: "가입이 되지 않았습니다.",
+            confirmColor: "#E81818",
+            icon: "error",
           });
         }),
   });
@@ -74,11 +76,12 @@ export default function StudentSaving() {
     <>
       {studentSaving && (
         <section className={styled.studentBank}>
+          {console.log(studentSaving)}
           <img
             className={styled.back}
             src={Back}
             alt="뒤로가기"
-            onClick={() => navigate('/studentMain')}
+            onClick={() => navigate("/studentMain")}
           />
           <section className={styled.bankPage}>
             <section className={styled.bankSection}>
@@ -99,7 +102,15 @@ export default function StudentSaving() {
                   <section>
                     <div className={styled.taxRate}>{tax.taxRate}%</div>
                     <div className={styled.taxEnd}>{tax.endRange}</div>
-                    <div className={styled.taxIncome}>{tax.incomeLevel}</div>
+                    {studentSaving[0].incomeLevel === tax.incomeLevel ? (
+                      <div className={`${styled.taxIncome} ${styled.mine}`}>
+                        {tax.incomeLevel}분위
+                      </div>
+                    ) : (
+                      <div className={styled.taxIncome}>
+                        {tax.incomeLevel}분위
+                      </div>
+                    )}
                   </section>
                 ))}
               </section>

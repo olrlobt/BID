@@ -54,7 +54,7 @@
 }
 
 .savingAImage {
-  background-image: url('../../Asset/Image/HOME_icons/savingA.png');
+  background-image: url("../../Asset/Image/HOME_icons/savingA.png");
   width: 19vw;
   height: 50vh;
   background-size: cover;
@@ -65,7 +65,7 @@
 .savingBImage {
   width: 20vw;
   height: 50vh;
-  background-image: url('../../Asset/Image/HOME_icons/savingB.png');
+  background-image: url("../../Asset/Image/HOME_icons/savingB.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: -1vw -3vh;
@@ -185,7 +185,7 @@
 
 .taxEnd {
   position: absolute;
-  margin-top: -6vh;
+  margin-top: -5vh;
   margin-left: 5vw;
   font-size: 0.7rem;
 }
@@ -196,5 +196,17 @@
   width: 8vw;
   height: 3vh;
   background-color: #5fa1c4;
+  font-size: 0.9rem;
   margin-right: 0.1vw;
+  margin-top: 1vh;
+}
+
+.taxIncome {
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.mine {
+  color: #f23f3f;
+  font-weight: 600;
 }

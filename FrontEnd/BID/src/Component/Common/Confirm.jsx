@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 export default function confirmBtn({
   icon,
@@ -13,8 +13,8 @@ export default function confirmBtn({
 }) {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
-      confirmButton: 'btn btn-success',
-      cancelButton: 'btn btn-danger',
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-danger",
     },
     buttonsStyling: true,
   });
