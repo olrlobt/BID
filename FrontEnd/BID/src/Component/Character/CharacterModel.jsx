@@ -24,8 +24,6 @@ export function CharacterModel({
     const [showChatBubble, setShowChatBubble] = useState(false);
     const clone = useMemo(() => SkeletonUtils.clone(scene),[scene])
     const {nodes} = useGraph(clone)
-
-    console.log(myModelNo)
     useEffect(() => {
       clone.traverse((child) => {
         if (child.isMesh) {
@@ -34,11 +32,9 @@ export function CharacterModel({
         }
       });
     }, [clone]);
-  
     useEffect(() => {
       let chatMessageBubbleTimeout;
       function onPlayerChatMessage(value) {
-        console.log(value)
         if (value.id === id) {
           setChatMessage(value.message);
           clearTimeout(chatMessageBubbleTimeout);
@@ -391,7 +387,7 @@ export function CharacterModel({
       <mesh geometry={nodes.Cube016_2.geometry} material={materials['pit.001']} />
     </group>
       )}
-      <Box position={[2.892, 0.9, -1.964]} />
+      {myModelNo === id && <Box position={[2.892, 0.9, -1.964]} />}
     </group>
   );
 }
@@ -408,7 +404,6 @@ export function Box({ scale = 0.15, ...props }) {
 
   const handleBoxClick = () => {
     // 여기에서 모달을 열거나 다른 동작을 수행할 수 있습니다.
-    console.log("Box clicked!");
   };
 
   return (
