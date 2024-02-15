@@ -36,7 +36,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 			.otherwise(board.totalPrice.divide(board.attendeeCount)),
 		board.category,
 		board.goodsImgUrl,
-		student.name,
+		user.name,
 		board.gradePeriodNo
 	);
 
