@@ -41,13 +41,14 @@
 .orderTableContainer {
   max-height: 80vh;
   overflow: scroll;
+  display: flex;
 }
 
 .buttonSpacing {
   margin-right: 10px; /* 원하는 간격 값으로 조절 */
 }
 .orderTable {
-  width: 20vw;
+  width: 70vw;
   background-color: #fffef4;
   line-height: 1.5;
   font-size: 14px;

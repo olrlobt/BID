@@ -6,6 +6,7 @@
 
 .content {
     text-align: center;
+    height: 20vh;
 }
 
 .contenttitle { 
@@ -38,6 +39,7 @@
     border-radius: .3rem;
     border: 1px solid #ECECEC;
     box-sizing: border-box;
+    
 }
 
 
@@ -45,7 +47,9 @@
 .button{
     justify-content: center;
     width: 30vw;
-    height: 7.5vh;
+    top: 25vh;
+    position: absolute;
+    height: 5.5vh;
     margin-top: 1.5rem;
     font-size: 1.3rem;
     background-color: #FFD43A;
