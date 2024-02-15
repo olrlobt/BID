@@ -55,12 +55,16 @@ const io = new Server({
   };
 
   io.on("connection", (socket) => {
-    console.log("user", socket.id);
+    console.log("user connected:", socket.id);
 
+    socket.on("joinRoom", (gradeNo) => {
+      socket.join(gradeNo);
+      console.log(`User ${socket.id} joined room ${gradeNo}`);
+    });
 
     socket.on("characters", (data) => {
       // 여기서 models 이벤트를 수신하여 원하는 작업을 수행합니다.
-      // console.log("Received models data:", data);
+      console.log("Received models data:", data);
       data.forEach(model => {
         // 중복 추가 방지
         const gradeNo = model.gradeNo;
@@ -71,12 +75,17 @@ const io = new Server({
           const character = createCharacter(model);
           roomId[gradeNo].push(character);
         }
-        Object.keys(roomId).forEach(gradeNo => {
-          io.emit(`characters-${gradeNo}`, roomId[gradeNo]);
-        });
+        // Object.keys(roomId).forEach(gradeNo => {
+        //   io.emit(`characters-${gradeNo}`, roomId[gradeNo]);
+        // });
+
+        io.to(gradeNo).emit(`characters-${gradeNo}`, roomId[gradeNo]);
       });
     });
 
+    socket.on("leaveRoom", (gradeNo) => {
+      roomId[gradeNo] = []
+    }) 
     socket.on("move", (position, characters, userId, gradeNo) => {
       characters.forEach((character) => {
 
@@ -84,14 +93,14 @@ const io = new Server({
           character.position = position
         }
       })
-      io.emit(`characters-${gradeNo}`, characters);
+      io.to(gradeNo).emit(`characters-${gradeNo}`, characters);
     });
 
-    socket.on("chatMessage", (message, userId) => {
+    socket.on("chatMessage", (message, userId, gradeNo) => {
       console.log(userId)
       console.log(message)
       // Assuming the message object has a sender and content property
-      io.emit("playerChatMessage", {
+      io.to(gradeNo).emit("playerChatMessage", {
         id: userId,
         message,
       });
@@ -100,7 +109,7 @@ const io = new Server({
     socket.on("disconnect", () => {
       console.log("user disconnected");
       const characters = []
-
+      console.log
       // Broadcast the updated characters array to all connected clients
       io.emit("characters", characters);
     });
