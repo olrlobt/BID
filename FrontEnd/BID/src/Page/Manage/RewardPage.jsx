@@ -4,7 +4,6 @@ import SubmitButton from "../../Component/Common/SubmitButton";
 import Reward from "../../Component/Reward/Reward";
 import SettingButton from "../../Component/Common/SettingButton";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { getStudentListApi } from "../../Apis/TeacherManageApis";
 import {
   getRewardListApi,
   addNewRewardApi,
@@ -13,9 +12,11 @@ import {
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { studentSelector } from "../../Store/studentSlice";
+import { mainSelector } from "../../Store/mainSlice";
 
 export default function RewardPage() {
   const students = useSelector(studentSelector);
+  const gradeNo = useSelector(mainSelector).no;
 
   const [isSetting, setIsSetting] = useState(false);
   const [studentList, setStudentList] = useState([]);
@@ -29,7 +30,7 @@ export default function RewardPage() {
   useQuery({
     queryKey: ["rewardList"],
     queryFn: () =>
-      getRewardListApi(1).then((res) => {
+      getRewardListApi(gradeNo).then((res) => {
         if (res.data !== undefined) {
           setRewardList(res.data);
         }
@@ -44,7 +45,7 @@ export default function RewardPage() {
   /** 리워드 추가 쿼리 */
   const addRewardQuery = useMutation({
     mutationKey: ["addNewReward"],
-    mutationFn: (newRewardForm) => addNewRewardApi(1, newRewardForm),
+    mutationFn: (newRewardForm) => addNewRewardApi(gradeNo, newRewardForm),
     onSuccess: () => {
       queryClient.invalidateQueries("rewardList");
     },
@@ -57,7 +58,7 @@ export default function RewardPage() {
   const sendRewardQuery = useMutation({
     mutationKey: ["sendReward"],
     mutationFn: (postData) => {
-      sendRewardApi(1, postData);
+      sendRewardApi(gradeNo, postData);
     },
     onSuccess: (res) => {
       console.log(res);

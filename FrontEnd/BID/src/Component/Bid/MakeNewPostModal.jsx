@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from './MakeNewPostModal.module.css';
 import Modal from '../Common/Modal';
 import DropDownSelect from '../Common/DropDownSelect';
 import SubmitButton from "../Common/SubmitButton";
-import { getProductListApi, addProductApi } from "../../Apis/StudentBidApis";
+import { getProductListApi, addProductApi, getImageUrlApi } from "../../Apis/StudentBidApis";
 import { useMutation } from "@tanstack/react-query";
 import useProducts from '../../hooks/useProducts';
 
 export default function MakeNewPostModal({ onClose, ...props }) {
   const { initProducts } = useProducts();
+  const [imgUrl, setImgUrl] = useState('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw8PDw8PDw8PDw8PDw8NDw8PDw8PDw8PFRUWFhUVFRUYHSggGBolHRUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDQ0NDg0NDysZFRktNystNysrNSsrLSstKysrKysrKystKysrKy0rKys3LS0rKystLSsrKysrKysrKysrK//AABEIAOEA4QMBIgACEQEDEQH/xAAYAAEBAQEBAAAAAAAAAAAAAAABAAIDBv/EABYQAQEBAAAAAAAAAAAAAAAAAAARAf/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABURAQEAAAAAAAAAAAAAAAAAAAAR/9oADAMBAAIRAxEAPwD12iNaEUIhQIoAkgQKAREAkkCBAJEAkkARQgRQBJAkiARQOoa0I0EQogUIEUKEQARQgDQAIoAkgSSBAoAigCKAJIQpIHbQ1oRplNAAigAKAIoAGkDKKVGUVEAilAigAKAIoAigCKBIwA7gpFZRQBFAA1EDKKAAoAGgARQBFCBEAgUARUAYigChQJGIHVHQKEUARQANAAigZTQABpAyigCKAIgAigSUQBNRQRkogIiQdNDQFSiQCIoGUUAiKgMooAGoAEUKAIoAigEDSBmJpAEUIFCgSSB1DWhFCMQBFAyiooIoQARQBFAyjEAUKAIqAIioARiARQqCBQrMBQGIHUNBFCKABpAyigCIARGIBFCgZUMIMqEgymhACKUCMQBFCBEgA0gdA0EUKGIAioDKjQAIoAGhAERQMkoAoiARgBCNAAigChSgJigBGISNqFRFCKAKEAEUARQMkoGYigCMQMkxAASABQBRoAhCYAiKUERiBtGJAIoGU0ACKAIgAigCKAIgEjFAAKBAoAUgQMQJFAIGko2tKQCKAAqAFCgAaABFAEUADQAIoAigCKAKFAEUAKSiRiBtEIBFAEUABQCIoAkgCKAIoAigCKAJIEkgSSBIoFEYlGkdCARQBFAAUARQBEAkkCSQBFAgUASIMooAUooikgiioVoSCwpAEkCWpAEUARQAFAEUCBQBFAEkARSgKQFJIFJKP//Z');
 
   /** 경매 등록 쿼리 */
   const addNewProductQuery = useMutation({
@@ -24,6 +25,14 @@ export default function MakeNewPostModal({ onClose, ...props }) {
     onsError: (error) => { console.log(error); }
   })
 
+  /** 이미지 url 발급 쿼리 */
+  const getImageUrlQuery = useMutation({
+    mutationKey: ['getImageUrl'],
+    mutationFn: (formData) => getImageUrlApi(formData),
+    onSuccess: (res) => { setImgUrl(res.data) },
+    onError: (error) => { console.log(error) }
+  })
+
   /** 경매 등록 함수 */
   const addNewProduct = (e) => {
     e.preventDefault();
@@ -31,7 +40,7 @@ export default function MakeNewPostModal({ onClose, ...props }) {
       title: e.target.title.value,
       description: e.target.description.value,
       category: e.target.category.value,
-      goodsImgUrl: e.target.image.value,
+      goodsImgUrl: imgUrl,
       startPrice: e.target.startPrice.value,
       gradePeriodNo: e.target.gradePeriodNo.value,
     }
@@ -40,8 +49,11 @@ export default function MakeNewPostModal({ onClose, ...props }) {
     onClose();
   }
 
-  const changeProfileImage = async () => {
-    console.log('img uploaded');
+  /** 이미지 등록 -> url 반환 함수 */
+  const changeProfileImage = async (e) => {
+    const formData = new FormData();
+    formData.append('file', e.target.files[0]);
+    getImageUrlQuery.mutate(formData);
   }
 
   return(
@@ -91,14 +103,14 @@ export default function MakeNewPostModal({ onClose, ...props }) {
         <div className={styled.body}>
           <div className={styled.left}>
             <div className={styled.myInfoImgPre}>
-              {/* <img src={'data:image/gif;base64' + profileImage}/> */}
+              <img src={imgUrl}/>
             </div>
             <div className={styled.fileSelect}>
               <input id='uploadName' className={styled.uploadName} defaultValue='첨부파일' placeholder='첨부파일'/>
               <label htmlFor='fileUpload'>파일찾기</label> 
               <input 
                 type='file'
-                name='image'
+                name='biddingImage'
                 id ='fileUpload'
                 onChange={changeProfileImage}
               />

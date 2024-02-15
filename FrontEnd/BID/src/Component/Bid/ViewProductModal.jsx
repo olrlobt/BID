@@ -18,11 +18,10 @@ import useProducts from "../../hooks/useProducts";
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
   
-  const currentUser = useSelector(modelSelector);
-  const nowUserId = currentUser.model.no;
-
   const queryClient = useQueryClient();
   const { deleteProduct } = useProducts();
+  const currentUser = useSelector(modelSelector);
+  const nowUserId = currentUser.model.no;
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -52,7 +51,7 @@ export default function ViewProductModal({ onClose, ...props }) {
   const patchProductQuery = useMutation({
     mutationKey: ['patchProduct'],
     mutationFn: (params) => patchProductApi(params.boardNo, params.productInfo),
-    onSuccess: () => { queryClient.invalidateQueries('getProductDetail');; },
+    onSuccess: () => { queryClient.invalidateQueries('getProductDetail'); },
     onError: (error) => { console.log(error); }
   })
 
@@ -100,8 +99,10 @@ export default function ViewProductModal({ onClose, ...props }) {
 
   /** 경매 삭제 함수 */
   const onClickDeleteProduct = (e) => {
-    deleteProductQuery.mutate(boardNo);
-    onClose();
+    if(window.confirm('게시글을 삭제하시겠습니까?')){
+      deleteProductQuery.mutate(boardNo);
+      onClose();
+    }
   }
 
   /** 입찰 신청 함수 */
@@ -171,20 +172,25 @@ export default function ViewProductModal({ onClose, ...props }) {
                 height='1vw'
                 backgroundColor='#A6A6A6'
               />
-              <SettingButton
-                onClick={ onClickDeleteProduct }
-                svg={ Delete }
-                text='삭제'
-                height='1vw'
-                backgroundColor='#F23F3F'
-              />
+              {
+                isSetting?
+                null
+                :
+                <SettingButton
+                  onClick={ onClickDeleteProduct }
+                  svg={ Delete }
+                  text='삭제'
+                  height='1vw'
+                  backgroundColor='#F23F3F'
+                />
+              }
             </div>
             :
             null
           }
           <div className={styled.content}>
             <div className={styled.imgArea}>
-              <img src='https://img.freepik.com/premium-psd/chocolate-3d-render_553817-59.jpg?w=2000' alt='' />
+              <img src={productDetailIinfo.goodsImgUrl} alt='' />
             </div>
             <div className={styled.infoArea}>
               <input 
@@ -275,7 +281,7 @@ export default function ViewProductModal({ onClose, ...props }) {
         <div className={styled.right}>
           <div className={styled.commentsArea} style={isSetting? {height: '100%'}: {height: '42vw'}}>
             <div className={styled.writerArea}>
-              <div className={styled.left}>
+              <div className={styled.left} style={{border: '0.3vw solid #ECECEC'}}>
                 <div className={styled.descHeader}>
                   <h3>{ productDetailIinfo.userName }</h3>
                   <div>{ trimmedCreateAt(productDetailIinfo.createdAt) }</div>
