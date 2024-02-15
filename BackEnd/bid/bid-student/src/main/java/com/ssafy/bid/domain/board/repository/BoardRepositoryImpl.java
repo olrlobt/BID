@@ -3,6 +3,7 @@ package com.ssafy.bid.domain.board.repository;
 import static com.ssafy.bid.domain.board.QBidding.*;
 import static com.ssafy.bid.domain.board.QBoard.*;
 import static com.ssafy.bid.domain.user.QStudent.*;
+import static com.ssafy.bid.domain.user.QUser.*;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bid.domain.board.BiddingStatus;
 import com.ssafy.bid.domain.board.BoardStatus;
 import com.ssafy.bid.domain.board.dto.BoardListResponse;
+import com.ssafy.bid.domain.user.QUser;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,9 +44,9 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 	public List<BoardListResponse> findBoards(int gradeNo) {
 		return queryFactory.select(constructor)
 			.from(board)
-			.innerJoin(student)
-			.on(board.userNo.eq(student.no)
-				.and(student.gradeNo.eq(gradeNo))
+			.innerJoin(user)
+			.on(board.userNo.eq(user.no)
+				.and(board.gradeNo.eq(gradeNo))
 				.and(board.boardStatus.eq(BoardStatus.PROGRESS)))
 			.orderBy(board.createdAt.desc())
 			.limit(20)
