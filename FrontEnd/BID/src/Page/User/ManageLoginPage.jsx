@@ -63,7 +63,6 @@ function ManageLoginPage() {
         console.log('so... found this!')
         console.log(foundMainClass);
         initClass(foundMainClass);
-        queryClient.setQueryData("ClassList", res.data);
         return res.data;
       }),
   });
