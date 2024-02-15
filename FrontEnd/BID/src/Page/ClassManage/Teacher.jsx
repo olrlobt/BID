@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import { removeCookie } from "../../cookie";
 
-
 export default function Teacher() {
   const location = useLocation();
   const teacherInfo = useSelector(userSelector);
@@ -23,17 +22,16 @@ export default function Teacher() {
   const navigate = useNavigate();
   const { logoutUser } = useUser();
 
-
   /** 로그아웃 쿼리 */
   const logoutUserQuery = useMutation({
-    mutationKey: ['logoutUser'],
+    mutationKey: ["logoutUser"],
     mutationFn: () => logoutUserApi(),
     onSuccess: (res) => {
-      console.log(res)
+      console.log(res);
       // 여기서 토큰 폐기 작업 수행
       // 예를 들어, 로컬 스토리지에서 토큰을 삭제하는 방법:
-      logoutUser()
-      removeCookie('accessToken');
+      logoutUser();
+      removeCookie("accessToken");
     },
     onError: (error) => {
       console.log(error);
@@ -44,8 +42,8 @@ export default function Teacher() {
   const handleLogoutUser = (e) => {
     e.preventDefault();
     logoutUserQuery.mutate();
-    navigate('/managelogin');
-  }
+    navigate("/managelogin");
+  };
 
   return (
     <section className={styled.teacherArea}>
@@ -79,15 +77,15 @@ export default function Teacher() {
               비밀번호 변경
             </Link>
           )}
-          {location.pathname === `/classlist/${userNo}` ? (
-            <button className={styled.logoutBtn} 
-            onClick={handleLogoutUser}>
+          {location.pathname === `/classlist/${userNo}` ||
+          location.pathname === `/classlist/${userNo}/no-class` ? (
+            <button className={styled.logoutBtn} onClick={handleLogoutUser}>
               <FontAwesomeIcon
                 className={styled.icon}
                 icon={faArrowRightFromBracket}
               />
               로그아웃
-          </button>
+            </button>
           ) : (
             <Link to={`/delete/${userNo}`} className={styled.logoutBtn}>
               회원탈퇴

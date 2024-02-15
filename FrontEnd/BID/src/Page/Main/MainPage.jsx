@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "./MainPage.module.css";
 import NavBar from "../../Component/Common/NavBar";
 import { Outlet } from "react-router";
-import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { userLoggedInSelector } from "../../Store/userSlice";
 
 export default function MainPage() {
-  // const location = useLocation();
+  const teacherLogin = useSelector(userLoggedInSelector);
+  useEffect(() => {}, [teacherLogin]);
 
   return (
     <>
