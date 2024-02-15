@@ -5,9 +5,16 @@ import SettingButton from "../../Component/Common/SettingButton";
 import AddIcon from "@material-ui/icons/Add";
 import Product from "../../Component/Bid/Product";
 import NoContent from "../../Component/Bid/NoContent";
+import BiddingCoupon from "../../Component/Bid/BiddingCoupon";
+import CannonBall from "../../Component/Bid/Cannonball";
+import RandomItemBox from "../../Component/Bid/RandomItemBox";
+import Price from "../../Component/Common/Price";
 import useModal from '../../hooks/useModal';
+import SubmitButton from "../../Component/Common/SubmitButton";
 import { useSelector } from "react-redux";
-import { productSelector } from "../../Store/productSlice";
+import { productSelector, biddingCouponSelector, biddingCannonballSelector } from "../../Store//productSlice";
+import { useMutation } from "@tanstack/react-query";
+import { buyAvatarsApi, biddingApi, getProductDetailApi } from "../../Apis/StudentBidApis";
 
 export default function StudentBidPage(){
   const reduxProducts = useSelector(productSelector);
@@ -15,6 +22,8 @@ export default function StudentBidPage(){
   const [products, setProducts] = useState(reduxProducts);
   const [productFilter, setProductFilter] = useState('전체');
   const [keyword, setKeyword] = useState('');
+  const biddingCoupon = useSelector(biddingCouponSelector);
+  const biddingCannonball = useSelector(biddingCannonballSelector);
 
   const { openModal } = useModal();
 
@@ -48,7 +57,71 @@ export default function StudentBidPage(){
     }
     return filteredProducts;
   }, [products, productFilter, keyword]);
-  /** 경매 카테고리 초기 설정 */
+
+  /** 랜덤 박스 아이템 구입 쿼리 */
+  const buyAvatarsQuery = useMutation({
+    mutationKey: ['buyAvatar'],
+    mutationFn: (params) => buyAvatarsApi(params),
+    onSuccess: (res) => { console.log(res) },
+    onError: (error) => { console.log(error) }
+  })
+  
+  /** 랜덤 박스 아이템 구입 함수 */
+  const buyRandomItem = (e) => {
+    if(window.confirm("아이템 랜덤 박스를 구입하시겠습니까?")){
+      const params = {
+        price: 70
+      }
+      buyAvatarsQuery.mutate(params);
+    }
+  }
+
+  /** 입찰 쿼리 */
+  const biddingQuery = useMutation({
+    mutationKey: ['bidding'],
+    mutationFn: (params) => biddingApi(params.boardNo, params.biddingInfo),
+    onSuccess: (res) => { console.log(res); },
+    onError: (error) => { console.log(error); }
+  });
+
+  /** 쿠폰 입찰 신청 함수 */
+  const couponBidSubmit = (e) => {
+    e.preventDefault();
+    const biddingPrice = e.target.price.value;
+    if(biddingPrice==='' || biddingPrice===null || biddingPrice<1) {
+      console.log('금액을 입력해주세요');
+    } else{
+      const biddingInfo = {
+        price: e.target.price.value
+      }
+      const params = {
+        boardNo: biddingCoupon.no,
+        biddingInfo: biddingInfo
+      }
+      biddingQuery.mutate(params);
+      // console.log(biddingPrice+'비드 입찰되었습니다');
+    }
+  };
+
+  /** 자리 구슬 입찰 신청 함수 */
+  const cannonBidSubmit = (e) => {
+    e.preventDefault();
+    const biddingPrice = e.target.price.value;
+    if(biddingPrice==='' || biddingPrice===null || biddingPrice<1) {
+      console.log('금액을 입력해주세요');
+    } else{
+      const biddingInfo = {
+        price: e.target.price.value
+      }
+      const params = {
+        boardNo: biddingCannonball.no,
+        biddingInfo: biddingInfo
+      }
+      biddingQuery.mutate(params);
+      // console.log(biddingPrice+'비드 입찰되었습니다');
+    }
+  };
+
   
   return (
     <>
@@ -107,6 +180,74 @@ export default function StudentBidPage(){
       </div>
 
       <div className={styled.bidBody}>
+        <div className={styled.teacherProducts}>
+          <div className={styled.prod}>
+              <div className={styled.header}>
+                <h3>오늘의 쿠폰</h3>
+                <Price price = {biddingCoupon.displayPrice}/>
+              </div>
+              <div className={styled.desc}>쿠폰은 매일매일 바뀌어요!</div>
+              <BiddingCoupon
+                no = {biddingCoupon.no}
+                name = {biddingCoupon.title}
+                description = ''
+                startPrice = {biddingCoupon.displayPrice}
+              />
+              <div className={styled.biddingArea}>
+                <form onSubmit={couponBidSubmit}>
+                  <input
+                    type="number"
+                    name="price"
+                    className={styled.biddingNumber}
+                  />
+                  <div className={styled.biddingUnit}>비드</div>
+                  <SubmitButton
+                    text="입찰"
+                    width="5vw"
+                    height="4vw"
+                    fontSize="1.5vw"
+                  />
+                </form>
+              </div>
+            </div>
+
+            <div className={styled.prod}>
+              <div className={styled.header}>
+                <h3>자리 구슬</h3>
+                <Price price = {biddingCannonball.displayPrice}/>
+              </div>
+              <div className={styled.desc}>내가 먼저 뽑힐 확률을 높일 수 있어요</div>
+              <CannonBall
+                displayPrice = {biddingCannonball.displayPrice}
+              />
+              <div className={styled.biddingArea}>
+                <form onSubmit={cannonBidSubmit}>
+                  <input
+                    type="number"
+                    name="price"
+                    className={styled.biddingNumber}
+                  />
+                  <div className={styled.biddingUnit}>비드</div>
+                  <SubmitButton
+                    text="입찰"
+                    width="5vw"
+                    height="4vw"
+                    fontSize="1.5vw"
+                  />
+                </form>
+              </div>
+            </div>
+
+            <div className={styled.prod}>
+              <div className={styled.header}>
+                <h3>랜덤 아바타 뽑기</h3>
+                <Price price = {70}/>
+              </div>
+              <div className={styled.desc}>이번엔 어떤 아바타가 나올까요?</div>
+              <RandomItemBox/>
+              <button className={styled.getAvatarBtn} type="button" onClick={buyRandomItem}>아바타 뽑기</button>
+            </div>
+        </div>
         <div className = {styled.productsWrapper} style={{gap: '3vw'}} >
           {
             filteredProducts && filteredProducts.length === 0?
