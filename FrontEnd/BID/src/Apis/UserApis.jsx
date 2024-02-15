@@ -128,18 +128,47 @@ export const searchSchoolApi = async (schoolName) => {
  * @param gradeNo schoolNo도 필요
  * @returns 학급 내 학생 목록
  */
-export const addStudentApi = async () => {
-  return await UserApis.post(`/students`);
+export const addStudentApi = async (userData, gradeNo) => {
+  return await UserApis.post(`/students`, userData, {
+    headers: {
+      "gradeNo": gradeNo
+    }
+  });
 };
 
 /**
  * 학생 편집하기
- * @param gradeNo schoolNo도 필요
+ * @param userNo 
  * @returns 학급 내 학생 목록
  */
-export const editStudentApi = async () => {
-  return await UserApis.post(`/students`);
+export const editStudentApi = async (userNo, userData) => {
+  return await UserApis.patch(`/students/${userNo}`,userData);
 };
+
+/**
+ * 학생 삭제하기
+ * @param gradeNo
+ * @param userNo 
+ * @returns 학급 내 학생 목록
+ */
+
+export const deleteStudentApi = async (userNo, gradeNo) => {
+  return await UserApis.delete(`/students/${userNo}`, {
+    headers: {
+      "gradeNo": gradeNo
+    }
+  });
+};
+
+/**
+ * 학생 비밀번호 초기화
+ * @param userNo
+ * @returns 학급 내 학생 목록
+ */
+export const resetPwdApi = async (userNo) => {
+  return await UserApis.patch(`/password/${userNo}`);
+};
+
 
 
 /**
@@ -155,3 +184,12 @@ export const deleteUserApi = async (gradeNo, userNo, userData) => {
 
   return await UserApis.delete(`${gradeNo}/users/${userNo}`, requestData);
 };
+
+/**
+ * {로그인 후} 비밀번호 변경
+ * @param userData 
+ */
+export const userChangePwdApi = async (userData) => {
+  return await UserApis.patch(`/password/admin`, userData);
+};
+
