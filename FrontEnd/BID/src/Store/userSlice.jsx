@@ -19,6 +19,8 @@ export const userSlice = createSlice({
   reducers: {
     loginUser: (state, action) => {
       const currentUser = action.payload.data;
+      console.log(">> 3 "+"userSlice, loginUser, currentUser");
+      console.log(currentUser);
       state.currentUser = currentUser;
       state.isLoggedIn = true;
     },
