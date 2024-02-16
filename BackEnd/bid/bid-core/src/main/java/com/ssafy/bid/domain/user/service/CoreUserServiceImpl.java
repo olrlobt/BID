@@ -1,29 +1,42 @@
 package com.ssafy.bid.domain.user.service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.bid.domain.user.Account;
+import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.Admin;
+import com.ssafy.bid.domain.user.DealType;
+import com.ssafy.bid.domain.user.School;
 import com.ssafy.bid.domain.user.Student;
-import com.ssafy.bid.domain.user.TokenBlacklist;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
+import com.ssafy.bid.domain.user.dto.AdminInfo;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
+import com.ssafy.bid.domain.user.dto.LoginResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentInfo;
+import com.ssafy.bid.domain.user.dto.TokenResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
-import com.ssafy.bid.domain.user.repository.CoreTokenBlacklistRepository;
+import com.ssafy.bid.domain.user.repository.AccountRepository;
 import com.ssafy.bid.domain.user.repository.CoreUserRepository;
+import com.ssafy.bid.domain.user.repository.SchoolRepository;
 import com.ssafy.bid.domain.user.security.JwtTokenProvider;
+import com.ssafy.bid.global.error.exception.AuthenticationFailedException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
+import com.ssafy.bid.global.util.SecurityUtils;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -34,66 +47,128 @@ public class CoreUserServiceImpl implements CoreUserService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final CoreUserRepository coreUserRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final CoreTokenBlacklistRepository coreTokenBlacklistRepository;
+	private final RedisTemplate redisTemplate;
+	private final SchoolRepository schoolRepository;
+	private final AccountRepository accountRepository;
+
+	private User authenticateUser(String id, String password) {
+		return coreUserRepository.findById(id)
+			.filter(user -> passwordEncoder.matches(password, user.getPassword()))
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 아이디의 유저 없음 또는 비밀번호 불일치"));
+	}
 
 	@Override
-	public String login(LoginRequest loginRequest) {
-		String id = loginRequest.getId();
-		String password = loginRequest.getPassword();
+	@Transactional
+	public LoginResponse login(LoginRequest loginRequest, boolean isAdmin) {
+		User user = authenticateUser(loginRequest.getId(), loginRequest.getPassword());
+		CustomUserInfo userInfo = createCustomUserInfo(user);
 
-		User user = coreUserRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 아이디의 유저 없음"));//TODO: 커스텀 예외처리
+		TokenResponse tokenResponse = jwtTokenProvider.createToken(userInfo);
 
-		if (!passwordEncoder.matches(password, user.getPassword())) {
-			throw new IllegalArgumentException("비밀번호 불일치"); // TODO: 커스텀 예외처리
+		redisTemplate.opsForValue().set("RT:" + user.getNo(), tokenResponse.getRefreshToken(), 7, TimeUnit.DAYS);
+
+		if (user instanceof Student student) {
+			if (isAdmin) {
+				throw new AuthenticationFailedException("로그인: 알맞은 권한이 아님.");
+			}
+
+			School school = schoolRepository.findById(user.getSchoolNo())
+				.orElseThrow(() -> new ResourceNotFoundException("학교 없음.", user.getSchoolNo()));
+
+			List<StudentInfo> studentList = coreUserRepository.findByGradeNo(student.getGradeNo());
+			StudentInfo studentInfo = null;
+			for (StudentInfo info : studentList) {
+				info.setSchoolName(school.getName());
+				if (info.getNo() == user.getNo()) {
+					studentInfo = new StudentInfo(info.getNo(), info.getGradeNo(), info.getName(), info.getProfileImgUrl(), school.getName(), student.getAsset());
+				}
+			}
+			return new LoginResponse(tokenResponse, studentList, studentInfo, null);
+		} else {
+			if (!isAdmin) {
+				throw new AuthenticationFailedException("로그인: 알맞은 권한이 아님.");
+			}
+
+			School school = schoolRepository.findById(user.getSchoolNo())
+				.orElseThrow(() -> new ResourceNotFoundException("학교 없음.", user.getSchoolNo()));
+			AdminInfo adminInfo = new AdminInfo(user.getNo(), school.getNo(), school.getCode(), school.getName(), user.getName());
+
+			return new LoginResponse(tokenResponse, null, null, adminInfo);
 		}
+	}
 
-		CustomUserInfo userInfo = CustomUserInfo.builder()
+	private CustomUserInfo createCustomUserInfo(User user) {
+		return CustomUserInfo.builder()
 			.no(user.getNo())
 			.id(user.getId())
 			.password(user.getPassword())
 			.name(user.getName())
 			.schoolNo(user.getSchoolNo())
-			.gradeNo(user instanceof Student ? ((Student)user).getGradeNo() : -1)
-			.tel(user instanceof Admin ? ((Admin)user).getTel() : null)
+			.gradeNo(user instanceof Student student ? student.getGradeNo() : -1)
+			.tel(user instanceof Admin admin ? admin.getTel() : null)
 			.build();
-
-		return jwtTokenProvider.createAccessToken(userInfo);
 	}
 
 	@Override
 	@Transactional
-	public void logout(String token) {
-		String actualToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+	public void logout(int userNo, HttpServletRequest request) {
+		String token = SecurityUtils.getAccessToken(request);
 
-		TokenBlacklist blacklist = TokenBlacklist.builder()
-			.token(actualToken)
-			.expiryDate(LocalDateTime.now().plusMinutes(30))
-			.build();
+		if (!jwtTokenProvider.validateToken(token)) {
+			throw new AuthenticationFailedException("로그아웃하려는 엑세스 토큰이 검증되지 않았음.");
+		}
 
-		coreTokenBlacklistRepository.save(blacklist);
+		if (redisTemplate.opsForValue().get("RT:" + userNo) != null) {
+			redisTemplate.delete("RT:" + userNo);
+		}
+
+		redisTemplate.opsForValue().set(token, "logout", 7, TimeUnit.DAYS);
 	}
 
 	@Override
 	public StudentFindResponse findStudent(int userNo, StudentFindRequest studentFindRequest) {
-		// 학생PK를 통해 회원쿠폰목록 조회, 기간내 입출금내역목록 조회
 		List<UserCouponsFindResponse> couponResponses = coreUserRepository.findUserCouponsByUserNo(userNo);
 		List<AccountsFindResponse> accountResponses = coreUserRepository.findAccountsByUserNo(userNo,
 			studentFindRequest);
 
-		// 학생PK를 통해 회원 상세(통계) 정보 조회 및 파라미터 검증
 		StudentFindResponse response = coreUserRepository.findStudentByUserNo(userNo)
 			.orElseThrow(() -> new ResourceNotFoundException("학생상세조회-회원PK", userNo));
 
-		// 응답 데이터 완성
 		response.completeResponse(couponResponses, accountResponses);
-
-		// 응답 반환
 		return response;
 	}
 
 	@Override
 	public List<AccountFindResponse> findAccount(int userNo, AccountFindRequest accountFindRequest) {
 		return coreUserRepository.findAccountByUserNo(userNo, accountFindRequest);
+	}
+
+	@Override
+	@Transactional
+	public void resetAttendance() {
+		List<Account> accounts = new ArrayList<>();
+		coreUserRepository.findAllStudentsAndSalaries()
+			.forEach(response -> {
+				int price = response.calculateSalary(response.getSalary());
+				Account account = Account.builder()
+					.accountType(AccountType.INCOME)
+					.price(price)
+					.content("주급 입금.")
+					.dealType(DealType.SALARY)
+					.userNo(response.getStudent().getNo())
+					.gradeNo(response.getStudent().getGradeNo())
+					.build();
+				accounts.add(account);
+			});
+		accountRepository.saveAll(accounts);
+	}
+
+	@Override
+	@Transactional
+	public void calculateIncomeLevel() {
+		coreUserRepository.findAllIncomes().forEach(response -> {
+			response.calculateIncomeLevel();
+			response.getStudent().calculateTaxRate(response.getTaxRate());
+		});
 	}
 }

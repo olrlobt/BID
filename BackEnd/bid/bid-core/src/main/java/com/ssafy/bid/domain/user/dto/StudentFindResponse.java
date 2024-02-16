@@ -30,6 +30,7 @@ public class StudentFindResponse {
 	private int etcSum;
 	private int totalIncome;
 	private int totalExpense;
+	private int asset;
 	private List<UserCouponsFindResponse> couponsResponses;
 	private List<AccountsFindResponse> accountsResponses;
 

@@ -2,6 +2,7 @@ package com.ssafy.bid.domain.user.repository;
 
 import static com.ssafy.bid.domain.coupon.QCoupon.*;
 import static com.ssafy.bid.domain.coupon.QUserCoupon.*;
+import static com.ssafy.bid.domain.grade.QGrade.*;
 import static com.ssafy.bid.domain.saving.QSaving.*;
 import static com.ssafy.bid.domain.saving.QUserSaving.*;
 import static com.ssafy.bid.domain.user.QAccount.*;
@@ -16,13 +17,17 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.bid.domain.saving.dto.SavingTransferRequest;
 import com.ssafy.bid.domain.user.AccountType;
 import com.ssafy.bid.domain.user.User;
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AccountsFindResponse;
+import com.ssafy.bid.domain.user.dto.CalculateIncomeLevelResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
+import com.ssafy.bid.domain.user.dto.StudentInfo;
+import com.ssafy.bid.domain.user.dto.StudentSalaryResponse;
 import com.ssafy.bid.domain.user.dto.UserCouponsFindResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -160,6 +165,82 @@ public class CoreUserRepositoryCustomImpl implements CoreUserRepositoryCustom {
 				)
 			)
 			.orderBy(account.createdAt.desc())
+			.fetch();
+	}
+
+	@Override
+	public List<SavingTransferRequest> findAllByIds(List<Integer> userNos) {
+		return queryFactory
+			.select(Projections.constructor(SavingTransferRequest.class,
+					saving.depositPrice,
+					student
+				)
+			)
+			.from(student)
+			.innerJoin(userSaving).on(userSaving.userNo.eq(student.no))
+			.innerJoin(saving).on(saving.no.eq(userSaving.savingNo))
+			.where(student.no.in(userNos))
+			.fetch();
+	}
+
+	@Override
+	public List<StudentSalaryResponse> findAllStudentsAndSalaries() {
+		return queryFactory
+			.select(Projections.constructor(StudentSalaryResponse.class,
+					student,
+					grade.salary
+				)
+			)
+			.from(student)
+			.innerJoin(grade).on(grade.no.eq(student.gradeNo))
+			.fetch();
+	}
+
+	@Override
+	public List<StudentInfo> findByGradeNo(int gradeNo) {
+		return queryFactory
+			.select(Projections.constructor(StudentInfo.class,
+				student.no,
+				student.gradeNo,
+				student.name,
+				student.profileImgUrl,
+				student.asset))
+			.from(student)
+			.where(student.gradeNo.eq(gradeNo))
+			.fetch();
+	}
+
+	public List<CalculateIncomeLevelResponse> findAllIncomes() {
+		return queryFactory
+			.select(Projections.constructor(CalculateIncomeLevelResponse.class,
+					student,
+					grade.salary,
+					ExpressionUtils.as(
+						JPAExpressions
+							.select(account.price.avg())
+							.from(account)
+							.where(
+								account.gradeNo.eq(grade.no),
+								account.accountType.eq(AccountType.INCOME),
+								account.createdAt.between(LocalDateTime.now().minusDays(7), LocalDateTime.now())
+							)
+						, "avgGradeIncome"
+					),
+					ExpressionUtils.as(
+						JPAExpressions
+							.select(account.price.sum())
+							.from(account)
+							.where(
+								account.userNo.eq(student.no),
+								account.accountType.eq(AccountType.INCOME),
+								account.createdAt.between(LocalDateTime.now().minusDays(7), LocalDateTime.now())
+							)
+						, "sumMyIncome"
+					)
+				)
+			)
+			.from(student)
+			.innerJoin(grade).on(grade.no.eq(student.gradeNo))
 			.fetch();
 	}
 }

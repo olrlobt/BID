@@ -1,0 +1,107 @@
+.home {
+  width: 80vw;
+  margin-top: 3vh;
+  height: 94vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.holdBtn {
+  width: 40vw;
+  height: 15vh;
+  background-color: var(--color-box-important);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgb(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.holdBtn > span {
+  color: #ffffff;
+}
+
+.hold {
+  font-style: italic;
+  font-weight: 700;
+  font-size: 3rem;
+}
+
+.holdInfo {
+  font-size: 0.7rem;
+}
+
+.secondRow,
+.thirdRow {
+  width: 80vw;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.graphSec {
+  display: flex;
+  width: 40vw;
+  height: 34vh;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.infoSec {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.schedule {
+  width: 35vw;
+  height: 34vh;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.infoBox {
+  width: 35vw;
+  height: 15vh;
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgb(0, 0, 0, 0.25);
+}
+
+.icon {
+  width: 35%;
+  height: 100%;
+}
+
+.infoText {
+  width: 80%;
+  padding-right: 5%;
+  font-size: 1.2rem;
+  font-weight: 600;
+  align-self: center;
+  text-align: end;
+}
+
+.infoImportant {
+  color: var(--color-text-important);
+}
+
+.line {
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  margin-right: 3vw;
+  align-items: center;
+  height: 85%;
+}
+
+.category {
+  font-weight: 600;
+}

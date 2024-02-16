@@ -1,5 +1,7 @@
 package com.ssafy.bid.global.error.exception;
 
+import java.util.Arrays;
+
 import lombok.Getter;
 
 /**
@@ -8,10 +10,10 @@ import lombok.Getter;
 @Getter
 public class DataFormatException extends RuntimeException {
 
-	private final Object parameterValue;
+	private final Object[] parameterValues;
 
-	public DataFormatException(String message, Object parameterValue) {
-		super(message + " Parameter Value: " + parameterValue.toString());
-		this.parameterValue = parameterValue;
+	public DataFormatException(String message, Object... parameterValues) {
+		super(message + " Parameter Value: " + Arrays.toString(parameterValues));
+		this.parameterValues = parameterValues;
 	}
 }

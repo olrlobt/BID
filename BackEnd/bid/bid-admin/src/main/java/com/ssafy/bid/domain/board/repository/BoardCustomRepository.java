@@ -6,6 +6,6 @@ import com.ssafy.bid.domain.board.dto.BoardListResponse;
 
 public interface BoardCustomRepository {
 
-	List<BoardListResponse> findAllStudentBoards(int gradeNo);
+	List<BoardListResponse> findAllStudentBoards(int gradeNo, int userGradeNo);
 
 }

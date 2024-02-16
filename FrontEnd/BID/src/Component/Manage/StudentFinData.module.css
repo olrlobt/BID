@@ -1,0 +1,33 @@
+.studentFinDataContainer {
+  background-color: white;
+  height: 80vh;
+}
+
+.dashboard {
+  margin-left: 2vw;
+  background-color: #fffef0;
+}
+
+.dashboardContainer {
+  background-color: white;
+  padding: 2vh;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  height: 76vh;
+  display: flex;
+  justify-content: space-between; /* To separate left and right containers */
+}
+
+.additionalChartsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%; /* To take up 50% of the parent container width */
+  margin-left: 20px;
+}
+
+.chartsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}

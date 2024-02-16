@@ -23,7 +23,9 @@ public class BoardResponse {
 	private int resultPrice;
 	private String category;
 	private String goodsImgUrl;
+	private int userNo;
 	private String userName;
+	private String userProfileImgUrl;
 	private int gradePeriodNo;
 	private LocalDateTime createdAt;
 
@@ -31,8 +33,8 @@ public class BoardResponse {
 	private List<ReplyResponse> comments;
 
 	public BoardResponse(long no, String title, String description, int startPrice, BoardStatus boardStatus,
-		int averagePrice, int resultPrice, Category category, String goodsImgUrl, String userName, int gradePeriodNo,
-		LocalDateTime createdAt) {
+		int averagePrice, int resultPrice, Category category, String goodsImgUrl, int userNo, String userName,
+		String userProfileImgUrl, int gradePeriodNo, LocalDateTime createdAt) {
 		this.no = no;
 		this.title = title;
 		this.description = description;
@@ -42,7 +44,9 @@ public class BoardResponse {
 		this.resultPrice = resultPrice;
 		this.category = category.getCategory();
 		this.goodsImgUrl = goodsImgUrl;
+		this.userNo = userNo;
 		this.userName = userName;
+		this.userProfileImgUrl = userProfileImgUrl;
 		this.gradePeriodNo = gradePeriodNo;
 		this.createdAt = createdAt;
 	}
