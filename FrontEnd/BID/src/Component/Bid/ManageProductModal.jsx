@@ -9,6 +9,7 @@ import NoContent from "./NoContent";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getProductDetailApi, deleteProductApi } from "../../Apis/TeacherBidApis";
 import useProducts from "../../hooks/useProducts";
+import confirmBtn from "../Common/Confirm";
 
 export default function ManageProductModal({ onClose, ...props }) {
   const gradeNo = props[0];
@@ -51,10 +52,19 @@ export default function ManageProductModal({ onClose, ...props }) {
 
   /** 경매 삭제 함수 */
   const onClickDeleteProduct = () => {
-    if(window.confirm('게시글을 삭제하시겠습니까?')){
-      deleteProductQuery.mutate(boardNo);
-      onClose();
-    }
+    onClose();
+    confirmBtn({
+			icon: "warning",
+			text: "삭제하신 게시글은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?",
+			confirmTxt: "삭제",
+			confirmColor: "#F23F3F",
+			cancelTxt: "취소",
+			cancelColor: "#a6a6a6",
+			confirmFunc: () => {
+        deleteProductQuery.mutate(boardNo);
+      },
+      cancelFunc: () => {}
+		})
   }
 
   return (
