@@ -71,7 +71,7 @@ export default function Home() {
           setLineData(
             res.data.biddingStatisticsFindResponses.map((item) => {
               return {
-                x: `${item.date.split("-")[1]}.${item.date.split("-")[2]}`,
+                x: `${parseInt(item.date.split("-")[2])}`,
                 y: item.count,
               };
             })
