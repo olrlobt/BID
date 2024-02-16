@@ -1,21 +1,21 @@
-import React from 'react';
-import { createPortal } from 'react-dom';
-import { useSelector } from 'react-redux';
-import { modalSelector } from '../../Store/modalSlice';
-import useModal from '../../hooks/useModal';
-import CouponModal from '../DashboardModals/CouponModal';
-import ChangeBidModal from '../DashboardModals/ChangeBidModal';
-import TimeModal from '../DashboardModals/TimeModal';
-import NewCouponModal from '../Bid/NewCouponModal';
-import StudentAdd from '../Manage/StudentAdd';
-import PwdRemoveModal from '../Manage/PwdRemoveModal';
-import StudentEditModal from '../Manage/StudentEditModal';
-import ViewProductModal from '../Bid/ViewProductModal';
-import SearchSchoolModal from '../User/SearchSchoolModal';
+import React from "react";
+import { createPortal } from "react-dom";
+import { useSelector } from "react-redux";
+import { modalSelector } from "../../Store/modalSlice";
+import useModal from "../../hooks/useModal";
+import CouponModal from "../DashboardModals/CouponModal";
+import ChangeBidModal from "../DashboardModals/ChangeBidModal";
+import TimeModal from "../DashboardModals/TimeModal";
+import NewCouponModal from "../Bid/NewCouponModal";
+import StudentAdd from "../Manage/StudentAdd";
+import PwdRemoveModal from "../Manage/PwdRemoveModal";
+import StudentEditModal from "../Manage/StudentEditModal";
+import ViewProductModal from "../Bid/ViewProductModal";
+import SearchSchoolModal from "../User/SearchSchoolModal";
 import MakeNewPostModal from "../Bid/MakeNewPostModal";
-import StudentSchoolModal from '../User/StudentSchoolModal';
+import StudentSchoolModal from "../User/StudentSchoolModal";
 import ManageProductModal from "../Bid/ManageProductModal";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +31,7 @@ const MODAL_COMPONENTS = {
   makeNewPost: MakeNewPostModal,
   searchSchool: SearchSchoolModal,
   studentSchool: StudentSchoolModal,
-  manageProduct: ManageProductModal
+  manageProduct: ManageProductModal,
 };
 
 function ModalContainer() {
@@ -46,7 +46,7 @@ function ModalContainer() {
     <QueryClientProvider client={queryClient}>
       <Modal onClose={closeModal} {...props} />
     </QueryClientProvider>,
-    document.getElementById('modal')
+    document.getElementById("modal")
   );
 }
 

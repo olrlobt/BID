@@ -5,14 +5,55 @@ import PwdRemoveBtn from './PwdRemoveBtn';
 import DoDisturbOnIcon from '@mui/icons-material/DoDisturbOn';
 import { SvgIcon } from "@material-ui/core";
 import EditIcon from '@mui/icons-material/Edit';
+import { deleteStudentApi } from "../../Apis/UserApis";
+import { useMutation } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { mainSelector } from "../../Store/mainSlice";
 
 const Student = ({ item, onClick, handleRemove, handleEdit, showRemove }) => {
+  
+  const mainClass = useSelector(mainSelector);
+  /** 학생 비밀번호 초기화 쿼리 */
+  const resetPwdQuery = useMutation({
+    mutationKey: ['resetPwd'],
+    mutationFn: () => resetPwdApi(),
+    onSuccess: (res) => {
+      console.log(res.data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  /** 학생 비밀번호 초기화 **/
+  const resetPwdApi = (e) => {
+    e.preventDefault();
+    resetPwdQuery.mutate();
+  }
+
+  // /** 학생 제거 쿼리 */
+  // const deleteStudentQuery = useMutation({
+  //   mutationKey: ['deleteStudent'],
+  //   mutationFn: () => deleteStudentApi(item.no),
+  //   onSuccess: (res) => {
+  //     console.log(res.data);
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //   },
+  // });
+
+  /** 학생 비밀번호 초기화 **/
   const onRemove = () => {
-    handleRemove(item.no);
+    handleRemove(item.no)
+    console.log(item)
+    // deleteStudentQuery.mutate(item.no,mainClass.no)
   };
+
   const onEdit = () => {
     handleEdit(item);
   };
+
   const { openModal } = useModal();
 
 
@@ -23,8 +64,7 @@ const Student = ({ item, onClick, handleRemove, handleEdit, showRemove }) => {
         <td>{item.name}</td>
         <td>{item.asset}</td>
         {showRemove && (
-          <td onClick={onEdit}>
-              <PwdRemoveBtn
+          <td className={styled.resetPwdCell} onClick={onEdit}>              <PwdRemoveBtn
                 onClick={() =>
                   openModal({
                     type: "pwdRemove",
