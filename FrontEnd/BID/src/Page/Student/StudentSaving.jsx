@@ -82,6 +82,7 @@ export default function StudentSaving() {
             src={Back}
             alt="뒤로가기"
             onClick={() => navigate("/studentMain")}
+            onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}
           />
           <section className={styled.bankPage}>
             <section className={styled.bankSection}>
