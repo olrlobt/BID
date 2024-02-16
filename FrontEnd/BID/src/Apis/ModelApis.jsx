@@ -24,18 +24,16 @@ ModelApis.interceptors.request.use(
  * @returns 선생님 이름, 학교 이름
  */
 export const studentLoginApi = async (studentData) => {
-    return await ModelApis.post(`/login`, studentData);
-  };
-  
+  return await ModelApis.post(`/login`, studentData);
+};
 
 /**
  * 학생 로그아웃
- * @param  
+ * @param
  */
 export const studentLogoutApi = async () => {
   return await ModelApis.get(`/logout`);
 };
-
 
 /**
  * 학생 패스워드 수정
@@ -67,16 +65,16 @@ export const stuAttendCheckApi = async () => {
  * @param userNo 사용자 pk
  */
 export const getMyBidListApi = async (userNo) => {
-  return await ModelApis.get(`/users/${userNo}/boards`)
-}
+  return await ModelApis.get(`/users/${userNo}/boards`);
+};
 
 /**
  * 보유 아바타 현황
  * @param userNo 사용자pk
  */
 export const getMyAvatarListApi = async (userNo) => {
-  return await(ModelApis).get(`/${userNo}/avatars`);
-}
+  return await ModelApis.get(`/${userNo}/avatars`);
+};
 
 /**
  * 아바타 수정
@@ -84,13 +82,12 @@ export const getMyAvatarListApi = async (userNo) => {
  */
 export const editAvatarApi = async (AvatarNo) => {
   return await ModelApis.patch(`/avatars`, AvatarNo); // body에 no: AvatarNo 넣어서 보내기
-}
-
+};
 
 /**
  * 아바타 업데이트후 유저들 불러오기
- * @param 
+ * @param
  */
 export const updateUsersApi = async () => {
   return await ModelApis.get(`/users`); // body에 no: AvatarNo 넣어서 보내기
-}
+};
