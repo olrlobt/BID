@@ -24,8 +24,10 @@ import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.LoginResponse;
+import com.ssafy.bid.domain.user.dto.PasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
@@ -143,6 +145,16 @@ public class UserApi {
 	@PatchMapping("/password")
 	public ResponseEntity<?> updateAdminPassword(@RequestBody AdminPasswordUpdateRequest adminPasswordUpdateRequest) {
 		userService.updateAdminPassword(adminPasswordUpdateRequest);
+		return ResponseEntity.status(OK).build();
+	}
+
+	@PatchMapping("/password/admin")
+	public ResponseEntity<?> updatePasswordAfterLogin(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@RequestBody PasswordUpdateRequest request
+	) {
+		CustomUserInfo userInfo = userDetails.getUserInfo();
+		userService.updatePassword(userInfo, request);
 		return ResponseEntity.status(OK).build();
 	}
 

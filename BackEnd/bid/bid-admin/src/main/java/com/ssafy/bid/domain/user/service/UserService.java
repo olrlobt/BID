@@ -6,6 +6,8 @@ import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
+import com.ssafy.bid.domain.user.dto.PasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
 import com.ssafy.bid.domain.user.dto.StudentUpdateRequest;
@@ -34,6 +36,8 @@ public interface UserService {
 	void resetStudentPassword(UserType userType, int userNo);
 
 	void updateAdminPassword(AdminPasswordUpdateRequest adminPasswordUpdateRequest);
+
+	void updatePassword(CustomUserInfo userInfo, PasswordUpdateRequest request);
 
 	List<StudentsGetResponse> getStudents(UserType userType, int gradeNo);
 

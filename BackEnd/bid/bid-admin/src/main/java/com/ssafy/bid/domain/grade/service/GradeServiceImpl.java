@@ -55,8 +55,9 @@ public class GradeServiceImpl implements GradeService {
 		// 학생등록
 		int schoolNo = request.getSchoolNo();
 		List<Student> students = request.getStudentListSaveRequests().stream()
-			.map(studentListSaveRequest -> studentListSaveRequest.toEntity(passwordEncoder, schoolNo, savedGrade.getNo(),
-				request.createId()))
+			.map(
+				studentListSaveRequest -> studentListSaveRequest.toEntity(passwordEncoder, schoolNo, savedGrade.getNo(),
+					request.createId()))
 			.toList();
 		List<Student> savedStudents = studentRepository.saveAll(students);
 
@@ -128,6 +129,8 @@ public class GradeServiceImpl implements GradeService {
 		if (!exists) {
 			throw new ResourceNotFoundException("학급삭제: 삭제하려는 Grade 엔티티가 없음.", gradeNo);
 		}
+		savingRepository.deleteByGradeNo(gradeNo);
+		gradePeriodRepository.deleteByGradeNo(gradeNo);
 
 		gradeRepository.deleteById(gradeNo);
 		studentRepository.deleteAllByGradeNo(gradeNo);
