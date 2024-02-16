@@ -1,0 +1,56 @@
+.bidSection {
+	display: flex;
+	flex-direction: column;
+	width: calc(100% - 20vw);
+  height: 100vh;
+	padding: 5vh;
+	box-sizing: border-box;
+}
+
+.bidHeader {
+	display: flex;
+	justify-content: space-between;
+	margin: 5vh 0;
+
+	.filterArea{
+		display: flex;
+
+		.keywordSearch{
+			margin-left: 3vw;
+
+			input{
+			border: 1px solid #c8c8c8;
+			padding: 0 1vw;
+					box-sizing: border-box;
+			border-radius: 0.5vw;
+			width: 18vw;
+					height: 2vw;
+					margin-right: 1vw;
+			}
+			input:focus{
+			outline: none;
+			}
+		}
+	}
+}
+
+.couponListWrapper{
+	display: flex;
+	justify-content: space-around;
+}
+
+.couponListTitle {
+	text-align: center;
+	font-size: 3vh;
+	font-weight: bold;
+	margin-bottom: 1vh;
+}
+
+.productsWrapper {
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	gap: 2.8vw;
+	height: 48vw;
+	overflow: scroll;
+}

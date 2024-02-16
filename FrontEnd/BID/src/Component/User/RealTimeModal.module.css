@@ -1,0 +1,70 @@
+.alarmBackground {
+  position: absolute;
+  width: 36vw;
+  height: 85vh;
+  top: 8%;
+  background-color: #ffffff;
+  left: 60%;
+  border-radius: 10px;
+}
+
+.listContainer {
+  font-size: 0.9rem;
+  height: 65vh;
+  overflow: scroll;
+}
+
+.title {
+  margin-top: 2vh;
+  display: flex;
+  align-items: center;
+}
+
+.activity {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.bell {
+  margin-left: 2vw;
+  width: \8vw;
+  height: 12vh;
+}
+
+.alarmContainer {
+  padding: 1vw 2vw 1vw 2vw;
+}
+
+.alarmList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.createdAt {
+  align-self: center;
+  font-size: 0.8rem;
+}
+
+.bar {
+  width: 100%;
+  height: 0.1vh;
+  margin-top: 2vh;
+  background-color: #a6a6a6;
+}
+
+.complete {
+  width: 5vw;
+  height: 4vh;
+  border-radius: 5px;
+  background-color: #cc636f;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.delete {
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin-left: 13vw;
+  margin-top: -7vh;
+}

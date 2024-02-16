@@ -1,0 +1,27 @@
+.logoContainer {
+  display: flex;
+}
+
+.Face {
+  
+}
+
+.logoInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.B_D {
+  position: relative;
+  margin-left: 0.5vw;
+}
+
+.logoContainer p {
+  position: relative;
+
+  margin-left: 1vw;
+  font-size: 0.7rem;
+  color: #a6a6a6;
+  font-weight: bold;
+}

@@ -1,0 +1,104 @@
+.section {
+    width: 100%;
+    height: 62.5vw;
+    background-color: FFFEF0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboardContainer {
+    background-color: white;
+    width: 95%;
+    height: 95%;
+    padding: 2vw;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between; /* To separate left and right containers */
+
+    .leftArea{
+        flex: 3;
+        /* background-color: orange; */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-right: 5vw;
+
+        .imgArea{
+            width: 26vw;
+            height: 26vw;
+            margin-bottom: 1vw;
+            overflow: hidden;
+            border-radius: 50%;
+
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .descArea{
+            line-height: 3vw;
+        }
+    }
+
+    .rightArea{
+        flex: 7;
+
+        .pageSelectArea{
+            width: 21vw;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2vw;
+        }
+
+        .myBidContainer{
+            display: flex;
+            flex-direction: column;
+            height: 50vw;
+            gap: 3vw 0;
+
+            .myBidArea{
+                
+                .products{
+                    display: flex;
+                    width: 61vw;
+                    gap: 0 2vw;
+                    overflow: scroll;
+                    padding: 2vw;
+                    box-sizing: border-box;
+                }
+            }
+        }
+
+        .myAvatarContainer{
+            display: flex;
+            flex-wrap: wrap;
+            height: 50vw;
+            gap: 2.5vw;
+            overflow: scroll;
+        }
+    }
+}
+
+.additionalChartsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* To take up 50% of the parent container width */
+    margin-left: 20px;
+}
+
+.chartsContainer {
+    width: 50%; /* To take up 50% of the parent container width */
+}
+
+.schoolName{
+    font-size: 0.8rem;
+}
+.name{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+

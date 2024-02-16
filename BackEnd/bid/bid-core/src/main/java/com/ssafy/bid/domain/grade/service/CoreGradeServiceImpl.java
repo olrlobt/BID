@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.dto.GradePeriodsGetResponse;
 import com.ssafy.bid.domain.grade.dto.GradeStatisticsGetResponse;
-import com.ssafy.bid.domain.grade.repository.CoreGradePeriodRepository;
 import com.ssafy.bid.domain.grade.repository.CoreGradeRepository;
+import com.ssafy.bid.domain.gradeperiod.repository.CoreGradePeriodRepository;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -45,5 +45,12 @@ public class CoreGradeServiceImpl implements CoreGradeService {
 		coreGradeRepository.findAllWinningBiddingStatistics().forEach(response -> grades.stream()
 			.filter(grade -> grade.getNo() == response.getGradeNo())
 			.forEach(grade -> grade.getBiddingStatistics().updateBiddingStatistics(response)));
+	}
+
+	@Override
+	@Transactional
+	public void recommendSalary() {
+		coreGradeRepository.findAllGradeBiddingPrice()
+			.forEach(response -> response.getGrade().updateSalaryRecommendation(response.getDiff()));
 	}
 }

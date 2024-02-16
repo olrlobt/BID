@@ -8,4 +8,6 @@ import com.ssafy.bid.domain.saving.Saving;
 
 public interface SavingRepository extends JpaRepository<Saving, Integer>, SavingRepositoryCustom {
 	List<Saving> findAllByGradeNo(int gradeNo);
+
+	void deleteByGradeNo(int gradeNo);
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.ssafy.bid.configuration.security.JwtProperties;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
+import com.ssafy.bid.domain.user.dto.TokenResponse;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -23,19 +24,26 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtTokenProvider {
 	private final Key key;
-	private final long accessTokenExpTime;
+	private final long ACCESS_TOKEN_EXPIRATION;
+	private final long REFRESH_TOKEN_EXPIRATION;
 
 	public JwtTokenProvider(JwtProperties jwtProperties) {
 		byte[] keyBytes = Decoders.BASE64URL.decode(jwtProperties.getSecret());
 		this.key = Keys.hmacShaKeyFor(keyBytes);
-		this.accessTokenExpTime = jwtProperties.getExpirationTime();
+		this.ACCESS_TOKEN_EXPIRATION = jwtProperties.getExpirationTime();
+		this.REFRESH_TOKEN_EXPIRATION = jwtProperties.getRefreshExpirationTime();
 	}
 
-	public String createAccessToken(CustomUserInfo userInfo) {
-		return createToken(userInfo, accessTokenExpTime);
+	public TokenResponse createToken(CustomUserInfo userInfo) {
+		String accessToken = createAccessToken(userInfo, ACCESS_TOKEN_EXPIRATION);
+		String refreshToken = createRefreshToken();
+		return TokenResponse.builder()
+			.accessToken(accessToken)
+			.refreshToken(refreshToken)
+			.build();
 	}
 
-	private String createToken(CustomUserInfo userInfo, long accessTokenExpTime) {
+	private String createAccessToken(CustomUserInfo userInfo, long accessTokenExpTime) {
 		Claims claims = Jwts.claims();
 		claims.put("no", userInfo.getNo());
 		claims.put("id", userInfo.getId());
@@ -48,6 +56,16 @@ public class JwtTokenProvider {
 		return Jwts.builder()
 			.setClaims(claims)
 			.setIssuedAt(Date.from(now.toInstant()))
+			.setExpiration(Date.from(tokenValidity.toInstant()))
+			.signWith(key, SignatureAlgorithm.HS256)
+			.compact();
+	}
+
+	private String createRefreshToken() {
+		ZonedDateTime now = ZonedDateTime.now();
+		ZonedDateTime tokenValidity = now.plusSeconds(REFRESH_TOKEN_EXPIRATION);
+
+		return Jwts.builder()
 			.setExpiration(Date.from(tokenValidity.toInstant()))
 			.signWith(key, SignatureAlgorithm.HS256)
 			.compact();

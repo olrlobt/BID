@@ -1,0 +1,56 @@
+.attendanceContainer {
+  display: flex;
+}
+
+.attendanceTable {
+  width: 20vw;
+  height: 13vh;
+  background-color: #ffffff;
+  line-height: 1.5;
+  box-shadow: 0px 3px 3px #4d4d4d;
+  font-size: 14px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+thead th {
+  background-color: #f2f2f2;
+}
+
+th,
+td {
+  border: 1px solid #f2f2f2;
+  padding: 8px;
+  text-align: center;
+}
+
+.present {
+  font-size: 0.8rem;
+  color: #4d4d4d;
+}
+
+.beadsContainer {
+  position: relative;
+  flex: 1;
+  display: flex;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-direction: column;
+  justify-content: center; /* Center the beads */
+  align-items: center; /* Center the beads */
+}
+
+.bead {
+  width: 6.5vw;
+  height: 6.5vw;
+  background-color: #5fa1c4;
+  border-radius: 50%;
+  display: flex;
+  font-size: 1.3rem;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 3px 3px #4d4d4d;
+  margin-top: 1vh;
+  color: white; /* Set text color to white or adjust as needed */
+  font-weight: bold;
+}

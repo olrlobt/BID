@@ -37,6 +37,5 @@ public class UserCouponRepositoryImpl implements UserCouponCustomRepository {
 			.on(userCoupon.couponNo.eq(coupon.no))
 			.where(userCoupon.useStatus.eq(UsageStatus.REQUEST_PROGRESS))
 			.fetch();
-
 	}
 }

@@ -5,15 +5,22 @@ import java.util.List;
 import com.ssafy.bid.domain.user.dto.AccountFindRequest;
 import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
+import com.ssafy.bid.domain.user.dto.LoginResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
 
-public interface CoreUserService {
-	String login(LoginRequest loginRequest);
+import jakarta.servlet.http.HttpServletRequest;
 
-	void logout(String token);
+public interface CoreUserService {
+	LoginResponse login(LoginRequest loginRequest, boolean isAdmin);
+
+	void logout(int userNo, HttpServletRequest request);
 
 	StudentFindResponse findStudent(int userNo, StudentFindRequest studentFindRequest);
 
 	List<AccountFindResponse> findAccount(int userNo, AccountFindRequest accountFindRequest);
+
+	void resetAttendance();
+
+	void calculateIncomeLevel();
 }

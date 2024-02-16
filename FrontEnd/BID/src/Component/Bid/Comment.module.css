@@ -1,0 +1,61 @@
+.commentWrapper {
+  display: flex;
+  border-radius: 1vw;
+  justify-content: space-between;
+}
+
+.left {
+  width: 5vw;
+  height: 5vw;
+  border-radius: 50%;
+  overflow: hidden;
+
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.right {
+  background-color: #f2f2f2;
+  padding: 1vw 1.3vw;
+  box-sizing: border-box;
+  width: 31.5vw;
+  border: '0.3vw solid #ECECEC';
+  border-radius: 0.5vw;
+
+  .commentHeader {
+    display: flex;
+    margin-bottom: 0.5vw;
+    align-items: flex-end;
+
+    h3 {
+      font-size: 1.8vw;
+      margin-right: 1vw;
+    }
+    div {
+      color: #929292;
+      font-size: 1.2vw;
+    }
+    .deleteArea{
+      margin-left: 0.5vw;
+    }
+  }
+
+  .commentBody {
+    line-height: 2vw;
+
+    textarea{
+      background-color: rgba(255, 255, 255, 0);
+      width: 100%;
+      max-height: 10vw;
+      border: none;
+      resize: none;
+      border: none;
+      padding: 1vw;
+      border-radius: 0.5vw;
+      box-sizing: border-box;
+    }
+  }
+}
