@@ -33,7 +33,8 @@ export default function Coupon(props){
 			confirmColor: "#F23F3F",
 			cancelTxt: "취소",
 			cancelColor: "#a6a6a6",
-			confirmFunc: () => deleteCouponQuery.mutate(no)
+			confirmFunc: () => deleteCouponQuery.mutate(no),
+      cancelFunc: () => {}
 		})
 	}
 
