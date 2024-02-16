@@ -1,5 +1,5 @@
 // CalendarChart.js
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import styled from "./CalendarChart.module.css";
 import { Calendar, Navigate, momentLocalizer } from "react-big-calendar";
@@ -12,7 +12,6 @@ import SmallEvent from "./SmallEvent";
 import "./chart.css";
 
 function CalendarChart({ event }) {
-  console.log(event);
   moment.locale("ko-KR");
   const localizer = momentLocalizer(moment);
 
@@ -76,8 +75,8 @@ function CalendarChart({ event }) {
     }, 0);
   };
 
-  const totalExpense = calculateTotalAmount(event, "EXPENDITURE");
-  const totalIncome = calculateTotalAmount(event, "INCOME");
+  const totalExpense = event?.calculateTotalAmount(event, "EXPENDITURE");
+  const totalIncome = event?.calculateTotalAmount(event, "INCOME");
 
   // const [selectedEvent, setSelectedEvent] = useState(null);
   // const [modalIsOpen, setModalIsOpen] = useState(false);
