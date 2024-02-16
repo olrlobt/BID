@@ -65,6 +65,10 @@ function CalendarChart({ event }) {
   );
 
   const calculateTotalAmount = (events, type) => {
+    if (!event || event.length === 0) {
+      return 0;
+    }
+
     return events.reduce((total, event) => {
       if (type === "EXPENDITURE") {
         return event.title === "EXPENDITURE" ? total + event.amount : total;
@@ -75,8 +79,8 @@ function CalendarChart({ event }) {
     }, 0);
   };
 
-  const totalExpense = event?.calculateTotalAmount(event, "EXPENDITURE");
-  const totalIncome = event?.calculateTotalAmount(event, "INCOME");
+  const totalExpense = calculateTotalAmount(event, "EXPENDITURE");
+  const totalIncome = calculateTotalAmount(event, "INCOME");
 
   // const [selectedEvent, setSelectedEvent] = useState(null);
   // const [modalIsOpen, setModalIsOpen] = useState(false);
