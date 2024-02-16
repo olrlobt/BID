@@ -190,7 +190,7 @@ export default function ViewProductModal({ onClose, ...props }) {
           }
           <div className={styled.content}>
             <div className={styled.imgArea}>
-              <img src={productDetailIinfo.goodsImgUrl} alt='' />
+              <img src={productDetailIinfo.goodsImgUrl} alt='' onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
             </div>
             <div className={styled.infoArea}>
               <input 
@@ -295,7 +295,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                 </div>
               </div>
               <div className={styled.right}>
-                <img src={ productDetailIinfo.userProfileImgUrl } alt='프로필 이미지' />
+                <img src={ productDetailIinfo.userProfileImgUrl } alt='프로필 이미지' onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
               </div>
             </div>
             {
