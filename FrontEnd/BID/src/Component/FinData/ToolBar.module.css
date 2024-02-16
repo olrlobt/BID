@@ -1,7 +1,7 @@
 .rbc_toolbar {
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-self: flex-end;
   height: 10vh;
 }
@@ -22,4 +22,13 @@
 .buttonPrev > path,
 .buttonNext > path {
   color: #a6a6a6;
+}
+
+.goMonth {
+  width: 2vw;
+  height: 4vh;
+  margin-left: 2vw;
+  text-align: center;
+  margin-top: 1vh;
+  margin: 1vh 1vw 0 1vw;
 }

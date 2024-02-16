@@ -99,3 +99,20 @@ export const deleteCommentApi = async (boardNo, replyNo) => {
 export const biddingApi = async (boardNo, biddingInfo) => {
   return await STUBidApis.post(`boards/${boardNo}/bid`, biddingInfo);
 };
+
+/**
+ * 아이템 구입하기
+ * @param price 아이템 가격
+ */
+export const buyAvatarsApi = async (price) => {
+  console.log(price);
+  return await STUBidApis.post(`avatars`, price);
+}
+
+/*
+ * 경매 낙찰금액 송금
+ * @param boardNo 경매글 넘버
+ */
+export const transferMoney = async (boardNo) => {
+  return await STUBidApis.post(`/boards/${boardNo}/transfer`);
+};

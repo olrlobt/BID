@@ -26,7 +26,7 @@ export default function NavBar() {
   return (
     <nav>
       <section className={styled.logoArea}>
-        <img src={Logo} alt="logo" />
+        <img src={Logo} alt="logo" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
         <div>
           <div>{teacherInfo.adminInfo.schoolName}</div>
           <div className={styled.classInfo}>
@@ -123,21 +123,6 @@ export default function NavBar() {
               }`}
             />
             <span>자리 뽑기</span>
-          </li>
-        </div>
-        <div onClick={() => navigate("/for-student")}>
-          <li
-            className={`${styled.navLi} ${
-              location.pathname === "/student-version" ? styled.active : ""
-            }`}
-          >
-            <FontAwesomeIcon
-              icon={faSchool}
-              className={`${styled.navImage} ${
-                location.pathname === "/student-version" ? styled.clicked : ""
-              }`}
-            />
-            <span>학생 버전</span>
           </li>
         </div>
       </ul>

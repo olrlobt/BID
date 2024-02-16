@@ -103,7 +103,7 @@ export default function MakeNewPostModal({ onClose, ...props }) {
         <div className={styled.body}>
           <div className={styled.left}>
             <div className={styled.myInfoImgPre}>
-              <img src={imgUrl}/>
+              <img src={imgUrl} onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
             </div>
             <div className={styled.fileSelect}>
               <input id='uploadName' className={styled.uploadName} defaultValue='첨부파일' placeholder='첨부파일'/>
