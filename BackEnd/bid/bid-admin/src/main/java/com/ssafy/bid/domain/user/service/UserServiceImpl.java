@@ -11,6 +11,8 @@ import com.ssafy.bid.domain.avatar.UserAvatar;
 import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.repository.GradeRepository;
 import com.ssafy.bid.domain.grade.repository.StudentRepository;
+import com.ssafy.bid.domain.grade.service.GradeService;
+import com.ssafy.bid.domain.grade.service.GradeServiceImpl;
 import com.ssafy.bid.domain.user.Admin;
 import com.ssafy.bid.domain.user.Student;
 import com.ssafy.bid.domain.user.TelAuthentication;
@@ -19,6 +21,8 @@ import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
+import com.ssafy.bid.domain.user.dto.PasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentSaveRequest;
 import com.ssafy.bid.domain.user.dto.StudentUpdateRequest;
@@ -51,6 +55,7 @@ public class UserServiceImpl implements UserService {
 	private final GradeRepository gradeRepository;
 	private final StudentRepository studentRepository;
 	private final UserAvatarRepository userAvatarRepository;
+	private final GradeService gradeService;
 
 	@Override
 	@Transactional
@@ -186,6 +191,8 @@ public class UserServiceImpl implements UserService {
 
 		User user = userRepository.findById(userNo)
 			.orElseThrow(() -> new ResourceNotFoundException("학생삭제: 삭제하려는 Student가 없음", userNo));
+
+		userAvatarRepository.deleteByUserNo(userNo);
 		userRepository.delete(user);
 	}
 
@@ -219,6 +226,24 @@ public class UserServiceImpl implements UserService {
 		}
 
 		admin.changePassword(passwordEncoder.encode(request.getNewPassword()));
+	}
+
+	@Override
+	@Transactional
+	public void updatePassword(CustomUserInfo userInfo, PasswordUpdateRequest request) {
+		User user = userRepository.findById(userInfo.getNo())
+			.orElseThrow(() -> new ResourceNotFoundException("관리자패스워드변경: 패스워드 수정하려는 Admin 엔티티가 없음.", userInfo.getNo()));
+
+		if (!request.getNewPassword().equals(request.getNewPasswordCheck())) {
+			throw new InvalidParameterException("관리자패스워드변경: 패스워드와 패스워드 확인 불일치.", request.getNewPassword());
+		}
+
+		if (user instanceof Admin admin) {
+			admin.changePassword(passwordEncoder.encode(request.getNewPassword()));
+			return;
+		}
+
+		throw new AuthorizationFailedException("관리자 권한이 아님.");
 	}
 
 	@Override
@@ -267,6 +292,11 @@ public class UserServiceImpl implements UserService {
 		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 			throw new InvalidParameterException("관리자탈퇴: 패스워드와 패스워드 확인 불일치.", request.getPassword());
 		}
+		List<Grade> grades = gradeRepository.findAllByUserNo(userNo);
+		for (Grade grade: grades) {
+			gradeService.deleteGrade(userType, grade.getNo());
+		}
+
 		userRepository.delete(user);
 	}
 

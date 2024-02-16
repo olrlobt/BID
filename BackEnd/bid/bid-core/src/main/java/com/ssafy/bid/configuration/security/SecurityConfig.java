@@ -46,7 +46,7 @@ public class SecurityConfig {
 				authorize
 					.requestMatchers(
 						"/password/send-code", "/password/check-code", "/send-code", "/check-code",
-						"/check-id", "/schools", "/register", "/password", "/login", "/find-id"
+						"/check-id", "/schools", "/register", "/password", "/login", "/find-id", "/notification/subscribe/**", "/test/**"
 					).permitAll()
 					.anyRequest().authenticated()
 			)

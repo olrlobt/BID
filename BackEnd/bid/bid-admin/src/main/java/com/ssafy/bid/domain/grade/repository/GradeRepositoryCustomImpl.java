@@ -1,5 +1,6 @@
 package com.ssafy.bid.domain.grade.repository;
 
+import static com.querydsl.jpa.JPAExpressions.*;
 import static com.ssafy.bid.domain.grade.QGrade.*;
 import static com.ssafy.bid.domain.user.QAdmin.*;
 import static com.ssafy.bid.domain.user.QSchool.*;
@@ -11,6 +12,7 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.bid.domain.grade.Grade;
 import com.ssafy.bid.domain.grade.dto.GradeListGetResponse;
 import com.ssafy.bid.domain.user.Admin;
 
@@ -64,5 +66,15 @@ public class GradeRepositoryCustomImpl implements GradeRepositoryCustom {
 				.where(admin.no.eq(userNo))
 				.fetchOne()
 		);
+	}
+
+	@Override
+	public List<Grade> findAllByUserNo(int userNo) {
+		return queryFactory
+			.selectFrom(grade)
+			.where(
+				grade.userNo.eq(userNo),
+				grade.deletedAt.isNull())
+			.fetch();
 	}
 }
