@@ -134,7 +134,7 @@ function StudentMain() {
     <div className={styled.container}>
       <div className={styled.header}>
         <Link to={`/studentmain/${studentId}/`}>
-          <img className={styled.img} src={imgInfo} alt="이미지" />
+          <img className={styled.img} src={imgInfo} alt="이미지" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
         </Link>
         <div>
           <p>안녕하세요!</p>

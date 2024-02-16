@@ -248,7 +248,7 @@ export default function Home() {
                 text={`${classMoney}비드`}
               />
               <div className={styled.infoBox}>
-                <img className={styled.icon} src={Clock} alt="시계" />
+                <img className={styled.icon} src={Clock} alt="시계" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
                 <div className={styled.infoText}>
                   <div>
                     적금 알림은{" "}
