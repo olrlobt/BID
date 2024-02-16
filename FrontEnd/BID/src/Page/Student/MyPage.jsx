@@ -269,9 +269,20 @@ function MyPage() {
               src={Back}
               alt="뒤로가기"
               onClick={() => navigate("/studentMain")}
+              onError={(e) =>
+                (e.target.src =
+                  "https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg")
+              }
             />
             <div className={styled.imgArea}>
-              <img src={imgInfo} alt="이미지" />
+              <img
+                src={imgInfo}
+                alt="이미지"
+                onError={(e) =>
+                  (e.target.src =
+                    "https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg")
+                }
+              />
             </div>
             <div className={styled.descArea}>
               <div className={styled.schoolName}>
@@ -319,7 +330,7 @@ function MyPage() {
             {page === "myFin" ? (
               <>
                 {studentData && (
-                  <div className={styled.dashboardContainer}>
+                  <div className={styled.dashboard}>
                     <div className={styled.chartsContainer}>
                       <BarChart savingData={savingData} />
                       <PieChart data={categoryData} />
@@ -421,6 +432,10 @@ function MyPage() {
                               ? styled.avatarImage
                               : styled.avatarImageInactive
                           }
+                          onError={(e) =>
+                            (e.target.src =
+                              "https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg")
+                          }
                         />
                         {!isEquipped && (
                           <div className={styled.avatarOverlay}></div>
@@ -498,27 +513,3 @@ function MyPage() {
 }
 
 export default MyPage;
-
-{
-  /* <div className={styled.chartsContainer}> */
-}
-{
-  /* <BarChart /> */
-}
-{
-  /* <PieChart data={categoryData} /> */
-}
-{
-  /* <Coupon /> */
-}
-// </div>
-{
-  /* <div className={styled.additionalChartsContainer}> */
-}
-{
-  /* <AttendRec className={styled.AttendRec} /> */
-}
-{
-  /* <CalendarChart /> */
-}
-// </div>

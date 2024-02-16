@@ -75,7 +75,7 @@ export default function ManageProductModal({ onClose, ...props }) {
           </div>
           <div className={styled.content}>
             <div className={styled.imgArea}>
-              <img src={productDetailIinfo.goodsImgUrl} alt='' />
+              <img src={productDetailIinfo.goodsImgUrl} alt='' onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
             </div>
             <div className={styled.infoArea}>
               <input 

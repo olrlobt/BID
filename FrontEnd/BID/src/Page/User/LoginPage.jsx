@@ -69,7 +69,7 @@ function LoginPage() {
   return (
     <section className={styled.back}>
       <div className={styled.logo}>
-        <img src={Logo} alt="로고" />
+        <img src={Logo} alt="로고" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
       </div>
       <div className={styled.content}>
         <SvgIcon
