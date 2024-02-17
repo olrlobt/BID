@@ -28,7 +28,8 @@ function ManageLoginPage() {
     mutationFn: (userCredentials) => loginUserApi(userCredentials),
     onSuccess: async (data) => {
       loginUser(data);
-
+      console.log(data)
+      console.log("===============================")
       setCookie("accessToken", data.data.tokenResponse.accessToken);
       await queryClient.invalidateQueries("ClassList");
       if (mainClass) {
