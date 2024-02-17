@@ -90,16 +90,25 @@ export default function MakeClass() {
     makingClass.mutate();
   };
 
+  function excelSerialDateToJSDate(serial) {
+    var utc_days = Math.floor(serial - 25569);
+    var utc_value = utc_days * 86400;
+    let date = new Date(utc_value * 1000).toISOString().slice(0, 10);
+    return date
+  }
+
   useEffect(() => {
     setStudentFormat(
-      stuFile.map((student) => {
-        return {
-          password: student.birth.split('.').join('').slice(2),
-          name: student.name,
-          birthDate: student.birth.split('.').join('').slice(2),
-          number: student.num,
-        };
-      })
+        stuFile.map((student) => {
+          const birthDate = excelSerialDateToJSDate(student.생년월일);
+          const birthDateString = birthDate.substring(2).replace(/-/g, '');
+          return {
+            password: birthDateString,
+            name: student.이름,
+            birthDate: birthDateString,
+            number: student.번호,
+          };
+        })
     );
   }, [stuFile, classInfo, year, classRoom]);
 
@@ -191,21 +200,21 @@ export default function MakeClass() {
               <div className={styled.infoTitle} key={index}>
                 <input
                   className={`${styled.num} ${styled.newStu}`}
-                  value={student.num}
+                  value={student.번호}
                   onChange={(e) =>
                     handleInputChange(index, '번호', e.target.value)
                   }
                 />
                 <input
                   className={`${styled.name} ${styled.newStu}`}
-                  value={student.name}
+                  value={student.이름}
                   onChange={(e) =>
                     handleInputChange(index, '이름', e.target.value)
                   }
                 />
                 <input
                   className={`${styled.birth} ${styled.newStu}`}
-                  value={student.birth}
+                  value={excelSerialDateToJSDate(student.생년월일)}
                   onChange={(e) =>
                     handleInputChange(index, '생년월일', e.target.value)
                   }
