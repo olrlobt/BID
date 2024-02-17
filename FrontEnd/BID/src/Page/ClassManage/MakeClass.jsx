@@ -94,10 +94,10 @@ export default function MakeClass() {
     setStudentFormat(
       stuFile.map((student) => {
         return {
-          password: student.생년월일.split('.').join('').slice(2),
-          name: student.이름,
-          birthDate: student.생년월일.split('.').join('').slice(2),
-          number: student.번호,
+          password: student.birth.split('.').join('').slice(2),
+          name: student.name,
+          birthDate: student.birth.split('.').join('').slice(2),
+          number: student.num,
         };
       })
     );
@@ -191,21 +191,21 @@ export default function MakeClass() {
               <div className={styled.infoTitle} key={index}>
                 <input
                   className={`${styled.num} ${styled.newStu}`}
-                  value={student.번호}
+                  value={student.num}
                   onChange={(e) =>
                     handleInputChange(index, '번호', e.target.value)
                   }
                 />
                 <input
                   className={`${styled.name} ${styled.newStu}`}
-                  value={student.이름}
+                  value={student.name}
                   onChange={(e) =>
                     handleInputChange(index, '이름', e.target.value)
                   }
                 />
                 <input
                   className={`${styled.birth} ${styled.newStu}`}
-                  value={student.생년월일}
+                  value={student.birth}
                   onChange={(e) =>
                     handleInputChange(index, '생년월일', e.target.value)
                   }
