@@ -10,3 +10,17 @@
   padding: 1vw;
   border-radius: 5px;
 }
+
+.expense,
+.income {
+  position: absolute;
+  font-weight: 600;
+}
+
+.income {
+  top: 4vh;
+}
+
+.incomeBid {
+  color: #3459cc;
+}

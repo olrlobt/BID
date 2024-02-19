@@ -4,6 +4,7 @@ import SubmitButton from "../../Component/Common/SubmitButton";
 import Reward from "../../Component/Reward/Reward";
 import SettingButton from "../../Component/Common/SettingButton";
 import SettingsIcon from "@mui/icons-material/Settings";
+import alertBtn from "../../Component/Common/Alert";
 import {
   getRewardListApi,
   addNewRewardApi,
@@ -60,8 +61,12 @@ export default function RewardPage() {
     mutationFn: (postData) => {
       sendRewardApi(gradeNo, postData);
     },
-    onSuccess: (res) => {
-      console.log(res);
+    onSuccess: () => {
+        alertBtn({
+          text:'리워드가 지급되었습니다!',
+          confirmColor: '#ffd43a',
+          icon: 'success',
+        })
     },
     onError: (error) => {
       console.log(error);
@@ -94,7 +99,7 @@ export default function RewardPage() {
         usersNos: rStudents,
         comment: rComment,
       };
-      sendRewardQuery.mutate(postData);
+      sendRewardQuery.mutate(postData)
     }
   };
 

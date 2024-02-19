@@ -14,7 +14,7 @@ export default function Product(props) {
   return (
     <div className={styled.productWrapper} onClick={onClick}>
       <div className={styled.imgWrapper}>
-        <img src={goodsImgUrl} alt="이미지" />
+        <img src={goodsImgUrl} alt="이미지" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
       </div>
       <div className={styled.productHeader}>
         <span className={styled.title}>{title}</span>
