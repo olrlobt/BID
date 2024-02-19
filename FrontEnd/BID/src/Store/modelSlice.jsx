@@ -4,6 +4,7 @@ const initialState = {
   models: [],
   modelLoggedIn: false,
   model: null,
+  modelImg: null
 };
 
 export const modelListSelector = (state) => {
@@ -16,8 +17,11 @@ export const modelLoggedInSelector = (state) => {
 
 export const modelSelector = (state) => {
   return state.studentmodel.model;
-};
+}
 
+export const modelImgSelector = (state) => {
+  return state.studentmodel.modelImg;
+}
 export const modelSlice = createSlice({
   name: 'studentmodel',
   initialState,
@@ -32,10 +36,7 @@ export const modelSlice = createSlice({
     },
     editModel: (state, action) => {
       const updatedModel = action.payload;
-      const updatedModels = state.models.map((model) =>
-        model.no === updatedModel.no ? updatedModel : model
-      );
-      state.models = updatedModels;
+      state.modelImg = updatedModel
     },
     loginStudent: (state, action) => {
       const model = action.payload;
