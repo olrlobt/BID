@@ -42,7 +42,7 @@ public class CoreBoardScheduleService {
 	private final CoreBoardService coreBoardService;
 	private final Map<Long, ScheduledFuture<?>> boardScheduledTasks = new ConcurrentHashMap<>();
 
-	@Scheduled(cron = "0 12 8 * * *")
+	@Scheduled(cron = "0 25 8 * * *")
 	public void addWeeklyCoupon() {
 		// 모든 학급의 쿠폰
 		List<GradeProjection> allGradeNo = coreGradeRepository.findBy();
