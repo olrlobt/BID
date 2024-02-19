@@ -24,8 +24,10 @@ import com.ssafy.bid.domain.user.dto.AccountFindResponse;
 import com.ssafy.bid.domain.user.dto.AdminPasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.AdminSaveRequest;
 import com.ssafy.bid.domain.user.dto.BallsFindResponse;
+import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.dto.LoginRequest;
 import com.ssafy.bid.domain.user.dto.LoginResponse;
+import com.ssafy.bid.domain.user.dto.PasswordUpdateRequest;
 import com.ssafy.bid.domain.user.dto.SchoolsFindResponse;
 import com.ssafy.bid.domain.user.dto.StudentFindRequest;
 import com.ssafy.bid.domain.user.dto.StudentFindResponse;
@@ -146,6 +148,16 @@ public class UserApi {
 		return ResponseEntity.status(OK).build();
 	}
 
+	@PatchMapping("/password/admin")
+	public ResponseEntity<?> updatePasswordAfterLogin(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@RequestBody PasswordUpdateRequest request
+	) {
+		CustomUserInfo userInfo = userDetails.getUserInfo();
+		userService.updatePassword(userInfo, request);
+		return ResponseEntity.status(OK).build();
+	}
+
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpServletResponse httpResponse) {
 		LoginResponse loginResponse = coreUserService.login(request, true);
@@ -157,7 +169,7 @@ public class UserApi {
 
 	private Cookie createCookie(String accessToken) {
 		Cookie cookie = new Cookie("accessToken", accessToken);
-		cookie.setHttpOnly(true);
+		// cookie.setHttpOnly(true);
 		// cookie.setSecure(true);
 		cookie.setPath("/");
 		cookie.setMaxAge(60 * 30);

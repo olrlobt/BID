@@ -48,6 +48,9 @@ public class AvatarServiceImpl implements AvatarService {
 			throw new AuthorizationFailedException("아바타수정: Student 권한 사용자가 아님.");
 		}
 
+		System.out.println("아바타 변경 -------------");
+		System.out.println(userInfo.getNo());
+
 		Student student = userRepository.findStudentByUserNo(userInfo.getNo())
 			.orElseThrow(() -> new ResourceNotFoundException("아바타수정: Student 가 없음.", userInfo.getNo()));
 
@@ -55,7 +58,11 @@ public class AvatarServiceImpl implements AvatarService {
 			.orElseThrow(
 				() -> new ResourceNotFoundException("아바타수정: UserAvatar 가 없음.", userAvatarUpdateRequest.getNo()));
 
+		System.out.println(url);
+		System.out.println(student.getProfileImgUrl());
 		student.updateAvatar(url);
+		System.out.println(student.getProfileImgUrl());
+		System.out.println("아바타 변경 -------------");
 	}
 
 	@Override
