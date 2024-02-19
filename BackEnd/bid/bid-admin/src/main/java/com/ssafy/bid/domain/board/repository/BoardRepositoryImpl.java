@@ -1,7 +1,7 @@
 package com.ssafy.bid.domain.board.repository;
 
 import static com.ssafy.bid.domain.board.QBoard.*;
-import static com.ssafy.bid.domain.user.QStudent.*;
+import static com.ssafy.bid.domain.user.QUser.*;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<BoardListResponse> findAllStudentBoards(int gradeNo) {
+	public List<BoardListResponse> findAllStudentBoards(int gradeNo, int userGradeNo) {
 		return queryFactory.select(Projections.constructor(BoardListResponse.class,
 				board.no,
 				board.title,
@@ -32,14 +32,13 @@ public class BoardRepositoryImpl implements BoardCustomRepository {
 					.otherwise(board.totalPrice.divide(board.attendeeCount)),
 				board.category,
 				board.goodsImgUrl,
-				student.name,
+				user.name,
 				board.gradePeriodNo
 			))
 			.from(board)
-			.innerJoin(student)
-			.on(board.userNo.eq(student.no)
+			.innerJoin(user)
+			.on(board.userNo.eq(user.no)
 				.and(board.gradeNo.eq(gradeNo))
-				.and(student.gradeNo.eq(gradeNo))
 				.and(board.boardStatus.eq(BoardStatus.PROGRESS)))
 			.orderBy(board.createdAt.desc())
 			.limit(20)

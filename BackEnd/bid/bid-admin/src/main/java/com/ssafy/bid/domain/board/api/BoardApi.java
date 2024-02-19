@@ -35,6 +35,7 @@ public class BoardApi {
 		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable int gradeNo) {
 		int userNo = userDetails.getUserInfo().getNo();
+		int userGradeNo = userDetails.getUserInfo().getGradeNo();
 		return boardService.findAllStudentBoards(gradeNo, userNo);
 	}
 
