@@ -55,7 +55,7 @@ export default function ManageProductModal({ onClose, ...props }) {
     onClose();
     confirmBtn({
 			icon: "warning",
-			text: "삭제하신 게시글은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?",
+			html: "삭제하신 게시글은 다시 복구할 수 없습니다.<br/>그래도 삭제하시겠습니까?",
 			confirmTxt: "삭제",
 			confirmColor: "#F23F3F",
 			cancelTxt: "취소",
