@@ -45,8 +45,10 @@ export const modelSlice = createSlice({
         state.modelLoggedIn = true;
     },
     logoutStudent: (state) => {
-        state.currentModel = null;
-        state.modelLoggedIn = false;
+      state.modelLoggedIn = false;
+      state.model = null
+      state.modelImg = null
+      state.models = []
     },
   },
 });
