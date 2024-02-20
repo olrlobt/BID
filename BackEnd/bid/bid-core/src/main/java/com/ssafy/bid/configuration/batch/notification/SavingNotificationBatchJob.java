@@ -1,5 +1,7 @@
 package com.ssafy.bid.configuration.batch.notification;
 
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -57,12 +59,13 @@ public class SavingNotificationBatchJob {
 	}
 
 	private NotificationRequest createRequest(SavingTransferAlertRequest transferAlertRequest) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
+		StringBuilder sb = new StringBuilder();
+		sb.append("오늘 ").append(transferAlertRequest.getTransferPeriod().format(formatter)).append("시에 적금 금액이 빠져나가요");
 		return NotificationRequest.builder()
 			.receiverNo(transferAlertRequest.getUserNo())
-			.title("적금 이체 알림")
-			.content(String.valueOf(transferAlertRequest.getPrice())
-				.concat(" ")
-				.concat(String.valueOf(transferAlertRequest.getTransferPeriod())))
+			.title(transferAlertRequest.getTransferPeriod().format(formatter))
+			.content(sb.toString())
 			.notificationType(NotificationType.SAVING_TRANSFER)
 			.build();
 	}

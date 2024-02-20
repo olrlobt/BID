@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import styled from "./LoginPage.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import styled from './LoginPage.module.css';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../Asset/Image/LoginLogo.png';
-import useModels from "../../hooks/useModels";
-import { studentLoginApi } from "../../Apis/ModelApis";
-import { useMutation } from "@tanstack/react-query";
-import { SvgIcon } from "@material-ui/core";
+import useModels from '../../hooks/useModels';
+import { studentLoginApi } from '../../Apis/ModelApis';
+import { useMutation } from '@tanstack/react-query';
+import { SvgIcon } from '@material-ui/core';
 import SearchIcon from '@mui/icons-material/Search';
 import useModal from "../../hooks/useModal";
 import { setCookie } from "../../cookie";
@@ -19,7 +19,7 @@ function LoginPage() {
   const { editModel } =  useModels();
   const navigate = useNavigate();
   const { openModal } = useModal();
-  const [schoolCode, setSchoolCode] = useState("");
+  const [schoolCode, setSchoolCode] = useState('');
 
   /** 로그인 쿼리 */
   const studentLoginQuery = useMutation({
