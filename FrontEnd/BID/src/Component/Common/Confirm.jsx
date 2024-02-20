@@ -4,6 +4,7 @@ export default function confirmBtn({
   icon,
   title,
   text,
+  html,
   confirmTxt,
   confirmColor,
   cancelTxt,
@@ -22,6 +23,7 @@ export default function confirmBtn({
     .fire({
       title,
       text,
+      html,
       icon,
       showCancelButton: true,
       confirmButtonText: confirmTxt,
