@@ -1,11 +1,13 @@
 
 import { useDispatch } from "react-redux";
 import { loginStudent, logoutStudent, initModels, addModel, editModel } from "../Store/modelSlice";
+import { logoutUser } from "../Store/userSlice";
 
 export default function useModels() {
   const dispatch = useDispatch();
 
   const handleLoginStudent = (user) => {
+    dispatch(logoutUser());
     dispatch(loginStudent(user));
   };
 
