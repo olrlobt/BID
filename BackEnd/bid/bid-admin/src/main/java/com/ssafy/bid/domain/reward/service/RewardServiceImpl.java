@@ -110,12 +110,14 @@ public class RewardServiceImpl implements RewardService {
 		accountRepository.saveAll(accounts);
 	}
 
-	private NotificationRequest createNotificationRequest(Student student, Reward reward,
-		RewardSendRequest rewardSendRequest) {
+	private NotificationRequest createNotificationRequest(Student student, Reward reward, RewardSendRequest rewardSendRequest) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("선생님으로부터 ").append(reward.getName()).append("을 받았어요");
+		sb.append("\n").append(rewardSendRequest.getComment());
 		return NotificationRequest.builder()
 			.receiverNo(student.getNo())
 			.title(reward.getName())
-			.content(rewardSendRequest.getComment())
+			.content(sb.toString())
 			.notificationType(NotificationType.REWARD)
 			.build();
 	}

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   models: [],
@@ -9,7 +9,7 @@ const initialState = {
 
 export const modelListSelector = (state) => {
   return state.studentmodel.models;
-}
+};
 
 export const modelLoggedInSelector = (state) => {
   return state.studentmodel.modelLoggedIn;
@@ -23,12 +23,11 @@ export const modelImgSelector = (state) => {
   return state.studentmodel.modelImg;
 }
 export const modelSlice = createSlice({
-  name: "studentmodel",
+  name: 'studentmodel',
   initialState,
   reducers: {
     initModels: (state, action) => {
       const models = action.payload;
-      console.log(models)
       state.models = models;
     },
     addModel: (state, action) => {
@@ -40,9 +39,9 @@ export const modelSlice = createSlice({
       state.modelImg = updatedModel
     },
     loginStudent: (state, action) => {
-        const model = action.payload;
-        state.model = model;
-        state.modelLoggedIn = true;
+      const model = action.payload;
+      state.model = model;
+      state.modelLoggedIn = true;
     },
     logoutStudent: (state) => {
       state.modelLoggedIn = false;
@@ -53,4 +52,5 @@ export const modelSlice = createSlice({
   },
 });
 
-export const { initModels, addModel, editModel, loginStudent, logoutStudent } = modelSlice.actions;
+export const { initModels, addModel, editModel, loginStudent, logoutStudent } =
+  modelSlice.actions;

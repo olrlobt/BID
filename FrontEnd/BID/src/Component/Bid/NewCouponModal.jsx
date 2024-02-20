@@ -5,7 +5,7 @@ import SubmitButton from '../Common/SubmitButton';
 import { getCouponListApi, addNewCouponApi } from '../../Apis/CouponApis';
 import { useMutation } from '@tanstack/react-query';
 import useCoupons from "../../hooks/useCoupons";
-import alertBtn from '../Common/Alert';
+import alertBtn from "../../Component/Common/Alert";
 
 export default function NewCouponModal({ onClose, ...props }){
   const { initCoupons } = useCoupons();
@@ -19,23 +19,15 @@ export default function NewCouponModal({ onClose, ...props }){
       getCouponListApi(gradeNo).then((res) => {
         if(res.data !== undefined){
           initCoupons({ couponList: res.data.coupons });
+          alertBtn({
+            text:'쿠폰이 추가되었습니다!',
+            confirmColor: '#ffd43a',
+            icon: 'success',
+          })
         }
       })
-      .then(() => {
-        alertBtn({
-          text:'쿠폰이 추가되었습니다!',
-          confirmColor: '#ffd43a',
-          icon: 'success',
-        })
-      })
-      .catch(() => {
-        alertBtn({
-          text: '추가가 되지 않았습니다.',
-          confirmColor: '#E81818',
-          icon: 'error',
-        });
-      })
     },
+    onError: (error) => { console.log(error); }
   })
 
   /** 버튼 클릭 -> 쿠폰 추가 함수 */
@@ -57,7 +49,7 @@ export default function NewCouponModal({ onClose, ...props }){
         gradeNo: gradeNo,
         form: form
       }
-      addNewCouponQuery.mutate(params);
+      addNewCouponQuery.mutate(params)
       onClose();
     }
   }
