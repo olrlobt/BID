@@ -27,7 +27,7 @@ import RealTimeModal from "../../Component/User/RealTimeModal";
 export default function Models(myInfo) {
   const [characters] = useAtom(charactersAtom);
   const [onFloor, setOnFloor] = useState(false);
-  const [isAlarm, setIsAlarm] = useState(true);
+  const [isAlarm, setIsAlarm] = useState(false);
   // const [selectedCharacter, setSelectedCharacter] = useState(null);
   useCursor(onFloor);
   const navigate = useNavigate(); // useNavigate hook
