@@ -16,7 +16,6 @@ export default function useModels() {
   const handleLoginStudent = (user) => {
     dispatch(logoutUser());
     dispatch(loginStudent(user));
-    navigate("/studentmain");
   };
 
   const handleLogoutStudent = () => {
