@@ -33,6 +33,7 @@ function LoginPage() {
         loginStudent({ model: { ...res.data.myInfo, IdInfo: parsedId } });
         initModels({ models: res.data.studentList });
         editModel(res.data.myInfo.profileImgUrl);
+        console.log("accessToken" + res.data.tokenResponse.accessToken);
         setCookie("accessToken", res.data.tokenResponse.accessToken);
         console.log(res);
       } catch (error) {
