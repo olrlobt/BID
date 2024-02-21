@@ -1,10 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   models: [],
   modelLoggedIn: false,
   model: null,
-  modelImg: null
+  modelImg: null,
 };
 
 export const modelListSelector = (state) => {
@@ -17,13 +17,13 @@ export const modelLoggedInSelector = (state) => {
 
 export const modelSelector = (state) => {
   return state.studentmodel.model;
-}
+};
 
 export const modelImgSelector = (state) => {
   return state.studentmodel.modelImg;
-}
+};
 export const modelSlice = createSlice({
-  name: 'studentmodel',
+  name: "studentmodel",
   initialState,
   reducers: {
     initModels: (state, action) => {
@@ -36,7 +36,7 @@ export const modelSlice = createSlice({
     },
     editModel: (state, action) => {
       const updatedModel = action.payload;
-      state.modelImg = updatedModel
+      state.modelImg = updatedModel;
     },
     loginStudent: (state, action) => {
       const model = action.payload;
@@ -45,9 +45,9 @@ export const modelSlice = createSlice({
     },
     logoutStudent: (state) => {
       state.modelLoggedIn = false;
-      state.model = null
-      state.modelImg = null
-      state.models = []
+      state.model = null;
+      state.modelImg = null;
+      state.models = [];
     },
   },
 });
