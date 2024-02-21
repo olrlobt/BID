@@ -19,7 +19,9 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
@@ -32,7 +34,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		IOException,
 		ServletException {
 		String token = SecurityUtils.getAccessToken((HttpServletRequest)request);
-
+		log.info("token = {}", token);
+		log.info("request = {}", request);
 		if (token != null && jwtTokenProvider.validateToken(token)) {
 
 			String isLogout = (String)redisTemplate.opsForValue().get(token);
