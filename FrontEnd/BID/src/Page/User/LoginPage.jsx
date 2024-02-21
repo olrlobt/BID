@@ -1,43 +1,43 @@
-import React, { useState } from 'react';
-import styled from './LoginPage.module.css';
-import { Link, useNavigate } from 'react-router-dom';
-import Logo from '../../Asset/Image/LoginLogo.png';
-import useModels from '../../hooks/useModels';
-import { studentLoginApi } from '../../Apis/ModelApis';
-import { useMutation } from '@tanstack/react-query';
-import { SvgIcon } from '@material-ui/core';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState } from "react";
+import styled from "./LoginPage.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../Asset/Image/LoginLogo.png";
+import useModels from "../../hooks/useModels";
+import { studentLoginApi } from "../../Apis/ModelApis";
+import { useMutation } from "@tanstack/react-query";
+import { SvgIcon } from "@material-ui/core";
+import SearchIcon from "@mui/icons-material/Search";
 import useModal from "../../hooks/useModal";
 import { setCookie } from "../../cookie";
 
 function LoginPage() {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
   const { loginStudent } = useModels();
   const { initModels } = useModels();
-  const { editModel } =  useModels();
+  const { editModel } = useModels();
   const navigate = useNavigate();
   const { openModal } = useModal();
-  const [schoolCode, setSchoolCode] = useState('');
+  const [schoolCode, setSchoolCode] = useState("");
 
   /** 로그인 쿼리 */
   const studentLoginQuery = useMutation({
-    mutationKey: ['studentLogin'],
+    mutationKey: ["studentLogin"],
     mutationFn: (userCredentials) => studentLoginApi(userCredentials),
     onSuccess: async (res) => {
       try {
         const parsedId = parseId(id); // 아이디 파싱
-        loginStudent({ model: { ...res.data.myInfo, IdInfo: parsedId } });
         initModels({ models: res.data.studentList });
         editModel(res.data.myInfo.profileImgUrl);
-        setCookie('accessToken', res.data.tokenResponse.accessToken);
+        setCookie("accessToken", res.data.tokenResponse.accessToken);
+        loginStudent({ model: { ...res.data.myInfo, IdInfo: parsedId } });
         console.log(res);
       } catch (error) {
         console.error(error);
         // 에러 처리 로직 추가
       } finally {
-        navigate('/studentmain');
-        console.log('ㅇㅏ이')
+        navigate("/studentmain");
+        console.log("ㅇㅏ이");
       }
     },
     onError: (error) => {
@@ -75,7 +75,14 @@ function LoginPage() {
   return (
     <section className={styled.back}>
       <div className={styled.logo}>
-        <img src={Logo} alt="로고" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
+        <img
+          src={Logo}
+          alt="로고"
+          onError={(e) =>
+            (e.target.src =
+              "https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg")
+          }
+        />
       </div>
       <div className={styled.content}>
         <SvgIcon
