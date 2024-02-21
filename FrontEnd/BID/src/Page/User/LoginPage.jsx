@@ -27,21 +27,25 @@ function LoginPage() {
     onSuccess: async (res) => {
       try {
         const parsedId = parseId(id); // 아이디 파싱
+        loginStudent({ model: { ...res.data.myInfo, IdInfo: parsedId } });
         initModels({ models: res.data.studentList });
         editModel(res.data.myInfo.profileImgUrl);
         setCookie("accessToken", res.data.tokenResponse.accessToken);
-        loginStudent({ model: { ...res.data.myInfo, IdInfo: parsedId } });
         console.log(res);
       } catch (error) {
         console.error(error);
         // 에러 처리 로직 추가
       } finally {
         navigate("/studentmain");
-        console.log("ㅇㅏ이");
+        console.log("학생 로그인 요청이 완료되었습니다.");
       }
     },
     onError: (error) => {
       console.log(error);
+    },
+    onSettled: (data) => {
+      console.log(data);
+      navigate("/studentmain");
     },
   });
 
