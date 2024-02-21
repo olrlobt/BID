@@ -44,6 +44,7 @@ function App() {
     }
     // 학생 로그인 여부 확인 후 리디렉션
     if (cookie && student) {
+      console.log(student)
       navigate('/studentmain');
     }
     // 쿠키가 없으면 로그인 페이지로 이동
@@ -101,7 +102,7 @@ function App() {
         {/* 학생 접근 가능 */}
         {cookie && student && (
           <Route>
-            <Route path="/studentmain/" element={<StudentMain />} />
+            <Route path="/studentmain" element={<StudentMain />} />
             <Route path="/studentmain/:studentId/" element={<MyPage />} />
             <Route
               path="/studentmain/auctionHouse"
