@@ -23,11 +23,13 @@ import {
 import { useAtom } from "jotai";
 import * as THREE from "three";
 import RealTimeModal from "../../Component/User/RealTimeModal";
+import { BasicBean } from '../../Component/Character/BasicBean';
 
 export default function Models(myInfo) {
   const [characters] = useAtom(charactersAtom);
   const [onFloor, setOnFloor] = useState(false);
   const [isAlarm, setIsAlarm] = useState(false);
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
   // const [selectedCharacter, setSelectedCharacter] = useState(null);
   useCursor(onFloor);
   const navigate = useNavigate(); // useNavigate hook
@@ -36,6 +38,15 @@ export default function Models(myInfo) {
   const handleCharacterClick = (characterId) => {
     navigate(`/studentmain/${characterId}`);
   };
+
+  useEffect(() => {
+    if (characters) {
+      setLoading(false); // 로딩 상태 변경
+    }
+    else {
+      setLoading(true)
+    }
+  }, []);
 
   const handlePointerDown = (e) => {
     // 롱 클릭을 감지하기 위한 타이머 설정
@@ -66,6 +77,10 @@ export default function Models(myInfo) {
 
   return (
     <>
+      {loading ? ( // 로딩 중일 때 스피너 표시
+      <div>Loading...</div>
+      ) : (
+      <>
       <SocketManager />
       <Canvas
         style={{ width: "100%", height: "70vh" }}
@@ -112,7 +127,8 @@ export default function Models(myInfo) {
           <Alarm onClick={handleAlarmClick} />
           <Bank />
           <BiddingPlace />
-          <SnowBean />
+          {/* <SnowBean /> */}
+          <BasicBean />
         </group>
         <OrbitControls
           makeDefault
@@ -129,5 +145,7 @@ export default function Models(myInfo) {
       </Canvas>
       {isAlarm && <RealTimeModal handleClick={handleAlarmClick} />}
     </>
+      )}
+      </>
   );
 }
