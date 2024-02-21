@@ -9,7 +9,6 @@ import { SvgIcon } from '@material-ui/core';
 import SearchIcon from '@mui/icons-material/Search';
 import useModal from "../../hooks/useModal";
 import { setCookie } from "../../cookie";
-import { initStudents } from "../../Store/studentSlice";
 
 function LoginPage() {
   const [id, setId] = useState('');
@@ -25,14 +24,21 @@ function LoginPage() {
   const studentLoginQuery = useMutation({
     mutationKey: ['studentLogin'],
     mutationFn: (userCredentials) => studentLoginApi(userCredentials),
-    onSuccess: (res) => {
-      const parsedId = parseId(id); // 아이디 파싱
-      loginStudent({ model: { ...res.data.myInfo, IdInfo: parsedId } });
-      initModels({ models: res.data.studentList });
-      editModel(res.data.myInfo.profileImgUrl)
-      setCookie('accessToken', res.data.tokenResponse.accessToken);
-      navigate('/studentmain');
-      console.log(res);
+    onSuccess: async (res) => {
+      try {
+        const parsedId = parseId(id); // 아이디 파싱
+        loginStudent({ model: { ...res.data.myInfo, IdInfo: parsedId } });
+        initModels({ models: res.data.studentList });
+        editModel(res.data.myInfo.profileImgUrl);
+        setCookie('accessToken', res.data.tokenResponse.accessToken);
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+        // 에러 처리 로직 추가
+      } finally {
+        navigate('/studentmain');
+        console.log('ㅇㅏ이')
+      }
     },
     onError: (error) => {
       console.log(error);
