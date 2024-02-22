@@ -30,14 +30,14 @@ function ManageLoginPage() {
       loginUser(data);
       setCookie("accessToken", data.data.tokenResponse.accessToken);
       await queryClient.invalidateQueries("ClassList");
-      if (mainClass) {
-        navigate("/");
-      } else {
+      if (!mainClass) {
         navigate(`/classlist/${data.data.adminInfo.userNo}/no-class`, {
           state: {
             teacherId: data.data.adminInfo.userNo,
           },
         });
+      } else {
+        navigate("/");
       }
     },
     onError: (error) => {
@@ -71,6 +71,7 @@ function ManageLoginPage() {
     if (!teacherLogin.isLoggedIn) {
       queryClient.cancelQueries(["ClassList"]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teacherLogin.isLoggedIn, mainClass]);
 
   return (

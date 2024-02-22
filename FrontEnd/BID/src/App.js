@@ -50,8 +50,7 @@ function App() {
     if (!cookie) {
       navigate("/login");
     }
-
-    console.log(student);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cookie, teacher, student]);
 
   return (
