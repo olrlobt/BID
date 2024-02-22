@@ -66,11 +66,13 @@ export default function ClassList() {
   // 메인 학급의 no만 던져줌
   // {no : 1}
   const handleCompleteEditing = () => {
-    const mainClass = editedClassList.filter(
-      (eachClass) => eachClass.main === true
-    );
-    changeMainClass(mainClass[0]);
-    editMainClass(mainClass[0].no);
+    if (editedClassList.length !== 0) {
+      const mainClass = editedClassList.filter(
+        (eachClass) => eachClass.main === true
+      );
+      changeMainClass(mainClass[0]);
+      editMainClass(mainClass[0].no);
+    }
   };
 
   const handleStar = (index) => {
@@ -85,9 +87,7 @@ export default function ClassList() {
     setEditedClassList(updatedClassList);
   };
 
-  useEffect(() => {
-    console.log(editedClassList);
-  }, [classList, editedClassList]);
+  useEffect(() => {}, [classList, editedClassList]);
   return (
     <main className={styled.classList}>
       <section>
@@ -104,6 +104,7 @@ export default function ClassList() {
       {location.pathname === `/classlist/${userNo}` ? (
         <ul className={styled.classes}>
           {editedClassList &&
+            editedClassList.length !== 0 &&
             editedClassList.map((value) => (
               <li
                 className={
@@ -119,12 +120,18 @@ export default function ClassList() {
                 <span>{value.classRoom}반</span>
               </li>
             ))}
+          {editedClassList && editedClassList.length === 0 && (
+            <div className={styled.noCurrentClass}>
+              현재 학급 목록이 없습니다.
+            </div>
+          )}
         </ul>
       ) : (
         // 편집 버전일 떄
         <React.Fragment>
           <ul className={styled.mClasses}>
             {editedClassList &&
+              editedClassList.length !== 0 &&
               editedClassList.map((value, index) => (
                 <li className={styled.mEachClass}>
                   <span>{value.createdAt}년도 </span>
@@ -150,8 +157,13 @@ export default function ClassList() {
                   </button>
                 </li>
               ))}
+            {editedClassList && editedClassList.length === 0 && (
+              <div className={styled.noCurrentClass}>
+                현재 학급 목록이 없습니다.
+              </div>
+            )}
           </ul>
-          {/* 클릭시 편집상 황 반영 후 편집 완료 */}
+          {/* 클릭시 편집상황 반영 후 편집 완료 */}
           <Link to={`/classlist/${userNo}`}>
             <button className={styled.complete} onClick={handleCompleteEditing}>
               편집 완료

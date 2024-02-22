@@ -47,7 +47,14 @@ export default function Teacher() {
 
   return (
     <section className={styled.teacherArea}>
-      <img src={Logo} alt="로고" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
+      <img
+        src={Logo}
+        alt="로고"
+        onError={(e) =>
+          (e.target.src =
+            "https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg")
+        }
+      />
       <section>
         <div className={styled.eleInfo}>{schoolName}</div>
         <div className={styled.nameInfo}>
