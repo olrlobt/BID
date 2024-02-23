@@ -9,7 +9,7 @@ import styled from "./StudentFinData.module.css";
 import { useQuery } from "@tanstack/react-query";
 import { viewStudentDetail } from "../../Apis/TeacherManageApis";
 
-const StudentFinData = ({ student }) => {
+const StudentFinData = ({ student, studentData }) => {
   const [attandanceDays, setAttendanceDays] = useState([
     false,
     false,
@@ -36,19 +36,18 @@ const StudentFinData = ({ student }) => {
 
   const [calendarInfo, setCalendarInfo] = useState([]);
 
-  const { data: studentData } = useQuery({
-    queryKey: ["StudentFinData", `studentNo_${student.name}`],
-    queryFn: () =>
-      viewStudentDetail(1, student.no, "2024-02-01", "2024-02-28")
-        .then((res) => {
-          return res.data;
-        })
-        .catch((e) => console.log(e)),
-  });
+  // const { data: studentData } = useQuery({
+  //   queryKey: ["StudentFinData", `studentNo_${student.name}`],
+  //   queryFn: () =>
+  //     viewStudentDetail(1, student.no, "2024-02-01", "2024-02-28")
+  //       .then((res) => {
+  //         return res.data;
+  //       })
+  //       .catch((e) => console.log(e)),
+  // });
 
   useEffect(() => {
     if (studentData) {
-      console.log(studentData);
       const {
         savingNo,
         savingDepositPeriod,
@@ -108,11 +107,10 @@ const StudentFinData = ({ student }) => {
   return (
     studentData && (
       <div className={styled.dashboardContainer}>
-        {console.log(studentData)}
         <div className={styled.chartsContainer}>
           <BarChart savingData={savingData} />
           <PieChart data={categoryData} />
-          <Coupon data={studentData.couponsResponses} />
+          {/* <Coupon data={studentData.couponsResponses} /> */}
         </div>
         <div className={styled.additionalChartsContainer}>
           <AttendRec

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import styled from "./BankPage.module.css";
@@ -11,7 +11,6 @@ import { mainSelector } from "../../Store/mainSlice";
 import alertBtn from "../../Component/Common/Alert";
 
 export default function BankPage() {
-  // 이후 백엔드에서 국고 금액 받아오면 바꾸기
   const classMoney = useSelector(moneySeletor);
   const mainClass = useSelector(mainSelector);
 
@@ -30,11 +29,16 @@ export default function BankPage() {
     },
   ]);
 
+  // const savingBasketRef = useRef(savingBasket);
+
   const handleClick = () => {
     setIsEdit(!isEdit);
   };
 
   const handleChange = (e, index) => {
+    // const newBasket = [...savingBasketRef.current];
+    // newBasket[index][e.target.name] = e.target.value;
+    // savingBasketRef.current = newBasket;
     const { name, value } = e.target;
     setSavingBasket((prevSaving) => {
       const updatedSaving = [...prevSaving];
