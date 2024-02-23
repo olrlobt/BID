@@ -1,9 +1,10 @@
 .attendanceContainer {
   display: flex;
+  justify-content: space-between;
 }
 
 .attendanceTable {
-  width: 20vw;
+  width: 18vw;
   height: 13vh;
   background-color: #ffffff;
   line-height: 1.5;
@@ -30,8 +31,6 @@ td {
 }
 
 .beadsContainer {
-  position: relative;
-  flex: 1;
   display: flex;
   font-size: 0.8rem;
   font-weight: 600;
@@ -41,8 +40,8 @@ td {
 }
 
 .bead {
-  width: 6.5vw;
-  height: 6.5vw;
+  width: 6vw;
+  height: 6vw;
   background-color: #5fa1c4;
   border-radius: 50%;
   display: flex;
