@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
-import styled from "./BankPage.module.css";
-import { updateSavingList, viewSavingList } from "../../Apis/TeacherManageApis";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import useSaving from "../../hooks/useSaving";
-import { useSelector } from "react-redux";
-import { moneySeletor } from "../../Store/moneySlice";
-import { mainSelector } from "../../Store/mainSlice";
-import alertBtn from "../../Component/Common/Alert";
+import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import styled from './BankPage.module.css';
+import { updateSavingList, viewSavingList } from '../../Apis/TeacherManageApis';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import useSaving from '../../hooks/useSaving';
+import { useSelector } from 'react-redux';
+import { moneySeletor } from '../../Store/moneySlice';
+import { mainSelector } from '../../Store/mainSlice';
+import alertBtn from '../../Component/Common/Alert';
 
 export default function BankPage() {
   const classMoney = useSelector(moneySeletor);
@@ -29,16 +29,11 @@ export default function BankPage() {
     },
   ]);
 
-  // const savingBasketRef = useRef(savingBasket);
-
   const handleClick = () => {
     setIsEdit(!isEdit);
   };
 
   const handleChange = (e, index) => {
-    // const newBasket = [...savingBasketRef.current];
-    // newBasket[index][e.target.name] = e.target.value;
-    // savingBasketRef.current = newBasket;
     const { name, value } = e.target;
     setSavingBasket((prevSaving) => {
       const updatedSaving = [...prevSaving];
@@ -52,21 +47,22 @@ export default function BankPage() {
   };
 
   const changeSavings = useMutation({
-    mutationKey: ["changeSaving"],
+    mutationKey: ['changeSaving'],
     mutationFn: () =>
       updateSavingList(mainClass.no, savingBasket)
         .then(() => {
           changeSavingList(savingBasket);
           setIsEdit(!isEdit);
-          alertBtn({ text: "변경되었습니다." });
+          alertBtn({ text: '변경되었습니다.' });
         })
-        .catch(() => {
-          alertBtn({ text: "변경이 되지 않았습니다." });
+        .catch((error) => {
+          alertBtn({ text: '변경이 되지 않았습니다.' });
+          console.log(error);
         }),
   });
 
   const { data: savingInfo } = useQuery({
-    queryKey: ["savingInfo"],
+    queryKey: ['savingInfo'],
     queryFn: () =>
       viewSavingList(mainClass.no).then((res) => {
         initSavingList(res.data);
@@ -118,122 +114,82 @@ export default function BankPage() {
             )}
           </section>
           <section className={styled.savingView}>
-            <div className={styled.savingA}>
-              <div className={styled.savingAImage}></div>
-              <span className={styled.savingTitle}>적금</span>
-              <span className={styled.kind}>A</span>
-              <section className={styled.inputArea}>
-                <div>
-                  <label htmlFor="period">총 기간</label>
-                  <input
-                    type="number"
-                    value={savingInfo[0].savingDepositPeriod / 7}
-                    id="period"
-                    readOnly
-                  />
-                  주
-                </div>
-                <div>
-                  <label htmlFor="transit">이체 주기</label>
-                  <input
-                    type="number"
-                    value={savingInfo[0].savingDepositCycle}
-                    id="transit"
-                    readOnly
-                  />
-                  일
-                </div>
-                <div>
-                  <label htmlFor="saving">입금 금액</label>
-                  <input
+            {savingInfo &&
+              savingInfo.map((info, index) => (
+                <div className={index === 0 ? styled.savingA : styled.savingB}>
+                  <div
                     className={
-                      isEdit
-                        ? `${styled.saving} ${styled.isEdit}`
-                        : `${styled.saving}`
+                      index === 0 ? styled.savingAImage : styled.savingBImage
                     }
-                    type="number"
-                    id="saving"
-                    name="depositPrice"
-                    value={savingBasket[0].depositPrice}
-                    onChange={(e) => handleChange(e, 0)}
-                    readOnly={isEdit ? false : true}
-                  />
-                  비드
+                  ></div>
+                  <span
+                    className={`${styled.savingTitle} ${
+                      index === 0 ? '' : styled.version2
+                    }`}
+                  >
+                    적금
+                  </span>
+                  <span
+                    className={`${styled.kind} ${
+                      index === 0 ? '' : styled.version2
+                    }`}
+                  >
+                    {index === 0 ? 'A' : 'B'}
+                  </span>
+                  <section className={styled.inputArea}>
+                    <div>
+                      <label htmlFor="period">총 기간</label>
+                      <input
+                        type="number"
+                        value={info.savingDepositPeriod / 7}
+                        id="period"
+                        readOnly
+                      />
+                      주
+                    </div>
+                    <div>
+                      <label htmlFor="transit">이체 주기</label>
+                      <input
+                        type="number"
+                        value={info.savingDepositCycle}
+                        id="transit"
+                        readOnly
+                      />
+                      일
+                    </div>
+                    <div>
+                      <label htmlFor="saving">입금 금액</label>
+                      <input
+                        className={
+                          isEdit
+                            ? `${styled.saving} ${styled.isEdit}`
+                            : `${styled.saving}`
+                        }
+                        type="number"
+                        id="saving"
+                        name="depositPrice"
+                        value={savingBasket[index].depositPrice}
+                        onChange={(e) => handleChange(e, index)}
+                        readOnly={isEdit ? false : true}
+                      />
+                      비드
+                    </div>
+                    <div>
+                      <label htmlFor="interest">금리</label>
+                      <input
+                        className={isEdit ? `${styled.isEdit}` : ''}
+                        type="number"
+                        value={savingBasket[index].interestRate}
+                        id="interest"
+                        name="interestRate"
+                        onChange={(e) => handleChange(e, index)}
+                        readOnly={isEdit ? false : true}
+                      />
+                      %
+                    </div>
+                  </section>
                 </div>
-                <div>
-                  <label htmlFor="interest">금리</label>
-                  <input
-                    className={isEdit ? `${styled.isEdit}` : ""}
-                    type="number"
-                    value={savingBasket[0].interestRate}
-                    id="interest"
-                    name="interestRate"
-                    onChange={(e) => handleChange(e, 0)}
-                    readOnly={isEdit ? false : true}
-                  />
-                  %
-                </div>
-              </section>
-            </div>
-            <div className={styled.savingB}>
-              <div className={styled.savingBImage}></div>
-              <span className={`${styled.savingTitle} ${styled.version2}`}>
-                적금
-              </span>
-              <span className={`${styled.kind} ${styled.version2}`}>B</span>
-              <section className={styled.inputArea}>
-                <div>
-                  <label htmlFor="period">총 기간</label>
-                  <input
-                    type="number"
-                    value={savingInfo[1].savingDepositPeriod / 7}
-                    id="period"
-                    readOnly
-                  />
-                  주
-                </div>
-                <div>
-                  <label htmlFor="transit">이체 주기</label>
-                  <input
-                    type="number"
-                    value={savingInfo[1].savingDepositCycle / 7}
-                    id="transit"
-                    readOnly
-                  />
-                  주일
-                </div>
-                <div>
-                  <label htmlFor="saving">입금 금액</label>
-                  <input
-                    className={
-                      isEdit
-                        ? `${styled.saving} ${styled.isEdit}`
-                        : `${styled.saving}`
-                    }
-                    type="number"
-                    value={savingBasket[1].depositPrice}
-                    onChange={(e) => handleChange(e, 1)}
-                    id="saving"
-                    name="depositPrice"
-                    readOnly={isEdit ? false : true}
-                  />
-                  비드
-                </div>
-                <div>
-                  <label htmlFor="interest">금리</label>
-                  <input
-                    className={isEdit ? `${styled.isEdit}` : ""}
-                    type="number"
-                    value={savingBasket[1].interestRate}
-                    onChange={(e) => handleChange(e, 1)}
-                    id="interest"
-                    name="interestRate"
-                    readOnly={isEdit ? false : true}
-                  />
-                  %
-                </div>
-              </section>
-            </div>
+              ))}
           </section>
         </section>
       )}

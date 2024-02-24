@@ -1,16 +1,16 @@
-import React from "react";
-import styled from "./Student.module.css";
-import useModal from "../../hooks/useModal";
-import PwdRemoveBtn from "./PwdRemoveBtn";
-import DoDisturbOnIcon from "@mui/icons-material/DoDisturbOn";
-import { SvgIcon } from "@material-ui/core";
-import EditIcon from "@mui/icons-material/Edit";
-import { useMutation } from "@tanstack/react-query";
+import React from 'react';
+import styled from './Student.module.css';
+import useModal from '../../hooks/useModal';
+import PwdRemoveBtn from './PwdRemoveBtn';
+import DoDisturbOnIcon from '@mui/icons-material/DoDisturbOn';
+import { SvgIcon } from '@material-ui/core';
+import EditIcon from '@mui/icons-material/Edit';
+import { useMutation } from '@tanstack/react-query';
 
 const Student = ({ item, onClick, handleRemove, handleEdit, showRemove }) => {
   /** 학생 비밀번호 초기화 쿼리 */
   const resetPwdQuery = useMutation({
-    mutationKey: ["resetPwd"],
+    mutationKey: ['resetPwd'],
     mutationFn: () => resetPwdApi(),
     onSuccess: (res) => {
       console.log(res.data);
@@ -59,12 +59,11 @@ const Student = ({ item, onClick, handleRemove, handleEdit, showRemove }) => {
         <td>{item.asset}</td>
         {showRemove && (
           <td className={styled.resetPwdCell} onClick={onEdit}>
-            {" "}
             <PwdRemoveBtn
               onClick={() =>
                 openModal({
-                  type: "pwdRemove",
-                  props: ["비밀번호 초기화", item],
+                  type: 'pwdRemove',
+                  props: ['비밀번호 초기화', item],
                 })
               }
             />
@@ -74,7 +73,7 @@ const Student = ({ item, onClick, handleRemove, handleEdit, showRemove }) => {
           <td onClick={onRemove}>
             <SvgIcon
               component={DoDisturbOnIcon}
-              style={{ fill: "red", height: "3vh" }}
+              style={{ fill: 'red', height: '3vh' }}
             />
           </td>
         )}
@@ -84,8 +83,8 @@ const Student = ({ item, onClick, handleRemove, handleEdit, showRemove }) => {
               component={EditIcon}
               onClick={() =>
                 openModal({
-                  type: "editStudent",
-                  props: ["학생 정보 수정", item],
+                  type: 'editStudent',
+                  props: ['학생 정보 수정', item],
                 })
               }
             />
