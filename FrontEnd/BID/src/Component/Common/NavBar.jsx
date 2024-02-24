@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "./NavBar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,7 +8,6 @@ import {
   faCoins,
   faPiggyBank,
   faDice,
-  faSchool,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import Logo from "../../Asset/Image/logo.png";
@@ -23,15 +22,28 @@ export default function NavBar() {
   const teacherInfo = useSelector(userSelector);
   const mainClass = useSelector(mainSelector);
 
+  useEffect(() => {}, [mainClass]);
+
   return (
     <nav>
       <section className={styled.logoArea}>
-        <img src={Logo} alt="logo" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
+        <img
+          src={Logo}
+          alt="logo"
+          onError={(e) =>
+            (e.target.src =
+              "https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg")
+          }
+        />
         <div>
           <div>{teacherInfo.adminInfo.schoolName}</div>
-          <div className={styled.classInfo}>
-            {mainClass.year}학년 {mainClass.classRoom}반
-          </div>
+          {mainClass ? (
+            <div className={styled.classInfo}>
+              {mainClass.year}학년 {mainClass.classRoom}반
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </section>
       <ul>

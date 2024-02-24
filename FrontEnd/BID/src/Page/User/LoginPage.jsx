@@ -8,9 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { SvgIcon } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import useModal from "../../hooks/useModal";
-import { getCookie, setCookie } from "../../cookie";
-import { useSelector } from "react-redux";
-import { modelSelector } from "../../Store/modelSlice";
+import { setCookie } from "../../cookie";
 
 function LoginPage() {
   const [id, setId] = useState("");
@@ -21,7 +19,6 @@ function LoginPage() {
   const navigate = useNavigate();
   const { openModal } = useModal();
   const [schoolCode, setSchoolCode] = useState("");
-  const student = useSelector(modelSelector);
 
   /** 로그인 쿼리 */
   const studentLoginQuery = useMutation({
@@ -33,24 +30,16 @@ function LoginPage() {
         loginStudent({ model: { ...res.data.myInfo, IdInfo: parsedId } });
         initModels({ models: res.data.studentList });
         editModel(res.data.myInfo.profileImgUrl);
-        console.log("accessToken" + res.data.tokenResponse.accessToken);
         setCookie("accessToken", res.data.tokenResponse.accessToken);
-        console.log(res);
       } catch (error) {
         console.error(error);
         // 에러 처리 로직 추가
       } finally {
         navigate("/studentmain");
-        console.log("학생 로그인 요청이 완료되었습니다.");
       }
     },
     onError: (error) => {
       console.log(error);
-    },
-    onSettled: () => {
-      if (student && getCookie("accessToken")) {
-        navigate("/studentmain");
-      }
     },
   });
 
