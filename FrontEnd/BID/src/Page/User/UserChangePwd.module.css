@@ -1,37 +1,50 @@
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 70vh;
-  justify-content: center;
+.back {
+    margin: 0 auto;
+    max-width: 1138px;
+    width: 100%;
+    height: 412px; 
+    background-color: #FFFEF0;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    position: relative; /* Added position relative */
+
 }
 
-.logo {
-  margin-bottom: 8vh;
+.content {
+    position: absolute;
+    display: flex;
+    align-items: center; 
+    margin-top: 30vh;
+    box-sizing: border-box;
+    justify-content: center;
 }
 
 .contentInput {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column; /* Changed to column layout */
-}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Changed to column layout */
+    box-sizing: border-box;
+  }
+
 
 .contentInput input:focus {
-  outline: none; /* 클릭할 때 검정색 테두리 제거 */
-  border: 1px solid #ececec; /* 클릭 시 보여질 테두리 스타일 */
+    outline: none; /* 클릭할 때 검정색 테두리 제거 */
+    border: 1px solid #ECECEC; /* 클릭 시 보여질 테두리 스타일 */
 }
 
 .contentInput input {
-  height: 40px;
-  width: 250px;
-  justify-content: center;
-  font-size: 0.75rem;
-  padding: 0 2.4rem;
-  border-radius: 0.3rem;
-  border: 1px solid #ececec;
-  box-sizing: border-box;
+    height: 40px;
+    width: 250px;
+    justify-content: center;
+    font-size: 0.75rem;
+    padding: 0 2.4rem;
+    border-radius: .3rem;
+    border: 1px solid #ECECEC;
+    box-sizing: border-box;
 }
+
 
 .inputWithIcon {
   display: flex;
@@ -39,60 +52,64 @@
 }
 
 .icon {
-  position: absolute;
-  left: 10px;
+    position: absolute;
+    left:10px;
+    
 }
 
+
 .findIdLink {
-  text-decoration: none;
-  color: #a6a6a6;
-  cursor: pointer;
-  margin-right: 1.2rem;
+    text-decoration: none;
+    color: #A6A6A6;
+    cursor: pointer;
+    margin-right: 1.2rem;
 }
 
 .registerLink {
-  text-decoration: none;
-  color: #a6a6a6;
-  cursor: pointer;
-  margin-left: 1.2rem;
-}
+    text-decoration: none;
+    color: #A6A6A6;
+    cursor: pointer;
+    margin-left: 1.2rem;
+  }
 
 .changePwdLink {
-  text-decoration: none;
-  color: #a6a6a6;
-  cursor: pointer;
+    text-decoration: none;
+    color: #A6A6A6;
+    cursor: pointer;
 }
 
-.IdLink {
-  width: 250px;
-  height: 45px;
-  margin-top: 1.5rem;
-  font-size: 1.3rem;
-  background-color: #ffd43a;
-  color: white;
-  border-radius: 0.3rem;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
+.IdLink{
+    width: 250px;
+    height: 45px;
+    margin-top: 1.5rem;
+    font-size: 1.3rem;
+    background-color: #FFD43A;
+    color: white;
+    border-radius: .3rem;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
+
 
 .changePwdBtn {
-  width: 250px;
-  height: 45px;
-  margin-top: 1.5rem;
-  font-size: 1.3rem;
-  color: white;
-  background-color: #ffd43a;
-  border-radius: 0.3rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+    width: 250px;
+    height: 45px;
+    margin-top: 1.5rem;
+    font-size: 1.3rem;
+    color: white;
+    background-color: #FFD43A;
+    border-radius: .3rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
 }
 
 .telInput {
@@ -103,28 +120,20 @@
 }
 
 .telInput button {
-  position: absolute;
-  width: 70px;
-  height: 22px;
-  color: white;
-  background-color: #a6a6a6;
-  font-size: 0.8rem;
-  right: 10px;
-  top: 49px;
-  border-radius: 10px;
-  cursor: pointer;
+    position: absolute;
+    width: 70px;
+    height: 22px;
+    color: white;
+    background-color: #A6A6A6;
+    font-size: 0.8rem;
+    right:10px;
+    top: 49px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
-.error {
-  margin-top: 0.5vh;
-  font-size: 1rem;
-  color: #e81818;
-}
-
-.back {
-  position: absolute;
-  width: 5vw;
-  height: 9vh;
-  left: 5vh;
-  top: 53vw;
+.error { 
+    margin-top: 0.5vh;
+    font-size: 1rem;
+    color: #E81818;
 }

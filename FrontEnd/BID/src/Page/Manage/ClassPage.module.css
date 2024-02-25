@@ -40,7 +40,6 @@
 
 .orderTableContainer {
   max-height: 80vh;
-  width: 30vw;
   overflow: scroll;
   display: flex;
 }
@@ -59,9 +58,6 @@
 
 .orderTable th {
   width: 3vw;
-  height: 5vh;
-  font-size: 1rem;
-  text-align: center;
 }
 
 .orderTable th:nth-child(2),
@@ -77,8 +73,14 @@
   background-color: #e6e5db;
 }
 
+.orderTable th {
+  height: 8vh;
+  font-size: 16px;
+  vertical-align: middle;
+}
+
 .orderTable td {
-  height: 4vh;
+  height: 7vh;
   padding: 10px;
   box-sizing: border-box;
   text-align: center;

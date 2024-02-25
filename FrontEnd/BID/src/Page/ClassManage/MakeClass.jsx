@@ -1,19 +1,18 @@
-import React, { useEffect } from "react";
-import styled from "./MakeClass.module.css";
-import Back from "../../Asset/Image/SeatGame/back_btn.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { useCallback, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { AddClass } from "../../Apis/ClassManageApis";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { userSelector } from "../../Store/userSlice";
-import { mainSelector } from "../../Store/mainSlice";
-import alertBtn from "../../Component/Common/Alert";
+import React, { useEffect } from 'react';
+import styled from './MakeClass.module.css';
+import Back from '../../Asset/Image/SeatGame/back_btn.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { useCallback, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { AddClass } from '../../Apis/ClassManageApis';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../Store/userSlice';
+import alertBtn from '../../Component/Common/Alert';
 
 export default function MakeClass() {
-  const XLSX = require("xlsx");
+  const XLSX = require('xlsx');
   const [uploadedFile, setUploadedFile] = useState(null);
   const [stuFile, setStuFile] = useState(
     uploadedFile ? uploadedFile.jsonData : []
@@ -22,20 +21,19 @@ export default function MakeClass() {
   const [year, setYear] = useState(0);
   const [classRoom, setClassRoom] = useState(0);
   const [classInfo, setClassInfo] = useState({
-    schoolCode: "AAA",
+    schoolCode: 'AAA',
     year: year,
     classRoom: classRoom,
     userNo: 36,
     schoolNo: 1,
     studentListSaveRequests: [],
   });
-  const mainClass = useSelector(mainSelector);
 
   const handleDownload = () => {
-    const url = "/Student.xlsx";
-    const link = document.createElement("a");
+    const url = '/Student.xlsx';
+    const link = document.createElement('a');
     link.href = url;
-    link.setAttribute("download", "Student.xlsx");
+    link.setAttribute('download', 'Student.xlsx');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -52,7 +50,7 @@ export default function MakeClass() {
       const reader = new FileReader();
       reader.onload = async (e) => {
         const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: "array", bookVBA: true });
+        const workbook = XLSX.read(data, { type: 'array', bookVBA: true });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
@@ -73,9 +71,9 @@ export default function MakeClass() {
   };
 
   const handleChange = (event, what) => {
-    if (what === "year") {
+    if (what === 'year') {
       setYear(event.target.value);
-    } else if (what === "classRoom") {
+    } else if (what === 'classRoom') {
       setClassRoom(event.target.value);
     }
   };
@@ -96,40 +94,40 @@ export default function MakeClass() {
     var utc_days = Math.floor(serial - 25569);
     var utc_value = utc_days * 86400;
     let date = new Date(utc_value * 1000).toISOString().slice(0, 10);
-    return date;
+    return date
   }
 
   useEffect(() => {
     setStudentFormat(
-      stuFile.map((student) => {
-        const birthDate = excelSerialDateToJSDate(student.생년월일);
-        const birthDateString = birthDate.substring(2).replace(/-/g, "");
-        return {
-          password: birthDateString,
-          name: student.이름,
-          birthDate: birthDateString,
-          number: student.번호,
-        };
-      })
+        stuFile.map((student) => {
+          const birthDate = excelSerialDateToJSDate(student.생년월일);
+          const birthDateString = birthDate.substring(2).replace(/-/g, '');
+          return {
+            password: birthDateString,
+            name: student.이름,
+            birthDate: birthDateString,
+            number: student.번호,
+          };
+        })
     );
   }, [stuFile, classInfo, year, classRoom]);
 
   const makingClass = useMutation({
-    mutationKey: ["makingClass"],
+    mutationKey: ['makingClass'],
     mutationFn: () =>
       AddClass({ classInfo })
         .then(() => {
           alertBtn({
-            text: "추가되었습니다.",
-            confirmColor: "#ffd43a",
-            icon: "success",
+            text: '추가되었습니다.',
+            confirmColor: '#ffd43a',
+            icon: 'success',
           });
         })
         .catch(() => {
           alertBtn({
-            text: "추가가 되지 않았습니다.",
-            confirmColor: "#E81818",
-            icon: "error",
+            text: '추가가 되지 않았습니다.',
+            confirmColor: '#E81818',
+            icon: 'error',
           });
         })
         .finally(() => {
@@ -158,7 +156,7 @@ export default function MakeClass() {
               type="number"
               id="year"
               value={year}
-              onChange={(e) => handleChange(e, "year")}
+              onChange={(e) => handleChange(e, 'year')}
             />
             학년
           </label>
@@ -168,7 +166,7 @@ export default function MakeClass() {
               id="class"
               className={styled.class}
               value={classRoom}
-              onChange={(e) => handleChange(e, "classRoom")}
+              onChange={(e) => handleChange(e, 'classRoom')}
             />
             반
           </label>
@@ -204,21 +202,21 @@ export default function MakeClass() {
                   className={`${styled.num} ${styled.newStu}`}
                   value={student.번호}
                   onChange={(e) =>
-                    handleInputChange(index, "번호", e.target.value)
+                    handleInputChange(index, '번호', e.target.value)
                   }
                 />
                 <input
                   className={`${styled.name} ${styled.newStu}`}
                   value={student.이름}
                   onChange={(e) =>
-                    handleInputChange(index, "이름", e.target.value)
+                    handleInputChange(index, '이름', e.target.value)
                   }
                 />
                 <input
                   className={`${styled.birth} ${styled.newStu}`}
                   value={excelSerialDateToJSDate(student.생년월일)}
                   onChange={(e) =>
-                    handleInputChange(index, "생년월일", e.target.value)
+                    handleInputChange(index, '생년월일', e.target.value)
                   }
                 />
               </div>
@@ -229,9 +227,9 @@ export default function MakeClass() {
           onClick={() => {
             if (year === 0 || classRoom === 0) {
               alertBtn({
-                title: "학년이나 반에 0은 입력할 수 없습니다.",
-                confirmColor: "#E81818",
-                icon: "warning",
+                title: '학년이나 반에 0은 입력할 수 없습니다.',
+                confirmColor: '#E81818',
+                icon: 'warning',
               });
               return;
             }
@@ -245,20 +243,8 @@ export default function MakeClass() {
         className={styled.back}
         src={Back}
         alt="뒤로가기"
-        onClick={() => {
-          console.log(userNo);
-          if (mainClass) {
-            navigate(`/classlist/${userNo}`);
-          } else {
-            navigate(`/classlist/${userNo}/no-class`, {
-              state: { teacherId: userNo },
-            });
-          }
-        }}
-        onError={(e) =>
-          (e.target.src =
-            "https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg")
-        }
+        onClick={() => navigate(`/classlist/${userNo}`)}
+        onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}
       />
     </section>
   );
