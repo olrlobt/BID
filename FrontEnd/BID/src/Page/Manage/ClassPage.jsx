@@ -105,7 +105,6 @@ function ClassPage() {
   };
 
   const handleRemove = (no) => {
-    console.log(no);
     deleteStudentApi(no, gradeNo)
       .then((res) => {
         console.log(res);
