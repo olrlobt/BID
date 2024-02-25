@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { bidSelector } from '../../Store/bidSlice';
 import { bidCountSelector } from '../../Store/bidCountSlice';
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getStudentListApi,
   holdBid,
@@ -60,6 +60,7 @@ export default function Home() {
   const holdView = useSelector(holdSelector);
   const teacher = useSelector(userSelector);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   /** 대시보드 */
   const { data: dashboardInfo } = useQuery({
@@ -154,6 +155,7 @@ export default function Home() {
       });
     } else {
       navigate('/');
+      queryClient.invalidateQueries(['HomeDashboard']);
     }
   }, [mainClass]);
 
