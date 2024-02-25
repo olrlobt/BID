@@ -27,7 +27,7 @@ import RealTimeModal from "../../Component/User/RealTimeModal";
 export default function Models(myInfo) {
   const [characters] = useAtom(charactersAtom);
   const [onFloor, setOnFloor] = useState(false);
-  const [isAlarm, setIsAlarm] = useState(false);
+  const [isAlarm, setIsAlarm] = useState(true);
   // const [selectedCharacter, setSelectedCharacter] = useState(null);
   useCursor(onFloor);
   const navigate = useNavigate(); // useNavigate hook
@@ -69,18 +69,14 @@ export default function Models(myInfo) {
       <SocketManager />
       <Canvas
         style={{ width: "100%", height: "70vh" }}
-        camera={{ position: [12, 10, 20], fov: 30 }}
+        camera={{ position: [12, 10, 20], fov: 20 }}
       >
-        <CameraControls minPolarAngle={5} maxPolarAngle={Math.PI / 1} />
+        <CameraControls minPolarAngle={2} maxPolarAngle={Math.PI / 2} />
         <directionalLight
           position={[1, 1, 1]}
           castShadow
-          intensity={3}
+          intensity={2}
         ></directionalLight>
-      <OrbitControls
-          enableZoom={false} // 확대/축소 비활성화
-          enablePan={false} // 패닝 비활성화
-        />
         <ambientLight intensity={1.7} />
         <OrbitControls />
         <group scale={20} position={[0, 0, 0]}>

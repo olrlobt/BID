@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "./MakeClass.module.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import React from 'react';
+import styled from './MakeClass.module.css';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function NoClass() {
   const navigate = useNavigate();
