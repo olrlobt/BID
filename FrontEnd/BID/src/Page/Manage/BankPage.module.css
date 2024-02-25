@@ -55,16 +55,16 @@
 
 .savingAImage {
   background-image: url('../../Asset/Image/HOME_icons/savingA.png');
-  width: 16vw;
-  height: 46vh;
+  width: 15vw;
+  height: 43vh;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: -5vw -2vh;
 }
 
 .savingBImage {
-  width: 20vw;
-  height: 47vh;
+  width: 18vw;
+  height: 43vh;
   background-image: url('../../Asset/Image/HOME_icons/savingB.png');
   background-repeat: no-repeat;
   background-size: cover;
