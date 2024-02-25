@@ -2,10 +2,6 @@
   display: flex;
 }
 
-.Face {
-  
-}
-
 .logoInfo {
   display: flex;
   flex-direction: column;

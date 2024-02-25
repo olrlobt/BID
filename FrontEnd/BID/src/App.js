@@ -50,6 +50,7 @@ function App() {
     if (!cookie) {
       navigate('/login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cookie, teacher, student]);
 
   return (
@@ -101,7 +102,7 @@ function App() {
         {/* 학생 접근 가능 */}
         {cookie && student && (
           <Route>
-            <Route path="/studentmain/" element={<StudentMain />} />
+            <Route path="/studentmain" element={<StudentMain />} />
             <Route path="/studentmain/:studentId/" element={<MyPage />} />
             <Route
               path="/studentmain/auctionHouse"
