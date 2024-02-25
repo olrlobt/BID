@@ -54,18 +54,18 @@
 }
 
 .savingAImage {
-  background-image: url('../../Asset/Image/HOME_icons/savingA.png');
-  width: 16vw;
-  height: 46vh;
+  background-image: url("../../Asset/Image/HOME_icons/savingA.png");
+  width: 19vw;
+  height: 50vh;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: -5vw -2vh;
+  background-position: -2vw -2vh;
 }
 
 .savingBImage {
   width: 20vw;
-  height: 47vh;
-  background-image: url('../../Asset/Image/HOME_icons/savingB.png');
+  height: 50vh;
+  background-image: url("../../Asset/Image/HOME_icons/savingB.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: -1vw -3vh;

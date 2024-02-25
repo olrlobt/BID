@@ -165,15 +165,7 @@ export default function SeatGame() {
           ))}
         </section>
         <button onClick={() => navigate('/game/')}>
-          <img
-            className={styled.back}
-            src={Back}
-            alt="뒤로가자"
-            onError={(e) =>
-              (e.target.src =
-                'https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg')
-            }
-          />
+          <img className={styled.back} src={Back} alt="뒤로가자" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
         </button>
       </section>
       <section className={styled.gameArea}>

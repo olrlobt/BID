@@ -1,13 +1,12 @@
-.newCouponButton {
-  background-color: #5fa1c4;
-  color: white;
-  box-sizing: border-box;
-  border: none;
-  border-radius: 0.5vh;
-  line-height: 3vh;
-  font-weight: bold;
-  padding: 0.3vh 1vh;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+.newCouponButton{
+	background-color: #5FA1C4;
+	color: white;
+	box-sizing: border-box;
+	border: none;
+	border-radius: 0.5vh;
+	line-height: 3vh;
+    font-weight: bold;
+	padding: 0.3vh 1vh;
+    cursor: pointer;
+	display: flex;
 }
