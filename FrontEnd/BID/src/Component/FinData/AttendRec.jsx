@@ -1,11 +1,9 @@
 // AttendRec.jsx
-import React from 'react';
-import styled from './AttendRec.module.css';
+import React from "react";
+import styled from "./AttendRec.module.css";
 
 function AttendRec({ attandance, ball }) {
-  const daysOfWeek = ['월', '화', '수', '목', '금'];
-  console.log(attandance);
-  console.log(ball);
+  const daysOfWeek = ["월", "화", "수", "목", "금"];
   return (
     <div className={styled.attendanceContainer}>
       <div className={styled.attendance}>
@@ -24,7 +22,7 @@ function AttendRec({ attandance, ball }) {
                   key={index}
                   className={value ? styled.present : styled.absent}
                 >
-                  {value ? '⭕️' : '❌'}
+                  {value ? "⭕️" : "❌"}
                 </td>
               ))}
             </tr>

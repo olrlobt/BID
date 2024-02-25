@@ -87,11 +87,23 @@ export default function RewardPage() {
   const sendReward = (e) => {
     e.preventDefault();
     if (rStudents.length === 0) {
-      console.log("리워드를 지급할 학생을 선택해주세요");
+      alertBtn({
+        text:'리워드를 지급할 학생을 선택해주세요!',
+        confirmColor: '#ffd43a',
+        icon: 'warning',
+      })
     } else if (rReward === 0) {
-      console.log("지급할 리워드를 선택해주세요");
+      alertBtn({
+        text:'지급할 리워드를 선택해주세요!',
+        confirmColor: '#ffd43a',
+        icon: 'warning',
+      })
     } else if (e.target.comment.value === "") {
-      console.log("리워드와 함께 전달할 코멘트를 입력해주세요");
+      alertBtn({
+        text:'리워드와 함께 전달할 코멘트를 입력해주세요!',
+        confirmColor: '#ffd43a',
+        icon: 'warning',
+      })
     } else {
       const rComment = e.target.comment.value;
       const postData = {
@@ -100,6 +112,11 @@ export default function RewardPage() {
         comment: rComment,
       };
       sendRewardQuery.mutate(postData)
+      if(sendRewardQuery.status==='success'){
+        e.target.comment.value = '';
+        setRStudents([]);
+        setRReward(0);
+      }
     }
   };
 
