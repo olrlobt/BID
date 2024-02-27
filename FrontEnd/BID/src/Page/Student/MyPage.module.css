@@ -228,8 +228,6 @@
 .avatarImage {
   width: 17vw;
   height: 17vw;
-  overflow: hidden;
-  display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 2vw;
@@ -238,8 +236,6 @@
 .avatarImageInactive {
   width: 17vw;
   height: 17vw;
-  overflow: hidden;
-  display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 2vw;
