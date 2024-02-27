@@ -46,6 +46,8 @@
 
   .pageContent {
     overflow: scroll;
+    display: flex;
+
   }
 
   .rightArea {
@@ -84,15 +86,15 @@
         }
       }
     }
-
-    .myAvatarContainer {
-      display: flex;
-      flex-wrap: wrap;
-      height: 50vw;
-      gap: 2.5vw;
-      overflow: scroll;
-    }
   }
+}
+
+.myAvatarContainer {
+  display: flex;
+  flex-wrap: wrap;
+  height: 50vw;
+  gap: 2.5vw;
+  overflow: scroll;
 }
 
 .additionalChartsContainer {
