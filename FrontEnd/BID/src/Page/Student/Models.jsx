@@ -23,11 +23,14 @@ import {
 import { useAtom } from "jotai";
 import * as THREE from "three";
 import RealTimeModal from "../../Component/User/RealTimeModal";
+import { BasicBean } from '../../Component/Character/BasicBean';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 export default function Models(myInfo) {
   const [characters] = useAtom(charactersAtom);
   const [onFloor, setOnFloor] = useState(false);
-  const [isAlarm, setIsAlarm] = useState(true);
+  const [isAlarm, setIsAlarm] = useState(false);
+  const [loading, setLoading] = useState(false); // 로딩 상태 추가
   // const [selectedCharacter, setSelectedCharacter] = useState(null);
   useCursor(onFloor);
   const navigate = useNavigate(); // useNavigate hook
@@ -36,6 +39,18 @@ export default function Models(myInfo) {
   const handleCharacterClick = (characterId) => {
     navigate(`/studentmain/${characterId}`);
   };
+
+  useEffect(() => {
+    if (characters.length === 0) {
+      setLoading(true)
+      console.log("로딩 중")
+      console.log(characters)
+    }
+    else {
+      setLoading(false); // 로딩 상태 변경
+      console.log("로딩 끝")
+    }
+  }, [characters]);
 
   const handlePointerDown = (e) => {
     // 롱 클릭을 감지하기 위한 타이머 설정
@@ -77,38 +92,46 @@ export default function Models(myInfo) {
           castShadow
           intensity={2}
         ></directionalLight>
+        <OrbitControls
+          enableZoom={false} // 확대/축소 비활성화
+          enablePan={false} // 패닝 비활성화
+        />
         <ambientLight intensity={1.7} />
         <OrbitControls />
         <group scale={20} position={[0, 0, 0]}>
           <mesh
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
           >
-            <Classroom/>
+            <Classroom />
           </mesh>
-          {characters.map((character) => (
+          {loading ? (
+            <BasicBean />
+          ) : (
+            characters.map((character) => (
               <CharacterModel
-                  key={character.id}
-                  id={character.id}
-                  name={character.name}
-                  position={
-                new THREE.Vector3(
-                  character.position[0],
-                  character.position[1],
-                  character.position[2]
-                )
-              }
-              selectedCharacter={character.selectedCharacter}
-              myModelNo={myInfo.myInfo.model.no} // 내 캐릭터의 번호 전달
-            />
-          ))}
+                key={character.id}
+                id={character.id}
+                name={character.name}
+                position={
+                  new THREE.Vector3(
+                    character.position[0],
+                    character.position[1],
+                    character.position[2]
+                  )
+                }
+                selectedCharacter={character.selectedCharacter}
+                myModelNo={myInfo.myInfo.model.no} // 내 캐릭터의 번호 전달
+              />
+            ))
+          )}
           <BlackBoard />
           <Cactus />
           <Alarm onClick={handleAlarmClick} />
           <Bank />
           <BiddingPlace />
-          <SnowBean />
+          {/* <SnowBean /> */}
         </group>
         <OrbitControls
           makeDefault
