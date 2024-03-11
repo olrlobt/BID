@@ -3,27 +3,33 @@ import styled from "./BidPage.module.css";
 import WriterButton from "../../Component/Bid/WriterButton";
 import SettingButton from "../../Component/Common/SettingButton";
 import CouponList from "../../Component/Bid/CouponList";
+import Price from "../../Component/Common/Price";
 import AddIcon from "@material-ui/icons/Add";
 import Product from "../../Component/Bid/Product";
 import NoContent from "../../Component/Bid/NoContent";
+import BiddingCoupon from "../../Component/Bid/BiddingCoupon";
+import CannonBall from "../../Component/Bid/Cannonball";
+import RandomItemBox from "../../Component/Bid/RandomItemBox";
 import useModal from '../../hooks/useModal';
 import useCoupons from "../../hooks/useCoupons";
 import { useSelector } from "react-redux";
 import { couponSelector } from "../../Store/couponSlice";
-import { productSelector } from "../../Store/productSlice";
+import { productSelector, biddingCouponSelector, biddingCannonballSelector } from "../../Store/productSlice";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useMutation } from "@tanstack/react-query";
 import { registerCouponApi, unregisterCouponApi } from "../../Apis/CouponApis";
 import { mainSelector } from "../../Store/mainSlice";
 
 export default function BidPage(){
+  const mainClass = useSelector(mainSelector);
   const reduxCoupons = useSelector(couponSelector);
   const reduxProducts = useSelector(productSelector);
-  const mainClass = useSelector(mainSelector);
+  const biddingCoupon = useSelector(biddingCouponSelector);
+  const biddingCannonball = useSelector(biddingCannonballSelector);
 
   const gradeNo = mainClass.no;
 
-  const [isCoupon, setIsCoupon] = useState(true);
+  const [isCoupon, setIsCoupon] = useState(false);
   const [coupons, setCoupons] = useState(reduxCoupons);
   const [products, setProducts] = useState(reduxProducts);
   const [productFilter, setProductFilter] = useState('전체');
@@ -115,7 +121,7 @@ export default function BidPage(){
     }
     return filteredProducts;
   }, [products, productFilter, keyword]);
-  /** 경매 카테고리 초기 설정 */
+
   
   return (
     <>
@@ -213,28 +219,69 @@ export default function BidPage(){
               </DragDropContext>
           </div>)
           :
-          (<div className = {styled.productsWrapper}>
-            {
-              filteredProducts && filteredProducts.length === 0?
-              <NoContent text='현재 진행 중인 경매가 없어요'/>
-              :
-              filteredProducts && filteredProducts.map((product) => 
-                <Product
-                  onClick = {() => {
-                    openModal({
-                      type: 'manageProduct',
-                      props: [gradeNo, product.no] })
-                  }}
-                  key = {product.no}
-                  title = {product.title}
-                  displayPrice = {product.displayPrice}
-                  goodsImgUrl = {product.goodsImgUrl}
-                  userName = {product.userName}
-                  boardStatus = {product.boardStatus}
-                />
-              )
-            }
-          </div>)
+          <div>
+          {biddingCoupon && biddingCannonball && (
+            <div className={styled.teacherProducts}>
+              <div className={styled.prod}>
+                  <div className={styled.header}>
+                    <h3>오늘의 쿠폰</h3>
+                    <Price price = {biddingCoupon.displayPrice}/>
+                  </div>
+                  <div className={styled.desc}>쿠폰은 매일매일 바뀌어요!</div>
+                  <BiddingCoupon
+                    no = {biddingCoupon.no}
+                    name = {biddingCoupon.title}
+                    description = ''
+                    startPrice = {biddingCoupon.displayPrice}
+                  />
+                </div>
+
+                <div className={styled.prod}>
+                  <div className={styled.header}>
+                    <h3>자리 구슬</h3>
+                    <Price price = {biddingCannonball.displayPrice}/>
+                  </div>
+                  <div className={styled.desc}>내가 먼저 뽑힐 확률을 높일 수 있어요</div>
+                  <CannonBall
+                    displayPrice = {biddingCannonball.displayPrice}
+                  />
+                </div>
+
+                <div className={styled.prod}>
+                  <div className={styled.header}>
+                    <h3>랜덤 아바타 뽑기</h3>
+                    <Price price = {70}/>
+                  </div>
+                  <div className={styled.desc}>이번엔 어떤 아바타가 나올까요?</div>
+                  <RandomItemBox/>
+                </div>
+            </div>
+          )}
+
+
+            <div className = {styled.productsWrapper}>
+              {
+                filteredProducts && filteredProducts.length === 0?
+                <NoContent text='현재 진행 중인 경매가 없어요'/>
+                :
+                filteredProducts && filteredProducts.map((product) => 
+                  <Product
+                    onClick = {() => {
+                      openModal({
+                        type: 'manageProduct',
+                        props: [gradeNo, product.no] })
+                    }}
+                    key = {product.no}
+                    title = {product.title}
+                    displayPrice = {product.displayPrice}
+                    goodsImgUrl = {product.goodsImgUrl}
+                    userName = {product.userName}
+                    boardStatus = {product.boardStatus}
+                  />
+                )
+              }
+            </div>
+          </div>
         }
       </div>
     </div>

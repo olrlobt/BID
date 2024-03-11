@@ -7,6 +7,7 @@ import { deleteRewardApi } from "../../Apis/RewardApis";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { mainSelector } from "../../Store/mainSlice";
+import confirmBtn from "../Common/Confirm";
 
 export default function Reward(props){
   const { rNo, rName, rPrice, isSetting, onClick, isActivated } = props;
@@ -25,7 +26,16 @@ export default function Reward(props){
 
     /** 리워드 삭제 함수 */
   const deleteReward = () => {
-    deleteRewardQuery.mutate();
+    confirmBtn({
+			icon: "warning",
+			text: "삭제하신 리워드는 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?",
+			confirmTxt: "삭제",
+			confirmColor: "#F23F3F",
+			cancelTxt: "취소",
+			cancelColor: "#a6a6a6",
+			confirmFunc: () => deleteRewardQuery.mutate(),
+      cancelFunc: () => {}
+		})
   }
 
   return(
