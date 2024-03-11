@@ -18,10 +18,9 @@
 }
 
 .studentFinDataContainer {
-  position: relative; /* sticky가 아니라 relative나 absolute 사용 */
   width: 54vw; /* 더 넓은 너비로 설정 */
-  margin-left: 20px; /* 여백 조정 */
-  height: auto; /* 내용에 따라 높이 자동 조정 */
+  background-color: white;
+  height: 80vh;
 }
 
 .orderlist {
@@ -38,10 +37,35 @@
   position: relative;
 }
 
+.studentData {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .orderTableContainer {
   max-height: 80vh;
   overflow: scroll;
-  display: flex;
+
+  table {
+    width: 100%;
+    border: 0;
+
+    thead {
+      background-color: #e6e5db;
+    }
+    th {
+      text-align: center;
+      font-size: 1.5vw;
+      vertical-align: middle;
+    }
+    td {
+      height: 6vh;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      vertical-align: middle;
+    }
+  }
 }
 
 .buttonSpacing {

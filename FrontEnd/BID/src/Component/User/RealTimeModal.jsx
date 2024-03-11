@@ -29,7 +29,7 @@ export default function RealTimeModal({ handleClick }) {
     <section className={styled.alarmBackground}>
       <section className={styled.alarm}>
         <h1 className={styled.title}>
-          <img className={styled.bell} src={Bell} alt="종" />
+          <img className={styled.bell} src={Bell} alt="종" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
           <span className={styled.activity}>활동 알림</span>
           <button className={styled.delete} onClick={handleClick}>
             x

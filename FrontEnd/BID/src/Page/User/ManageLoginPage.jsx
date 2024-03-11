@@ -28,7 +28,6 @@ function ManageLoginPage() {
     mutationFn: (userCredentials) => loginUserApi(userCredentials),
     onSuccess: async (data) => {
       loginUser(data);
-
       setCookie("accessToken", data.data.tokenResponse.accessToken);
       await queryClient.invalidateQueries("ClassList");
       if (mainClass) {
@@ -58,7 +57,6 @@ function ManageLoginPage() {
     enabled: teacherLogin.isLoggedIn,
   });
 
-
   /** 로그인 버튼 */
   const handleLoginEvent = (e) => {
     e.preventDefault();
@@ -78,7 +76,7 @@ function ManageLoginPage() {
   return (
     <section className={styled.back}>
       <div className={styled.logo}>
-        <img src={Logo} alt="로고" />
+        <img src={Logo} alt="로고" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
       </div>
       <div className={styled.content}>
         <form className={styled.contentInput} onSubmit={handleLoginEvent}>

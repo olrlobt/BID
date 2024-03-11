@@ -134,7 +134,7 @@ function ClassPage() {
           active={activeButton === 'asset'}
         />
       </div>
-      <div style={{ display: 'flex' }}>
+      <div className={styled.studentData}>
         <div className={styled.orderTableContainer}>
           <table className={styled.orderTable}>
             <thead>
@@ -161,11 +161,15 @@ function ClassPage() {
             />
           </table>
         </div>
-        {selectedStudent && !isEditing && (
-          <div className={`${styled.studentFinDataContainer} ${styled.studentFinDataTable}`}>
-            <StudentFinData student={selectedStudent} />
-          </div>
-        )}
+        <div
+          className={`${styled.studentFinDataContainer} ${styled.studentFinDataTable}`}
+        >
+          {selectedStudent && !isEditing && studentData.length > 0 && (
+            <StudentFinData
+              studentData={studentData.find((v) => v.no === selectedStudent.no)}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
