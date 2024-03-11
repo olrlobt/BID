@@ -84,13 +84,13 @@ export default function Models(myInfo) {
       <SocketManager />
       <Canvas
         style={{ width: "100%", height: "70vh" }}
-        camera={{ position: [12, 10, 20], fov: 30 }}
+        camera={{ position: [12, 10, 20], fov: 20 }}
       >
-        <CameraControls minPolarAngle={5} maxPolarAngle={Math.PI / 1} />
+        <CameraControls minPolarAngle={2} maxPolarAngle={Math.PI / 2} />
         <directionalLight
           position={[1, 1, 1]}
           castShadow
-          intensity={3}
+          intensity={2}
         ></directionalLight>
         <OrbitControls
           enableZoom={false} // 확대/축소 비활성화
