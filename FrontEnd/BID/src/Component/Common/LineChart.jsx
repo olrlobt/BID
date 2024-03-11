@@ -1,5 +1,5 @@
-import { ResponsiveLine } from '@nivo/line';
-import styled from '../../Page/Main/Home.module.css';
+import { ResponsiveLine } from "@nivo/line";
+import styled from "../../Page/Main/Home.module.css";
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
@@ -8,6 +8,7 @@ import styled from '../../Page/Main/Home.module.css';
 // you'll often use just a few of them.
 export default function LineChart({ data }) {
   const prettyData = data[0].data;
+  console.log(prettyData);
   const min = Math.min(...prettyData.map((v) => v.y));
   const max = Math.max(...prettyData.map((v) => v.y));
 
@@ -17,9 +18,9 @@ export default function LineChart({ data }) {
         className={styled.graph}
         data={data}
         margin={{ top: 30, bottom: 30, left: 60 }}
-        xScale={{ type: 'point' }}
+        xScale={{ type: "point" }}
         yScale={{
-          type: 'linear',
+          type: "linear",
           min: min,
           max: max,
           stacked: true,
@@ -33,7 +34,7 @@ export default function LineChart({ data }) {
           tickPadding: 5,
           tickRotation: 0,
           legendOffset: 36,
-          legendPosition: 'middle',
+          legendPosition: "middle",
         }}
         axisLeft={{
           tickSize: 5,
@@ -41,13 +42,13 @@ export default function LineChart({ data }) {
           tickValues: 5,
           tickRotation: 0,
           legendOffset: -40,
-          legendPosition: 'middle',
+          legendPosition: "middle",
         }}
         enablePoints={false}
         pointSize={10}
-        pointColor={{ theme: 'background' }}
+        pointColor={{ theme: "background" }}
         pointBorderWidth={2}
-        pointBorderColor={{ from: 'serieColor' }}
+        pointBorderColor={{ from: "serieColor" }}
         pointLabelYOffset={-12}
         useMesh={true}
       />
