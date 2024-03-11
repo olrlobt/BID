@@ -1,11 +1,10 @@
-import PropTypes from 'prop-types';
-import styled from './InfoBox.module.css';
-import React from 'react';
+import PropTypes from "prop-types";
+import styled from "./InfoBox.module.css";
 
-const InfoBox = React.memo(({ info, icons, text, modalClick }) => {
+export default function InfoBox({ info, icons, text, modalClick }) {
   const containerStyle = {
-    width: info[0]?.width || 'auto',
-    height: info[0]?.height || 'auto',
+    width: info[0]?.width || "auto",
+    height: info[0]?.height || "auto",
   };
 
   return (
@@ -15,15 +14,7 @@ const InfoBox = React.memo(({ info, icons, text, modalClick }) => {
       onClick={modalClick}
     >
       {icons && (
-        <img
-          className={styled.icon}
-          src={icons[0].src}
-          alt={icons[0].alt}
-          onError={(e) =>
-            (e.target.src =
-              'https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg')
-          }
-        />
+        <img className={styled.icon} src={icons[0].src} alt={icons[0].alt} onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
       )}
       <div className={styled.infoText}>
         <div>{info[0].text[0]}</div>
@@ -32,7 +23,7 @@ const InfoBox = React.memo(({ info, icons, text, modalClick }) => {
       </div>
     </section>
   );
-});
+}
 
 // 넘어오는 props에 대한 정보
 InfoBox.propTypes = {
@@ -40,7 +31,7 @@ InfoBox.propTypes = {
     PropTypes.shape({
       width: PropTypes.string,
       height: PropTypes.string,
-      text: PropTypes.arrayOf(PropTypes.string),
+      text: PropTypes.string,
     })
   ).isRequired,
   icons: PropTypes.arrayOf(
@@ -52,5 +43,3 @@ InfoBox.propTypes = {
   ),
   text: PropTypes.string,
 };
-
-export default InfoBox;

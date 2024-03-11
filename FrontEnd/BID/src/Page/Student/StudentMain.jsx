@@ -3,7 +3,7 @@ import Models from "./Models";
 import { Link } from "react-router-dom";
 import { stuAttendApi, stuAttendCheckApi, studentLogoutApi } from "../../Apis/ModelApis";
 import { useSelector } from "react-redux";
-import { modelListSelector, modelSelector, modelImgSelector, logoutStudent } from "../../Store/modelSlice";
+import { modelListSelector, modelSelector, modelImgSelector } from "../../Store/modelSlice";
 import styled from "./StudentMain.module.css";
 import alertBtn from '../../Component/Common/Alert';
 import { socket } from "../../Component/Models/SocketManager";
@@ -13,19 +13,18 @@ import useProducts from "../../hooks/useProducts";
 import { getProductListApi } from "../../Apis/StudentBidApis";
 import { useNavigate } from "react-router-dom";
 import { removeCookie } from "../../cookie";
-import useModels from '../../hooks/useModels';
-
 
 function StudentMain() {
   const models = useSelector(modelListSelector);
   const myInfo = useSelector(modelSelector);
   const imgInfo = useSelector(modelImgSelector)
   const navigate = useNavigate();
-  const { logoutStudent } = useModels();
   const gradeNo = myInfo.model.gradeNo;
   useEffect(() => {
     // gradeNo를 사용하여 방에 조인
     socket.emit("joinRoom", gradeNo);
+
+    // 컴포넌트 언마운트 시에 방을 떠나는 로직도 추가할 수 있습니다.
   }, []);
 
   const { updateAlarms } = useAlarm();
@@ -114,7 +113,6 @@ function StudentMain() {
     onSuccess: (res) => {
       console.log(res)
       removeCookie("accessToken");
-      logoutStudent()
     },
     onError: (error) =>{
       console.log(error)
