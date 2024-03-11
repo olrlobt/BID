@@ -28,7 +28,7 @@ export default function Reward(props){
   const deleteReward = () => {
     confirmBtn({
 			icon: "warning",
-			html: "삭제하신 리워드는 다시 복구할 수 없습니다.<br/>그래도 삭제하시겠습니까?",
+			text: "삭제하신 리워드는 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?",
 			confirmTxt: "삭제",
 			confirmColor: "#F23F3F",
 			cancelTxt: "취소",

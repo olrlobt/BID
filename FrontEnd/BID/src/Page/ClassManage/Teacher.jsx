@@ -1,40 +1,37 @@
-import React from 'react';
-import Logo from '../../Asset/Image/logo.png';
-import styled from './Teacher.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import Logo from "../../Asset/Image/logo.png";
+import styled from "./Teacher.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGear,
   faArrowRightFromBracket,
-} from '@fortawesome/free-solid-svg-icons';
-import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../../Store/userSlice';
-import { logoutUserApi } from '../../Apis/UserApis';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import useUser from '../../hooks/useUser';
-import { removeCookie } from '../../cookie';
-import useMain from '../../hooks/useMain';
+} from "@fortawesome/free-solid-svg-icons";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../Store/userSlice";
+import { logoutUserApi } from "../../Apis/UserApis";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import useUser from "../../hooks/useUser";
+import { removeCookie } from "../../cookie";
 
 export default function Teacher() {
   const location = useLocation();
   const teacherInfo = useSelector(userSelector);
   const { userNo, schoolName, adminName } = teacherInfo.adminInfo;
   const navigate = useNavigate();
-  const { changeMainClass } = useMain();
   const { logoutUser } = useUser();
 
   /** 로그아웃 쿼리 */
   const logoutUserQuery = useMutation({
-    mutationKey: ['logoutUser'],
+    mutationKey: ["logoutUser"],
     mutationFn: () => logoutUserApi(),
     onSuccess: (res) => {
       console.log(res);
       // 여기서 토큰 폐기 작업 수행
       // 예를 들어, 로컬 스토리지에서 토큰을 삭제하는 방법:
-      changeMainClass([]);
       logoutUser();
-      removeCookie('accessToken');
+      removeCookie("accessToken");
     },
     onError: (error) => {
       console.log(error);
@@ -45,19 +42,12 @@ export default function Teacher() {
   const handleLogoutUser = (e) => {
     e.preventDefault();
     logoutUserQuery.mutate();
-    navigate('/managelogin');
+    navigate("/managelogin");
   };
 
   return (
     <section className={styled.teacherArea}>
-      <img
-        src={Logo}
-        alt="로고"
-        onError={(e) =>
-          (e.target.src =
-            'https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg')
-        }
-      />
+      <img src={Logo} alt="로고" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
       <section>
         <div className={styled.eleInfo}>{schoolName}</div>
         <div className={styled.nameInfo}>
@@ -81,7 +71,7 @@ export default function Teacher() {
               className={`${styled.classBtn} ${
                 location.pathname !== `/classlist/${userNo}`
                   ? styled.disabled
-                  : ''
+                  : ""
               }`}
             >
               비밀번호 변경
