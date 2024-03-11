@@ -1,17 +1,17 @@
-import styled from "./Home.module.css";
-import InfoBox from "../../Component/Common/InfoBox";
-import Card from "../../Asset/Image/HOME_icons/coupon.png";
-import Coin from "../../Asset/Image/HOME_icons/Coins.png";
-import LinkFront from "../../Asset/Image/HOME_icons/transaction.png";
-import Locker from "../../Asset/Image/HOME_icons/bank.png";
-import Clock from "../../Asset/Image/HOME_icons/clock.png";
-import useModal from "../../hooks/useModal";
-import TimeTable from "../../Component/Common/TimeTable";
-import { useSelector } from "react-redux";
-import { bidSelector } from "../../Store/bidSlice";
-import { bidCountSelector } from "../../Store/bidCountSlice";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import styled from './Home.module.css';
+import InfoBox from '../../Component/Common/InfoBox';
+import Card from '../../Asset/Image/HOME_icons/coupon.png';
+import Coin from '../../Asset/Image/HOME_icons/Coins.png';
+import LinkFront from '../../Asset/Image/HOME_icons/transaction.png';
+import Locker from '../../Asset/Image/HOME_icons/bank.png';
+import Clock from '../../Asset/Image/HOME_icons/clock.png';
+import useModal from '../../hooks/useModal';
+import TimeTable from '../../Component/Common/TimeTable';
+import { useSelector } from 'react-redux';
+import { bidSelector } from '../../Store/bidSlice';
+import { bidCountSelector } from '../../Store/bidCountSlice';
+import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getStudentListApi,
   holdBid,
@@ -56,6 +56,9 @@ export default function Home() {
   const [lineData, setLineData] = useState([]);
   const mainClass = useSelector(mainSelector);
   const holdView = useSelector(holdSelector);
+  const teacher = useSelector(userSelector);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   /** 대시보드 */
   const { data: dashboardInfo } = useQuery({
@@ -140,6 +143,19 @@ export default function Home() {
       });
     });
   };
+
+  useEffect(() => {
+    if (!mainClass) {
+      navigate(`/classlist/${teacher.adminInfo.userNo}/no-class`, {
+        state: {
+          teacherId: teacher.adminInfo.userNo,
+        },
+      });
+    } else {
+      navigate('/');
+      queryClient.invalidateQueries(['HomeDashboard']);
+    }
+  }, [mainClass]);
 
   useEffect(() => {}, [dashboardInfo, couponList, studentList, holdView]);
   return (
