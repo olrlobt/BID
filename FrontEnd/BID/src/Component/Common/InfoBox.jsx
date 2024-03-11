@@ -14,7 +14,7 @@ export default function InfoBox({ info, icons, text, modalClick }) {
       onClick={modalClick}
     >
       {icons && (
-        <img className={styled.icon} src={icons[0].src} alt={icons[0].alt} />
+        <img className={styled.icon} src={icons[0].src} alt={icons[0].alt} onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
       )}
       <div className={styled.infoText}>
         <div>{info[0].text[0]}</div>

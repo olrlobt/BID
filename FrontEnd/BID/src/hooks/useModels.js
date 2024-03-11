@@ -21,8 +21,8 @@ export default function useModels() {
     dispatch(addModel(newModel));
   }
 
-  const handleEditModel= ({updatedModel}) => {
-    dispatch(editModel(updatedModel));
+  const handleEditModel= (updatedImg) => {
+    dispatch(editModel(updatedImg));
   };
 
 
@@ -31,6 +31,6 @@ export default function useModels() {
     logoutStudent: handleLogoutStudent,
     initModels: handleInitModels,
     addModel: handleAddModel,
-    editSteditModeludent: handleEditModel
+    editModel: handleEditModel
   };
 }

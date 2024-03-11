@@ -8,7 +8,8 @@
   align-items: center;
 }
 
-.holdBtn {
+.holdBtn,
+.stopBtn {
   width: 40vw;
   height: 15vh;
   background-color: var(--color-box-important);
@@ -34,6 +35,10 @@
 
 .holdInfo {
   font-size: 0.7rem;
+}
+
+.stopBtn {
+  background-color: #a6a6a6;
 }
 
 .secondRow,
@@ -82,7 +87,7 @@
 
 .infoText {
   width: 80%;
-  padding-right: 5%;
+  padding-right: 3%;
   font-size: 1.2rem;
   font-weight: 600;
   align-self: center;
