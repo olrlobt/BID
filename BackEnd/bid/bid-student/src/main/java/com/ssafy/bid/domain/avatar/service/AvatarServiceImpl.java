@@ -19,6 +19,7 @@ import com.ssafy.bid.domain.user.UserType;
 import com.ssafy.bid.domain.user.dto.CustomUserInfo;
 import com.ssafy.bid.domain.user.repository.UserRepository;
 import com.ssafy.bid.global.error.exception.AuthorizationFailedException;
+import com.ssafy.bid.global.error.exception.InvalidParameterException;
 import com.ssafy.bid.global.error.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,10 @@ public class AvatarServiceImpl implements AvatarService {
 
 		Student student = userRepository.findStudentByUserNo(userNo)
 			.orElseThrow(() -> new ResourceNotFoundException("아바타구매: Student 가 없음.", userNo));
+
+		if (student.getAsset() < avatarRequest.getPrice()) {
+			throw new InvalidParameterException("현재 보유 자산으로는 입찰할 수 없습니다.", avatarRequest.getPrice());
+		}
 
 		List<Avatar> allAvatars = avatarRepository.findAll();
 		Avatar avatar = allAvatars.get(ThreadLocalRandom.current().nextInt(allAvatars.size()));

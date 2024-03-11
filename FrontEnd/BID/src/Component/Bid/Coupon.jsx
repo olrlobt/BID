@@ -6,6 +6,8 @@ import { Close } from "@material-ui/icons";
 import { deleteCouponApi } from "../../Apis/CouponApis";
 import { useMutation } from "@tanstack/react-query";
 import useCoupons from "../../hooks/useCoupons";
+import alertBtn from "../Common/Alert";
+import confirmBtn from "../Common/Confirm";
 
 export default function Coupon(props){
 	const {no, name, description, startPrice, gradeNo} = props;
@@ -16,15 +18,24 @@ export default function Coupon(props){
 	const deleteCouponQuery = useMutation({
 		mutationKey: ['deleteCoupon'],
 		mutationFn: (no) => deleteCouponApi(gradeNo, no),
-		onSuccess: () => { deleteCoupon({couponNo: no}); },
-		onError: (error) => { console.log(error) }
+		onSuccess: () => {
+			deleteCoupon({couponNo: no})
+		}
 	})
 
 	/** X 버튼 클릭 -> 쿠폰 삭제 함수 */
 	const onClickDeleteCoupon = (e) => {
 		e.preventDefault();
-		deleteCouponQuery.mutate(no);
-		
+		confirmBtn({
+			icon: "warning",
+			text: "삭제하신 쿠폰은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?",
+			confirmTxt: "삭제",
+			confirmColor: "#F23F3F",
+			cancelTxt: "취소",
+			cancelColor: "#a6a6a6",
+			confirmFunc: () => deleteCouponQuery.mutate(no),
+      cancelFunc: () => {}
+		})
 	}
 
 	return(

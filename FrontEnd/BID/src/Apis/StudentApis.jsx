@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { getCookie } from '../cookie';
+import axios from "axios";
+import { getCookie } from "../cookie";
 
 export const StudentApis = axios.create({
   baseURL: process.env.REACT_APP_STU_API,
@@ -7,8 +7,8 @@ export const StudentApis = axios.create({
 
 StudentApis.interceptors.request.use(
   (config) => {
-    config.headers['Content-Type'] = 'application/json';
-    config.headers['Authorization'] = `Bearer ${getCookie('accessToken')}`;
+    config.headers["Content-Type"] = "application/json";
+    config.headers["Authorization"] = `Bearer ${getCookie("accessToken")}`;
 
     return config;
   },
@@ -33,5 +33,16 @@ export const getStudentSavingInfo = async () => {
  */
 
 export const applyStudentSaving = async (savingInfo) => {
-  return await StudentApis.post('/savings', savingInfo);
+  return await StudentApis.post("/savings", savingInfo);
+};
+
+/**
+ * 개인테이터 가져오기
+ * @param userNo 개인 정보
+ * @returns
+ */
+export const getFinData = async (userNo, startDate, endDate) => {
+  return await StudentApis.get(
+    `/users/${userNo}?startDate=${startDate}&endDate=${endDate}`
+  );
 };

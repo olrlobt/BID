@@ -1,14 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   models: [],
   modelLoggedIn: false,
   model: null,
+  modelImg: null
 };
 
 export const modelListSelector = (state) => {
   return state.studentmodel.models;
-}
+};
 
 export const modelLoggedInSelector = (state) => {
   return state.studentmodel.modelLoggedIn;
@@ -18,14 +19,15 @@ export const modelSelector = (state) => {
   return state.studentmodel.model;
 }
 
-
+export const modelImgSelector = (state) => {
+  return state.studentmodel.modelImg;
+}
 export const modelSlice = createSlice({
-  name: "studentmodel",
+  name: 'studentmodel',
   initialState,
   reducers: {
     initModels: (state, action) => {
       const models = action.payload;
-      console.log(models)
       state.models = models;
     },
     addModel: (state, action) => {
@@ -34,21 +36,19 @@ export const modelSlice = createSlice({
     },
     editModel: (state, action) => {
       const updatedModel = action.payload;
-      const updatedModels = state.models.map((model) =>
-      model.no === updatedModel.no ? updatedModel : model
-      );
-      state.models = updatedModels;
+      state.modelImg = updatedModel
     },
     loginStudent: (state, action) => {
-        const model = action.payload;
-        state.model = model;
-        state.modelLoggedIn = true;
+      const model = action.payload;
+      state.model = model;
+      state.modelLoggedIn = true;
     },
     logoutStudent: (state) => {
-        state.currentModel = null;
-        state.modelLoggedIn = false;
+      state.currentModel = null;
+      state.modelLoggedIn = false;
     },
   },
 });
 
-export const { initModels, addModel, editModel, loginStudent, logoutStudent } = modelSlice.actions;
+export const { initModels, addModel, editModel, loginStudent, logoutStudent } =
+  modelSlice.actions;
