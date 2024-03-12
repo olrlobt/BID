@@ -1,18 +1,22 @@
-import styled from "./Home.module.css";
-import InfoBox from "../../Component/Common/InfoBox";
-import Card from "../../Asset/Image/HOME_icons/coupon.png";
-import Coin from "../../Asset/Image/HOME_icons/Coins.png";
-import LinkFront from "../../Asset/Image/HOME_icons/transaction.png";
-import Locker from "../../Asset/Image/HOME_icons/bank.png";
-import Clock from "../../Asset/Image/HOME_icons/clock.png";
-import useModal from "../../hooks/useModal";
-import TimeTable from "../../Component/Common/TimeTable";
-import { useSelector } from "react-redux";
-import { bidSelector } from "../../Store/bidSlice";
-import { bidCountSelector } from "../../Store/bidCountSlice";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getStudentListApi, viewDashboard } from "../../Apis/TeacherManageApis";
+import styled from './Home.module.css';
+import InfoBox from '../../Component/Common/InfoBox';
+import Card from '../../Asset/Image/HOME_icons/coupon.png';
+import Coin from '../../Asset/Image/HOME_icons/Coins.png';
+import LinkFront from '../../Asset/Image/HOME_icons/transaction.png';
+import Locker from '../../Asset/Image/HOME_icons/bank.png';
+import Clock from '../../Asset/Image/HOME_icons/clock.png';
+import useModal from '../../hooks/useModal';
+import TimeTable from '../../Component/Common/TimeTable';
+import { useSelector } from 'react-redux';
+import { bidSelector } from '../../Store/bidSlice';
+import { bidCountSelector } from '../../Store/bidCountSlice';
+import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  getStudentListApi,
+  holdBid,
+  viewDashboard,
+} from "../../Apis/TeacherManageApis";
 import { stopTimeSelector } from "../../Store/stopTimeSlice";
 import { getCouponList, getCouponListApi } from "../../Apis/CouponApis";
 import { requestCouponSelector } from "../../Store/requestCouponSlice";
@@ -29,6 +33,9 @@ import useStudents from "../../hooks/useStudents";
 import useProducts from "../../hooks/useProducts";
 import useCoupons from "../../hooks/useCoupons";
 import { getProductListApi } from "../../Apis/TeacherBidApis";
+import useHold from "../../hooks/useHold";
+import { holdSelector } from "../../Store/holdSlice";
+import alertBtn from "../../Component/Common/Alert";
 
 export default function Home() {
   const { openModal } = useModal();
@@ -40,6 +47,7 @@ export default function Home() {
   const { initStudents } = useStudents();
   const { initCoupons } = useCoupons();
   const { initProducts } = useProducts();
+  const { changeHold } = useHold();
   const currentBid = useSelector(bidSelector);
   const classMoney = useSelector(moneySeletor);
   const bidCount = useSelector(bidCountSelector);
@@ -47,6 +55,10 @@ export default function Home() {
   const requestedCoupons = useSelector(requestCouponSelector);
   const [lineData, setLineData] = useState([]);
   const mainClass = useSelector(mainSelector);
+  const holdView = useSelector(holdSelector);
+  const teacher = useSelector(userSelector);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   /** 대시보드 */
   const { data: dashboardInfo } = useQuery({
@@ -58,10 +70,11 @@ export default function Home() {
           initMoney(res.data.asset);
           initCount(res.data.biddingStatisticsFindResponses[13].count);
           initTime(res.data.gradePeriodsGetResponses);
+          changeHold(res.data.hold);
           setLineData(
             res.data.biddingStatisticsFindResponses.map((item) => {
               return {
-                x: `${item.date.split("-")[1]}.${item.date.split("-")[2]}`,
+                x: `${parseInt(item.date.split("-")[2])}`,
                 y: item.count,
               };
             })
@@ -112,7 +125,7 @@ export default function Home() {
     queryKey: ["productList"],
     queryFn: () =>
       getProductListApi(mainClass.no).then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         if (res.data !== undefined) {
           initProducts({ productList: res.data });
         }
@@ -120,16 +133,44 @@ export default function Home() {
       }),
   });
 
-  useEffect(() => {}, [dashboardInfo, couponList, studentList]);
+  const handleBid = (gradeNo) => {
+    holdBid(gradeNo).then((res) => {
+      changeHold(res.data);
+      alertBtn({
+        text: "변경되었습니다.",
+        confirmColor: "#ffd43a",
+        icon: "success",
+      });
+    });
+  };
+
+  useEffect(() => {
+    if (!mainClass) {
+      navigate(`/classlist/${teacher.adminInfo.userNo}/no-class`, {
+        state: {
+          teacherId: teacher.adminInfo.userNo,
+        },
+      });
+    } else {
+      navigate('/');
+      queryClient.invalidateQueries(['HomeDashboard']);
+    }
+  }, [mainClass]);
+
+  useEffect(() => {}, [dashboardInfo, couponList, studentList, holdView]);
   return (
     <>
       {dashboardInfo && couponList && studentList && (
         <main className={styled.home}>
-          {/* {console.log(dashboardInfo)} */}
-          <button className={styled.holdBtn}>
+          <button
+            onClick={() => handleBid(mainClass.no)}
+            className={holdView ? styled.stopBtn : styled.holdBtn}
+          >
             <span className={styled.hold}>HOLD</span>
             <span className={styled.holdInfo}>
-              지금은 경매가 진행되고 있어요
+              {holdView
+                ? "지금은 경매가 중단된 상태에요"
+                : "지금은 경매가 진행되고 있어요"}
             </span>
           </button>
           <InfoBox
@@ -223,7 +264,7 @@ export default function Home() {
                 text={`${classMoney}비드`}
               />
               <div className={styled.infoBox}>
-                <img className={styled.icon} src={Clock} alt="시계" />
+                <img className={styled.icon} src={Clock} alt="시계" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
                 <div className={styled.infoText}>
                   <div>
                     적금 알림은{" "}

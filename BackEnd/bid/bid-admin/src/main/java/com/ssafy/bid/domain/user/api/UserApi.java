@@ -169,7 +169,7 @@ public class UserApi {
 
 	private Cookie createCookie(String accessToken) {
 		Cookie cookie = new Cookie("accessToken", accessToken);
-		cookie.setHttpOnly(true);
+		// cookie.setHttpOnly(true);
 		// cookie.setSecure(true);
 		cookie.setPath("/");
 		cookie.setMaxAge(60 * 30);

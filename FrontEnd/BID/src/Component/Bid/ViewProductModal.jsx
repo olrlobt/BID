@@ -14,6 +14,8 @@ import { getProductDetailApi, patchProductApi, deleteProductApi, addCommentApi, 
 import { useSelector } from 'react-redux';
 import { modelSelector } from '../../Store/modelSlice';
 import useProducts from "../../hooks/useProducts";
+import confirmBtn from "../Common/Confirm";
+import alertBtn from "../Common/Alert";
 
 export default function ViewProductModal({ onClose, ...props }) {
   const boardNo = props[0];
@@ -67,8 +69,22 @@ export default function ViewProductModal({ onClose, ...props }) {
   const biddingQuery = useMutation({
     mutationKey: ['bidding'],
     mutationFn: (params) => biddingApi(params.boardNo, params.biddingInfo),
-    onSuccess: (res) => { console.log(res); },
-    onError: (error) => { console.log(error); }
+    onSuccess: (res) => { 
+    onClose();
+      alertBtn({
+        text: '정상적으로 입찰되었습니다!',
+        confirmColor: '#ffd43a',
+        icon: 'success',
+    });
+    },
+    onError: (error) => {
+    onClose();
+      alertBtn({
+        text: "입찰 도중 에러가 발생했습니다",
+        confirmColor: '#E81818',
+        icon: 'error',
+      });
+    }
   });
 
   /** 댓글 작성 쿼리 */
@@ -98,11 +114,20 @@ export default function ViewProductModal({ onClose, ...props }) {
   }
 
   /** 경매 삭제 함수 */
-  const onClickDeleteProduct = (e) => {
-    if(window.confirm('게시글을 삭제하시겠습니까?')){
-      deleteProductQuery.mutate(boardNo);
-      onClose();
-    }
+  const onClickDeleteProduct = () => {
+    onClose();
+    confirmBtn({
+			icon: "warning",
+			text: "삭제하신 게시글은 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?",
+			confirmTxt: "삭제",
+			confirmColor: "#F23F3F",
+			cancelTxt: "취소",
+			cancelColor: "#a6a6a6",
+			confirmFunc: () => {
+        deleteProductQuery.mutate(boardNo);
+      },
+      cancelFunc: () => {}
+		})
   }
 
   /** 입찰 신청 함수 */
@@ -120,7 +145,6 @@ export default function ViewProductModal({ onClose, ...props }) {
         biddingInfo: biddingInfo
       }
       biddingQuery.mutate(params);
-      // console.log(biddingPrice+'비드 입찰되었습니다');
     }
   };
 
@@ -190,7 +214,7 @@ export default function ViewProductModal({ onClose, ...props }) {
           }
           <div className={styled.content}>
             <div className={styled.imgArea}>
-              <img src={productDetailIinfo.goodsImgUrl} alt='' />
+              <img src={productDetailIinfo.goodsImgUrl} alt='' onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
             </div>
             <div className={styled.infoArea}>
               <input 
@@ -295,7 +319,7 @@ export default function ViewProductModal({ onClose, ...props }) {
                 </div>
               </div>
               <div className={styled.right}>
-                <img src={ productDetailIinfo.userProfileImgUrl } alt='프로필 이미지' />
+                <img src={ productDetailIinfo.userProfileImgUrl } alt='프로필 이미지' onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
               </div>
             </div>
             {

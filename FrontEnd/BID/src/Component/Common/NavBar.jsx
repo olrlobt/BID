@@ -26,7 +26,7 @@ export default function NavBar() {
   return (
     <nav>
       <section className={styled.logoArea}>
-        <img src={Logo} alt="logo" />
+        <img src={Logo} alt="logo" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
         <div>
           <div>{teacherInfo.adminInfo.schoolName}</div>
           <div className={styled.classInfo}>
