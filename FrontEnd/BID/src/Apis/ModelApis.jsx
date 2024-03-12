@@ -32,7 +32,7 @@ export const studentLoginApi = async (studentData) => {
  * @param
  */
 export const studentLogoutApi = async () => {
-  return await ModelApis.get(`/signout`);
+  return await ModelApis.get(`/logout`);
 };
 
 /**

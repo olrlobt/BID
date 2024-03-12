@@ -1,33 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import styled from './LoginPage.module.css';
-import { Link, useNavigate } from 'react-router-dom';
-import Logo from '../../Asset/Image/LoginLogo.png';
-import useUser from '../../hooks/useUser';
-import { loginUserApi } from '../../Apis/UserApis';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { setCookie } from '../../cookie';
-import { getGrades } from '../../Apis/ClassManageApis';
-import useMain from '../../hooks/useMain';
-import { useSelector } from 'react-redux';
-import { mainSelector } from '../../Store/mainSlice';
-import { userLoggedInSelector } from '../../Store/userSlice';
+import React, { useEffect, useState } from "react";
+import styled from "./LoginPage.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../Asset/Image/LoginLogo.png";
+import useUser from "../../hooks/useUser";
+import { loginUserApi } from "../../Apis/UserApis";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { setCookie } from "../../cookie";
+import { getGrades } from "../../Apis/ClassManageApis";
+import useMain from "../../hooks/useMain";
+import { useSelector } from "react-redux";
+import { mainSelector } from "../../Store/mainSlice";
+import { userLoggedInSelector } from "../../Store/userSlice";
 
 function ManageLoginPage() {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
   const { loginUser } = useUser();
   const { initClass } = useMain();
   const teacherLogin = useSelector(userLoggedInSelector);
-  const queryClient = useQueryClient();
+  const mainClass = useSelector(mainSelector);
 
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   /** 로그인 쿼리 */
   const loginUserQuery = useMutation({
-    mutationKey: ['loginUser'],
+    mutationKey: ["loginUser"],
     mutationFn: (userCredentials) => loginUserApi(userCredentials),
     onSuccess: async (data) => {
       loginUser(data);
-      setCookie('accessToken', data.data.tokenResponse.accessToken);
-      await queryClient.invalidateQueries('ClassList');
+      setCookie("accessToken", data.data.tokenResponse.accessToken);
+      await queryClient.invalidateQueries("ClassList");
+      if (mainClass) {
+        navigate("/");
+      } else {
+        navigate(`/classlist/${data.data.adminInfo.userNo}/no-class`, {
+          state: {
+            teacherId: data.data.adminInfo.userNo,
+          },
+        });
+      }
     },
     onError: (error) => {
       console.log(error);
@@ -35,9 +46,10 @@ function ManageLoginPage() {
   });
 
   useQuery({
-    queryKey: ['ClassList'],
+    queryKey: ["ClassList"],
     queryFn: () =>
       getGrades().then((res) => {
+        console.log(res);
         const foundMainClass = res.data.find((item) => item.main === true);
         initClass(foundMainClass);
         return res.data;
@@ -57,22 +69,14 @@ function ManageLoginPage() {
 
   useEffect(() => {
     if (!teacherLogin.isLoggedIn) {
-      queryClient.cancelQueries(['ClassList']);
+      queryClient.cancelQueries(["ClassList"]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teacherLogin]);
+  }, [teacherLogin.isLoggedIn, mainClass]);
 
   return (
     <section className={styled.back}>
       <div className={styled.logo}>
-        <img
-          src={Logo}
-          alt="로고"
-          onError={(e) =>
-            (e.target.src =
-              'https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg')
-          }
-        />
+        <img src={Logo} alt="로고" onError={(e) => e.target.src='https://media.tarkett-image.com/large/TH_PROTECTWALL_Tisse_Light_Grey.jpg'}/>
       </div>
       <div className={styled.content}>
         <form className={styled.contentInput} onSubmit={handleLoginEvent}>
