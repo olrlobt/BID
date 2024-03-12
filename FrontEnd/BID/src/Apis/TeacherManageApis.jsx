@@ -28,6 +28,15 @@ export const viewDashboard = async (gradeNo) => {
 };
 
 /**
+ * 경매 hold 버튼
+ * @param gradeNo 학급 넘버
+ */
+export const holdBid = async (gradeNo) => {
+  console.log(gradeNo);
+  return await TeacherManageApis.patch(`/${gradeNo}/boards/hold`);
+};
+
+/**
  * 주급 수정
  * @param  salary 주급
  * @returns 200 OK
